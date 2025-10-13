@@ -76,7 +76,7 @@
           <li><span class="check"></span> Eerlijk advies op maat</li>
         </ul>
       </div>
-      <form class="kh-cta-form" onsubmit="event.preventDefault(); window.location.href='#keuzehulp';">
+      <form class="kh-cta-form" onsubmit="event.preventDefault(); window.location.href='keuzehulp.html';">
         <label for="kh-email" class="visually-hidden">E-mailadres</label>
         <input id="kh-email" type="email" placeholder="jij@voorbeeld.nl" required>
         <button class="btn btn-primary" type="submit">Start de keuzehulp</button>
@@ -161,53 +161,6 @@
       <details><summary>Wat is inbegrepen bij de prijs?</summary><p>Standaard montage, tot 4 meter leiding, inbedrijfstelling en uitleg. Afwijkingen bespreken we vooraf.</p></details>
       <details><summary>Kunnen jullie ook verwarmen met airco?</summary><p>Ja, moderne airco’s zijn warmtepompen en kunnen efficiënt koelen én verwarmen.</p></details>
       <details><summary>Doen jullie onderhoud?</summary><p>Jazeker. Jaarlijks onderhoud houdt het rendement hoog en verlengt de levensduur.</p></details>
-    </div>
-  </div>
-</section>
-
-<section id="keuzehulp" class="section alt kh-wrap">
-  <div class="container">
-    <div class="kh-card">
-      <div class="kh-head">
-        <div class="kh-badge">Stap <span data-kh-step>1</span> / 2</div>
-        <h2 class="kh-title">Voor hoeveel kamers wil je airconditioning?</h2>
-        <p class="kh-sub">Kies 1 t/m 4 kamers. In de volgende stap geef je per kamer de oppervlakte aan.</p>
-      </div>
-      <form id="keuzehulp-form" class="kh-form">
-        <div class="kh-step" id="kh-step-rooms">
-          <div class="kh-grid-rooms">
-            <label class="chip"><input type="radio" name="rooms" value="1" required> 1 kamer</label>
-            <label class="chip"><input type="radio" name="rooms" value="2"> 2 kamers</label>
-            <label class="chip"><input type="radio" name="rooms" value="3"> 3 kamers</label>
-            <label class="chip"><input type="radio" name="rooms" value="4"> 4 kamers</label>
-          </div>
-          <div class="kh-actions">
-            <button type="button" class="btn btn-primary" data-kh-next>Volgende</button>
-          </div>
-        </div>
-        <div class="kh-step" id="kh-step-sizes" hidden>
-          <h3 class="kh-step-title">Wat is de oppervlakte van de kamer(s)? <span class="muted">(m²)</span></h3>
-          <p class="kh-sub">Kies per kamer de juiste klasse.</p>
-          <div id="kh-size-grid" class="kh-size-grid"></div>
-          <div class="kh-actions between">
-            <button type="button" class="btn" data-kh-prev>← Vorige</button>
-            <button type="submit" class="btn btn-primary">Resultaat →</button>
-          </div>
-        </div>
-      </form>
-      <aside id="kh-result" class="kh-result" aria-live="polite" hidden>
-        <h3>Jouw indicatie</h3>
-        <ul class="kh-out">
-          <li><strong>Kamers:</strong> <span data-kh="rooms"></span></li>
-          <li><strong>Totaal adviescapaciteit:</strong> <span data-kh="kw"></span> kW</li>
-          <li><strong>Voorstel:</strong> <span data-kh="voorstel"></span></li>
-        </ul>
-        <div class="cta-row">
-          <a href="contact.html" class="btn btn-primary">Vrijblijvende offerte</a>
-          <a href="prijzen.html" class="btn btn-outline">Bekijk prijzen</a>
-        </div>
-        <small class="muted">Indicatie. Definitief advies na inmeten.</small>
-      </aside>
     </div>
   </div>
 </section>
