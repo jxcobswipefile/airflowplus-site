@@ -75,6 +75,78 @@
   </div>
 </section>
 
+<!-- Keuzehulp -->
+<section id="keuzehulp" class="section alt">
+  <div class="container">
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <h2>Doe de airco keuzehulp</h2>
+        <p class="muted">Beantwoord 3 korte vragen en ontvang een indicatie van de geschikte capaciteit en een voorstel.</p>
+
+        <form id="keuzehulp-form" class="form">
+          <!-- Step 1 -->
+          <div class="kh-step" data-step="1">
+            <label><strong>1) Welke ruimte wil je koelen/verwarmen?</strong></label>
+            <div class="kh-options">
+              <label><input type="radio" name="ruimte" value="woonkamer" required> Woonkamer</label>
+              <label><input type="radio" name="ruimte" value="slaapkamer"> Slaapkamer</label>
+              <label><input type="radio" name="ruimte" value="kantoor"> Kantoor</label>
+              <label><input type="radio" name="ruimte" value="anders"> Anders</label>
+            </div>
+            <button type="button" class="btn btn-primary kh-next">Volgende</button>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="kh-step" data-step="2" hidden>
+            <label><strong>2) Hoe groot is de ruimte (m²)?</strong></label>
+            <input type="number" name="opp" min="5" max="120" step="1" required placeholder="Bijv. 28">
+            <div class="kh-row">
+              <label><strong>Isolatie</strong></label>
+              <select name="isolatie" required>
+                <option value="goed">Goed (nieuwbouw)</option>
+                <option value="gemiddeld" selected>Gemiddeld</option>
+                <option value="matig">Matig (oud huis)</option>
+              </select>
+            </div>
+            <div class="kh-actions">
+              <button type="button" class="btn kh-prev">Vorige</button>
+              <button type="button" class="btn btn-primary kh-next">Volgende</button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="kh-step" data-step="3" hidden>
+            <label><strong>3) Aantal kamers die je wilt bedienen?</strong></label>
+            <div class="kh-options">
+              <label><input type="radio" name="kamers" value="1" required> 1 kamer (single-split)</label>
+              <label><input type="radio" name="kamers" value="2"> 2 kamers</label>
+              <label><input type="radio" name="kamers" value="3"> 3+ kamers</label>
+            </div>
+            <div class="kh-actions">
+              <button type="button" class="btn kh-prev">Vorige</button>
+              <button type="submit" class="btn btn-primary">Resultaat</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div id="kh-result" class="box" aria-live="polite">
+        <h3>Jouw indicatie</h3>
+        <p class="muted">Vul de keuzehulp in om een inschatting te zien.</p>
+        <div class="kh-out" hidden>
+          <p><strong>Adviescapaciteit:</strong> <span data-kh="kw"></span> kW</p>
+          <p><strong>Voorstel:</strong> <span data-kh="voorstel"></span></p>
+          <div class="cta-row">
+            <a href="contact.html" class="btn btn-primary">Vrijblijvende offerte</a>
+            <a href="prijzen.html" class="btn btn-outline">Bekijk prijzen</a>
+          </div>
+          <small class="muted">Indicatie. Definitief advies na inmeten.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section class="trust">
   <div class="container trust-grid">
