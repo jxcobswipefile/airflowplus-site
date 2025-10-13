@@ -71,17 +71,23 @@
 </section>
 
 
-<section id="keuzehulp-cta" class="section kh-cta overlap">
-  <div class="container left">
-    <div class="kh-cta-card compact seam blue">
-      <div class="kh-cta-text">
-        <h2>Doe de airco keuzehulp</h2>
-        <ul class="checklist row">
-          <li><span class="check"></span> Klaar in 3 stappen</li>
-          <li><span class="check"></span> Eerlijk advies op maat</li>
-        </ul>
-      </div>
+<!-- Combined seam card (form + heating message) -->
+<section class="section hero-seam">
+  <div class="container">
+    <div class="seam-card wide blue seam">
+      <h2>Comfort met airco in <span class="hl-blue">winter én zomer</span></h2>
+      <p class="lead">
+        Het wordt kouder — met onze airco (warmtepomp) zit je warm in de winter en koel in de zomer.
+        We installeren netjes op de plek die jij wilt: woonkamer, slaapkamer of kantoor.
+      </p>
 
+      <ul class="checklist row white">
+        <li><span class="check"></span> Verwarmen tot&nbsp;-10&nbsp;°C</li>
+        <li><span class="check"></span> Koelen &amp; verwarmen in één</li>
+        <li><span class="check"></span> Netjes geplaatst waar jij het wilt</li>
+      </ul>
+
+      <!-- Email BELOW the checks -->
       <form class="kh-cta-form stack" onsubmit="event.preventDefault(); window.location.href='keuzehulp.html';">
         <label for="kh-email" class="visually-hidden">E-mailadres</label>
         <input id="kh-email" type="email" placeholder="jij@voorbeeld.nl" required>
@@ -91,25 +97,6 @@
   </div>
 </section>
 
-<section class="section info-strip">
-  <div class="container info-grid">
-    <div class="info-item">
-      <div class="icn">🏅</div>
-      <h3><span class="hl-blue">Gecertificeerde</span> installateur</h3>
-      <p>F-gassen gecertificeerd, netjes en volgens norm.</p>
-    </div>
-    <div class="info-item">
-      <div class="icn">⚡</div>
-      <h3><span class="hl-blue">Snel</span> ingepland</h3>
-      <p>Binnen 10–14 dagen gemonteerd, vaak sneller.</p>
-    </div>
-    <div class="info-item">
-      <div class="icn">💬</div>
-      <h3><span class="hl-blue">Eerlijk</span> advies</h3>
-      <p>Altijd het juiste vermogen en systeem voor jouw ruimtes.</p>
-    </div>
-  </div>
-</section>
 
 <section class="section alt-blue">
   <div class="container">
@@ -155,54 +142,44 @@
 </section>
 
 
-<!-- Airconditioning op maat (INVERTED / BLUE) -->
-<section class="section maat invert">
+<!-- Airconditioning op maat (INVERTED / BLUE, SIMPLE CARDS) -->
+<section class="section maat invert simple">
   <div class="container maat-grid">
-    <!-- Left: text -->
+    <!-- Left: text + simple buttons -->
     <div>
       <h2>Airconditioning <span class="hl-blue">op maat</span></h2>
       <p class="maat-lead">
-        We adviseren het juiste type en vermogen voor jouw woning of bedrijf.
-        Zo ben je verzekerd van comfort, laag verbruik en een nette afwerking.
+        We adviseren het juiste vermogen en type voor jouw woning of bedrijf. Altijd netjes geplaatst met duidelijke afspraken.
       </p>
+      <div class="cta-row" style="margin-top:14px;">
+        <a href="keuzehulp.html" class="btn" style="background:#fff; border-color:#fff; color:#005b8f;">Doe de keuzehulp</a>
+        <a href="contact.html" class="btn" style="background:#fff; border-color:#fff; color:#005b8f;">Direct contact</a>
+      </div>
       <ul class="maat-points">
-        <li><span class="check"></span> Capaciteit op basis van m² en isolatie</li>
+        <li><span class="check"></span> Capaciteit op basis van m² & isolatie</li>
         <li><span class="check"></span> Strak weggewerkte leidingen</li>
-        <li><span class="check"></span> Duidelijke prijsafspraak vooraf</li>
+        <li><span class="check"></span> Heldere prijsafspraak vooraf</li>
       </ul>
     </div>
 
-    <!-- Right: three styled mini-cards -->
+    <!-- Right: simple white cards (no icons) -->
     <div class="maat-side">
-      <div class="mini-card">
-        <div class="mini-head">
-          <div class="ic">🧭</div>
-          <h4>Vrijblijvend advies</h4>
-        </div>
-        <p>We denken mee over type, merk en binnen/buiten-opstelling.</p>
-        <span class="pill">Persoonlijk</span>
+      <div class="mini-card simple">
+        <h4>Vrijblijvend advies</h4>
+        <p>We denken mee over merk, type en positie. Snel duidelijkheid, geen gedoe.</p>
       </div>
-
-      <div class="mini-card">
-        <div class="mini-head">
-          <div class="ic">🛠️</div>
-          <h4>Nette installatie</h4>
-        </div>
-        <p>Leidingen netjes weggewerkt, oplevering schoon en getest.</p>
-        <span class="pill">Afwerking</span>
+      <div class="mini-card simple">
+        <h4>Nette installatie</h4>
+        <p>Stofarm boren en strakke afwerking. Alles schoon opgeleverd.</p>
       </div>
-
-      <div class="mini-card">
-        <div class="mini-head">
-          <div class="ic">🧰</div>
-          <h4>Service & onderhoud</h4>
-        </div>
-        <p>Periodieke check voor stil, zuinig en storingsvrij gebruik.</p>
-        <span class="pill">Zorgeloos</span>
+      <div class="mini-card simple">
+        <h4>Service & onderhoud</h4>
+        <p>Periodieke controle voor zuinig, stil en storingsvrij gebruik.</p>
       </div>
     </div>
   </div>
 </section>
+
 
 
 <!-- Reviews -->
