@@ -172,7 +172,7 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
               linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.0));
 }
 /* Headline emphasis */
-.hl-blue{ color: var(--primary-700); }
+.hl-blue{ color:#2ab5f2; }
 
 /* Services images */
 .card.service img{
@@ -282,8 +282,7 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 }
 .hero .btn{ padding:14px 20px; font-size:16px; }
 
-/* Lighter highlight blue for H1 emphasis */
-.hl-blue{ color:#2ab5f2; }       /* light, vibrant blue */
+
 /* Bigger card + blue theme */
 .kh-cta-card.compact.seam.blue{
   max-width:680px;                /* bigger */
