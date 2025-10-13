@@ -1,79 +1,51 @@
 <!doctype html>
-<html lang="nl"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Airco & warmtepomp installatie • Airflow+</title>
-<meta name="description" content="Airflow+ — Airco & warmtepomp installatie. Snel, netjes en gecertificeerd.">
-<link rel="icon" href="assets/img/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<!-- Use the new themed CSS -->
-<link rel="stylesheet" href="assets/css/style.v13.css?v=2501">
-<link rel="stylesheet" href="assets/css/hotfix.css?v=1">
-  
-<!-- Your script (keep your filename; example shown) -->
-<script defer src="assets/js/main.js?v=13"></script>
-
-</head><body>
-
-<div class="topbar">
-  <div class="container topbar-inner">
-    <span>Gecertificeerde airco & warmtepomp installateur</span>
-    <a href="tel:+31 10 000 0000" class="topbar-link">Bel: +31 10 000 0000</a>
-  </div>
-</div>
-
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Airflow+ — Airco & warmtepomp installaties</title>
+  <link rel="stylesheet" href="assets/css/style.v14.css?v=restore1">
+</head>
+<body>
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
+    <div class="brand">Airflow<span class="hl-blue">+</span></div>
     <nav class="nav">
-      <a href="keuzehulp.html">Keuzehulp</a>
-      <a href="airco.html">Airco</a>
-      <a href="diensten.html">Diensten</a>
-      <a href="prijzen.html">Prijzen</a>
-      <a href="over.html">Over ons</a>
-      <a href="contact.html" class="btn btn-primary">Bel/Offerte</a>
+      <a href="#kh">Keuzehulp</a>
+      <a href="#airco">Airco</a>
+      <a href="#services">Diensten</a>
+      <a href="#prijzen">Prijzen</a>
+      <a href="#over">Over ons</a>
     </nav>
-    <button class="nav-toggle" aria-label="Open menu">☰</button>
+    <a class="btn btn-primary" href="tel:+3110000000">Bel/Offerte</a>
   </div>
 </header>
 
-<main>
-
-<section class="hero hero-tall">
-  <!-- Background video -->
-  <div class="hero-bg">
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
   <video class="hero-video" autoplay muted loop playsinline preload="auto"
-         poster="">
-    <!-- Ultra-reliable CC0 samples -->
+         poster="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.jpg">
     <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
     <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm" type="video/webm">
   </video>
   <div class="hero-overlay"></div>
-</div>
 
   <div class="container hero-inner">
     <div class="hero-copy">
       <h1>Airflow+ is <span class="hl-blue">dé airco specialist</span> in de regio Amsterdam</h1>
-      
       <div class="cta-row">
-        <a href="keuzehulp.html" class="btn btn-primary">Doe de keuzehulp</a>
-        <a href="tel:+31100000000" class="btn btn-outline">Bel nu</a>
+        <a class="btn btn-primary" href="#kh">Doe de keuzehulp</a>
+        <a class="btn btn-outline" href="tel:+3110000000">Bel nu</a>
       </div>
     </div>
-
-    <!-- Remove the old hero image by deleting this block entirely.
-         If you prefer to keep an image, you can move it INTO another section later. -->
-    <!-- <div class="hero-media"> ... </div> -->
+    <div></div>
   </div>
 </section>
 
-
-<!-- Keuzehulp CTA (own container, left-aligned) -->
-<section id="keuzehulp-cta" class="section kh-cta overlap">
+<!-- Keuzehulp CTA (left, overlapping seam) -->
+<section id="kh" class="section kh-cta overlap">
   <div class="container left">
     <div class="kh-cta-card compact seam blue">
       <div class="kh-cta-text">
@@ -83,7 +55,6 @@
           <li><span class="check"></span> Eerlijk advies op maat</li>
         </ul>
       </div>
-
       <form class="kh-cta-form stack" onsubmit="event.preventDefault(); window.location.href='keuzehulp.html';">
         <label for="kh-email" class="visually-hidden">E-mailadres</label>
         <input id="kh-email" type="email" placeholder="jij@voorbeeld.nl" required>
@@ -93,7 +64,7 @@
   </div>
 </section>
 
-<!-- Heating info (centered, its own container) -->
+<!-- Heating info (centered) -->
 <section class="section heat-info">
   <div class="container">
     <div class="heat-card">
@@ -102,73 +73,48 @@
         Het wordt kouder — met onze airco (warmtepomp) zit je warm in de winter en koel in de zomer.
         We installeren netjes waar jij het wilt: woonkamer, slaapkamer of kantoor.
       </p>
-      <ul class="checklist row dark">
-        <li><span class="check"></span> Verwarmen tot&nbsp;-10&nbsp;°C</li>
+      <ul class="checklist row">
+        <li><span class="check"></span> Verwarmen tot -10 °C</li>
         <li><span class="check"></span> Koelen &amp; verwarmen in één</li>
-        <li><span class="check"></span> Netjes geplaatst op jouw gewenste plek</li>
-        <!-- add this line inside .heat-card, after the <ul class="checklist row dark"> -->
-        <a href="airco.html" class="btn btn-primary heat-read">Lees meer over airco</a>
+        <li><span class="check"></span> Nette plaatsing op jouw gewenste plek</li>
       </ul>
+      <a href="airco.html" class="btn btn-primary heat-read">Lees meer over airco</a>
     </div>
   </div>
 </section>
 
-
-<section class="section alt-blue">
+<!-- Services -->
+<section id="services" class="section alt">
   <div class="container">
-    <h2>Onze services</h2>
+    <h2>Onze <span class="hl-blue">services</span></h2>
     <div class="cards">
-      <a class="card service" href="service-split-airco.html">
-        <img src="https://images.unsplash.com/photo-1598300183876-3b8536b9c3d3?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+      <article class="card service">
+        <img src="https://images.unsplash.com/photo-1581091014534-8987c1d1d3cd?q=80&w=1200&auto=format&fit=crop" alt="Split airco">
         <h3>Split airco</h3>
         <p>Ideaal voor 1 ruimte. Stil en energiezuinig.</p>
-      </a>
-
-      <a class="card service" href="service-multi-split.html">
-        <img src="https://images.unsplash.com/photo-1603190287605-e6ade32fa852?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+      </article>
+      <article class="card service">
+        <img src="https://images.unsplash.com/photo-1581092795360-fd1b0f5c6a19?q=80&w=1200&auto=format&fit=crop" alt="Multi-split">
         <h3>Multi-split</h3>
         <p>Meerdere kamers met één buitenunit.</p>
-      </a>
-
-      <a class="card service" href="service-warmtepomp.html">
-        <img src="https://images.unsplash.com/photo-1614586125858-6fcd9d9d1b4f?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+      </article>
+      <article class="card service">
+        <img src="https://images.unsplash.com/photo-1596075780750-81249df16d7b?q=80&w=1200&auto=format&fit=crop" alt="Warmtepomp airco">
         <h3>Warmtepomp airco</h3>
         <p>Koelen én verwarmen met hoog rendement.</p>
-      </a>
-
-      <a class="card service" href="service-onderhoud.html">
-        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
-        <h3>Onderhoud</h3>
-        <p>Jaarlijkse check voor top-prestaties.</p>
-      </a>
-
-      <a class="card service" href="service-zakelijk.html">
-        <img src="https://images.unsplash.com/photo-1512914890250-1dc5a1a6549f?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
-        <h3>Zakelijk</h3>
-        <p>Winkel, horeca, kantooroplossingen.</p>
-      </a>
-
-      <a class="card service" href="service-reparatie.html">
-        <img src="https://images.unsplash.com/photo-1565992441121-4367c2967103?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
-        <h3>Reparatie & storingen</h3>
-        <p>Snel geholpen, ook buiten kantoortijd.</p>
-      </a>
+      </article>
     </div>
   </div>
 </section>
 
-
-<!-- Airconditioning op maat (INVERTED / BLUE, SIMPLE CARDS) -->
+<!-- Airconditioning op maat (blue inverted, simple cards) -->
 <section class="section maat invert simple">
   <div class="container maat-grid">
-    <!-- Left: text + simple buttons -->
     <div>
       <h2>Airconditioning <span class="hl-blue">op maat</span></h2>
-      <p class="maat-lead">
-        We adviseren het juiste vermogen en type voor jouw woning of bedrijf. Altijd netjes geplaatst met duidelijke afspraken.
-      </p>
+      <p class="maat-lead">We adviseren het juiste vermogen en type voor jouw woning of bedrijf. Altijd netjes geplaatst met duidelijke afspraken.</p>
       <div class="cta-row" style="margin-top:14px;">
-        <a href="keuzehulp.html" class="btn" style="background:#fff; border-color:#fff; color:#005b8f;">Doe de keuzehulp</a>
+        <a href="#kh" class="btn" style="background:#fff; border-color:#fff; color:#005b8f;">Doe de keuzehulp</a>
         <a href="contact.html" class="btn" style="background:#fff; border-color:#fff; color:#005b8f;">Direct contact</a>
       </div>
       <ul class="maat-points">
@@ -177,8 +123,6 @@
         <li><span class="check"></span> Heldere prijsafspraak vooraf</li>
       </ul>
     </div>
-
-    <!-- Right: simple white cards (no icons) -->
     <div class="maat-side">
       <div class="mini-card simple">
         <h4>Vrijblijvend advies</h4>
@@ -196,106 +140,71 @@
   </div>
 </section>
 
-
-
 <!-- Reviews -->
 <section class="section reviews">
   <div class="container">
-    <h2>Wat klanten <span class="hl-blue">zeggen</span></h2>
-
+    <h2>Klant<span class="hl-blue">reviews</span></h2>
     <div class="review-grid">
       <article class="review">
         <div class="head">
-          <div class="avatar" aria-hidden="true"></div>
-          <div>
-            <div class="name">Marieke K.</div>
-            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
-          </div>
-          <span class="badge">Google</span>
+          <div class="avatar"></div>
+          <div class="name">Sanne de Vries</div>
+          <div class="badge">Geverifieerd</div>
         </div>
-        <p>Netjes gewerkt en super snel ingepland. Binnen één dag alles klaar.</p>
+        <p>Snelle plaatsing, stil toestel en supernetjes gewerkt. Zeer tevreden.</p>
       </article>
-
       <article class="review">
         <div class="head">
-          <div class="avatar" aria-hidden="true"></div>
-          <div>
-            <div class="name">Jeroen V.</div>
-            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
-          </div>
-          <span class="badge">Google</span>
+          <div class="avatar"></div>
+          <div class="name">Tom Janssen</div>
+          <div class="badge">Geverifieerd</div>
         </div>
-        <p>Eerlijk advies over vermogen. Koelt én verwarmt nu precies goed.</p>
+        <p>Goed advies over capaciteit en locatie. Binnen één dag geplaatst.</p>
       </article>
-
       <article class="review">
         <div class="head">
-          <div class="avatar" aria-hidden="true"></div>
-          <div>
-            <div class="name">Aisha R.</div>
-            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
-          </div>
-          <span class="badge">Google</span>
+          <div class="avatar"></div>
+          <div class="name">M. Bakker</div>
+          <div class="badge">Geverifieerd</div>
         </div>
-        <p>Leidingen strak weggewerkt. Zeer tevreden over het resultaat.</p>
+        <p>Kabels strak weggewerkt. Keurig resultaat en duidelijke prijs.</p>
       </article>
     </div>
   </div>
 </section>
 
-
+<!-- Final CTA -->
 <section class="cta alt-dark">
-  <div class="container cta-inner">
-    <h2>Klaar voor comfortabel binnenklimaat?</h2>
-    <p>Vraag nu een vrijblijvende offerte aan of bel voor direct advies.</p>
-    <div class="cta-row">
-      <a href="contact.html" class="btn btn-primary">Offerte aanvragen</a>
-      <a href="tel:+31 10 000 0000" class="btn btn-outline">Bel ons</a>
-    </div>
-  </div>
-</section>
-
-<section class="section">
   <div class="container">
-    <h2>Veelgestelde <span class="hl-blue">vragen</span></h2>
-    <div class="faq">
-      <details><summary>Hoe snel kunnen jullie plaatsen?</summary><p>Meestal binnen 10–14 dagen, afhankelijk van planning en situatie ter plaatse.</p></details>
-      <details><summary>Wat is inbegrepen bij de prijs?</summary><p>Standaard montage, tot 4 meter leiding, inbedrijfstelling en uitleg. Afwijkingen bespreken we vooraf.</p></details>
-      <details><summary>Kunnen jullie ook verwarmen met airco?</summary><p>Ja, moderne airco’s zijn warmtepompen en kunnen efficiënt koelen én verwarmen.</p></details>
-      <details><summary>Doen jullie onderhoud?</summary><p>Jazeker. Jaarlijks onderhoud houdt het rendement hoog en verlengt de levensduur.</p></details>
+    <div class="cta-inner">
+      <h2>Klaar voor een <span class="hl-blue">comfortabel</span> binnenklimaat?</h2>
+      <p>Vraag nu een vrijblijvende offerte aan of bel voor direct advies.</p>
+      <div class="cta-row" style="justify-content:center; gap:12px;">
+        <a class="btn btn-primary" href="contact.html">Offerte aanvragen</a>
+        <a class="btn btn-outline" href="tel:+3110000000">Bel ons</a>
+      </div>
     </div>
   </div>
 </section>
 
-</main>
-
+<!-- Footer -->
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="brand">Airflow<span class="accent">+</span></div>
-      <p class="muted">Gecertificeerde installatie van airco &amp; warmtepompen. Snel, netjes en volgens norm.</p>
+      <div class="brand">Airflow<span class="hl-blue">+</span></div>
+      <p class="muted">Gecertificeerde installatie van airco & warmtepompen. Snel, netjes en volgens norm.</p>
     </div>
     <div>
-      <h4>Contact</h4>
-      <ul class="list">
-        <li><a href="tel:+31 10 000 0000">+31 10 000 0000</a></li>
-        <li><a href="mailto:info@placeholder.nl">info@placeholder.nl</a></li>
-        <li>Rotterdam &amp; landelijk</li>
-      </ul>
+      <strong>Contact</strong>
+      <p class="muted">+31 10 000 0000<br>info@placeholder.nl<br>Amsterdam & omgeving</p>
     </div>
     <div>
-      <h4>Pagina’s</h4>
-      <ul class="list">
-        <li><a href="#keuzehulp-cta">Keuzehulp</a></li>
-        <li><a href="airco.html">Airco</a></li>
-        <li><a href="diensten.html">Diensten</a></li>
-        <li><a href="prijzen.html">Prijzen</a></li>
-        <li><a href="over.html">Over ons</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
+      <strong>Pagina’s</strong>
+      <p class="muted">Keuzehulp<br>Airco<br>Diensten<br>Prijzen<br>Over ons</p>
     </div>
   </div>
-  <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
+  <div class="container legal">© 2025 Airflow+</div>
 </footer>
 
-</body></html>
+</body>
+</html>
