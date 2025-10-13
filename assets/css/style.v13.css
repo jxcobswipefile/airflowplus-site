@@ -401,3 +401,58 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 .review .badge{ margin-left:auto; font-size:12px; padding:6px 10px; border-radius:999px;
                 background:#f0f9ff; color:#005b8f; border:1px solid #dbe7ff; font-weight:800; }
 @media (max-width: 900px){ .review-grid{ grid-template-columns:1fr; } }
+
+/* Wider hero text column */
+.hero .hero-inner{ grid-template-columns: 1.6fr .4fr; }
+.hero .hero-copy{ max-width: 1000px; }
+
+/* Combined seam card */
+.hero-seam{ padding-top: 0; }
+.seam-card{
+  display:flex; flex-direction:column; gap:14px;
+  border-radius:20px; border:1px solid #dbe7ff; padding:28px;
+  background:#fff; box-shadow:0 22px 60px rgba(0,93,143,.12);
+}
+.seam-card.seam{ transform: translateY(-56%); position:relative; z-index:5; }
+.seam-card.wide{ max-width: 980px; margin: 0 auto; }      /* wider + centered */
+
+.seam-card h2{ margin:0; font-size:28px; }
+.seam-card .lead{ margin:2px 0 4px; color:#eef6ff; }      /* will flip to white below */
+
+.seam-card.blue{
+  color:#fff;
+  background: linear-gradient(180deg,#0a8fd0 0%, #0a78b0 100%);
+  border-color: rgba(255,255,255,.25);
+  box-shadow:0 28px 70px rgba(0,93,143,.22);
+}
+.seam-card.blue h2, .seam-card.blue .lead, .seam-card.blue li{ color:#fff; }
+
+/* White checks on blue */
+.seam-card.blue .check{
+  background:#fff;
+  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="black"><path d="M20.285 2.859l-11.73 11.73-4.84-4.84-2.828 2.828 7.668 7.668 14.558-14.558z"/></svg>') center/contain no-repeat;
+}
+
+/* Make the form fill nicely under the checks */
+.seam-card .kh-cta-form.stack{ width:100%; display:grid; grid-template-columns: 1fr auto; gap:10px; margin-top:6px; }
+.seam-card .kh-cta-form input{ background:#fff; color:#0f1720; border:1px solid rgba(255,255,255,.55); }
+.seam-card .kh-cta-form input:focus{ box-shadow:0 0 0 6px rgba(255,255,255,.18); border-color:#ffffff; }
+.seam-card .btn-primary{ background:#fff; color:#005b8f; border-color:#fff; box-shadow:none; }
+.seam-card .btn-primary:hover{ filter:brightness(1.02); }
+
+/* Checklist row */
+.checklist.row{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin:4px 0 2px; }
+@media (max-width: 900px){
+  .seam-card.seam{ transform:none; }
+  .seam-card .kh-cta-form.stack{ grid-template-columns:1fr; }
+}
+
+/* Simpler white cards on blue background */
+.maat.invert.simple .mini-card{
+  background:#ffffff; color:#0f1720; border:0;
+  box-shadow:0 16px 40px rgba(0,0,0,.12);
+}
+.maat.invert.simple h2{ font-size:34px; }
+.maat.invert.simple .mini-card h4{ font-size:20px; margin:0 0 6px; }
+.maat.invert.simple .mini-card p{ font-size:16px; line-height:1.5; }
+.maat.invert.simple .maat-lead{ color:#eff7ff; font-size:18px; }
