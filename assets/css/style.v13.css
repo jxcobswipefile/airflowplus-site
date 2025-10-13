@@ -166,6 +166,8 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .kh-cta-card{flex-direction:column;align-items:stretch}
   .kh-cta-form{justify-content:flex-start}
 }
-/* TEMP: make hero video clearly visible while testing */
-.hero-video { opacity: .75 !important; }
-.hero-overlay { background: none !important; }
+.hero-video { opacity: .35; }
+.hero-overlay { 
+  background: radial-gradient(60% 40% at 30% 20%, rgba(255,255,255,.55), rgba(255,255,255,.1) 70%),
+              linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.0));
+}
