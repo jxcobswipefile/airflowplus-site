@@ -7,9 +7,9 @@
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=7">
-<script defer src="assets/js/main.js?v=7"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=10">
+<script defer src="assets/js/main.js?v=10"></script>
 </head><body>
 
 <div class="topbar">
@@ -24,7 +24,7 @@
   <div class="container header-inner">
     <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
     <nav class="nav">
-      <a href="index.html#keuzehulp">Keuzehulp</a>
+      <a href="#keuzehulp-cta">Keuzehulp</a>
       <a href="airco.html">Airco</a>
       <a href="diensten.html">Diensten</a>
       <a href="prijzen.html">Prijzen</a>
@@ -39,23 +39,24 @@
 
 <section class="hero hero-tall">
   <div class="hero-bg">
-    <video class="hero-video" autoplay muted loop playsinline poster="" aria-label="HVAC montage video (background)">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="assets/img/hero-poster.jpg">
       <source src="https://cdn.coverr.co/videos/coverr-working-on-air-conditioner-6237/1080p.mp4" type="video/mp4">
+      <source src="https://cdn.coverr.co/videos/coverr-working-on-air-conditioner-6237/1080p.webm" type="video/webm">
     </video>
     <div class="hero-overlay"></div>
   </div>
   <div class="container hero-inner">
     <div class="hero-copy">
-      <h1>Airco &amp; Warmtepomp Installatie — Snel, Netjes, Gecertificeerd</h1>
-      <p>Comfort in huis of kantoor binnen 14 dagen. All-in montage met fabrieksgarantie.</p>
+      <h1>Comfortabele koelte &amp; warmte, <span class="grad">zorgeloos geregeld</span></h1>
+      <p>Airco &amp; warmtepomp installatie met vaste prijs, net afgewerkt en snel gepland.</p>
       <div class="cta-row">
-        <a href="contact.html" class="btn btn-primary">Vrijblijvende offerte</a>
+        <a href="#keuzehulp-cta" class="btn btn-primary">Doe de keuzehulp</a>
         <a href="tel:+31 10 000 0000" class="btn btn-outline">Bel nu</a>
       </div>
       <ul class="bullets">
         <li>F-gassen gecertificeerd</li>
         <li>Netjes weggewerkte leidingen</li>
-        <li>Vaste prijs vooraf</li>
+        <li>Binnen 10–14 dagen geplaatst</li>
       </ul>
     </div>
     <div class="hero-media">
@@ -64,61 +65,22 @@
   </div>
 </section>
 
-<!-- Keuzehulp (v2) -->
-<section id="keuzehulp" class="section alt kh-wrap">
+<section id="keuzehulp-cta" class="section kh-cta">
   <div class="container">
-    <div class="kh-card">
-
-      <!-- Step header -->
-      <div class="kh-head">
-        <div class="kh-badge">Stap <span data-kh-step>1</span> / 2</div>
-        <h2 class="kh-title">Voor hoeveel kamers wil je airconditioning?</h2>
-        <p class="kh-sub">Kies 1 t/m 4 kamers. In de volgende stap geef je per kamer de oppervlakte aan.</p>
-      </div>
-
-      <!-- STEP 1: room count -->
-      <form id="keuzehulp-form" class="kh-form">
-        <div class="kh-step" id="kh-step-rooms" aria-labelledby="kh-rooms-label">
-          <div class="kh-grid-rooms">
-            <label class="chip"><input type="radio" name="rooms" value="1" required> 1 kamer</label>
-            <label class="chip"><input type="radio" name="rooms" value="2"> 2 kamers</label>
-            <label class="chip"><input type="radio" name="rooms" value="3"> 3 kamers</label>
-            <label class="chip"><input type="radio" name="rooms" value="4"> 4 kamers</label>
-          </div>
-          <div class="kh-actions">
-            <button type="button" class="btn btn-primary" data-kh-next>Volgende</button>
-          </div>
-        </div>
-
-        <!-- STEP 2: dynamically rendered room-size cards land here -->
-        <div class="kh-step" id="kh-step-sizes" hidden>
-          <h3 class="kh-step-title">Wat is de oppervlakte van de kamer(s)? <span class="muted">(m²)</span></h3>
-          <p class="kh-sub">Meet lengte × breedte. Kies per kamer de juiste klasse.</p>
-
-          <div id="kh-size-grid" class="kh-size-grid"><!-- JS injects room blocks --></div>
-
-          <div class="kh-actions between">
-            <button type="button" class="btn" data-kh-prev>← Vorige</button>
-            <button type="submit" class="btn btn-primary">Resultaat →</button>
-          </div>
-        </div>
-      </form>
-
-      <!-- Result panel -->
-      <aside id="kh-result" class="kh-result" aria-live="polite" hidden>
-        <h3>Jouw indicatie</h3>
-        <ul class="kh-out">
-          <li><strong>Kamers:</strong> <span data-kh="rooms"></span></li>
-          <li><strong>Totaal adviescapaciteit:</strong> <span data-kh="kw"></span> kW</li>
-          <li><strong>Voorstel:</strong> <span data-kh="voorstel"></span></li>
+    <div class="kh-cta-card">
+      <div class="kh-cta-text">
+        <h2>Doe de airco keuzehulp</h2>
+        <p class="muted">Beantwoord 3 korte vragen en ontvang een onafhankelijk advies, afgestemd op jouw ruimtes.</p>
+        <ul class="checklist">
+          <li><span class="check"></span> Klaar in 3 stappen</li>
+          <li><span class="check"></span> Eerlijk advies op maat</li>
         </ul>
-        <div class="cta-row">
-          <a href="contact.html" class="btn btn-primary">Vrijblijvende offerte</a>
-          <a href="prijzen.html" class="btn btn-outline">Bekijk prijzen</a>
-        </div>
-        <small class="muted">Indicatie. Definitief advies na inmeten.</small>
-      </aside>
-
+      </div>
+      <form class="kh-cta-form" onsubmit="event.preventDefault(); window.location.href='#keuzehulp';">
+        <label for="kh-email" class="visually-hidden">E-mailadres</label>
+        <input id="kh-email" type="email" placeholder="jij@voorbeeld.nl" required>
+        <button class="btn btn-primary" type="submit">Start de keuzehulp</button>
+      </form>
     </div>
   </div>
 </section>
@@ -136,39 +98,46 @@
     </div>
   </div>
 </section>
-  
-<!-- Airconditioning op maat -->
-<section class="section maat">
-  <div class="container maat-grid">
+
+<section class="section maat v2">
+  <div class="container maat-grid v2">
     <div>
       <h2>Airconditioning op maat — comfort voor elke ruimte</h2>
-      <p class="maat-lead">Van één slaapkamer tot volledige woning of kantoor: wij adviseren, plaatsen en werken netjes af. Ontdek in 2 minuten welke oplossing past bij jouw situatie.</p>
+      <p class="maat-lead">Van één slaapkamer tot volledige woning of kantoor: wij adviseren, installeren en onderhouden. Altijd netjes, snel en voor een vaste prijs.</p>
       <div class="cta-row">
-        <a href="#keuzehulp" class="btn btn-primary">Doe de keuzehulp</a>
+        <a href="#keuzehulp-cta" class="btn btn-primary">Doe de keuzehulp</a>
         <a href="contact.html" class="btn btn-outline">Direct contact</a>
       </div>
       <ul class="maat-points">
-        <li>Vaste prijsafspraak vooraf</li>
-        <li>F-gassen gecertificeerd team</li>
-        <li>Netjes weggewerkt leidingwerk</li>
+        <li><span class="check"></span> Vaste prijsafspraak vooraf</li>
+        <li><span class="check"></span> F-gassen gecertificeerd team</li>
+        <li><span class="check"></span> Netjes weggewerkt leidingwerk</li>
       </ul>
     </div>
-    <div class="maat-visual">
-      <!-- Decorative visual (placeholder) -->
-      <div class="maat-blob"></div>
-      <img src="https://images.unsplash.com/photo-1581091870622-7e0cdfbb6792?q=80&w=1200&auto=format&fit=crop" alt="Airconditioning op maat" loading="lazy">
+    <div class="maat-side">
+      <article class="mini-card">
+        <h4>Vrijblijvend advies</h4>
+        <p>We denken mee over capaciteit, type en positie — afgestemd op jouw woning.</p>
+      </article>
+      <article class="mini-card">
+        <h4>Nette installatie</h4>
+        <p>Strakke afwerking, stofarm boren en leidingen netjes uit het zicht.</p>
+      </article>
+      <article class="mini-card">
+        <h4>Service & onderhoud</h4>
+        <p>Jaarlijkse controle voor top-rendement en langere levensduur.</p>
+      </article>
     </div>
   </div>
 </section>
 
-<section class="section">
+<section class="section alt">
   <div class="container">
     <h2>Klanten over Airflow+</h2>
-    <div class="cards">
+    <div class="cards three">
       <article class="card review"><div class="stars" aria-label="5 sterren">★★★★★</div><p>“Super netjes gewerkt en binnen 1 dag klaar. Duidelijke communicatie en geen verrassingen.”</p><div class="reviewer">— Sanne, Rotterdam</div></article>
       <article class="card review"><div class="stars" aria-label="5 sterren">★★★★★</div><p>“Top service. Binnen 10 dagen geplaatst, alles strak afgewerkt en goed advies.”</p><div class="reviewer">— Mehmet, Den Haag</div></article>
       <article class="card review"><div class="stars" aria-label="5 sterren">★★★★★</div><p>“Aanrader! Fijne monteurs en nette prijs. Airco koelt en verwarmt perfect.”</p><div class="reviewer">— Lisa, Delft</div></article>
-      <article class="card review"><div class="stars" aria-label="5 sterren">★★★★★</div><p>“Heldere offerte, snelle planning en schoon opgeleverd. Zeer tevreden.”</p><div class="reviewer">— Willem, Gouda</div></article>
     </div>
   </div>
 </section>
@@ -188,10 +157,57 @@
   <div class="container">
     <h2>Veelgestelde vragen</h2>
     <div class="faq">
-      <details><summary>Hoe snel kunnen jullie plaatsen?</summary><p>Meestal binnen 10–14 dagen, afhankelijk van de planning en situatie ter plaatse.</p></details>
+      <details><summary>Hoe snel kunnen jullie plaatsen?</summary><p>Meestal binnen 10–14 dagen, afhankelijk van planning en situatie ter plaatse.</p></details>
       <details><summary>Wat is inbegrepen bij de prijs?</summary><p>Standaard montage, tot 4 meter leiding, inbedrijfstelling en uitleg. Afwijkingen bespreken we vooraf.</p></details>
       <details><summary>Kunnen jullie ook verwarmen met airco?</summary><p>Ja, moderne airco’s zijn warmtepompen en kunnen efficiënt koelen én verwarmen.</p></details>
       <details><summary>Doen jullie onderhoud?</summary><p>Jazeker. Jaarlijks onderhoud houdt het rendement hoog en verlengt de levensduur.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="keuzehulp" class="section alt kh-wrap">
+  <div class="container">
+    <div class="kh-card">
+      <div class="kh-head">
+        <div class="kh-badge">Stap <span data-kh-step>1</span> / 2</div>
+        <h2 class="kh-title">Voor hoeveel kamers wil je airconditioning?</h2>
+        <p class="kh-sub">Kies 1 t/m 4 kamers. In de volgende stap geef je per kamer de oppervlakte aan.</p>
+      </div>
+      <form id="keuzehulp-form" class="kh-form">
+        <div class="kh-step" id="kh-step-rooms">
+          <div class="kh-grid-rooms">
+            <label class="chip"><input type="radio" name="rooms" value="1" required> 1 kamer</label>
+            <label class="chip"><input type="radio" name="rooms" value="2"> 2 kamers</label>
+            <label class="chip"><input type="radio" name="rooms" value="3"> 3 kamers</label>
+            <label class="chip"><input type="radio" name="rooms" value="4"> 4 kamers</label>
+          </div>
+          <div class="kh-actions">
+            <button type="button" class="btn btn-primary" data-kh-next>Volgende</button>
+          </div>
+        </div>
+        <div class="kh-step" id="kh-step-sizes" hidden>
+          <h3 class="kh-step-title">Wat is de oppervlakte van de kamer(s)? <span class="muted">(m²)</span></h3>
+          <p class="kh-sub">Kies per kamer de juiste klasse.</p>
+          <div id="kh-size-grid" class="kh-size-grid"></div>
+          <div class="kh-actions between">
+            <button type="button" class="btn" data-kh-prev>← Vorige</button>
+            <button type="submit" class="btn btn-primary">Resultaat →</button>
+          </div>
+        </div>
+      </form>
+      <aside id="kh-result" class="kh-result" aria-live="polite" hidden>
+        <h3>Jouw indicatie</h3>
+        <ul class="kh-out">
+          <li><strong>Kamers:</strong> <span data-kh="rooms"></span></li>
+          <li><strong>Totaal adviescapaciteit:</strong> <span data-kh="kw"></span> kW</li>
+          <li><strong>Voorstel:</strong> <span data-kh="voorstel"></span></li>
+        </ul>
+        <div class="cta-row">
+          <a href="contact.html" class="btn btn-primary">Vrijblijvende offerte</a>
+          <a href="prijzen.html" class="btn btn-outline">Bekijk prijzen</a>
+        </div>
+        <small class="muted">Indicatie. Definitief advies na inmeten.</small>
+      </aside>
     </div>
   </div>
 </section>
@@ -215,7 +231,7 @@
     <div>
       <h4>Pagina’s</h4>
       <ul class="list">
-        <li><a href="index.html#keuzehulp">Keuzehulp</a></li>
+        <li><a href="#keuzehulp-cta">Keuzehulp</a></li>
         <li><a href="airco.html">Airco</a></li>
         <li><a href="diensten.html">Diensten</a></li>
         <li><a href="prijzen.html">Prijzen</a></li>
