@@ -234,3 +234,34 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 .alt-blue{
   background: linear-gradient(180deg, #eaf6ff 0%, #ffffff 70%);
 }
+/* Place CTA card on the seam between hero and next section */
+.kh-cta.overlap{
+  padding-top:0;
+  margin-top:0;                   /* section starts right after hero */
+  position:relative;
+  z-index:5;
+}
+.kh-cta .container.left{ display:flex; justify-content:flex-start; }
+
+/* The “seam” class lifts the card up to overlap the border line */
+.kh-cta-card.compact.seam{
+  max-width:560px;
+  margin-left:0;
+  display:flex; flex-direction:column; align-items:flex-start; gap:12px;
+  transform: translateY(-50%);    /* pull it up by half its height */
+  box-shadow:0 22px 60px rgba(0,93,143,.18);
+}
+
+/* Tighten spacing in the card */
+.checklist.row{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin:6px 0 2px; }
+
+/* Email BELOW the checks */
+.kh-cta-form.stack{
+  width:100%;
+  display:grid; grid-template-columns:1fr auto; gap:10px; margin-top:6px;
+}
+
+@media (max-width: 900px){
+  .kh-cta-card.compact.seam{ transform:none; }       /* no overlap on small screens */
+  .kh-cta-form.stack{ grid-template-columns:1fr; }
+}
