@@ -1,19 +1,30 @@
-    <!doctype html>
-    <html lang="nl">
-      <head>
-        <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Contact • Airflow+</title>
-<meta name="description" content="Airflow+ — Airco & warmtepomp installatie. Snel, netjes en gecertificeerd.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
-<script defer src="assets/js/main.js"></script>
+<!doctype html>
+<html lang="nl">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact • Airflow+</title>
+    <meta name="description" content="Airflow+ — Airco & warmtepomp installatie. Snel, netjes en gecertificeerd.">
+    <link rel="icon" href="assets/img/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script defer src="assets/js/main.js"></script>
 
-      </head>
-      <body>
-        <header class="site-header">
+  </head>
+  <body>
+    
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>Gecertificeerde airco & warmtepomp installateur</span>
+    <a href="tel:+31101234567" class="topbar-link">Bel: +31 10 123 4567</a>
+  </div>
+</div>
+
+    
+<header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
     <nav class="nav">
@@ -27,51 +38,53 @@
   </div>
 </header>
 
-        <main>
-              <section class="page-header">
-      <div class="container">
-        <h1>Contact & Offerte</h1>
-        <p>Bel ons direct of vul het formulier in; we reageren meestal binnen 1 werkdag.</p>
+    <main>
+      
+<section class="page-header">
+  <div class="container">
+    <h1>Contact & Offerte</h1>
+    <p>Bel ons direct of vul het formulier in; we reageren meestal binnen 1 werkdag.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container grid-2">
+    <form class="form" id="quote-form" method="POST" action="https://formspree.io/f/your_form_id">
+      <div class="field">
+        <label>Naam</label>
+        <input type="text" name="name" required placeholder="Uw naam">
       </div>
-    </section>
-    <section class="section">
-      <div class="container grid-2">
-        <form class="form" id="quote-form">
-          <div class="field">
-            <label>Naam</label>
-            <input type="text" name="name" required placeholder="Uw naam">
-          </div>
-          <div class="field">
-            <label>E-mail</label>
-            <input type="email" name="email" required placeholder="naam@voorbeeld.nl">
-          </div>
-          <div class="field">
-            <label>Telefoon</label>
-            <input type="tel" name="phone" required placeholder="+31">
-          </div>
-          <div class="field">
-            <label>Adres / Postcode</label>
-            <input type="text" name="address" placeholder="1234 AB">
-          </div>
-          <div class="field">
-            <label>Bericht</label>
-            <textarea name="message" rows="5" placeholder="Vertel kort wat u nodig heeft."></textarea>
-          </div>
-          <button class="btn btn-primary" type="submit">Versturen</button>
-          <p class="form-note">Door te verzenden gaat u akkoord met onze <a href="#">privacyverklaring</a>.</p>
-        </form>
-        <div class="box">
-          <h3>Direct contact</h3>
-          <p><a href="tel:+31101234567" class="link-block">Bel: +31 10 123 4567</a></p>
-          <p><a href="mailto:info@airflowplus.nl" class="link-block">E-mail: info@airflowplus.nl</a></p>
-          <p>Werkgebied: Rotterdam en heel Nederland</p>
-          <div class="map-embed">
-            <iframe title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=4.40%2C51.85%2C4.55%2C51.95&layer=mapnik" loading="lazy"></iframe>
-          </div>
-        </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" name="email" required placeholder="naam@voorbeeld.nl">
       </div>
-    </section>
-    <section class="cta">
+      <div class="field">
+        <label>Telefoon</label>
+        <input type="tel" name="phone" required placeholder="+31">
+      </div>
+      <div class="field">
+        <label>Adres / Postcode</label>
+        <input type="text" name="address" placeholder="1234 AB">
+      </div>
+      <div class="field">
+        <label>Bericht</label>
+        <textarea name="message" rows="5" placeholder="Vertel kort wat u nodig heeft."></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit">Versturen</button>
+      <p class="form-note">Door te verzenden gaat u akkoord met onze <a href="#">privacyverklaring</a>.</p>
+    </form>
+    <div class="box">
+      <h3>Direct contact</h3>
+      <p><a href="tel:+31101234567" class="link-block">Bel: +31 10 123 4567</a></p>
+      <p><a href="mailto:info@airflowplus.nl" class="link-block">E-mail: info@airflowplus.nl</a></p>
+      <p>Werkgebied: Rotterdam en heel Nederland</p>
+      <div class="map-embed">
+        <iframe title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=4.40%2C51.85%2C4.55%2C51.95&layer=mapnik" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
   <div class="container cta-inner">
     <h2>Klaar voor comfortabel binnenklimaat?</h2>
     <p>Vraag nu een vrijblijvende offerte aan of bel voor direct advies.</p>
@@ -83,8 +96,9 @@
 </section>
 
 
-        </main>
-        <footer class="site-footer">
+    </main>
+    
+<footer class="site-footer">
   <div class="container footer-grid">
     <div>
       <div class="brand">Airflow<span class="accent">+</span></div>
@@ -114,5 +128,5 @@
   </div>
 </footer>
 
-      </body>
-    </html>
+  </body>
+</html>

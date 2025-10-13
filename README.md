@@ -1,0 +1,1 @@
+Airflow+ static site. Deploy via GitHub Pages (Settings → Pages). Update Formspree endpoint in contact.html.
