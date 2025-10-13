@@ -166,3 +166,6 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .kh-cta-card{flex-direction:column;align-items:stretch}
   .kh-cta-form{justify-content:flex-start}
 }
+/* TEMP: make hero video clearly visible while testing */
+.hero-video { opacity: .75 !important; }
+.hero-overlay { background: none !important; }
