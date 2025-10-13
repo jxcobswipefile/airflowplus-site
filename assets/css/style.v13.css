@@ -387,12 +387,12 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   background:#ffffff; border:1px solid #ffe7c2;
 }
 
-.reviews{ padding-top: 20px; }
-.review-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
-.review{
-  background:#fff; border:1px solid #e6e9ee; border-radius:16px; padding:18px;
-  box-shadow:0 16px 40px rgba(0,93,143,.08);
-}
+/* Reviews: more vertical space + card padding */
+.reviews{ padding-top: 48px; padding-bottom: 48px; }
+.review-grid{ gap:22px; }
+.review{ padding:22px; }
+.review .name{ font-size:16px; }
+.review p{ font-size:16px; line-height:1.55; }
 .review .head{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
 .review .avatar{ width:40px; height:40px; border-radius:50%; background:linear-gradient(180deg,#eaf6ff,#fff);
                  border:1px solid #dbe7ff; }
@@ -447,12 +447,63 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .seam-card .kh-cta-form.stack{ grid-template-columns:1fr; }
 }
 
-/* Simpler white cards on blue background */
+/* Op maat (blue bg) – bigger readable content */
+.maat.invert.simple{
+  background: linear-gradient(180deg, #0a8fd0 0%, #0a78b0 100%);
+  color:#ffffff;
+}
+.maat.invert.simple h2{ font-size:36px; margin-bottom:8px; }
+.maat.invert.simple .maat-lead{ font-size:18px; color:#eef6ff; }
+
+/* Right side cards: wider, larger headings, body text black/near-black */
+.maat.invert.simple .maat-side{ gap:18px; }
 .maat.invert.simple .mini-card{
   background:#ffffff; color:#0f1720; border:0;
-  box-shadow:0 16px 40px rgba(0,0,0,.12);
+  box-shadow:0 16px 42px rgba(0,0,0,.16);
+  padding:18px 18px;
+  max-width: 560px;         /* wider cards */
 }
-.maat.invert.simple h2{ font-size:34px; }
-.maat.invert.simple .mini-card h4{ font-size:20px; margin:0 0 6px; }
-.maat.invert.simple .mini-card p{ font-size:16px; line-height:1.5; }
-.maat.invert.simple .maat-lead{ color:#eff7ff; font-size:18px; }
+.maat.invert.simple .mini-card h4{
+  font-size:22px; line-height:1.2; margin:0 0 8px;
+  max-width: 75%;           /* headline extends ~3/4 of card */
+}
+.maat.invert.simple .mini-card p{ font-size:17px; color:#0f1720; }
+
+
+/* Keuzehulp card width + placement (left, a bit wider) */
+.kh-cta .container.left{ display:flex; justify-content:flex-start; }
+.kh-cta-card.compact.seam.blue{
+  max-width: 720px;     /* wider than before */
+  padding: 28px 28px;
+  transform: translateY(-54%);
+}
+@media (max-width: 900px){
+  .kh-cta-card.compact.seam.blue{ transform:none; max-width:100%; }
+}
+
+/* Heating info card (centered) */
+.heat-info{ padding-top: 18px; }
+.heat-card{
+  max-width: 980px; margin: 0 auto;
+  background:#ffffff; border:1px solid #e6e9ee; border-radius:20px;
+  padding:26px 28px; box-shadow:0 22px 60px rgba(0,93,143,.10);
+  text-align:center;
+}
+.heat-card h2{ margin:0 0 10px; font-size:28px; }
+.heat-card .lead{ color:#445164; margin:0 0 10px; }
+.heat-card .checklist.row{ justify-content:center; gap:16px; }
+
+/* Darker final CTA background */
+.cta.alt-dark{
+  background: linear-gradient(180deg, #0a2942 0%, #0b1f33 100%);
+  color:#eaf1ff;
+}
+.cta.alt-dark .cta-inner{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
+}
+.cta.alt-dark h2, .cta.alt-dark p{ color:#eaf1ff; }
+.cta.alt-dark .btn-outline{
+  color:#fff; border-color:#fff; background:transparent;
+}
+.cta.alt-dark .btn-outline:hover{ background: rgba(255,255,255,.14); }
