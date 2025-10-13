@@ -132,3 +132,50 @@ input:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 6px var(
 .kh-actions{ display:flex; gap:10px; margin-top:12px; }
 .kh-row{ display:grid; gap:8px; margin-top:10px; }
 #kh-result .kh-out p{ margin:6px 0; }
+/* ===== Keuzehulp v2 ===== */
+.kh-wrap{padding-top:80px;padding-bottom:80px}
+.kh-card{background:#f3f8ff;border:1px solid #dbe7ff;border-radius:20px;padding:28px;box-shadow:0 18px 40px rgba(0,93,143,.08)}
+.kh-head{margin-bottom:12px}
+.kh-badge{display:inline-block;background:#e9f4ff;border:1px solid #cfe6ff;color:#005b8f;font-weight:700;border-radius:999px;padding:6px 12px;font-size:12px}
+.kh-title{margin:10px 0 4px}
+.kh-sub{color:#5b6470;margin:0 0 16px}
+
+.chip{display:inline-flex;align-items:center;gap:10px;border:2px solid #009de0;color:#005b8f;background:#fff;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer;transition:.15s}
+.chip input{appearance:none;width:16px;height:16px;border:2px solid #009de0;border-radius:50%}
+.chip:has(input:checked){background:#009de0;color:#fff;border-color:#009de0}
+.chip:has(input:checked) input{background:#fff;border-color:#fff}
+
+.kh-grid-rooms{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:12px 0 8px}
+.kh-actions{display:flex;gap:10px;margin-top:10px}
+.kh-actions.between{justify-content:space-between}
+
+.kh-step-title{margin:6px 0 8px}
+.kh-size-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.kh-room{background:#fff;border:1px solid #e6e9ee;border-radius:16px;padding:16px}
+.kh-room h4{margin:0 0 10px}
+.kh-size-row{display:flex;flex-wrap:wrap;gap:10px}
+.kh-pill{display:inline-block;border:2px solid #009de0;color:#005b8f;background:#fff;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;transition:.15s}
+.kh-pill.active,.kh-pill:hover{background:#009de0;color:#fff}
+
+.kh-result{background:#ffffff;border:1px solid #dbe7ff;border-radius:16px;padding:18px;margin-top:18px}
+.kh-result h3{margin:0 0 10px}
+.kh-out{padding-left:18px;margin:0 0 12px}
+
+@media (max-width: 900px){
+  .kh-grid-rooms{grid-template-columns:1fr 1fr}
+  .kh-size-grid{grid-template-columns:1fr}
+}
+
+/* ===== “Airconditioning op maat” section ===== */
+.maat{background:linear-gradient(180deg,#f7fbff 0%,#ffffff 60%);border-top:1px solid #e6e9ee;border-bottom:1px solid #e6e9ee}
+.maat-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+.maat-lead{color:#5b6470;max-width:60ch}
+.maat-points{margin:14px 0 0;padding-left:18px}
+.maat-visual{position:relative}
+.maat-visual img{border-radius:16px;box-shadow:0 18px 40px rgba(0,93,143,.12)}
+.maat-blob{position:absolute;inset:-30px -20px auto auto;height:200px;width:200px;border-radius:40px;background:radial-gradient(110px 110px at 70% 30%, rgba(0,157,224,.25), transparent 60%), radial-gradient(110px 110px at 20% 80%, rgba(16,163,127,.18), transparent 60%);filter:blur(8px);z-index:-1}
+
+@media (max-width: 900px){
+  .maat-grid{grid-template-columns:1fr}
+}
+
