@@ -265,3 +265,60 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .kh-cta-card.compact.seam{ transform:none; }       /* no overlap on small screens */
   .kh-cta-form.stack{ grid-template-columns:1fr; }
 }
+/* Bigger hero headline + more breathing room */
+.hero h1{
+  font-size:56px;               /* was ~44 */
+  line-height:1.04;
+  margin:0 0 18px;              /* space under H1 */
+}
+@media (max-width: 900px){
+  .hero h1{ font-size:38px; }
+}
+
+/* Larger hero buttons + more spacing below H1 */
+.hero .cta-row{
+  display:flex; gap:14px; 
+  margin-top:22px;              /* pushes buttons away from H1 */
+}
+.hero .btn{ padding:14px 20px; font-size:16px; }
+
+/* Lighter highlight blue for H1 emphasis */
+.hl-blue{ color:#2ab5f2; }       /* light, vibrant blue */
+/* Bigger card + blue theme */
+.kh-cta-card.compact.seam.blue{
+  max-width:680px;                /* bigger */
+  padding:28px 28px;
+  background: linear-gradient(180deg,#0a8fd0 0%, #0a78b0 100%);
+  color:#fff;
+  border-color: rgba(255,255,255,.22);
+  box-shadow:0 28px 70px rgba(0,93,143,.22);
+}
+
+/* White text inside */
+.kh-cta-card.compact.seam.blue h2,
+.kh-cta-card.compact.seam.blue p,
+.kh-cta-card.compact.seam.blue li{ color:#ffffff; }
+
+/* White check icons look crisp on blue */
+.kh-cta-card.compact.seam.blue .check{
+  background:#fff; 
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="black"><path d="M20.285 2.859l-11.73 11.73-4.84-4.84-2.828 2.828 7.668 7.668 14.558-14.558z"/></svg>') center/contain no-repeat;
+}
+
+/* Input stays readable on blue; button pops */
+.kh-cta-card.compact.seam.blue .kh-cta-form input{
+  background:#ffffff; color:#0f1720; border:1px solid rgba(255,255,255,.55);
+}
+.kh-cta-card.compact.seam.blue .kh-cta-form input:focus{
+  box-shadow:0 0 0 6px rgba(255,255,255,.18); border-color:#ffffff;
+}
+.kh-cta-card.compact.seam.blue .btn-primary{
+  background:linear-gradient(180deg,#ffffff,#e9f3ff);
+  color:#005b8f;
+  border-color:#ffffff;
+}
+.kh-cta-card.compact.seam.blue .btn-primary:hover{ filter:brightness(1.02); }
+
+/* Keep layout as before (email below checks) but give a touch more air */
+.kh-cta-form.stack{ margin-top:10px; }
+.checklist.row{ gap:16px; }
