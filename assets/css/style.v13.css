@@ -301,7 +301,7 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 
 /* Make the next section (“Onze services”) start closer */
 .heat-info + .section{
-  padding-top: 48px;              /* default is 80px; halve it after the heat section */
+  padding-top: 60px;              /* default is 80px; halve it after the heat section */
 }
 
 /* If your services block doesn’t use .section, target its id/class instead:
