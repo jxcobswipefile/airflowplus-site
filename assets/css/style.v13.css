@@ -192,3 +192,52 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .kh-cta-card.compact.seam{transform:none;max-width:100%}
   .kh-cta-form.stack{grid-template-columns:1fr}
 }
+
+/* ===== Hero Keuzehulp: input styling + wider card ===== */
+.kh-cta-card.compact.seam.blue {
+  max-width: 820px;              /* wider to the right */
+  padding: 30px 32px;
+}
+
+.kh-cta-card.compact.seam.blue .kh-cta-form input {
+  background:#ffffff;
+  color:#0f1720;
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:12px;
+  padding:12px 14px;
+  min-width:320px;               /* ensure roomy input */
+}
+.kh-cta-card.compact.seam.blue .kh-cta-form input:focus {
+  border-color:#ffffff;
+  box-shadow:0 0 0 6px rgba(255,255,255,.18);
+}
+
+/* Keep email below the checks and full width on small screens */
+.kh-cta-form.stack {
+  width:100%;
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap:10px;
+  margin-top:8px;
+}
+@media (max-width: 720px){
+  .kh-cta-form.stack { grid-template-columns:1fr; }
+}
+
+/* ===== Reduce space between Keuzehulp and Heating section ===== */
+.kh-cta { padding-bottom: 0; }
+.heat-info { 
+  padding-top: 8px;             /* was larger; brings it closer */
+}
+
+/* ===== Heating card: taller, more presence ===== */
+.heat-info { 
+  min-height: 68vh;             /* was ~56vh */
+}
+.heat-card {
+  padding: 72px 48px;           /* more vertical mass */
+}
+@media (max-width: 900px){
+  .heat-info { min-height: 56vh; }  /* keep mobile comfortable */
+  .heat-card { padding: 48px 28px; }
+}
