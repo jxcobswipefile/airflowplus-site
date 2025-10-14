@@ -196,50 +196,59 @@
 
 
 
-<!-- Reviews -->
-<section class="section reviews">
+<!-- Reviews — vertical cards + carousel -->
+<section class="section reviews" id="reviews">
   <div class="container">
-    <h2>Wat klanten <span class="hl-blue">zeggen</span></h2>
+    <h2>Klant<span class="hl-blue">reviews</span></h2>
 
-    <div class="review-grid">
-      <article class="review">
-        <div class="head">
-          <div class="avatar" aria-hidden="true"></div>
-          <div>
-            <div class="name">Marieke K.</div>
-            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
-          </div>
-          <span class="badge">Google</span>
+    <div class="reviews-carousel" data-reviews>
+      <button class="rev-nav rev-prev" aria-label="Vorige review">‹</button>
+      <div class="rev-viewport" data-viewport>
+        <div class="rev-track" data-track>
+          <!-- 9 vertical cards (feel free to edit text) -->
+          <article class="rev-card">
+            <div class="head"><div class="avatar"></div><div class="name">Sanne de Vries</div></div>
+            <p>Snelle plaatsing, stil toestel en supernetjes gewerkt. Zeer tevreden!</p>
+          </article>
+          <article class="rev-card">
+            <div class="head"><div class="avatar"></div><div class="name">Tom Janssen</div></div>
+            <p>Goed advies over capaciteit en locatie. Binnen één dag geplaatst.</p>
+          </article>
+          <article class="rev-card">
+            <div class="head"><div class="avatar"></div><div class="name">M. Bakker</div></div>
+            <p>Kabels strak weggewerkt. Keurig resultaat en duidelijke prijs.</p>
+          </article>
+          <article class="rev-card">
+            <div class="head"><div class="avatar"></div><div class="name">Eva Koning</div></div>
+            <p>Werkt fluisterstil in de slaapkamer. Montage was heel netjes.</p>
+          </article>
+          <article class="rev-card">
+            <div class="head"><div class="avatar"></div><div class="name">J. van Dijk</div></div>
+            <p>Fijn team. Alles helder uitgelegd en direct gebruiksklaar.</p>
+          </article>
+          <article class="rev-card">
+            <div class="head"><div class="avatar"></div><div class="name">R. Vos</div></div>
+            <p>Precies het juiste vermogen. Huis koel in zomer, warm in winter.</p>
+          </article>
+          <article class="rev-card">
+            <div class="head"><div class="avatar"></div><div class="name">Anouk</div></div>
+            <p>Netjes opgeleverd, geen rommel. Aanrader voor Amsterdam regio.</p>
+          </article>
+          <article class="rev-card">
+            <div class="head"><div class="avatar"></div><div class="name">Bas</div></div>
+            <p>Communicatie snel en duidelijk. Goede prijs-kwaliteit.</p>
+          </article>
+          <article class="rev-card">
+            <div class="head"><div class="avatar"></div><div class="name">L. Meijer</div></div>
+            <p>Multi-split perfect ingeregeld. Fijne service na installatie.</p>
+          </article>
         </div>
-        <p>Netjes gewerkt en super snel ingepland. Binnen één dag alles klaar.</p>
-      </article>
-
-      <article class="review">
-        <div class="head">
-          <div class="avatar" aria-hidden="true"></div>
-          <div>
-            <div class="name">Jeroen V.</div>
-            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
-          </div>
-          <span class="badge">Google</span>
-        </div>
-        <p>Eerlijk advies over vermogen. Koelt én verwarmt nu precies goed.</p>
-      </article>
-
-      <article class="review">
-        <div class="head">
-          <div class="avatar" aria-hidden="true"></div>
-          <div>
-            <div class="name">Aisha R.</div>
-            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
-          </div>
-          <span class="badge">Google</span>
-        </div>
-        <p>Leidingen strak weggewerkt. Zeer tevreden over het resultaat.</p>
-      </article>
+      </div>
+      <button class="rev-nav rev-next" aria-label="Volgende review">›</button>
     </div>
   </div>
 </section>
+
 
 
 <section class="cta alt-dark">
