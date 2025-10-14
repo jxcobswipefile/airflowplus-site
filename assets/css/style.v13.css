@@ -507,3 +507,46 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   color:#fff; border-color:#fff; background:transparent;
 }
 .cta.alt-dark .btn-outline:hover{ background: rgba(255,255,255,.14); }
+/* ---- Phase A: safe visual polish (append-only) ---- */
+
+/* Hero: keep copy higher/left; slight breathing on buttons */
+.hero { padding: 28px 0 24px; }
+.hero-inner { align-items: start; }
+.hero h1 { margin-bottom: 16px; }
+.hero .cta-row { margin-top: 24px; gap: 16px; }
+
+/* Keuzehulp seam card: subtle width & overlap */
+.kh-cta .container.left { display: flex; justify-content: flex-start; }
+.kh-cta-card.seam { transform: translateY(-54%); }
+.kh-cta-card.compact.seam.blue { max-width: 720px; }
+
+/* Heating card: deep, legible, centered */
+.heat-info { padding: 0; min-height: 56vh; display: flex; align-items: center; }
+.heat-info .container { width: 100%; display: flex; justify-content: center; }
+.heat-card {
+  max-width: 980px; width: min(980px, 92%); text-align: center;
+  background: linear-gradient(180deg, #0b1f33 0%, #0a2942 100%);
+  color: #eaf1ff; border: 1px solid rgba(255,255,255,.18);
+  border-radius: 22px; padding: 52px 40px; box-shadow: 0 28px 70px rgba(0,0,0,.25);
+}
+.heat-card .lead { color: #cfe4ff; }
+
+/* Op maat: darker blue + readable side cards */
+.maat.invert.simple {
+  background: linear-gradient(180deg, #085786 0%, #073f66 100%);
+  color: #ffffff;
+}
+.maat.invert.simple .maat-lead { color: #d9ecff; }
+.maat.invert.simple .mini-card {
+  background: #ffffff; color: #0f1720; border: 0; border-radius: 16px;
+  padding: 18px; box-shadow: 0 16px 42px rgba(0,0,0,.16);
+}
+
+/* Reviews: more breathing & readable body */
+.reviews { padding-top: 48px; padding-bottom: 48px; }
+.review-grid { gap: 22px; }
+.review { padding: 22px; }
+.review p { font-size: 16px; line-height: 1.55; }
+
+/* Headline highlight stays a lighter blue for emphasis */
+.hl-blue { color: #2ab5f2; }
