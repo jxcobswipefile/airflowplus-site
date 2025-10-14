@@ -287,3 +287,27 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .heat-card h2{ font-size:26px; }
   .heat-card .lead{ line-height:1.55; }
 }
+
+/* ===== Tighten spacing around the heating card ===== */
+
+/* Reduce the overall height and add modest padding so it sits higher */
+.kh-cta + .heat-info{
+  padding-top: 12px;              /* was effectively larger via min-height centering */
+}
+.heat-info{
+  min-height: 34vh;               /* was ~56vh; pull section up */
+  padding-bottom: 24px;           /* modest bottom breathing room */
+}
+
+/* Make the next section (“Onze services”) start closer */
+.heat-info + .section{
+  padding-top: 36px;              /* default is 80px; halve it after the heat section */
+}
+
+/* If your services block doesn’t use .section, target its id/class instead:
+   #services{ padding-top:36px; }  (uncomment/adjust if needed) */
+
+/* Optional: slightly reduce the heat card’s “lifted” feel so it visually sits tighter */
+.heat-card{
+  box-shadow: 0 22px 60px rgba(0,0,0,.18); /* you can drop to .14 if you want even tighter look */
+}
