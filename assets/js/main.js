@@ -180,7 +180,7 @@ if (form){
   const maxScroll = () => track.scrollWidth - track.clientWidth;
 
   // Auto-advance
-  let intervalMs = 2800;
+  let intervalMs = 3200;
   let timer = null;
 
   const stepOnce = () => {
