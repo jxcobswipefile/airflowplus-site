@@ -371,3 +371,25 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 /* Reduce extra space between Services and Savings */
 #services + #savings{ padding-top:42px; }
 #savings + #maat{ padding-top:60px; } /* keep some air before “op maat” */
+
+/* Op maat (light theme) refinements */
+.msat-lead, .maat-lead { color:#445164; }  /* keep readable gray */
+.msat-lead + .maat-lead, .maat-lead + .maat-lead { margin-top:8px; }
+
+.msat-cta, .maat-cta { margin-top:14px; }
+
+/* Ensure buttons read well on light background inside this section */
+#maat .btn-primary{
+  background: linear-gradient(180deg,#00a7ef,#008fce);
+  color:#fff;
+  border-color: transparent;
+}
+#maat .btn-outline{
+  background:#fff;
+  color: var(--primary-700);
+  border-color:#99d4ef;
+}
+#maat .btn-outline:hover{ background:#f0f9ff; }
+
+/* Optional: a bit more breathing on the mini-cards side */
+#maat .mini-card p{ color:#445164; }
