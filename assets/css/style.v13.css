@@ -631,8 +631,8 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 /* Make sure review nav arrows sit above the track */
 .reviews-carousel { position: relative; }
 .rev-viewport { position: relative; z-index: 1; }
-.rev-track { position: relative; z-index: 2; }  /* scrolling layer */
-.rev-nav { position: absolute; z-index: 5; }    /* arrows above everything */
+.rev-track { position: relative; z-index: 1; }  /* scrolling layer */
+.rev-nav { position: absolute; z-index: 20; }    /* arrows above everything */
 
 /* Optional: nudge the left arrow inside the viewport on small screens */
 @media (max-width: 900px){
