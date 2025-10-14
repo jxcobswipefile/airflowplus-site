@@ -627,3 +627,15 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 .brand-strip .logos{ display:flex; gap:22px; flex-wrap:wrap; align-items:center; justify-content:center; opacity:.9; }
 .brand-strip img{ height:28px; width:auto; filter: grayscale(100%); opacity:.8; }
 .brand-strip img:hover{ opacity:1; filter:none; }
+
+/* Make sure review nav arrows sit above the track */
+.reviews-carousel { position: relative; }
+.rev-viewport { position: relative; z-index: 1; }
+.rev-track { position: relative; z-index: 2; }  /* scrolling layer */
+.rev-nav { position: absolute; z-index: 5; }    /* arrows above everything */
+
+/* Optional: nudge the left arrow inside the viewport on small screens */
+@media (max-width: 900px){
+  .rev-prev { left: 6px; }
+  .rev-next { right: 6px; }
+}
