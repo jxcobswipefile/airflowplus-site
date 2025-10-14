@@ -550,3 +550,80 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 
 /* Headline highlight stays a lighter blue for emphasis */
 .hl-blue { color: #2ab5f2; }
+/* ================================
+   Reviews carousel (vertical cards)
+==================================*/
+.reviews { padding-top: 54px; padding-bottom: 54px; }
+.reviews-carousel{ position:relative; margin-top: 14px; }
+.rev-viewport{
+  overflow: hidden; border-radius: 16px;
+}
+.rev-track{
+  display: flex; gap: 16px; padding: 6px; will-change: transform;
+  scroll-snap-type: x mandatory; overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.rev-track::-webkit-scrollbar{ height: 8px }
+.rev-track::-webkit-scrollbar-thumb{ background: #d7e4f5; border-radius: 8px }
+.rev-card{
+  flex: 0 0 260px; height: 360px;       /* vertical rectangle */
+  background: #fff; border: 1px solid #e6e9ee; border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0,93,143,.08);
+  padding: 16px; scroll-snap-align: start; display: flex; flex-direction: column;
+}
+.rev-card .head{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.rev-card .avatar{ width:38px; height:38px; border-radius:50%;
+  background: linear-gradient(180deg,#eaf6ff,#fff); border:1px solid #dbe7ff; }
+.rev-card .name{ font-weight:800; font-size:15px; }
+.rev-card p{ font-size:15px; line-height:1.55; color:#0f1720; margin: 6px 0 0; }
+
+/* Carousel nav */
+.rev-nav{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:38px; height:38px; border-radius:50%;
+  display:grid; place-items:center; border:1px solid #d7deea;
+  background:#fff; box-shadow:0 10px 22px rgba(0,0,0,.08);
+  cursor:pointer; font-size:20px; line-height:0;
+}
+.rev-prev{ left:-12px; }
+.rev-next{ right:-12px; }
+@media (max-width: 900px){
+  .rev-card{ flex-basis: 78%; height: 320px; }
+  .rev-prev{ left:4px } .rev-next{ right:4px }
+}
+
+/* ================================
+   Phase C polish
+==================================*/
+
+/* Sticky header glow + subtle blur on scroll */
+.site-header{ transition: box-shadow .2s ease, backdrop-filter .2s ease, background .2s ease; }
+.site-header.scrolled{
+  background: rgba(255,255,255,.85);
+  backdrop-filter: saturate(120%) blur(8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+/* Button hover: soft lift */
+.btn{ transition: transform .05s ease, box-shadow .18s ease; }
+.btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0,0,0,.10); }
+
+/* FAQ: larger summary + caret animation */
+.faq details{
+  background:#fff; border:1px solid #dbe7ff; border-radius:14px;
+  padding:14px 16px; margin:12px 0; box-shadow:0 10px 24px rgba(0,93,143,.06)
+}
+.faq summary{ cursor:pointer; font-weight:800; display:flex; justify-content:space-between; align-items:center; font-size:16px; }
+.faq summary::after{ content:"▾"; color:#0a66cc; font-size:18px; transform:rotate(0); transition:.2s transform }
+.faq details[open] summary::after{ transform:rotate(180deg) }
+.faq p{ margin:10px 0 0; color:#445164; font-size:15px; line-height:1.55 }
+
+/* Footer: tightened text hierarchy */
+.site-footer .footer-grid strong{ display:block; margin-bottom:6px; font-size:15px; }
+.site-footer .muted{ color:#c9d7ee; font-size:14px; line-height:1.55 }
+
+/* Optional brand strip (drop-in if you add logos later) */
+.brand-strip{ padding: 18px 0; border-top:1px solid #e6e9ee; border-bottom:1px solid #e6e9ee; background:#f8fafc; }
+.brand-strip .logos{ display:flex; gap:22px; flex-wrap:wrap; align-items:center; justify-content:center; opacity:.9; }
+.brand-strip img{ height:28px; width:auto; filter: grayscale(100%); opacity:.8; }
+.brand-strip img:hover{ opacity:1; filter:none; }
