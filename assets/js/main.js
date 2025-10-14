@@ -272,3 +272,72 @@ if (form){
   // Go!
   startAuto();
 })();
+
+(() => {
+  // Guard if the section isn't on this page yet
+  const root = document.querySelector('#savings');
+  if (!root) return;
+
+  // Baseline saving rates (fraction of current monthly bill).
+  // Conservative/realistic, tweak any time.
+  const RATES = {
+    split: {     // split airco
+      cooling: 0.18,  // mainly cooling
+      mixed:   0.14,  // 50/50
+      heating: 0.06   // mostly heating (less impact vs gas/radiators)
+    },
+    multi: {     // multi-split
+      cooling: 0.22,
+      mixed:   0.18,
+      heating: 0.10
+    },
+    hp: {        // warmtepomp airco (lucht-lucht) met goede COP
+      cooling: 0.20,
+      mixed:   0.28,
+      heating: 0.40   // grootste winst bij verwarmen
+    }
+  };
+
+  const billRange   = root.querySelector('#save-bill');
+  const billInput   = root.querySelector('#save-bill-input');
+  const profileSel  = root.querySelector('#save-profile');
+  const sysButtons  = [...root.querySelectorAll('.save-systems .chip')];
+  const outAmount   = root.querySelector('#save-amount');
+  const outRate     = root.querySelector('#save-rate');
+
+  let system = 'split';   // default
+  let profile = profileSel?.value || 'mixed';
+
+  // Sync range <-> number
+  const syncFromRange = () => { billInput.value = billRange.value; calc(); };
+  const syncFromInput = () => {
+    const val = Math.max(0, Number(billInput.value || 0));
+    billRange.value = String(Math.min(Math.max(val, billRange.min), billRange.max));
+    calc();
+  };
+
+  billRange?.addEventListener('input', syncFromRange);
+  billInput?.addEventListener('input', syncFromInput);
+  profileSel?.addEventListener('change', e => { profile = e.target.value; calc(); });
+
+  sysButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sysButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      system = btn.dataset.system || 'split';
+      calc();
+    });
+  });
+
+  function calc(){
+    const bill = Number(billInput.value || billRange.value || 0);
+    const rate = (RATES[system] && RATES[system][profile]) ? RATES[system][profile] : 0.15;
+    const saving = Math.round(bill * rate);
+
+    outAmount.textContent = saving.toLocaleString('nl-NL');
+    outRate.textContent = Math.round(rate * 100);
+  }
+
+  // Initial run
+  syncFromRange();
+})();
