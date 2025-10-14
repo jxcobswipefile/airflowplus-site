@@ -639,3 +639,35 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .rev-prev { left: 6px; }
   .rev-next { right: 6px; }
 }
+
+/* --- Fix review arrow layering --- */
+
+/* 1) Stop creating a competing stacking context on the track */
+.rev-track{
+  will-change: auto;           /* was: transform; this creates a new stacking context */
+  transform: none !important;  /* in case anything injected a transform */
+  position: relative;
+  z-index: 0;
+}
+
+/* 2) Put the whole carousel above nearby content */
+.reviews-carousel{
+  position: relative;
+  z-index: 10;
+}
+
+/* 3) Lift the arrows well above the track */
+.rev-nav{
+  position: absolute;
+  z-index: 9999;    /* win any local stacking wars */
+  pointer-events: auto;
+}
+
+/* Make sure viewport doesn't clamp layering */
+.rev-viewport{ position: relative; z-index: 1; }
+
+/* Optional: nudge in on small screens */
+@media (max-width: 900px){
+  .rev-prev{ left: 6px; }
+  .rev-next{ right: 6px; }
+}
