@@ -155,9 +155,64 @@
   </div>
 </section>
 
+<!-- Energy Savings Calculator -->
+<section id="savings" class="section savings">
+  <div class="container">
+    <div class="save-grid">
+      <div class="save-copy">
+        <h2><span class="hl-blue">Energiebesparing</span> calculator</h2>
+        <p class="lead">
+          Schuif en kies je systeem – we schatten je <strong>maandelijkse besparing</strong> op basis van een realistische efficiëntie.
+        </p>
+        <ul class="save-points">
+          <li>Direct indicatie op basis van je huidige maandkosten</li>
+          <li>Realistische aannames voor split, multi-split en warmtepomp-airco</li>
+          <li>Eerlijk, onafhankelijk en indicatief (prijzen/gebruik kunnen verschillen)</li>
+        </ul>
+      </div>
 
-<!-- Airconditioning op maat (INVERTED / BLUE, SIMPLE CARDS) -->
-<section class="section maat invert simple">
+      <div class="save-card">
+        <div class="save-row">
+          <label for="save-bill" class="save-label">Huidige energiekosten per maand (€)</label>
+          <div class="save-bill-wrap">
+            <input type="range" id="save-bill" min="50" max="600" step="5" value="180" />
+            <input type="number" id="save-bill-input" min="0" step="1" value="180" />
+          </div>
+        </div>
+
+        <div class="save-row">
+          <div class="save-label">Kies je systeem</div>
+          <div class="save-systems">
+            <button class="chip active" data-system="split">Split airco</button>
+            <button class="chip" data-system="multi">Multi-split</button>
+            <button class="chip" data-system="hp">Warmtepomp airco</button>
+          </div>
+        </div>
+
+        <div class="save-row">
+          <label for="save-profile" class="save-label">Gebruiksprofiel</label>
+          <select id="save-profile" class="save-select">
+            <option value="cooling">Meestal koelen</option>
+            <option value="mixed" selected>50% koelen / 50% verwarmen</option>
+            <option value="heating">Meestal verwarmen</option>
+          </select>
+        </div>
+
+        <div class="save-result">
+          <div class="big">€ <span id="save-amount">0</span> / maand</div>
+          <div class="note">Gebaseerd op <span id="save-rate">0</span>% besparing.</div>
+        </div>
+
+        <div class="save-disclaimer">
+          Indicatie o.b.v. gemiddelde efficiëntie en verbruik; daadwerkelijke besparingen kunnen afwijken per woning, toestel en tarief.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Airconditioning op maat -->
+<section class="section maat" id=maat">
   <div class="container maat-grid">
     <!-- Left: text + simple buttons -->
     <div>
