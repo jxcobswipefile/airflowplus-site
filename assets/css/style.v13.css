@@ -241,3 +241,49 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .heat-info { min-height: 56vh; }  /* keep mobile comfortable */
   .heat-card { padding: 48px 28px; }
 }
+
+/* ===== Heating card: vertical rhythm & spacing ===== */
+.heat-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;                 /* global vertical spacing between blocks */
+  text-align:center;
+}
+
+.heat-card h2{
+  margin:0;
+  font-size:32px;
+  line-height:1.15;
+}
+
+.heat-card .lead{
+  margin:0;
+  max-width: 60ch;
+  line-height:1.6;
+}
+
+.heat-card .checklist.row{
+  gap:18px;
+  justify-content:center;
+}
+
+.heat-card .cta-row{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:6px;          /* subtle offset from checklist */
+}
+
+/* Slightly larger buttons feel balanced in the taller card */
+.heat-card .btn{
+  padding:14px 20px;
+  font-size:16px;
+}
+
+/* Mobile tweaks */
+@media (max-width: 900px){
+  .heat-card{ gap:16px; }
+  .heat-card h2{ font-size:26px; }
+  .heat-card .lead{ line-height:1.55; }
+}
