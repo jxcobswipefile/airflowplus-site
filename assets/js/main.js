@@ -130,3 +130,174 @@ if (form){
     resultBox.scrollIntoView({behavior:'smooth', block:'center'});
   });
 })();
+
+/* ================================
+   Sticky header glow on scroll
+==================================*/
+(function () {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+
+  const onScroll = () => {
+    if (window.scrollY > 10) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  };
+
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+/* ================================
+   Reviews carousel (auto + arrows + drag)
+   Expects:
+   <div class="reviews-carousel" data-reviews>
+     <button class="rev-nav rev-prev">…</button>
+     <div class="rev-viewport" data-viewport>
+       <div class="rev-track" data-track>
+         <article class="rev-card">…</article>
+         …
+       </div>
+     </div>
+     <button class="rev-nav rev-next">…</button>
+   </div>
+==================================*/
+(function () {
+  const wrap = document.querySelector('[data-reviews]');
+  if (!wrap) return;
+
+  const viewport = wrap.querySelector('[data-viewport]');
+  const track = wrap.querySelector('[data-track]');
+  const prevBtn = wrap.querySelector('.rev-prev');
+  const nextBtn = wrap.querySelector('.rev-next');
+  const cards = track ? Array.from(track.querySelectorAll('.rev-card')) : [];
+
+  if (!viewport || !track || cards.length === 0) return;
+
+  const getGap = () => {
+    const cs = getComputedStyle(track);
+    const gap =
+      parseFloat(cs.columnGap || cs.gap || '0') || 0; // fallback if columnGap not supported
+    return isNaN(gap) ? 0 : gap;
+  };
+
+  const getStep = () => {
+    const first = cards[0];
+    if (!first) return 0;
+    return first.getBoundingClientRect().width + getGap();
+  };
+
+  const maxScroll = () => track.scrollWidth - viewport.clientWidth;
+
+  // Auto-advance
+  let intervalMs = 2800;
+  let timer = null;
+
+  const stepOnce = () => {
+    const step = getStep();
+    if (step <= 0) return;
+
+    const max = maxScroll();
+    const next = Math.min(viewport.scrollLeft + step, max);
+
+    viewport.scrollTo({ left: next, behavior: 'smooth' });
+
+    // If we hit the end, wrap back to start after a short pause
+    if (Math.abs(next - max) < 2) {
+      setTimeout(() => viewport.scrollTo({ left: 0, behavior: 'smooth' }), 800);
+    }
+  };
+
+  const startAuto = () => {
+    stopAuto();
+    timer = setInterval(stepOnce, intervalMs);
+  };
+
+  const stopAuto = () => {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  };
+
+  // Pause on interaction; resume after
+  ['mouseenter', 'touchstart', 'focusin'].forEach((ev) =>
+    viewport.addEventListener(ev, stopAuto, { passive: true })
+  );
+  ['mouseleave', 'touchend', 'focusout'].forEach((ev) =>
+    viewport.addEventListener(ev, startAuto, { passive: true })
+  );
+
+  // Arrow navigation
+  const jump = (dir) => {
+    const step = getStep();
+    if (step <= 0) return;
+    viewport.scrollBy({ left: dir * step, behavior: 'smooth' });
+  };
+
+  if (prevBtn) prevBtn.addEventListener('click', () => jump(-1));
+  if (nextBtn) nextBtn.addEventListener('click', () => jump(1));
+
+  // Drag-to-scroll (mouse)
+  let isDown = false;
+  let startX = 0;
+  let startLeft = 0;
+
+  const onMouseDown = (e) => {
+    isDown = true;
+    startX = e.pageX;
+    startLeft = viewport.scrollLeft;
+    viewport.classList.add('dragging');
+  };
+  const onMouseMove = (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const dx = e.pageX - startX;
+    viewport.scrollLeft = startLeft - dx;
+  };
+  const onMouseUp = () => {
+    isDown = false;
+    viewport.classList.remove('dragging');
+  };
+
+  viewport.addEventListener('mousedown', onMouseDown);
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+
+  // Drag-to-scroll (touch)
+  let tStartX = 0;
+  let tStartLeft = 0;
+
+  const onTouchStart = (e) => {
+    const t = e.touches && e.touches[0];
+    if (!t) return;
+    tStartX = t.pageX;
+    tStartLeft = viewport.scrollLeft;
+  };
+  const onTouchMove = (e) => {
+    const t = e.touches && e.touches[0];
+    if (!t) return;
+    const dx = t.pageX - tStartX;
+    viewport.scrollLeft = tStartLeft - dx;
+  };
+
+  viewport.addEventListener('touchstart', onTouchStart, { passive: true });
+  viewport.addEventListener('touchmove', onTouchMove, { passive: true });
+
+  // Keyboard (optional): arrow keys when the carousel is focused
+  wrap.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); jump(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); jump(1); }
+  });
+
+  // Restart auto-advance on resize (step size changes)
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      startAuto();
+    }, 150);
+  });
+
+  // Kick off
+  startAuto();
+})();
