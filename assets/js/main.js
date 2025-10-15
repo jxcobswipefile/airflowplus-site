@@ -341,3 +341,161 @@ if (form){
   // Initial run
   syncFromRange();
 })();
+
+(() => {
+  // ---- SELECTORS (adjust here if your HTML differs) ----
+  const STEP_SEL = '.khv2-step';
+  const BTN_NEXT_SEL = '.khv2-next';
+  const BTN_PREV_SEL = '.khv2-prev';
+  const ROOMS_INPUT_SEL = 'input[name="rooms"]'; // step 1 radios
+  const ROOMS_WRAP_ID = '#khv2-rooms-wrap';      // step 2 mount point
+  const SUMMARY_ID = '#khv2-summary';            // step 3 mount point
+
+  // Bail if we’re not on the keuzehulp page
+  const steps = Array.from(document.querySelectorAll(STEP_SEL));
+  if (!steps.length) return;
+
+  // ---- STATE ----
+  const state = {
+    step: 1,
+    rooms: 0,
+    sizes: [] // e.g. ["1-30", "30-40", ...]
+  };
+
+  // ---- HELPERS ----
+  const getStepEl = (n) => steps.find(s => String(s.dataset.step) === String(n));
+  const setActiveStep = (n) => {
+    steps.forEach(s => s.classList.toggle('is-active', String(s.dataset.step) === String(n)));
+    state.step = n;
+    syncNextButton();
+  };
+
+  const currentStepComplete = () => {
+    if (state.step === 1) {
+      const checked = document.querySelector(`${ROOMS_INPUT_SEL}:checked`);
+      return !!checked;
+    }
+    if (state.step === 2) {
+      return state.sizes.length === state.rooms && state.sizes.every(Boolean);
+    }
+    return true;
+  };
+
+  const syncNextButton = () => {
+    const nextBtn = document.querySelector(BTN_NEXT_SEL);
+    if (!nextBtn) return;
+    nextBtn.disabled = !currentStepComplete();
+  };
+
+  // Build one room card (step 2)
+  const sizePills = [
+    { val: '1-30', label: '1–30 m²' },
+    { val: '30-40', label: '30–40 m²' },
+    { val: '40-50', label: '40–50 m²' }
+  ];
+
+  const roomCardHTML = (idx) => {
+    const roomName = `room-${idx}-size`;
+    return `
+      <div class="khv2-room-card" data-room="${idx}">
+        <h4>Kamer ${idx}</h4>
+        <div class="khv2-sizes">
+          ${sizePills.map(p => `
+            <label class="kh-pill">
+              <input type="radio" name="${roomName}" value="${p.val}" hidden />
+              <span>${p.label}</span>
+            </label>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  };
+
+  const renderRooms = (roomsCount) => {
+    const mount = document.querySelector(ROOMS_WRAP_ID);
+    if (!mount) return;
+    mount.innerHTML = '';
+    state.sizes = new Array(roomsCount).fill(null);
+
+    const grid = document.createElement('div');
+    grid.className = 'kh-size-grid';
+    for (let i = 1; i <= roomsCount; i++) {
+      grid.insertAdjacentHTML('beforeend', roomCardHTML(i));
+    }
+    mount.appendChild(grid);
+
+    // Enable pill selection + state updates
+    mount.addEventListener('change', (e) => {
+      const input = e.target;
+      if (input && input.name && input.name.startsWith('room-') && input.type === 'radio') {
+        const roomIdx = parseInt(input.name.split('-')[1], 10); // room-X-size
+        state.sizes[roomIdx - 1] = input.value;
+
+        // Visual "active" state
+        const card = input.closest('.khv2-room-card');
+        if (card) {
+          card.querySelectorAll('.kh-pill').forEach(l => l.classList.remove('active'));
+          input.closest('.kh-pill')?.classList.add('active');
+        }
+        syncNextButton();
+      }
+    }, { once: false });
+  };
+
+  const renderSummary = () => {
+    const mount = document.querySelector(SUMMARY_ID);
+    if (!mount) return;
+    const list = state.sizes.map((sz, i) => `<li>Kamer ${i+1}: <strong>${sz.replace('-', '–')} m²</strong></li>`).join('');
+    mount.innerHTML = `
+      <h3>Jouw keuze</h3>
+      <ul class="kh-out">${list}</ul>
+      <p class="muted">We gebruiken dit om een passend advies te geven.</p>
+    `;
+  };
+
+  // ---- WIRING: step 1 (room count) ----
+  document.addEventListener('change', (e) => {
+    const roomsChecked = e.target?.matches?.(`${ROOMS_INPUT_SEL}`);
+    if (!roomsChecked) return;
+    const checked = document.querySelector(`${ROOMS_INPUT_SEL}:checked`);
+    state.rooms = checked ? parseInt(checked.value, 10) : 0;
+    syncNextButton();
+  });
+
+  // ---- NEXT / PREV ----
+  document.addEventListener('click', (e) => {
+    const nextBtn = e.target.closest(BTN_NEXT_SEL);
+    const prevBtn = e.target.closest(BTN_PREV_SEL);
+
+    if (nextBtn) {
+      e.preventDefault();
+      if (!currentStepComplete()) return;
+
+      if (state.step === 1) {
+        // prepare step 2
+        renderRooms(state.rooms);
+        setActiveStep(2);
+        return;
+      }
+
+      if (state.step === 2) {
+        // prepare step 3
+        renderSummary();
+        setActiveStep(3);
+        return;
+      }
+
+      // step 3 could submit or go to contact; do nothing here
+      return;
+    }
+
+    if (prevBtn) {
+      e.preventDefault();
+      if (state.step > 1) setActiveStep(state.step - 1);
+      return;
+    }
+  });
+
+  // Kick things off
+  setActiveStep(1);
+})();
