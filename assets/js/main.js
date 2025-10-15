@@ -822,3 +822,92 @@ if (closeBtn) {
   positionBubble();
 })();
 
+/* =========================================================
+   Savings calc polish (defensive version)
+   Works with: .save-card, #save-bill, #save-bill-input,
+               .save-bubble (or .bill-tag/.range-tag), .save-ticks
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const card = document.querySelector('.save-card') ||
+               document.querySelector('#savings .save-card');
+  if (!card) return;
+
+  const rangeWrap   = card.querySelector('.save-range') || card;
+  const range       = card.querySelector('#save-bill');
+  const numberField = card.querySelector('#save-bill-input');
+  // bubble may be named differently in some versions:
+  const bubble      = card.querySelector('.save-bubble, .bill-tag, .range-tag');
+  const ticks       = card.querySelectorAll('.save-ticks span, .range-scale span');
+
+  if (!range || !bubble) return;
+
+  // ---- Sync number field bounds with the slider
+  const min  = Number(range.min || 0);
+  const max  = Number(range.max || 100);
+  const step = Number(range.step || 1);
+
+  if (numberField) {
+    numberField.min  = min;
+    numberField.max  = max;
+    numberField.step = step;
+  }
+
+  // ---- Write min/mid/max tick labels from the slider’s true bounds
+  if (ticks.length >= 3) {
+    const midRaw = (min + max) / 2;
+    const mid    = Math.round(midRaw / step) * step;
+
+    ticks[0].textContent = `€${min.toLocaleString('nl-NL')}`;
+    ticks[1].textContent = `€${mid.toLocaleString('nl-NL')}`;
+    ticks[2].textContent = `€${max.toLocaleString('nl-NL')}`;
+  }
+
+  // ---- Position the floating € bubble; keep it inside the rail
+  function positionBubble() {
+    const v   = Number(range.value || min);
+    const pct = (v - min) / (max - min);
+
+    const trackRect = range.getBoundingClientRect();
+    const wrapRect  = (rangeWrap.getBoundingClientRect ? rangeWrap.getBoundingClientRect() : trackRect);
+    const bubbleW   = bubble.offsetWidth || 48;
+    const half      = bubbleW / 2;
+
+    const x = pct * trackRect.width;
+    const clamped = Math.min(trackRect.width - half, Math.max(half, x));
+    const left = (trackRect.left - wrapRect.left) + clamped;
+
+    bubble.style.position = 'absolute';
+    bubble.style.left = `${left}px`;
+    // nudged down so it doesn’t sit on the heading:
+    bubble.style.top  = '-28px';
+
+    bubble.textContent = `€ ${v.toLocaleString('nl-NL')}`;
+  }
+
+  // ---- Keep slider <-> number field in sync
+  function fromRange() {
+    if (numberField) numberField.value = range.value;
+    positionBubble();
+  }
+  function fromNumber() {
+    if (!numberField) return;
+    let v = Number(numberField.value);
+    if (!isFinite(v)) v = min;
+    v = Math.max(min, Math.min(max, v));
+    const snapped = Math.round(v / step) * step;
+    range.value = String(snapped);
+    numberField.value = String(snapped);
+    positionBubble();
+  }
+
+  range.addEventListener('input', fromRange);
+  if (numberField) numberField.addEventListener('input', fromNumber);
+  window.addEventListener('resize', positionBubble);
+
+  // initial
+  if (numberField) numberField.value = range.value;
+  positionBubble();
+
+  // simple debug helper
+  window.__savingsDebug = { range, numberField, bubble, ticks };
+});
