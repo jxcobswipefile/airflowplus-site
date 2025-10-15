@@ -725,3 +725,32 @@ if (closeBtn) {
   range.value = String(number.value);
   calc();
 })();
+
+function positionBillTag(val){
+  const range = document.querySelector('.save-range input[type="range"]');
+  const tag   = document.querySelector('.bill-tag, .range-tag');
+  if(!range || !tag) return;
+
+  const min  = +range.min, max = +range.max;
+  const pct  = (val - min) / (max - min);
+
+  const trackRect = range.getBoundingClientRect();
+  const tagHalf   = tag.offsetWidth / 2;
+
+  // x within the track
+  const x  = pct * trackRect.width;
+  // clamp so the tag never overflows left/right
+  const clamped = Math.min(trackRect.width - tagHalf, Math.max(tagHalf, x));
+
+  // position relative to the range wrap
+  tag.style.left = clamped + 'px';
+}
+
+/* Call this wherever you already update the UI, e.g.: */
+function updateUI(){
+  const val = Number(range.value);
+  // ... your existing updates
+  positionBillTag(val);
+}
+
+window.addEventListener('resize', () => positionBillTag(Number(range?.value || 0)));
