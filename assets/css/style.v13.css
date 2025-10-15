@@ -715,3 +715,24 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 @media (max-width: 480px){
   .save-tip-bubble{ left:auto; right:0; transform:none; }
 }
+
+/* Add space under the heading and above the slider */
+.save-head h3{ margin-bottom:14px; }
+.save-range{ margin-top:8px; }
+.save-range .range-wrap{ padding-top:18px; }
+
+/* If your € chip class is .bill-tag or .range-tag, nudge it down slightly */
+.bill-tag, .range-tag{ transform:translate(-50%, -120%); }  /* was ~-140% */
+
+/* Let the bubble escape the card */
+.save-card{ overflow:visible; }
+
+/* Keep the bubble above everything in the card */
+.save-tip-bubble{ z-index:60; }
+
+/* Ensure the slider actually uses the full width of its lane */
+.save-range input[type="range"]{ width:100%; }
+
+/* Nicely spaced min/mid/max labels */
+.range-scale{ display:flex; justify-content:space-between; margin-top:6px; }
+.range-scale span{ min-width:2ch; text-align:center; }
