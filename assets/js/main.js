@@ -911,3 +911,46 @@ document.addEventListener('DOMContentLoaded', () => {
   // simple debug helper
   window.__savingsDebug = { range, numberField, bubble, ticks };
 });
+
+// --- Savings slider & tick sync (safe to append at bottom) ---
+(function(){
+  const wrap  = document.querySelector('.save-card');
+  if (!wrap) return;
+  const rng   = wrap.querySelector('#save-bill');
+  const num   = wrap.querySelector('#save-bill-input');
+  const ticks = wrap.querySelectorAll('.range-scale span');
+  const bubble = wrap.querySelector('.save-bubble');
+
+  if (!rng || !num) return;
+
+  // Ensure attributes are honored across UI
+  const min = +rng.min || 50, max = +rng.max || 600, step = +rng.step || 5;
+  rng.min = min; rng.max = max; rng.step = step;
+  num.min = min; num.max = max; num.step = step;
+
+  function clamp(v){ v = Math.round(v/step)*step; return Math.min(max, Math.max(min, v)); }
+  function syncFromRange(){
+    const v = clamp(+rng.value || min);
+    num.value = v;
+    if (bubble){
+      const pct = (v - min) / (max - min);
+      bubble.style.left = `calc(${pct*100}% + 12px)`; // 12px ≈ left padding before track
+      bubble.textContent = `€ ${v}`;
+    }
+  }
+  function syncFromNumber(){
+    rng.value = clamp(+num.value || min);
+    syncFromRange();
+  }
+
+  // Set ticks to min/mid/max
+  if (ticks.length >= 3){
+    ticks[0].textContent = `€${min}`;
+    ticks[1].textContent = `€${Math.round((min+max)/2)}`;
+    ticks[2].textContent = `€${max}`;
+  }
+
+  rng.addEventListener('input', syncFromRange);
+  num.addEventListener('input', syncFromNumber);
+  syncFromRange();
+})();
