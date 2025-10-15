@@ -544,3 +544,117 @@ if (closeBtn) {
     if (e.key === 'Escape') window.location.href = 'index.html';
   });
 }
+
+(() => {
+  const root = document.querySelector('#savings');
+  if (!root) return;
+
+  // Elements
+  const range = root.querySelector('#save-bill');
+  const number = root.querySelector('#save-bill-input');
+  const profileSel = root.querySelector('#save-profile');
+  const chips = [...root.querySelectorAll('.save-systems .chip')];
+  const outAmount = root.querySelector('#save-amount');
+  const outRate = root.querySelector('#save-rate');
+
+  // Add bubble + ticks (no HTML changes needed)
+  const wrap = root.querySelector('.save-bill-wrap');
+  let bubble = document.createElement('div');
+  bubble.className = 'save-bubble';
+  wrap.style.position = 'relative';
+  wrap.appendChild(bubble);
+
+  let ticks = document.createElement('div');
+  ticks.className = 'save-ticks';
+  ticks.innerHTML = `<span>€50</span><span>€325</span><span>€600</span>`;
+  wrap.parentElement.appendChild(ticks); // below the slider/number row
+
+  // Annual line
+  let annual = document.createElement('div');
+  annual.className = 'save-annual';
+  // will fill in calc()
+
+  // Slot annual just under the result
+  const resultBox = root.querySelector('.save-result');
+  if (resultBox) resultBox.appendChild(annual);
+
+  // Formatters
+  const fmtEUR = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  const fmtINT = new Intl.NumberFormat('nl-NL');
+
+  // Rates (same defaults; tweak as you like)
+  const RATES = {
+    split: { cooling: 0.18, mixed: 0.14, heating: 0.06 },
+    multi: { cooling: 0.22, mixed: 0.18, heating: 0.10 },
+    hp:    { cooling: 0.20, mixed: 0.28, heating: 0.40 }
+  };
+
+  let system = chips.find(c => c.classList.contains('active'))?.dataset.system || 'split';
+  let profile = profileSel?.value || 'mixed';
+
+  // Helpers
+  function clampBill(val){
+    const min = Number(range.min || 50);
+    const max = Number(range.max || 600);
+    if (!isFinite(val)) return min;
+    return Math.min(max, Math.max(min, Math.round(val)));
+  }
+
+  function bubblePos(){
+    // Position bubble centered over the thumb
+    const min = Number(range.min), max = Number(range.max), v = Number(range.value);
+    const pct = (v - min) / (max - min);
+    const x = range.getBoundingClientRect().width * pct;
+    bubble.style.left = `${x}px`;
+    bubble.textContent = fmtEUR.format(v);
+  }
+
+  function calc(){
+    const bill = clampBill(Number(number.value || range.value || 0));
+    const rate = (RATES[system] && RATES[system][profile]) ? RATES[system][profile] : 0.15;
+    const saving = Math.round(bill * rate);
+    const annualSaving = saving * 12;
+
+    if (outAmount) outAmount.textContent = fmtINT.format(saving);
+    if (outRate) outRate.textContent = Math.round(rate * 100);
+
+    annual.innerHTML = `Indicatie per jaar: <strong>${fmtEUR.format(annualSaving)}</strong> (uitgaande van huidige keuzes)`;
+
+    bubblePos();
+  }
+
+  // Wire inputs
+  function fromRange(){
+    number.value = clampBill(Number(range.value));
+    calc();
+  }
+  function fromNumber(){
+    const v = clampBill(Number(number.value));
+    number.value = v;
+    range.value = String(v);
+    calc();
+  }
+
+  range?.addEventListener('input', fromRange);
+  number?.addEventListener('input', fromNumber);
+  profileSel?.addEventListener('change', (e) => { profile = e.target.value; calc(); });
+
+  chips.forEach(btn => {
+    btn.addEventListener('click', () => {
+      chips.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      system = btn.dataset.system || 'split';
+      calc();
+    });
+  });
+
+  // Resize observer to keep bubble positioned on layout changes
+  const ro = new ResizeObserver(() => bubblePos());
+  ro.observe(range);
+
+  // Init
+  // Ensure sane defaults
+  number.value = clampBill(Number(number.value || range.value || 180));
+  range.value = String(number.value);
+  calc();
+})();
