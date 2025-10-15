@@ -748,17 +748,13 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 /* A touch more air above the slider so the chip has room */
 .save-range .range-wrap{ padding-top:20px; } /* was 18px */
 
-/* Value chip: nudge down a touch more so it never kisses the heading */
-.save-bubble{ top:-26px; }                 /* was -28px */
-.bill-tag, .range-tag{ transform:translate(-50%, -106%); }  /* was -110% */
+.save-bubble{top:-26px;}
+.bill-tag,.range-tag{transform:translate(-50%,-106%);}
+.save-head h3{margin-bottom:16px;}
+.save-range .range-wrap{padding-top:20px;}
+.save-card{overflow:visible;}
+.save-tip-bubble{z-index:60;}
 
-/* Give the heading a hair more clearance from the chip */
-.save-head h3{ margin-bottom:16px; }       /* was 14px */
-
-/* Keep the slider lane nicely spaced from the chip */
-.save-range .range-wrap{ padding-top:20px; } /* keep this if you like the room */
-
-/* Tooltip safety on narrow screens — keep it inside the viewport edge */
-@media (max-width: 520px){
-  .save-tip-bubble{ left:auto; right:0; transform:none; }
+@media (max-width:520px){
+  .save-tip-bubble{left:auto;right:0;transform:none;}
 }
