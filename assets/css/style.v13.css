@@ -758,3 +758,13 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 @media (max-width:520px){
   .save-tip-bubble{left:auto;right:0;transform:none;}
 }
+
+/* Keep the value bubble clear of the heading */
+.save-head h3{ margin-bottom:22px; }          /* a bit more space under the title */
+.save-range .range-wrap{ padding-top:28px; }  /* reserve space above the slider for the bubble */
+
+/* Nudge the bubble slightly closer to the track so it sits in that reserved space */
+.save-bubble{ top:-14px; }                    /* was -26px */
+
+/* If your EUR chip uses a tag class, keep it lower as well */
+.bill-tag, .range-tag{ transform:translate(-50%,-106%); }  /* keep this or lower further to -100% if needed */
