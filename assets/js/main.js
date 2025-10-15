@@ -343,37 +343,47 @@ if (form){
 })();
 
 (() => {
-  // ---- SELECTORS (adjust here if your HTML differs) ----
-  const STEP_SEL = '.khv2-step';
-  const BTN_NEXT_SEL = '.khv2-next';
-  const BTN_PREV_SEL = '.khv2-prev';
-  const ROOMS_INPUT_SEL = 'input[name="rooms"]'; // step 1 radios
-  const ROOMS_WRAP_ID = '#khv2-rooms-wrap';      // step 2 mount point
-  const SUMMARY_ID = '#khv2-summary';            // step 3 mount point
+  // Run only on keuzehulp page with the v2 card present
+  const card = document.querySelector('.khv2-card');
+  const nextBtn = document.querySelector('#kh-next');
+  const dots = Array.from(document.querySelectorAll('.khv2-steps .dot'));
 
-  // Bail if we’re not on the keuzehulp page
-  const steps = Array.from(document.querySelectorAll(STEP_SEL));
-  if (!steps.length) return;
+  if (!card || !nextBtn) return;
 
-  // ---- STATE ----
+  // --- Create/normalize a body container we can re-render into ---
+  let body = card.querySelector('.khv2-body');
+  const actions = card.querySelector('.khv2-actions');
+
+  if (!body) {
+    body = document.createElement('div');
+    body.className = 'khv2-body';
+
+    // Move current “h2 + room radios grid” into the body so we don’t lose your initial markup
+    // (We’ll reconstruct Step 1 exactly, then overwrite for Step 2/3 when needed.)
+    const h2 = card.querySelector('h2.khv2-q');
+    const grid = card.querySelector('.kh-grid-rooms');
+    if (h2) body.appendChild(h2);
+    if (grid) body.appendChild(grid);
+
+    // Insert body right before actions
+    card.insertBefore(body, actions);
+  }
+
+  // ---------- State ----------
   const state = {
     step: 1,
     rooms: 0,
-    sizes: [] // e.g. ["1-30", "30-40", ...]
+    sizes: [] // e.g. ['1-30', '30-40', ...]
   };
 
-  // ---- HELPERS ----
-  const getStepEl = (n) => steps.find(s => String(s.dataset.step) === String(n));
-  const setActiveStep = (n) => {
-    steps.forEach(s => s.classList.toggle('is-active', String(s.dataset.step) === String(n)));
-    state.step = n;
-    syncNextButton();
+  // ---------- Helpers ----------
+  const setDot = (n) => {
+    dots.forEach((d, i) => d.classList.toggle('is-active', i === (n - 1)));
   };
 
-  const currentStepComplete = () => {
+  const isStepComplete = () => {
     if (state.step === 1) {
-      const checked = document.querySelector(`${ROOMS_INPUT_SEL}:checked`);
-      return !!checked;
+      return state.rooms > 0;
     }
     if (state.step === 2) {
       return state.sizes.length === state.rooms && state.sizes.every(Boolean);
@@ -381,121 +391,144 @@ if (form){
     return true;
   };
 
-  const syncNextButton = () => {
-    const nextBtn = document.querySelector(BTN_NEXT_SEL);
-    if (!nextBtn) return;
-    nextBtn.disabled = !currentStepComplete();
+  const syncNextDisabled = () => {
+    nextBtn.disabled = !isStepComplete();
   };
 
-  // Build one room card (step 2)
-  const sizePills = [
-    { val: '1-30', label: '1–30 m²' },
-    { val: '30-40', label: '30–40 m²' },
-    { val: '40-50', label: '40–50 m²' }
-  ];
+  // ---------- Step renderers ----------
+  const renderStep1 = () => {
+    state.step = 1;
+    setDot(1);
 
-  const roomCardHTML = (idx) => {
-    const roomName = `room-${idx}-size`;
-    return `
-      <div class="khv2-room-card" data-room="${idx}">
-        <h4>Kamer ${idx}</h4>
-        <div class="khv2-sizes">
-          ${sizePills.map(p => `
-            <label class="kh-pill">
-              <input type="radio" name="${roomName}" value="${p.val}" hidden />
-              <span>${p.label}</span>
-            </label>
-          `).join('')}
-        </div>
+    body.innerHTML = `
+      <h2 class="khv2-q">In hoeveel ruimtes wil je airco?</h2>
+      <div class="kh-grid-rooms" style="justify-content:center; grid-template-columns: repeat(4, 72px); gap:14px;">
+        ${[1,2,3,4].map(n => `
+          <label class="chip round">
+            <input type="radio" name="rooms" value="${n}">
+            <span>${n}</span>
+          </label>
+        `).join('')}
       </div>
     `;
+
+    body.addEventListener('change', onRoomsChange, { once: true });
+    syncNextDisabled();
   };
 
-  const renderRooms = (roomsCount) => {
-    const mount = document.querySelector(ROOMS_WRAP_ID);
-    if (!mount) return;
-    mount.innerHTML = '';
-    state.sizes = new Array(roomsCount).fill(null);
+  const sizeOptions = [
+    { val: '1-30',  label: '1–30 m²' },
+    { val: '30-40', label: '30–40 m²' },
+    { val: '40-50', label: '40–50 m²' },
+  ];
 
-    const grid = document.createElement('div');
-    grid.className = 'kh-size-grid';
-    for (let i = 1; i <= roomsCount; i++) {
-      grid.insertAdjacentHTML('beforeend', roomCardHTML(i));
-    }
-    mount.appendChild(grid);
+  const renderRoomCard = (idx) => `
+    <div class="khv2-room-card" data-room="${idx}">
+      <h4>Kamer ${idx}</h4>
+      <div class="khv2-sizes">
+        ${sizeOptions.map(p => `
+          <label class="kh-pill">
+            <input type="radio" name="room-${idx}-size" value="${p.val}" hidden>
+            <span>${p.label}</span>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `;
 
-    // Enable pill selection + state updates
-    mount.addEventListener('change', (e) => {
-      const input = e.target;
-      if (input && input.name && input.name.startsWith('room-') && input.type === 'radio') {
-        const roomIdx = parseInt(input.name.split('-')[1], 10); // room-X-size
-        state.sizes[roomIdx - 1] = input.value;
+  const renderStep2 = () => {
+    state.step = 2;
+    setDot(2);
 
-        // Visual "active" state
-        const card = input.closest('.khv2-room-card');
-        if (card) {
-          card.querySelectorAll('.kh-pill').forEach(l => l.classList.remove('active'));
-          input.closest('.kh-pill')?.classList.add('active');
-        }
-        syncNextButton();
-      }
-    }, { once: false });
-  };
+    state.sizes = new Array(state.rooms).fill(null);
 
-  const renderSummary = () => {
-    const mount = document.querySelector(SUMMARY_ID);
-    if (!mount) return;
-    const list = state.sizes.map((sz, i) => `<li>Kamer ${i+1}: <strong>${sz.replace('-', '–')} m²</strong></li>`).join('');
-    mount.innerHTML = `
-      <h3>Jouw keuze</h3>
-      <ul class="kh-out">${list}</ul>
-      <p class="muted">We gebruiken dit om een passend advies te geven.</p>
+    body.innerHTML = `
+      <h2 class="khv2-q">Hoe groot zijn de ruimtes?</h2>
+      <p class="kh-sub">Kies de oppervlakte per kamer. Dit helpt ons een passend vermogen te adviseren.</p>
+      <div class="kh-size-grid">
+        ${Array.from({ length: state.rooms }, (_, i) => renderRoomCard(i + 1)).join('')}
+      </div>
     `;
+
+    // Delegate changes to the container
+    body.addEventListener('change', onSizeChange);
+    syncNextDisabled();
   };
 
-  // ---- WIRING: step 1 (room count) ----
-  document.addEventListener('change', (e) => {
-    const roomsChecked = e.target?.matches?.(`${ROOMS_INPUT_SEL}`);
-    if (!roomsChecked) return;
-    const checked = document.querySelector(`${ROOMS_INPUT_SEL}:checked`);
-    state.rooms = checked ? parseInt(checked.value, 10) : 0;
-    syncNextButton();
-  });
+  const renderStep3 = () => {
+    state.step = 3;
+    setDot(3);
 
-  // ---- NEXT / PREV ----
-  document.addEventListener('click', (e) => {
-    const nextBtn = e.target.closest(BTN_NEXT_SEL);
-    const prevBtn = e.target.closest(BTN_PREV_SEL);
+    const list = state.sizes
+      .map((sz, i) => `<li>Kamer ${i + 1}: <strong>${sz.replace('-', '–')} m²</strong></li>`)
+      .join('');
 
-    if (nextBtn) {
-      e.preventDefault();
-      if (!currentStepComplete()) return;
+    body.innerHTML = `
+      <h2 class="khv2-q">Overzicht</h2>
+      <p class="kh-sub">Op basis van jouw keuze stellen we een advies op maat samen.</p>
+      <div id="khv2-summary">
+        <ul class="kh-out">${list}</ul>
+      </div>
+      <p class="muted">Klaar! Je kunt dit doorgeven of direct contact met ons opnemen.</p>
+    `;
 
-      if (state.step === 1) {
-        // prepare step 2
-        renderRooms(state.rooms);
-        setActiveStep(2);
-        return;
+    syncNextDisabled(); // always enabled here but keeps logic consistent
+  };
+
+  // ---------- Event handlers ----------
+  const onRoomsChange = (e) => {
+    const input = e.target;
+    if (!input || input.name !== 'rooms') return;
+
+    state.rooms = parseInt(input.value, 10) || 0;
+    syncNextDisabled();
+
+    // Keep listening if user changes mind before pressing Next
+    body.addEventListener('change', onRoomsChange, { once: true });
+  };
+
+  const onSizeChange = (e) => {
+    const input = e.target;
+    if (!input || input.type !== 'radio') return;
+    if (!input.name.startsWith('room-') || !input.name.endsWith('-size')) return;
+
+    const roomIdx = parseInt(input.name.split('-')[1], 10); // room-X-size
+    if (Number.isFinite(roomIdx) && roomIdx >= 1 && roomIdx <= state.rooms) {
+      state.sizes[roomIdx - 1] = input.value;
+
+      // Visual “active” mark on the selected pill
+      const cardEl = input.closest('.khv2-room-card');
+      if (cardEl) {
+        cardEl.querySelectorAll('.kh-pill').forEach(l => l.classList.remove('active'));
+        input.closest('.kh-pill')?.classList.add('active');
       }
+      syncNextDisabled();
+    }
+  };
 
-      if (state.step === 2) {
-        // prepare step 3
-        renderSummary();
-        setActiveStep(3);
-        return;
-      }
+  // ---------- Next button flow ----------
+  nextBtn.addEventListener('click', (e) => {
+    e.preventDefault();
 
-      // step 3 could submit or go to contact; do nothing here
+    if (!isStepComplete()) return;
+
+    if (state.step === 1) {
+      renderStep2();
       return;
     }
-
-    if (prevBtn) {
-      e.preventDefault();
-      if (state.step > 1) setActiveStep(state.step - 1);
+    if (state.step === 2) {
+      renderStep3();
       return;
+    }
+    if (state.step === 3) {
+      // TODO: final submit / navigate / show contact
+      // For now do nothing (or redirect to contact page)
+      // window.location.href = 'contact.html';
     }
   });
 
-  // Kick things off
-  setActiveStep(1);
+  // ---------- Init ----------
+  // Make sure Next starts disabled until a room count is chosen
+  nextBtn.disabled = true;
+  renderStep1();
 })();
