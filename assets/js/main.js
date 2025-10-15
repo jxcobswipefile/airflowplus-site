@@ -687,6 +687,7 @@ if (closeBtn) {
     annual.innerHTML = `Indicatie per jaar: <strong>${fmtEUR.format(annualSaving)}</strong> (uitgaande van huidige keuzes)`;
 
     bubblePos();
+    updateTip();   // ← keep tooltip text in sync
   }
 
   // Wire inputs
