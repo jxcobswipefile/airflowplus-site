@@ -455,3 +455,85 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .kh-grid-rooms{ grid-template-columns:1fr 1fr; }
   .kh-size-grid{ grid-template-columns:1fr; }
 }
+
+/* ===========================
+   Keuzehulp v2 
+   =========================== */
+
+/* Dark header with big title */
+.khv2-hero{
+  background:#0f2531; /* deep blue */
+  padding: 36px 0 20px;
+}
+.khv2-hero h1{
+  color:#eaf1ff;
+  font-weight: 800;
+  font-size: 44px;
+  margin: 0;
+}
+
+/* Stage holds the centered light card + dots */
+.khv2-stage{ padding: 18px 0 34px; }
+
+/* Light card centered, rounded, generous padding */
+.khv2-card{
+  background:#f3f6fa;
+  border:1px solid #dbe7ff;
+  border-radius: 18px;
+  padding: 44px 46px;
+  position: relative;
+  box-shadow: 0 18px 44px rgba(0,93,143,.10);
+}
+
+/* Optional close button in top-right of card */
+.khv2-close{
+  position:absolute; top:14px; right:14px;
+  width:36px; height:36px; border-radius:10px;
+  background:var(--primary); color:#fff; border:0;
+  font-size:20px; line-height:1; display:grid; place-items:center;
+  cursor:pointer;
+}
+
+/* Main question centered inside card (if you use a heading here) */
+.khv2-card .khv2-q{
+  text-align:center; font-size:26px; margin: 6px 0 22px;
+  color:#0f1720;
+}
+
+/* Make numeric chips perfectly round like the design */
+.chip.round{
+  width:56px; height:56px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:18px; padding:0;
+}
+.chip.round input{ display:none; } /* number visible in <span> */
+.chip.round:has(input:checked){
+  background:var(--primary); color:#fff; border-color:var(--primary);
+}
+
+/* Bottom-right “Volgende” button inside the card */
+.khv2-actions{
+  display:flex; justify-content:flex-end; margin-top: 26px;
+}
+
+/* Step dots below the card, on the dark background strip */
+.khv2-steps{
+  display:flex; justify-content:center; gap:12px;
+  padding: 18px 0 0;
+}
+.khv2-steps .dot{
+  width:44px; height:44px; border-radius:50%;
+  border:2px solid #2ab5f2; background:transparent; color:#2ab5f2;
+  font-weight:800; display:grid; place-items:center; cursor:default;
+}
+.khv2-steps .dot.is-active{
+  background:#2ab5f2; color:#fff; border-color:#2ab5f2;
+}
+
+/* Responsive niceties */
+@media (max-width: 900px){
+  .khv2-hero h1{ font-size: 34px; }
+  .khv2-card{ padding: 28px; }
+  .khv2-actions{ margin-top: 20px; }
+  .khv2-steps .dot{ width:40px; height:40px; }
+}
