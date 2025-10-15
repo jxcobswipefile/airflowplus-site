@@ -591,7 +591,73 @@ if (closeBtn) {
 
   let system = chips.find(c => c.classList.contains('active'))?.dataset.system || 'split';
   let profile = profileSel?.value || 'mixed';
+  
+  // ---- Tooltip: inject button + bubble into the result box ----
+  const tipWrap = document.createElement('span');
+  tipWrap.className = 'save-tip-wrap';
 
+  const tipBtn = document.createElement('button');
+  tipBtn.className = 'save-tip';
+  tipBtn.type = 'button';
+  tipBtn.setAttribute('aria-label','Uitleg besparing');
+  tipBtn.textContent = 'i';
+
+  const tipBubble = document.createElement('div');
+  tipBubble.className = 'save-tip-bubble';
+  tipBubble.innerHTML = `
+    <h5>Hoe we dit schatten</h5>
+    <p id="save-tip-body">We gebruiken gemiddelde besparingspercentages per systeem & gebruiksprofiel.</p>
+    <p class="muted">Indicatie, geen offerte. Werkelijk verbruik en tarieven kunnen variëren.</p>
+  `;
+
+  tipWrap.appendChild(tipBtn);
+  tipWrap.appendChild(tipBubble);
+
+  // Place it next to the little badge at the left of the result row if present,
+  // otherwise append to the right end of the result box.
+  const badge = resultBox?.querySelector('.save-badge');
+  if (badge) {
+    badge.after(tipWrap);
+  } else if (resultBox) {
+    resultBox.appendChild(tipWrap);
+  }
+
+  // Toggle open/close
+  tipBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    tipWrap.classList.toggle('is-open');
+  });
+  document.addEventListener('click', () => tipWrap.classList.remove('is-open'));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') tipWrap.classList.remove('is-open');
+  });
+
+  // Copy for assumptions per system/profile (keep in sync with RATES)
+  const TIP_TEXT = {
+    split: {
+      cooling: 'Single-split: koelen bespaart ~18% van je huidige energiekosten bij regelmatig koelen.',
+      mixed:   'Single-split: gemengd gebruik (koelen + verwarmen voor-/naseizoen) ~14% besparing.',
+      heating: 'Single-split als bijverwarming: ~6% besparing t.o.v. alleen cv/elektra.'
+    },
+    multi: {
+      cooling: 'Multi-split: meerdere ruimtes efficiënt koelen → ~22% besparing.',
+      mixed:   'Multi-split gemengd gebruik: ~18% besparing bij normaal gebruik.',
+      heating: 'Multi-split als (bij)verwarming: ~10% besparing, afhankelijk van isolatie.'
+    },
+    hp: {
+      cooling: 'Warmtepomp-airco met nadruk op koelen: ~20% besparing.',
+      mixed:   'Warmtepomp-airco gemengd gebruik: ~28% besparing (hogere COP in tussenseizoen).',
+      heating: 'Warmtepomp-airco als hoofdverwarming: ~40% besparing t.o.v. convectie/elektra.'
+    }
+  };
+
+  function updateTip(){
+    const t = TIP_TEXT[system]?.[profile] || 'Indicatieve schatting op basis van gemiddelde profielen.';
+    const el = tipBubble.querySelector('#save-tip-body');
+    if (el) el.textContent = t;
+  }
+
+  
   // Helpers
   function clampBill(val){
     const min = Number(range.min || 50);
