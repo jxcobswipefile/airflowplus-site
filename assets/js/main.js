@@ -726,31 +726,99 @@ if (closeBtn) {
   calc();
 })();
 
-function positionBillTag(val){
-  const range = document.querySelector('.save-range input[type="range"]');
-  const tag   = document.querySelector('.bill-tag, .range-tag');
-  if(!range || !tag) return;
+/* =========================================================
+   Savings calc polish — matches your CSS & HTML
+   (.save-card, #save-bill, #save-bill-input, .save-bubble, .save-ticks)
+   ========================================================= */
+(() => {
+  const card = document.querySelector('.save-card');
+  if (!card) return;
 
-  const min  = +range.min, max = +range.max;
-  const pct  = (val - min) / (max - min);
+  const rangeWrap   = card.querySelector('.save-range') || card;
+  const range       = card.querySelector('#save-bill');        // slider
+  const numberField = card.querySelector('#save-bill-input');  // numeric field (right)
+  const bubble      = card.querySelector('.save-bubble');      // € chip above thumb
+  const ticks       = card.querySelectorAll('.save-ticks span'); // 3 spans: min, mid, max
 
-  const trackRect = range.getBoundingClientRect();
-  const tagHalf   = tag.offsetWidth / 2;
+  if (!range) return;
 
-  // x within the track
-  const x  = pct * trackRect.width;
-  // clamp so the tag never overflows left/right
-  const clamped = Math.min(trackRect.width - tagHalf, Math.max(tagHalf, x));
+  // ---- keep number-field bounds synced to the slider
+  if (numberField) {
+    numberField.min = range.min;
+    numberField.max = range.max;
+    numberField.step = range.step || numberField.step || 5;
+  }
 
-  // position relative to the range wrap
-  tag.style.left = clamped + 'px';
-}
+  // ---- write min/mid/max tick labels from the actual slider bounds
+  const min = Number(range.min || 0);
+  const max = Number(range.max || 100);
+  const step = Number(range.step || 1);
 
-/* Call this wherever you already update the UI, e.g.: */
-function updateUI(){
-  const val = Number(range.value);
-  // ... your existing updates
-  positionBillTag(val);
-}
+  if (ticks.length >= 3) {
+    const midRaw = (min + max) / 2;
+    // round mid to the nearest step for a tidy label (e.g. 325)
+    const mid = Math.round(midRaw / step) * step;
 
-window.addEventListener('resize', () => positionBillTag(Number(range?.value || 0)));
+    ticks[0].textContent = `€${min.toLocaleString('nl-NL')}`;
+    ticks[1].textContent = `€${mid.toLocaleString('nl-NL')}`;
+    ticks[2].textContent = `€${max.toLocaleString('nl-NL')}`;
+  }
+
+  // ---- position the floating € bubble so it never clips
+  function positionBubble() {
+    if (!bubble) return;
+
+    const v   = Number(range.value || min);
+    const pct = (v - min) / (max - min);
+
+    // geometry relative to the slider (track) & its wrapper
+    const trackRect = range.getBoundingClientRect();
+    const wrapRect  = (rangeWrap.getBoundingClientRect ? rangeWrap.getBoundingClientRect() : trackRect);
+
+    const bubbleW   = bubble.offsetWidth || 48;
+    const half      = bubbleW / 2;
+
+    // x along the track
+    const x = pct * trackRect.width;
+
+    // clamp so bubble never overflows either edge
+    const clamped = Math.min(trackRect.width - half, Math.max(half, x));
+
+    // place relative to the wrapper
+    const left = (trackRect.left - wrapRect.left) + clamped;
+    bubble.style.left = `${left}px`;
+
+    // small vertical nudge (you already set top in CSS; this ensures it stays above the track)
+    bubble.style.top  = '-34px';
+
+    // update the text to match current value
+    bubble.textContent = `€ ${v.toLocaleString('nl-NL')}`;
+  }
+
+  // ---- keep slider and number field in lockstep
+  function fromRange() {
+    if (numberField) numberField.value = range.value;
+    positionBubble();
+  }
+  function fromNumber() {
+    if (!numberField) return;
+    let v = Number(numberField.value);
+    if (!isFinite(v)) v = min;
+    v = Math.max(min, Math.min(max, v));
+    // snap to step
+    const snapped = Math.round(v / step) * step;
+    range.value = snapped.toString();
+    numberField.value = snapped.toString();
+    positionBubble();
+  }
+
+  // listeners
+  range.addEventListener('input', fromRange);
+  if (numberField) numberField.addEventListener('input', fromNumber);
+  window.addEventListener('resize', positionBubble);
+
+  // initial
+  if (numberField) numberField.value = range.value;
+  positionBubble();
+})();
+
