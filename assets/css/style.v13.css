@@ -626,3 +626,58 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   .khv2-actions{ position:static; margin-top:16px; display:flex; justify-content:flex-end; }
   .khv2-hero{ padding:28px 0 16px; }
 }
+
+/* ===== Savings polish ===== */
+#savings .save-card{ overflow:hidden; }
+.save-row + .save-row{ margin-top:18px; }
+
+/* Slider value bubble + track look */
+.save-bill-wrap{ position:relative; align-items:center; }
+#save-bill{ appearance:none; height:6px; border-radius:999px; background:#e6eef6; }
+#save-bill::-webkit-slider-thumb{
+  appearance:none; width:20px; height:20px; border-radius:50%;
+  background:var(--primary); border:2px solid #fff; box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+#save-bill::-moz-range-thumb{
+  width:20px; height:20px; border-radius:50%;
+  background:var(--primary); border:2px solid #fff; box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+.save-bubble{
+  position:absolute; top:-34px; transform:translateX(-50%);
+  background:#0a78b0; color:#fff; font-weight:800; font-size:12px;
+  padding:6px 8px; border-radius:8px; white-space:nowrap; pointer-events:none;
+}
+.save-bubble::after{
+  content:""; position:absolute; left:50%; bottom:-6px; transform:translateX(-50%);
+  border:6px solid transparent; border-top-color:#0a78b0;
+}
+
+/* Tick labels under the slider */
+.save-ticks{ display:flex; justify-content:space-between; font-size:12px; color:#445164; margin-top:6px; }
+.save-ticks span{ opacity:.85; }
+
+/* Result card */
+.save-result{
+  display:grid; grid-template-columns:auto 1fr; align-items:center; gap:12px;
+  background:#f6fbff; border:1px solid #dbe7ff; border-radius:14px; padding:14px 16px;
+}
+.save-badge{
+  display:inline-block; padding:6px 10px; border-radius:999px;
+  background:#e9f4ff; border:1px solid #cfe6ff; color:#005b8f; font-weight:800; font-size:12px;
+}
+.save-result .big{ font-size:30px; font-weight:900; line-height:1; }
+.save-sub{ color:#5b6470; font-size:13px; }
+
+/* Annual line */
+.save-annual{ margin-top:6px; font-size:14px; color:#0f1720; }
+.save-annual strong{ font-weight:900; }
+
+/* System chips UX */
+.save-systems .chip{ transition:transform .12s ease, box-shadow .18s ease; }
+.save-systems .chip:hover{ transform:translateY(-1px); box-shadow:0 10px 22px rgba(0,0,0,.08); }
+
+/* Mobile */
+@media (max-width: 900px){
+  .save-bill-wrap{ grid-template-columns:1fr 100px; }
+  .save-result{ grid-template-columns:1fr; text-align:left; }
+}
