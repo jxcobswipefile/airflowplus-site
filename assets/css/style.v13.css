@@ -393,3 +393,65 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 
 /* Optional: a bit more breathing on the mini-cards side */
 #maat .mini-card p{ color:#445164; }
+
+/* ================================
+   Keuzehulp (page) — scoped reset
+   Put this at the very end of your CSS
+==================================*/
+
+/* Layout + card shell */
+.kh-wrap{ padding-top:60px; padding-bottom:60px; }
+.kh-card{
+  background:#f3f8ff; border:1px solid #dbe7ff; border-radius:20px;
+  padding:28px; box-shadow:0 18px 40px rgba(0,93,143,.08);
+}
+.kh-head{ margin-bottom:12px; }
+.kh-badge{
+  display:inline-block; background:#e9f4ff; border:1px solid #cfe6ff;
+  color:#005b8f; font-weight:800; border-radius:999px; padding:6px 12px; font-size:12px;
+}
+.kh-title{ margin:10px 0 4px; }
+.kh-sub{ color:#5b6470; margin:0 0 16px; }
+
+/* Room count chips (1–4) */
+.chip{
+  display:inline-flex; align-items:center; gap:10px;
+  border:2px solid var(--primary); color:#005b8f; background:#fff;
+  border-radius:12px; padding:12px 16px; font-weight:700; cursor:pointer; transition:.15s;
+}
+.chip input{ appearance:none; width:16px; height:16px; border:2px solid var(--primary); border-radius:50%; }
+.chip:has(input:checked){ background:var(--primary); color:#fff; border-color:var(--primary); }
+.chip:has(input:checked) input{ background:#fff; border-color:#fff; }
+
+.kh-grid-rooms{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:12px 0 8px; }
+
+/* Per-room size selectors */
+.kh-step-title{ margin:6px 0 8px; }
+.kh-size-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.kh-room{
+  background:#fff; border:1px solid #e6e9ee; border-radius:16px;
+  padding:16px;
+}
+.kh-room h4{ margin:0 0 10px; }
+.kh-size-row{ display:flex; flex-wrap:wrap; gap:10px; }
+.kh-pill{
+  display:inline-block; border:2px solid var(--primary); color:#005b8f; background:#fff;
+  border-radius:10px; padding:10px 12px; font-weight:700; cursor:pointer; transition:.15s;
+}
+.kh-pill.active, .kh-pill:hover{ background:var(--primary); color:#fff; }
+
+/* Nav + result box */
+.kh-actions{ display:flex; gap:10px; margin-top:10px; }
+.kh-actions.between{ justify-content:space-between; }
+.kh-result{
+  background:#ffffff; border:1px solid #dbe7ff; border-radius:16px;
+  padding:18px; margin-top:18px;
+}
+.kh-result h3{ margin:0 0 10px; }
+.kh-out{ padding-left:18px; margin:0 0 12px; }
+
+/* Mobile */
+@media (max-width: 900px){
+  .kh-grid-rooms{ grid-template-columns:1fr 1fr; }
+  .kh-size-grid{ grid-template-columns:1fr; }
+}
