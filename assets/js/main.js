@@ -532,3 +532,15 @@ if (form){
   nextBtn.disabled = true;
   renderStep1();
 })();
+
+// Close (×) -> go back to homepage
+const closeBtn = document.querySelector('.khv2-close');
+if (closeBtn) {
+  closeBtn.addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+  // Close on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') window.location.href = 'index.html';
+  });
+}
