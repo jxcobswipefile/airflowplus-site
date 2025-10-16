@@ -462,3 +462,144 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   color:#fff !important;
   border-color:#fff !important;
 }
+
+/* =========================================================
+   SAVINGS CALCULATOR — FIX PACK (safe to append at end)
+   ========================================================= */
+
+/* 1) Keep the tooltip and its bubble from being clipped */
+#savings .save-card,
+#savings .save-result{ overflow:visible; }
+
+/* 2) Value bubble: sit closer to the track + reserve space above it
+      so it never overlaps the heading */
+#savings .save-head h3{ margin-bottom: 26px; }   /* more air under title */
+#savings .save-range .range-wrap{ padding-top: 34px; } /* room for the chip */
+#savings .save-bubble{ top: -8px; }             /* bring chip down to track */
+
+/* If your code uses .bill-tag/.range-tag for the chip position, keep it low */
+#savings .bill-tag,
+#savings .range-tag{ transform: translate(-50%, -104%); }
+
+/* 3) Consistent layout: lock the “i” tooltip button bottom-right
+      so it doesn’t push text and always aligns the same */
+#savings .save-result{ position: relative; }
+#savings .save-tip-wrap{
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  margin: 0;           /* don’t let margins shift the grid */
+}
+#savings .save-tip-bubble{ z-index: 60; }  /* above the card */
+
+/* 4) <select> polish: keep the profile dropdown styled the same */
+#savings .save-select{
+  appearance: none;
+  background: #fff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%23005b8f' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E")
+    no-repeat right 12px center;
+  padding: 10px 36px 10px 12px;
+  border: 1px solid #cfe0ee;
+  border-radius: 12px;
+  height: 42px;
+  line-height: 1.2;
+}
+
+/* 5) Small text tune in the result for a tighter look */
+#savings .save-result .big{ line-height: 1; }     /* keep it compact */
+#savings .save-sub{ font-size: 13px; }            /* restore intended size */
+
+/* =========================================================
+   HERO CTA (blue card) — make input/button styling bulletproof
+   ========================================================= */
+.kh-cta-card.compact.seam.blue .kh-cta-form input{
+  background:#fff !important;
+  color:#0f1720 !important;
+  border:1px solid rgba(255,255,255,.55) !important;
+  border-radius:12px;
+  padding:12px 14px;
+  min-width:320px;
+}
+.kh-cta-card.compact.seam.blue .kh-cta-form input:focus{
+  border-color:#fff !important;
+  box-shadow:0 0 0 6px rgba(255,255,255,.18) !important;
+}
+.kh-cta-card.compact.seam.blue .btn-primary{
+  background:#fff !important;
+  color:#005b8f !important;
+  border-color:#fff !important;
+}
+/* Keep outline button readable on the blue card */
+.kh-cta-card.compact.seam.blue .btn-outline{
+  background:transparent !important;
+  color:#fff !important;
+  border-color:#fff !important;
+}
+
+/* ===========================================
+   COMFORT MET AIRCO — TALL LAYOUT FIX PACK
+   (append-only, higher specificity wins)
+   =========================================== */
+
+.heat-info{
+  /* restore the taller section so the card can breathe */
+  min-height: 68vh;
+  padding: 12px 0 36px; /* slight top/bottom spacing */
+  display: flex;
+  align-items: center;
+}
+.heat-info .container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.heat-card{
+  /* big, centered card like before */
+  max-width: 980px;
+  width: min(980px, 92%);
+  padding: 72px 48px;
+  border-radius: 22px;
+  box-shadow: 0 28px 70px rgba(0,0,0,.25);
+  text-align: center;
+
+  /* vertical rhythm inside the card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.heat-card h2{
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.15;
+}
+.heat-card .lead{
+  margin: 0;
+  max-width: 60ch;
+  line-height: 1.6;
+}
+.heat-card .checklist.row{
+  justify-content: center;
+  gap: 18px;
+}
+.heat-card .cta-row{
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.heat-card .btn{
+  padding: 14px 20px;
+  font-size: 16px;
+}
+
+/* keep spacing reasonable on mobile */
+@media (max-width: 900px){
+  .heat-info{ min-height: 56vh; }
+  .heat-card{ padding: 48px 28px; gap: 16px; }
+  .heat-card h2{ font-size: 26px; }
+}
+
+/* start the next generic .section a bit closer */
+.heat-info + .section{ padding-top: 60px; }
