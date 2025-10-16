@@ -437,3 +437,28 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 /* Optional: keep tick labels readable and centered */
 .save-ticks span{ min-width:2ch; text-align:center; }
 
+/* Hero keuzehulp: enforce email input styling on the blue card */
+.kh-cta-card.compact.seam.blue .kh-cta-form input{
+  background:#fff !important;
+  color:#0f1720 !important;
+  border:1px solid rgba(255,255,255,.55) !important;
+  border-radius:12px;
+  padding:12px 14px;
+  min-width:320px;
+}
+.kh-cta-card.compact.seam.blue .kh-cta-form input:focus{
+  border-color:#fff !important;
+  box-shadow:0 0 0 6px rgba(255,255,255,.18) !important;
+}
+
+/* Keep CTA buttons readable on the blue variant */
+.kh-cta-card.compact.seam.blue .btn-primary{
+  background:#fff !important;
+  color:#005b8f !important;
+  border-color:#fff !important;
+}
+.kh-cta-card.compact.seam.blue .btn-outline{
+  background:transparent !important;
+  color:#fff !important;
+  border-color:#fff !important;
+}
