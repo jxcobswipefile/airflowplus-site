@@ -1021,3 +1021,39 @@ document.addEventListener('DOMContentLoaded', () => {
   // run after layout
   requestAnimationFrame(syncTicksWidth);
 })();
+
+<script>
+(function(){
+  const lane   = document.getElementById('save-bill');            // the <input type="range">
+  const wrap   = lane ? lane.closest('.range-wrap') : null;        // container above the track
+  const bubble = wrap ? wrap.querySelector('.save-bubble') : null; // the little € bubble
+
+  if (!lane || !wrap || !bubble) return;
+
+  // Keep this in sync with CSS thumb size
+  const THUMB_PX = 20; // matches #save-bill::-webkit-slider-thumb / ::-moz-range-thumb
+
+  function placeBubble(){
+    const min   = Number(lane.min || 0);
+    const max   = Number(lane.max || 100);
+    const val   = Number(lane.value || min);
+    const pct   = (val - min) / (max - min);                     // 0..1
+
+    const r     = lane.getBoundingClientRect();
+    const w     = r.width;
+
+    // Position the bubble so its center tracks the center of the thumb.
+    // (travel width is lane width minus thumb; then add half-thumb)
+    const x     = pct * (w - THUMB_PX) + THUMB_PX / 2;
+
+    // Place relative to the wrap (which is position:relative)
+    bubble.style.left = `${x}px`;
+  }
+
+  // Initial and reactive placements
+  placeBubble();
+  lane.addEventListener('input',  placeBubble);
+  lane.addEventListener('change', placeBubble);
+  window.addEventListener('resize', placeBubble);
+})();
+</script>
