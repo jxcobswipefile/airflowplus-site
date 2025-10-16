@@ -659,3 +659,67 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 #savings .range-tag{
   transform: translate(-50%, -106%) !important;
 }
+
+/* =========================
+   PATCH — Savings + Comfort + Inputs
+   (append-only; safe overrides)
+========================= */
+
+/* 1) Savings: keep tooltip/bubble above and allow overflow */
+#savings .save-card { overflow: visible; }
+#savings .save-result { overflow: visible; }
+.save-tip-bubble { z-index: 60; }
+
+/* 2) Savings: move value bubble out of the heading’s way */
+.save-head h3 { margin-bottom: 22px; }               /* more space under title */
+.save-range { grid-column: 1; }                      /* make sure slider sits in column 1 */
+.save-range .range-wrap { position: relative; padding-top: 28px; }
+.save-bubble { top: -12px; }                         /* lower bubble closer to track */
+.bill-tag, .range-tag { transform: translate(-50%, -105%); }
+
+/* 3) Savings: grid columns + ticks only under the slider (not the input box) */
+.save-bill-wrap { 
+  display: grid; 
+  grid-template-columns: minmax(0,1fr) 110px;        /* slider | number input */
+  align-items: center;
+}
+.save-bill-wrap + .save-ticks {                      /* the ticks element directly under the wrap */
+  grid-column: 1 / 2;                                /* align to slider column only */
+  max-width: 100%;
+  margin-right: auto;
+}
+
+/* If your ticks are inside .save-range instead, this also helps */
+.save-range .save-ticks { width: 100%; }
+
+/* 4) Savings: select & dropdown polish (some browsers dropped default look) */
+.save-select,
+select {
+  appearance: none;
+  background: #fff
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24'><path fill='%23005b8f' d='M7 10l5 5 5-5z'/></svg>")
+    no-repeat right 12px center / 12px;
+  border: 1px solid #cfe0ee;
+  border-radius: 12px;
+  padding: 10px 36px 10px 12px;
+  font: inherit;
+  color: inherit;
+}
+
+/* 5) Keuzehulp hero: email input styling (in case something overrode it) */
+.kh-cta-card .kh-cta-form input[type="email"] {
+  background: #ffffff; color: #0f1720;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 12px; padding: 12px 14px; min-width: 320px;
+}
+.kh-cta-card .kh-cta-form input[type="email"]:focus {
+  border-color: #ffffff; box-shadow: 0 0 0 6px rgba(255,255,255,.18);
+}
+
+/* 6) Comfort card: lock the taller presentation */
+.heat-info { min-height: 68vh; }         /* ensure it doesn't collapse */
+.heat-card { padding: 72px 48px; }       /* fuller vertical mass */
+@media (max-width: 900px){
+  .heat-info { min-height: 56vh; }
+  .heat-card { padding: 48px 28px; }
+}
