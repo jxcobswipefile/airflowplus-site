@@ -954,3 +954,21 @@ document.addEventListener('DOMContentLoaded', () => {
   num.addEventListener('input', syncFromNumber);
   syncFromRange();
 })();
+
+// --- Keep tick labels the same width as the slider track ---
+(function alignTickScaleToSlider(){
+  const slider = document.getElementById('save-bill');
+  const scale  = document.querySelector('#savings .range-scale');
+  if (!slider || !scale) return;
+
+  function sizeScale(){
+    // Use the rendered width of the range control
+    const w = slider.getBoundingClientRect().width;
+    scale.style.width = w + 'px';
+  }
+  // Size now and on resize (debounced for performance)
+  let raf;
+  function onResize(){ cancelAnimationFrame(raf); raf = requestAnimationFrame(sizeScale); }
+  window.addEventListener('resize', onResize);
+  sizeScale();
+})();
