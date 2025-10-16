@@ -883,6 +883,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     bubble.textContent = `€ ${v.toLocaleString('nl-NL')}`;
   }
+  
+// Savings slider: keep tick labels under the slider lane (not the number input)
+(function fixSavingsTicks() {
+  const root = document.getElementById('savings');
+  if (!root) return;
+
+  const wrap  = root.querySelector('.save-bill-wrap');   // grid: [ slider | input ]
+  const ticks = root.querySelector('.save-ticks');       // the 50 / 325 / 600 labels
+  const range = root.querySelector('#save-bill');        // the <input type="range">
+
+  if (!wrap || !ticks || !range) return;
+
+  // 1) Move ticks inside the grid wrap so we can place them under column 1
+  if (ticks.parentElement !== wrap) wrap.appendChild(ticks);
+
+  // 2) Grid placement: under the slider column, second row
+  ticks.style.gridColumn = '1';
+  ticks.style.gridRow    = '2';
+  ticks.style.marginTop  = '6px';
+
+  // 3) Match the ticks’ width to the actual slider lane width
+  function sizeTicks() {
+    const rect = range.getBoundingClientRect();
+    // Use the rendered width of the slider control
+    ticks.style.width = rect.width + 'px';
+  }
+
+  sizeTicks();
+  window.addEventListener('resize', sizeTicks);
+})();
 
   // ---- Keep slider <-> number field in sync
   function fromRange() {
