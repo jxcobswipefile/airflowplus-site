@@ -824,3 +824,19 @@ select {
 .heat-info{ min-height:68vh !important; }
 .heat-card{ padding:72px 48px !important; }
 @media (max-width:900px){ .heat-info{ min-height:56vh !important; } .heat-card{ padding:48px 28px !important; } }
+
+/* (optional) slightly slimmer track */
+#save-bill{ height:5px; }
+
+/* (optional) nudge the bubble a touch closer to the track */
+.save-bill-wrap .save-bubble{ top:-10px !important; }
+
+/* (optional) tighter right edge in the result box on narrow widths */
+@media (max-width:520px){
+  .save-result{ padding-right:10px; }
+}
+
+/* (optional) smaller bubble on mobile */
+@media (max-width:420px){
+  .save-bill-wrap .save-bubble{ font-size:11px; padding:5px 7px; }
+}
