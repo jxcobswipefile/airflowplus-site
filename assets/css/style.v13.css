@@ -723,3 +723,60 @@ select {
   .heat-info { min-height: 56vh; }
   .heat-card { padding: 48px 28px; }
 }
+
+/* ======= QUICK PATCH: Savings slider + layout (high specificity) ======= */
+
+/* 1) Let the tooltip/bubble render above and outside the card */
+#savings .save-card,
+#savings .save-result { overflow: visible !important; }
+#savings .save-tip-bubble { z-index: 60 !important; }
+
+/* 2) Move the € bubble down so it no longer overlaps the heading */
+#savings .save-head h3 { margin-bottom: 24px !important; }
+#savings .save-range .range-wrap { position: relative; padding-top: 28px !important; }
+#savings .save-bubble { top: -10px !important; }        /* lower = nearer the track */
+#savings .bill-tag,
+#savings .range-tag { transform: translate(-50%, -102%) !important; }
+
+/* 3) Keep ticks aligned with the slider lane only (not the number input) */
+#savings .save-bill-wrap { 
+  display: grid !important;
+  grid-template-columns: minmax(0,1fr) 110px !important; /* lane | input */
+  align-items: center;
+}
+#savings .save-bill-wrap + .save-ticks,
+#savings .save-range .save-ticks {
+  grid-column: 1 / 2 !important;     /* under the lane only */
+  width: 100% !important;
+}
+
+/* If your ticks aren’t a grid item, this fallback keeps them within the lane */
+#savings .save-ticks { max-width: 100% !important; margin-right: 0 !important; }
+
+/* 4) Restore/select styling (some browsers dropped native arrow) */
+#savings select,
+#savings .save-select {
+  appearance: none;
+  background: #fff
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24'><path fill='%23005b8f' d='M7 10l5 5 5-5z'/></svg>")
+    no-repeat right 12px center / 12px;
+  border: 1px solid #cfe0ee; border-radius: 12px;
+  padding: 10px 36px 10px 12px; font: inherit; color: inherit;
+}
+
+/* 5) Make sure the hero Keuzehulp email input has the intended style */
+.kh-cta .kh-cta-card .kh-cta-form input[type="email"]{
+  background:#fff; color:#0f1720; border:1px solid rgba(255,255,255,.55);
+  border-radius:12px; padding:12px 14px; min-width:320px;
+}
+.kh-cta .kh-cta-card .kh-cta-form input[type="email"]:focus{
+  border-color:#fff; box-shadow:0 0 0 6px rgba(255,255,255,.18);
+}
+
+/* 6) Lock the taller “Comfort met airco” card again */
+.heat-info { min-height: 68vh !important; }
+.heat-card { padding: 72px 48px !important; }
+@media (max-width: 900px){
+  .heat-info { min-height: 56vh !important; }
+  .heat-card { padding: 48px 28px !important; }
+}
