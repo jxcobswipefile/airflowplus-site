@@ -850,3 +850,24 @@ select {
   grid-row: 2;
   width: 100%;                     /* JS will set exact pixel width */
 }
+
+/* === Savings slider: bubble placement + spacing (append-only) === */
+#savings .save-head h3{ margin-bottom: 22px !important; }   /* room under title */
+#savings .save-range .range-wrap{
+  position: relative;
+  padding-top: 30px !important;                              /* room for bubble */
+}
+
+/* The value bubble itself – sits just above the track */
+#savings .save-bubble{
+  position: absolute;
+  top: 0;                                                    /* JS will set left */
+  transform: translate(-50%, -110%);                        /* a bit closer to track */
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Keep things from clipping */
+#savings .save-card,
+#savings .save-result { overflow: visible !important; }
+#savings .save-tip-bubble { z-index: 60 !important; }
