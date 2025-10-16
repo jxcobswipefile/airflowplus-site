@@ -972,3 +972,22 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', onResize);
   sizeScale();
 })();
+
+// Savings: keep tick labels exactly under the slider lane
+(function () {
+  const range = document.getElementById('save-bill');
+  if (!range) return;
+  // ticks element: either the sibling right after .save-bill-wrap or the nearest in the group
+  const ticks = range.closest('.save-bill-wrap')?.nextElementSibling?.classList.contains('save-ticks')
+    ? range.closest('.save-bill-wrap').nextElementSibling
+    : document.querySelector('.save-ticks');
+
+  function syncTicksWidth() {
+    if (!ticks) return;
+    const w = range.getBoundingClientRect().width;
+    ticks.style.width = w + 'px';
+  }
+  window.addEventListener('resize', syncTicksWidth, { passive: true });
+  // run after layout
+  requestAnimationFrame(syncTicksWidth);
+})();
