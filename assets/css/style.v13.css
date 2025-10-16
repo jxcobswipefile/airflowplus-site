@@ -603,3 +603,59 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 
 /* start the next generic .section a bit closer */
 .heat-info + .section{ padding-top: 60px; }
+
+/* ============================================================
+   Savings slider & result – spacing + alignment FIX PACK
+   (append-only; uses !important sparingly to win specificity)
+   ============================================================ */
+
+/* A) Give the bubble room so it never touches the heading */
+#savings .save-head h3{ 
+  margin-bottom: 26px !important;           /* extra room below title */
+}
+#savings .save-range .range-wrap{
+  position: relative;
+  padding-top: 28px !important;             /* space above track for the bubble */
+}
+
+/* Lower the bubble a touch so it's clearly below the title line */
+#savings .save-bubble{
+  top: -6px !important;                      /* was higher; this clears the title */
+  z-index: 3;
+}
+
+/* Keep bubble and tooltip free to overflow */
+#savings .save-card,
+#savings .save-result{ 
+  position: relative; 
+  overflow: visible;
+}
+
+/* B) Make the tick labels match the exact width of the slider lane.
+      We’ll set the width with JS; these keep it visually correct. */
+#savings .range-scale{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  pointer-events: none;
+  /* width will be injected by JS to equal the slider's width */
+}
+
+/* Small nudge so the info button doesn't collide with the text/tooltip */
+#savings .save-result{
+  grid-template-columns: auto 1fr auto;  /* badge | text | (i) */
+  column-gap: 12px;
+  padding-right: 14px;                   /* breathing room at right edge */
+}
+
+/* Mobile stacking remains tidy */
+@media (max-width: 900px){
+  #savings .save-result{ grid-template-columns: 1fr; }
+}
+
+/* (Optional safety) If your code uses .bill-tag/.range-tag chips instead of .save-bubble,
+   keep them a bit lower too. */
+#savings .bill-tag, 
+#savings .range-tag{
+  transform: translate(-50%, -106%) !important;
+}
