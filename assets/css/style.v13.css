@@ -877,3 +877,29 @@ select {
 #savings .save-range .range-wrap{ position:relative; padding-top:32px !important; }
 /* sit the bubble closer to the track so it never clips the heading */
 #savings .save-bubble{ top:-8px !important; transform:translateX(-50%); }
+
+/* ===============================
+   Savings – bubble vertical centering
+   One variable controls the gap.
+   =============================== */
+#savings {
+  --save-gap: 36px;          /* space between heading and rail */
+  --save-arrow: 6px;         /* triangle height under the bubble */
+}
+
+/* Put equal space below the title and above the rail */
+#savings .save-head h3{
+  margin-bottom: var(--save-gap) !important;
+}
+#savings .save-range .range-wrap{
+  position: relative;
+  padding-top: var(--save-gap) !important;
+}
+
+/* Place the bubble exactly halfway in that gap */
+#savings .save-bubble{
+  transform: translateX(-50%);
+  /* halfway up the gap, then nudge up by the arrow height
+     so the rectangle itself is visually centered */
+  top: calc( (var(--save-gap) / -2) - var(--save-arrow) ) !important;
+}
