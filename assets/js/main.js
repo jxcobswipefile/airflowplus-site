@@ -1021,3 +1021,6 @@ window.addEventListener('resize', syncTicksWidth, { passive: true });
 // run after layout
 requestAnimationFrame(syncTicksWidth);
 })();
+
+/* Savings – final vertical lock so other helpers can't move it */
+(() => { const b = document.querySelector('#savings .save-bubble'); if (b) b.style.top = '-8px'; })();
