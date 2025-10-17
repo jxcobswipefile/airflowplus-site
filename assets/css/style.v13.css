@@ -871,3 +871,9 @@ select {
 #savings .save-card,
 #savings .save-result { overflow: visible !important; }
 #savings .save-tip-bubble { z-index: 60 !important; }
+
+/* Savings – lock bubble height + give the title a bit more room */
+#savings .save-head h3{ margin-bottom:28px !important; }
+#savings .save-range .range-wrap{ position:relative; padding-top:32px !important; }
+/* sit the bubble closer to the track so it never clips the heading */
+#savings .save-bubble{ top:-8px !important; transform:translateX(-50%); }
