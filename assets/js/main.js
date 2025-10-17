@@ -1193,3 +1193,15 @@ requestAnimationFrame(syncTicksWidth);
     }
   });
 })();
+
+/* Keuzehulp: make "Volgende" go to Offerte/Contact now */
+(() => {
+  const next = document.getElementById('kh-next');
+  if (!next) return;
+  next.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Option A: send them to your quote page/section
+    window.location.href = 'contact.html#offerte';
+    // Option B instead: window.location.href = 'prijzen.html';
+  });
+})();
