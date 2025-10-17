@@ -1016,3 +1016,98 @@ select {
 @media (max-width: 900px){
   .form-grid { grid-template-columns: 1fr; }
 }
+
+/* ===== Keuzehulp hero form (name/name over email) ===== */
+.kh-cta-form.stack{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto auto;
+  gap:10px;
+  align-items:center;
+  width:100%;
+  max-width:720px;
+  margin-top:8px;
+}
+.kh-cta-form.stack input{
+  background:#fff;
+  color:#0f1720;
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:12px;
+  padding:12px 14px;
+  min-width:0;
+}
+.kh-cta-form.stack #kh-email{ grid-column:1 / -1; }   /* email spans full width */
+.kh-cta-form.stack .kh-actions{
+  grid-column:1 / -1;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:2px;
+}
+
+@media (max-width:700px){
+  .kh-cta-form.stack{ grid-template-columns:1fr; }
+  .kh-cta-form.stack #kh-email{ grid-column:auto; }
+  .kh-cta-form.stack .kh-actions{ justify-content:flex-end; }
+}
+
+/* ===== Savings: result + opt-in layout ===== */
+.save-result{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:12px;
+  background:#f6fbff;
+  border:1px solid #dbe7ff;
+  border-radius:14px;
+  padding:14px 16px;
+  overflow:visible;
+}
+
+.save-optin{
+  margin-top:12px;
+  background:#fff;
+  border:1px solid #dbe7ff;
+  border-radius:14px;
+  padding:14px 16px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:end;
+  gap:12px;
+}
+.save-optin .optin-head{
+  grid-column:1 / -1;
+  font-weight:800;
+  margin-bottom:-4px;
+}
+.save-optin .optin-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.save-optin .optin-grid input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid #cfe0ee;
+  background:#fff;
+  color:#0f1720;
+}
+.save-optin .optin-grid input[type="email"]{
+  grid-column:1 / -1; /* email full width under FN/LN */
+}
+.save-optin .btn{ padding:12px 18px; }
+
+@media (max-width:780px){
+  .save-result{ grid-template-columns:1fr; }
+  .save-optin{
+    grid-template-columns:1fr;
+    align-items:stretch;
+  }
+  .save-optin .btn{ width:100%; }
+  .save-optin .optin-grid{ grid-template-columns:1fr; }
+}
+
+/* Slightly wider feel for the calculator on large screens */
+@media (min-width:1100px){
+  .save-grid{ grid-template-columns:1fr 1.05fr; }
+}
