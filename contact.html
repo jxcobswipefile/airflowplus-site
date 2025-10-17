@@ -40,9 +40,77 @@
   </div>
 </header>
 
-<main>
-<section class='page-header'><div class='container'><h1>Contact</h1><p>Pagina in ontwikkeling.</p></div></section>
-</main>
+<section class="section" id="contact">
+  <div class="container">
+    <h1>Offerte of vraag</h1>
+    <p class="muted">Vul je gegevens in en we reageren meestal dezelfde werkdag.</p>
+
+    <form id="contact-form"
+          action="https://formspree.io/f/YOUR_FORMSPREE_ID"
+          method="POST" novalidate class="contact-form">
+
+      <!-- Honeypot (spam trap) -->
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none">
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="cf-name">Naam</label>
+          <input id="cf-name" name="name" type="text" required placeholder="Voor- en achternaam">
+          <div class="error" data-err="name"></div>
+        </div>
+
+        <div class="field">
+          <label for="cf-email">E-mail</label>
+          <input id="cf-email" name="email" type="email" required placeholder="jij@voorbeeld.nl">
+          <div class="error" data-err="email"></div>
+        </div>
+
+        <div class="field">
+          <label for="cf-phone">Telefoon (optioneel)</label>
+          <input id="cf-phone" name="phone" type="tel" inputmode="tel" placeholder="06 12345678">
+          <div class="error" data-err="phone"></div>
+        </div>
+
+        <div class="field">
+          <label for="cf-topic">Onderwerp</label>
+          <select id="cf-topic" name="topic" class="save-select">
+            <option value="offerte" selected>Offerte</option>
+            <option value="advies">Advies</option>
+            <option value="onderhoud">Onderhoud</option>
+            <option value="storingen">Storingen / Reparatie</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label for="cf-message">Bericht</label>
+          <textarea id="cf-message" name="message" required rows="6"
+            placeholder="Vertel kort wat je zoekt (ruimtes, type woning, gewenste periode)..."></textarea>
+          <div class="error" data-err="message"></div>
+        </div>
+
+        <div class="field full terms">
+          <label class="checkbox">
+            <input type="checkbox" id="cf-consent" name="consent" required>
+            <span>Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</span>
+          </label>
+          <div class="error" data-err="consent"></div>
+        </div>
+      </div>
+
+      <!-- Hidden subject that shows up in Formspree emails -->
+      <input type="hidden" name="_subject" value="Nieuwe aanvraag via Airflow+">
+
+      <div class="cta-row">
+        <button type="submit" class="btn btn-primary">Versturen</button>
+        <a href="tel:+31100000000" class="btn btn-outline">Bel direct</a>
+      </div>
+
+      <!-- Success / error inline feedback (JS fills these) -->
+      <div class="form-status" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
 
 <footer class="site-footer">
   <div class="container footer-grid">
