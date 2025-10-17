@@ -1062,3 +1062,68 @@ requestAnimationFrame(syncTicksWidth);
   script.textContent = JSON.stringify({ '@context':'https://schema.org', '@type':'FAQPage', mainEntity: qa });
   document.head.appendChild(script);
 })();
+
+/* ========= FAQ: deep links + persistence ========= */
+(() => {
+  const list = document.getElementById('faq-list');
+  if (!list) return;
+
+  const STORAGE_KEY = 'airflow_faq_open_ids';
+  const items = Array.from(list.querySelectorAll('details[id]'));
+
+  // Restore persisted open items
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    saved.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.open = true;
+    });
+  } catch {}
+
+  // Open from hash (e.g. /#faq-onderhoud)
+  const openFromHash = () => {
+    const id = decodeURIComponent((location.hash || '').replace('#', ''));
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el && el.tagName.toLowerCase() === 'details') {
+      // close others for clarity; comment out if you prefer multiple open
+      items.forEach(d => { if (d !== el) d.open = false; });
+      el.open = true;
+      // smooth-scroll a bit below the sticky header
+      const y = el.getBoundingClientRect().top + window.scrollY - 90;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+  window.addEventListener('hashchange', openFromHash, { passive: true });
+  // run once on load
+  openFromHash();
+
+  // Persist and push hash when toggled
+  const saveState = () => {
+    const openIds = items.filter(d => d.open).map(d => d.id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(openIds));
+  };
+
+  items.forEach(d => {
+    d.addEventListener('toggle', () => {
+      // Update URL hash to the last opened item
+      if (d.open) {
+        history.replaceState(null, '', `#${d.id}`);
+      } else if (location.hash === `#${d.id}`) {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+      saveState();
+    });
+
+    // Make summary clickable anchor for copy-link UX
+    const sum = d.querySelector('summary');
+    if (sum) {
+      sum.addEventListener('contextmenu', e => {
+        // Right click -> copy link to this Q in clipboard (nice to have)
+        e.preventDefault();
+        const url = `${location.origin}${location.pathname}#${d.id}`;
+        navigator.clipboard?.writeText(url);
+      });
+    }
+  });
+})();
