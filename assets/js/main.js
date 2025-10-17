@@ -1019,3 +1019,46 @@ window.addEventListener('resize', syncTicksWidth, { passive: true });
 // run after layout
 requestAnimationFrame(syncTicksWidth);
 })();
+
+/* FAQ: persistence + deep-linking + schema.org */
+(() => {
+  const faq = document.querySelector('.faq');
+  if (!faq) return;
+
+  const items = Array.from(faq.querySelectorAll('details[id]'));
+  const KEY = 'airflow_faq_open';
+
+  // Open from URL hash (e.g., /#faq-geluid)
+  if (location.hash) {
+    const el = document.getElementById(location.hash.slice(1));
+    if (el && el.tagName === 'DETAILS') el.open = true;
+  }
+
+  // Restore last open item
+  const last = localStorage.getItem(KEY);
+  if (!location.hash && last) {
+    const el = document.getElementById(last);
+    if (el) el.open = true;
+  }
+
+  // When toggled, save the last opened id and update the URL hash
+  items.forEach(d => {
+    d.addEventListener('toggle', () => {
+      if (d.open) {
+        localStorage.setItem(KEY, d.id);
+        history.replaceState(null, '', '#' + d.id);
+      }
+    });
+  });
+
+  // Minimal schema.org FAQPage injection
+  const qa = items.map(d => {
+    const q = d.querySelector('summary')?.textContent?.trim() || '';
+    const a = d.querySelector('summary + *')?.textContent?.trim() || '';
+    return { '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } };
+  });
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify({ '@context':'https://schema.org', '@type':'FAQPage', mainEntity: qa });
+  document.head.appendChild(script);
+})();
