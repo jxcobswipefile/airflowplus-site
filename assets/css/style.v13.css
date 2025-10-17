@@ -919,6 +919,6 @@ select {
 #savings .save-bubble{
   transform: translateX(-50%);
   /* was: calc((var(--save-gap)/-2) - var(--save-arrow)) */
-  top: calc((var(--save-gap) / -2) + 18px) !important;
+  top: calc((var(--save-gap) / -2) + 22px) !important;
   /* ↑ increase the +8px to +10/+12 if you want it even lower */
 }
