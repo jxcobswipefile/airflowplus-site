@@ -1,17 +1,30 @@
 <!doctype html>
-<html lang="nl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Airflow+ — Airco & warmtepomp</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.v13.css?v=patch1">
-  <script defer src="assets/js/main.js?v=current"></script>
-  <script defer src="assets/js/forms.addons.js?v=patch1"></script>
-</head>
-<body>
+<html lang="nl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airco & warmtepomp installatie • Airflow+</title>
+<meta name="description" content="Airflow+ — Airco & warmtepomp installatie. Snel, netjes en gecertificeerd.">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Use the new themed CSS -->
+<link rel="stylesheet" href="assets/css/style.v13.css?v=next">
+
+<!-- Your script (keep your filename; example shown) -->
+<script defer src="assets/js/main.js?v=next"></script>
+
+</head><body>
+
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>Gecertificeerde airco & warmtepomp installateur</span>
+    <a href="tel:+31 10 000 0000" class="topbar-link">Bel: +31 10 000 0000</a>
+  </div>
+</div>
+
+
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
@@ -26,23 +39,37 @@
     <button class="nav-toggle" aria-label="Open menu">☰</button>
   </div>
 </header>
+
 <main>
 
 <section class="hero hero-tall">
+  <!-- Background video -->
   <div class="hero-bg">
-    <video class="hero-video" autoplay muted loop playsinline poster="">
-      <source src="assets/video/hero.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay"></div>
-  </div>
+  <video class="hero-video" autoplay muted loop playsinline preload="auto"
+         poster="">
+    <source src="assets/video/hvac hero temp vid.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+</div>
+
   <div class="container hero-inner">
     <div class="hero-copy">
       <h1>Airflow+ is <span class="hl-blue">dé airco specialist</span> in de regio Amsterdam</h1>
-      <div class="cta-row"></div>
+      
+      <div class="cta-row">
+        <a href="keuzehulp.html" class="btn btn-primary">Doe de keuzehulp</a>
+        <a href="tel:+31100000000" class="btn btn-outline">Bel nu</a>
+      </div>
     </div>
+
+    <!-- Remove the old hero image by deleting this block entirely.
+         If you prefer to keep an image, you can move it INTO another section later. -->
+    <!-- <div class="hero-media"> ... </div> -->
   </div>
 </section>
 
+
+<!-- Keuzehulp CTA (own container, left-aligned) -->
 <section id="keuzehulp-cta" class="section kh-cta overlap">
   <div class="container left">
     <div class="kh-cta-card compact seam blue">
@@ -54,27 +81,108 @@
         </ul>
       </div>
 
-      <form id="kh-hero-optin" class="kh-cta-form stack grid2 optin-form" data-source="hero-optin">
-        <label for="kh-first" class="visually-hidden">Voornaam</label>
-        <input id="kh-first" name="firstname" type="text" placeholder="Voornaam" required>
-        <label for="kh-last" class="visually-hidden">Achternaam</label>
-        <input id="kh-last" name="lastname" type="text" placeholder="Achternaam" required>
-        <label for="kh-email" class="visually-hidden">E-mailadres</label>
-        <input id="kh-email" name="email" type="email" placeholder="jij@voorbeeld.nl" class="full" required>
-        <button class="btn btn-outline" type="submit">Start saving</button>
-        <a href="keuzehulp.html" class="btn btn-primary">Naar keuzehulp</a>
-      </form>
+      <form class="kh-cta-form stack formspree" action="https://formspree.io/f/xwprybon" method="POST">
+<div class="optin-row">
+  <div class="input-group">
+    <label for="kh-fname" class="visually-hidden">Voornaam</label>
+    <input id="kh-fname" name="first_name" type="text" placeholder="Voornaam" required>
+  </div>
+  <div class="input-group">
+    <label for="kh-lname" class="visually-hidden">Achternaam</label>
+    <input id="kh-lname" name="last_name" type="text" placeholder="Achternaam" required>
+  </div>
+  <div class="input-group">
+    <label for="kh-email" class="visually-hidden">E-mailadres</label>
+    <input id="kh-email" name="email" type="email" placeholder="jij@voorbeeld.nl" required>
+  </div>
+  <input type="hidden" name="_subject" value="Keuzehulp Hero Opt-in">
+  <button class="btn btn-primary" type="submit">Start saving</button>
+  <a class="btn btn-outline" href="keuzehulp.html">Naar keuzehulp</a>
+</div>
+</form>
     </div>
   </div>
 </section>
 
+<!-- Heating info (centered, its own container) -->
+<section class="section heat-info">
+  <div class="container">
+    <div class="heat-card">
+      <h2>Comfort met airco in <span class="hl-blue">winter én zomer</span></h2>
+      <p class="lead">
+        Het wordt kouder — met onze airco (warmtepomp) zit je warm in de winter en koel in de zomer.
+        We installeren netjes waar jij het wilt: woonkamer, slaapkamer of kantoor.
+      </p>
+      <ul class="checklist row dark">
+        <li><span class="check"></span> Verwarmen tot&nbsp;-10&nbsp;°C</li>
+        <li><span class="check"></span> Koelen &amp; verwarmen in één</li>
+        <li><span class="check"></span> Netjes geplaatst op jouw gewenste plek</li>
+      </ul>
+      <a href="airco.html" class="btn btn-primary heat-read">Lees meer over airco</a>
+    </div>
+  </div>
+</section>
+
+
+<section class="section alt-blue">
+  <div class="container">
+    <h2>Onze services</h2>
+    <div class="cards">
+      <a class="card service" href="airco-plaatsen.html">
+        <img src="https://images.unsplash.com/photo-1598300183876-3b8536b9c3d3?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+        <h3>Split airco</h3>
+        <p>Ideaal voor 1 ruimte. Stil en energiezuinig.</p>
+      </a>
+
+      <a class="card service" href="multi-split.html">
+        <img src="https://images.unsplash.com/photo-1603190287605-e6ade32fa852?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+        <h3>Multi-split</h3>
+        <p>Meerdere kamers met één buitenunit.</p>
+      </a>
+
+      <a class="card service" href="warmtepomp-airco.html">
+        <img src="https://images.unsplash.com/photo-1614586125858-6fcd9d9d1b4f?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+        <h3>Warmtepomp airco</h3>
+        <p>Koelen én verwarmen met hoog rendement.</p>
+      </a>
+
+      <a class="card service" href="onderhoud.html">
+        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+        <h3>Onderhoud</h3>
+        <p>Jaarlijkse check voor top-prestaties.</p>
+      </a>
+
+      <a class="card service" href="zakelijk.html">
+        <img src="https://images.unsplash.com/photo-1512914890250-1dc5a1a6549f?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+        <h3>Zakelijk</h3>
+        <p>Winkel, horeca, kantooroplossingen.</p>
+      </a>
+
+      <a class="card service" href="reparatie.html">
+        <img src="https://images.unsplash.com/photo-1565992441121-4367c2967103?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy">
+        <h3>Reparatie & storingen</h3>
+        <p>Snel geholpen, ook buiten kantoortijd.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Energy Savings Calculator -->
 <section id="savings" class="section savings">
   <div class="container">
     <div class="save-grid">
       <div class="save-copy">
         <h2><span class="hl-blue">Energiebesparing</span> calculator</h2>
-        <p class="lead">Schuif en kies je systeem – we schatten je <strong>maandelijkse besparing</strong>.</p>
+        <p class="lead">
+          Schuif en kies je systeem – we schatten je <strong>maandelijkse besparing</strong> op basis van een realistische efficiëntie.
+        </p>
+        <ul class="save-points">
+          <li>Direct indicatie op basis van je huidige maandkosten</li>
+          <li>Realistische aannames voor split, multi-split en warmtepomp-airco</li>
+          <li>Eerlijk, onafhankelijk en indicatief (prijzen/gebruik kunnen verschillen)</li>
+        </ul>
       </div>
+
       <div class="save-card">
         <div class="save-row">
           <label for="save-bill" class="save-label">Huidige energiekosten per maand (€)</label>
@@ -82,7 +190,6 @@
             <input type="range" id="save-bill" min="50" max="600" step="5" value="180" />
             <input type="number" id="save-bill-input" min="0" step="1" value="180" />
           </div>
-          <div class="save-ticks"><span>€50</span><span>€325</span><span>€600</span></div>
         </div>
 
         <div class="save-row">
@@ -104,29 +211,371 @@
         </div>
 
         <div class="save-result">
-          <div>
-            <div class="big">€ <span id="save-amount">0</span> / maand</div>
-            <div class="save-sub">Gebaseerd op <span id="save-rate">0</span>% besparing.</div>
-            <div class="save-sub" id="save-annual">Indicatie per jaar: …</div>
-          </div>
-          <div class="save-cta">
-            <h3 class="optin-title">Start saving</h3>
-            <form id="save-optin-form" class="inline-optin optin-form" data-source="savings-optin">
-              <input name="firstname" placeholder="Voornaam" required>
-              <input name="lastname" placeholder="Achternaam" required>
-              <input name="email" class="full" type="email" placeholder="jij@voorbeeld.nl" required>
-              <button class="btn btn-primary" type="submit">Aanmelden</button>
-            </form>
-          </div>
+          <div class="big">€ <span id="save-amount">0</span> / maand</div>
+<form class="save-optin formspree" action="https://formspree.io/f/xwprybon" method="POST">
+  <h3 class="optin-title">Start saving</h3>
+  <div class="optin-row">
+    <div class="input-group">
+      <label for="save-fname" class="visually-hidden">Voornaam</label>
+      <input id="save-fname" name="first_name" type="text" placeholder="Voornaam" required>
+    </div>
+    <div class="input-group">
+      <label for="save-lname" class="visually-hidden">Achternaam</label>
+      <input id="save-lname" name="last_name" type="text" placeholder="Achternaam" required>
+    </div>
+    <div class="input-group wide">
+      <label for="save-email" class="visually-hidden">E-mailadres</label>
+      <input id="save-email" name="email" type="email" placeholder="jij@voorbeeld.nl" required>
+    </div>
+    <input type="hidden" name="_subject" value="Savings Opt-in">
+    <button class="btn btn-primary" type="submit">Aanmelden</button>
+  </div>
+</form>
+          <div class="note">Gebaseerd op <span id="save-rate">0</span>% besparing.</div>
         </div>
 
-        <div class="save-disclaimer">Indicatie o.b.v. gemiddelde efficiëntie en verbruik.</div>
+        <div class="save-disclaimer">
+          Indicatie o.b.v. gemiddelde efficiëntie en verbruik; daadwerkelijke besparingen kunnen afwijken per woning, toestel en tarief.
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- Airconditioning op maat -->
+<section class="section maat" id="maat">
+  <div class="container">
+    <div class="maat-grid">
+      <!-- Left content (updated) -->
+      <div class="maat-left">
+        <h2>Airconditioning op maat</h2>
+        <p class="maat-lead">
+          Iedereen merkt het: zomers worden warmer en het stookseizoen loopt steeds langer door. 
+          Met een moderne airco (warmtepomp) geniet je thuis en op kantoor van een prettig klimaat – 
+          koel in de zomer en comfortabel warm in de winter, met een stille werking en een laag energieverbruik.
+        </p>
+        <p class="maat-lead">
+          Airflow+ adviseert eerlijk en onafhankelijk over het juiste type en vermogen voor jouw situatie. 
+          We denken mee over het merk, de positie en afwerking, zodat alles netjes wordt geplaatst en perfect wordt weggewerkt. 
+          Klanten waarderen onze snelle, zorgeloze montage en het heldere prijsplaatje.
+        </p>
+
+        <div class="cta-row maat-cta">
+          <a href="keuzehulp.html" class="btn btn-primary">Doe de keuzehulp</a>
+          <a href="tel:+31100000000" class="btn btn-outline">Direct contact</a>
+        </div>
+      </div>
+
+    <!-- Right: simple white cards (no icons) -->
+    <div class="maat-side">
+      <div class="mini-card simple">
+        <h4>Vrijblijvend advies</h4>
+        <p>We denken mee over merk, type en positie. Snel duidelijkheid, geen gedoe.</p>
+      </div>
+      <div class="mini-card simple">
+        <h4>Nette installatie</h4>
+        <p>Stofarm boren en strakke afwerking. Alles schoon opgeleverd.</p>
+      </div>
+      <div class="mini-card simple">
+        <h4>Service & onderhoud</h4>
+        <p>Periodieke controle voor zuinig, stil en storingsvrij gebruik.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Reviews — vertical cards + carousel -->
+<section class="section reviews" id="reviews">
+  <div class="container">
+    <h2>Klant<span class="hl-blue">reviews</span></h2>
+
+    <div class="reviews-carousel" data-reviews>
+      <button class="rev-nav rev-prev" aria-label="Vorige review">‹</button>
+      <div class="rev-viewport" data-viewport tabindex="0">
+        <div class="rev-track" data-track>
+          <!-- 9 uniform cards -->
+          <article class="rev-card" data-review>
+            <div class="head">
+              <img class="avatar" src="assets/img/avatars/sanne.jpg" alt="Klantnaam"
+                   width="38" height="38" loading="lazy" decoding="async">
+              <div>
+                <div class="name">Klantnaam</div>
+                <time class="date" datetime="2025-01-15">15 jan 2025</time>
+              </div>
+            </div>
+            <p>Snelle plaatsing, stil toestel en supernetjes gewerkt. Zeer tevreden!</p>
+            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
+          </article>
+
+          <article class="rev-card" data-review>
+            <div class="head">
+              <img class="avatar" src="assets/img/avatars/sanne.jpg" alt="Klantnaam"
+                   width="38" height="38" loading="lazy" decoding="async">
+              <div>
+                <div class="name">Klantnaam</div>
+                <time class="date" datetime="2025-02-02">2 feb 2025</time>
+              </div>
+            </div>
+            <p>Goed advies over capaciteit en locatie. Binnen één dag geplaatst.</p>
+            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
+          </article>
+
+          <article class="rev-card" data-review>
+            <div class="head">
+              <img class="avatar" src="assets/img/avatars/sanne.jpg" alt="Klantnaam"
+                   width="38" height="38" loading="lazy" decoding="async">
+              <div>
+                <div class="name">Klantnaam</div>
+                <time class="date" datetime="2025-02-18">18 feb 2025</time>
+              </div>
+            </div>
+            <p>Kabels strak weggewerkt. Keurig resultaat en duidelijke prijs.</p>
+            <div class="stars" aria-label="4 van 5 sterren">★★★★☆</div>
+          </article>
+
+          <article class="rev-card" data-review>
+            <div class="head">
+              <img class="avatar" src="assets/img/avatars/sanne.jpg" alt="Klantnaam"
+                   width="38" height="38" loading="lazy" decoding="async">
+              <div>
+                <div class="name">Klantnaam</div>
+                <time class="date" datetime="2025-03-04">4 mrt 2025</time>
+              </div>
+            </div>
+            <p>Werkt fluisterstil in de slaapkamer. Montage was heel netjes.</p>
+            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
+          </article>
+
+          <article class="rev-card" data-review>
+            <div class="head">
+              <img class="avatar" src="assets/img/avatars/sanne.jpg" alt="Klantnaam"
+                   width="38" height="38" loading="lazy" decoding="async">
+              <div>
+                <div class="name">Klantnaam</div>
+                <time class="date" datetime="2025-03-12">12 mrt 2025</time>
+              </div>
+            </div>
+            <p>Fijn team. Alles helder uitgelegd en direct gebruiksklaar.</p>
+            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
+          </article>
+
+          <article class="rev-card" data-review>
+            <div class="head">
+              <img class="avatar" src="assets/img/avatars/sanne.jpg" alt="Klantnaam"
+                   width="38" height="38" loading="lazy" decoding="async">
+              <div>
+                <div class="name">Klantnaam</div>
+                <time class="date" datetime="2025-03-28">28 mrt 2025</time>
+              </div>
+            </div>
+            <p>Precies het juiste vermogen. Huis koel in zomer, warm in winter.</p>
+            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
+          </article>
+
+          <article class="rev-card" data-review>
+            <div class="head">
+              <img class="avatar" src="assets/img/avatars/sanne.jpg" alt="Klantnaam"
+                   width="38" height="38" loading="lazy" decoding="async">
+              <div>
+                <div class="name">Klantnaam</div>
+                <time class="date" datetime="2025-04-06">6 apr 2025</time>
+              </div>
+            </div>
+            <p>Netjes opgeleverd, geen rommel. Aanrader voor Amsterdam regio.</p>
+            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
+          </article>
+
+          <article class="rev-card" data-review>
+            <div class="head">
+              <img class="avatar" src="assets/img/avatars/sanne.jpg" alt="Klantnaam"
+                   width="38" height="38" loading="lazy" decoding="async">
+              <div>
+                <div class="name">Klantnaam</div>
+                <time class="date" datetime="2025-04-18">18 apr 2025</time>
+              </div>
+            </div>
+            <p>Communicatie snel en duidelijk. Goede prijs-kwaliteit.</p>
+            <div class="stars" aria-label="4 van 5 sterren">★★★★☆</div>
+          </article>
+
+          <article class="rev-card" data-review>
+            <div class="head">
+              <img class="avatar" src="assets/img/avatars/sanne.jpg" alt="Klantnaam"
+                   width="38" height="38" loading="lazy" decoding="async">
+              <div>
+                <div class="name">Klantnaam</div>
+                <time class="date" datetime="2025-05-02">2 mei 2025</time>
+              </div>
+            </div>
+            <p>Multi-split perfect ingeregeld. Fijne service na installatie.</p>
+            <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
+          </article>
+        </div>
+      </div>
+      <button class="rev-nav rev-next" aria-label="Volgende review">›</button>
+    </div>
+  </div>
+
+  <!-- schema.org Review markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Airflow+",
+    "image": "https://YOUR_DOMAIN/assets/img/brand-social.jpg",
+    "url": "https://YOUR_DOMAIN/",
+    "telephone": "+31 10 000 0000",
+    "address": { "@type":"PostalAddress", "addressCountry":"NL" },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "9"
+    },
+    "review": [
+      { "@type":"Review", "author":{"@type":"Person","name":"Klantnaam"},
+        "datePublished":"2025-01-15", "reviewBody":"Snelle plaatsing, stil toestel en supernetjes gewerkt. Zeer tevreden!",
+        "reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"} },
+      { "@type":"Review", "author":{"@type":"Person","name":"Klantnaam"},
+        "datePublished":"2025-02-02", "reviewBody":"Goed advies over capaciteit en locatie. Binnen één dag geplaatst.",
+        "reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"} },
+      { "@type":"Review", "author":{"@type":"Person","name":"Klantnaam"},
+        "datePublished":"2025-02-18", "reviewBody":"Kabels strak weggewerkt. Keurig resultaat en duidelijke prijs.",
+        "reviewRating":{"@type":"Rating","ratingValue":"4","bestRating":"5"} },
+      { "@type":"Review", "author":{"@type":"Person","name":"Klantnaam"},
+        "datePublished":"2025-03-04", "reviewBody":"Werkt fluisterstil in de slaapkamer. Montage was heel netjes.",
+        "reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"} },
+      { "@type":"Review", "author":{"@type":"Person","name":"Klantnaam"},
+        "datePublished":"2025-03-12", "reviewBody":"Fijn team. Alles helder uitgelegd en direct gebruiksklaar.",
+        "reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"} },
+      { "@type":"Review", "author":{"@type":"Person","name":"Klantnaam"},
+        "datePublished":"2025-03-28", "reviewBody":"Precies het juiste vermogen. Huis koel in zomer, warm in winter.",
+        "reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"} },
+      { "@type":"Review", "author":{"@type":"Person","name":"Klantnaam"},
+        "datePublished":"2025-04-06", "reviewBody":"Netjes opgeleverd, geen rommel. Aanrader voor Amsterdam regio.",
+        "reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"} },
+      { "@type":"Review", "author":{"@type":"Person","name":"Klantnaam"},
+        "datePublished":"2025-04-18", "reviewBody":"Communicatie snel en duidelijk. Goede prijs-kwaliteit.",
+        "reviewRating":{"@type":"Rating","ratingValue":"4","bestRating":"5"} },
+      { "@type":"Review", "author":{"@type":"Person","name":"Klantnaam"},
+        "datePublished":"2025-05-02", "reviewBody":"Multi-split perfect ingeregeld. Fijne service na installatie.",
+        "reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"} }
+    ]
+  }
+  </script>
+</section>
+
+
+<section class="cta alt-dark">
+  <div class="container cta-inner">
+    <h2>Klaar voor comfortabel binnenklimaat?</h2>
+    <p>Vraag nu een vrijblijvende offerte aan of bel voor direct advies.</p>
+    <div class="cta-row">
+      <a href="contact.html" class="btn btn-primary">Offerte aanvragen</a>
+      <a href="tel:+31 10 000 0000" class="btn btn-outline">Bel ons</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Veelgestelde <span class="hl-blue">vragen</span></h2>
+    <div class="faq">
+      <details id="faq-planning">
+        <summary>Hoe snel kunnen jullie plaatsen?</summary>
+        <p>Meestal binnen 10–14 dagen, afhankelijk van planning en situatie ter plaatse.</p>
+      </details>
+
+      <details id="faq-prijs">
+        <summary>Wat is inbegrepen bij de prijs?</summary>
+        <p>Standaard montage, tot 4 meter leiding, inbedrijfstelling en uitleg. Afwijkingen bespreken we vooraf.</p>
+      </details>
+
+      <details id="faq-verwarmen">
+        <summary>Kunnen jullie ook verwarmen met airco?</summary>
+        <p>Ja, moderne airco’s zijn warmtepompen en kunnen efficiënt koelen én verwarmen.</p>
+      </details>
+
+      <details id="faq-onderhoud">
+        <summary>Doen jullie onderhoud?</summary>
+        <p>Jazeker. Jaarlijks onderhoud houdt het rendement hoog en verlengt de levensduur.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Hoe snel kunnen jullie plaatsen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Meestal binnen 10–14 dagen, afhankelijk van planning en situatie ter plaatse."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wat is inbegrepen bij de prijs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Standaard montage, tot 4 meter leiding, inbedrijfstelling en uitleg. Afwijkingen bespreken we vooraf."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kunnen jullie ook verwarmen met airco?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, moderne airco’s zijn warmtepompen en kunnen efficiënt koelen én verwarmen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Doen jullie onderhoud?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Jazeker. Jaarlijks onderhoud houdt het rendement hoog en verlengt de levensduur."
+      }
+    }
+  ]
+}
+</script>
+
+
 </main>
-<footer class="site-footer"><div class="container legal"><small>© <span id="year"></span> Airflow+</small></div></footer>
-</body>
-</html>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="brand">Airflow<span class="accent">+</span></div>
+      <p class="muted">Gecertificeerde installatie van airco &amp; warmtepompen. Snel, netjes en volgens norm.</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul class="list">
+        <li><a href="tel:+31 10 000 0000">+31 10 000 0000</a></li>
+        <li><a href="mailto:info@placeholder.nl">info@placeholder.nl</a></li>
+        <li>Rotterdam &amp; landelijk</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Pagina’s</h4>
+      <ul class="list">
+        <li><a href="keuzehulp.html">Keuzehulp</a></li>
+        <li><a href="airco.html">Airco</a></li>
+        <li><a href="diensten.html">Diensten</a></li>
+        <li><a href="prijzen.html">Prijzen</a></li>
+        <li><a href="over.html">Over ons</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
+</footer>
+
+</body></html>
