@@ -974,3 +974,45 @@ select {
 .faq details { margin: 10px 0; }
 .faq summary { font-size: 16px; }
 .faq p { margin-top: 8px; }
+
+/* Forms */
+.contact-form { margin-top: 10px; }
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.field.full { grid-column: 1 / -1; }
+.field label { display:block; font-weight:800; margin-bottom:6px; }
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: #fff;
+  color: var(--text);
+  border: 1px solid #cfe0ee;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+}
+.field textarea { resize: vertical; }
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: #99d4ef;
+  box-shadow: 0 0 0 6px rgba(0,157,224,.12);
+}
+.field .error { color: #b3261e; font-size: 12px; margin-top: 4px; min-height: 1em; }
+.checkbox { display: inline-flex; gap:10px; align-items: flex-start; }
+.form-status { margin-top: 14px; }
+.success-card, .error-card {
+  border-radius: 14px; padding: 14px 16px; border:1px solid #e6e9ee;
+}
+.success-card { background: #f0f9ff; border-color:#cfe6ff; }
+.error-card { background: #fff4f4; border-color: #ffd6d6; }
+
+/* Responsive */
+@media (max-width: 900px){
+  .form-grid { grid-template-columns: 1fr; }
+}
