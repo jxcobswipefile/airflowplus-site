@@ -1127,3 +1127,69 @@ requestAnimationFrame(syncTicksWidth);
     }
   });
 })();
+
+/* ===== Contact/Quote form (Formspree) ===== */
+(() => {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  const statusBox = form.querySelector('.form-status');
+
+  const err = (key, msg) => {
+    const slot = form.querySelector(`[data-err="${key}"]`);
+    if (slot) slot.textContent = msg || '';
+  };
+  const clearErrors = () => form.querySelectorAll('.error').forEach(e => e.textContent = '');
+
+  // Simple validators
+  const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const isPhone = v => !v || /^[0-9+()\-\s]{6,}$/.test(v);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearErrors();
+    statusBox.textContent = '';
+
+    const fd = new FormData(form);
+    const name = (fd.get('name') || '').toString().trim();
+    const email = (fd.get('email') || '').toString().trim();
+    const phone = (fd.get('phone') || '').toString().trim();
+    const message = (fd.get('message') || '').toString().trim();
+    const consent = form.querySelector('#cf-consent')?.checked;
+
+    // Client-side checks
+    let ok = true;
+    if (!name) { err('name', 'Vul je naam in.'); ok = false; }
+    if (!isEmail(email)) { err('email', 'Vul een geldig e-mailadres in.'); ok = false; }
+    if (!isPhone(phone)) { err('phone', 'Vul een geldig telefoonnummer in.'); ok = false; }
+    if (!message) { err('message', 'Schrijf kort je vraag/aanvraag.'); ok = false; }
+    if (!consent) { err('consent', 'Vink deze aan om te kunnen versturen.'); ok = false; }
+    if (!ok) return;
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: fd,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+
+      // Success state (inline thank-you)
+      form.reset();
+      form.classList.add('is-sent');
+      statusBox.innerHTML = `
+        <div class="success-card">
+          <h3>Bedankt! 🎉</h3>
+          <p>We hebben je bericht ontvangen en nemen snel contact op.</p>
+        </div>`;
+      // optional: scroll into view
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (e2) {
+      statusBox.innerHTML = `
+        <div class="error-card">
+          <strong>Er ging iets mis.</strong> Probeer het opnieuw of bel ons even.
+        </div>`;
+    }
+  });
+})();
