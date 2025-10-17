@@ -788,8 +788,7 @@ const clamped = Math.min(trackRect.width - half, Math.max(half, x));
 const left = (trackRect.left - wrapRect.left) + clamped;
 bubble.style.left = `${left}px`;
 
-// small vertical nudge (you already set top in CSS; this ensures it stays above the track)
-bubble.style.top  = '-34px';
+
 
 // update the text to match current value
 bubble.textContent = `€ ${v.toLocaleString('nl-NL')}`;
@@ -878,8 +877,7 @@ const left = (trackRect.left - wrapRect.left) + clamped;
 
 bubble.style.position = 'absolute';
 bubble.style.left = `${left}px`;
-// nudged down so it doesn’t sit on the heading:
-bubble.style.top  = '-28px';
+
 
 bubble.textContent = `€ ${v.toLocaleString('nl-NL')}`;
 }
@@ -1021,6 +1019,3 @@ window.addEventListener('resize', syncTicksWidth, { passive: true });
 // run after layout
 requestAnimationFrame(syncTicksWidth);
 })();
-
-/* Savings – final vertical lock so other helpers can't move it */
-(() => { const b = document.querySelector('#savings .save-bubble'); if (b) b.style.top = '-8px'; })();
