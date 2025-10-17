@@ -69,7 +69,7 @@
 </section>
 
 
-<!-- Keuzehulp CTA (own container, left-aligned) -->
+<!-- Keuzehulp CTA (hero card) -->
 <section id="keuzehulp-cta" class="section kh-cta overlap">
   <div class="container left">
     <div class="kh-cta-card compact seam blue">
@@ -81,28 +81,26 @@
         </ul>
       </div>
 
-      <form class="kh-cta-form stack formspree" action="https://formspree.io/f/xwprybon" method="POST">
-<div class="optin-row">
-  <div class="input-group">
-    <label for="kh-fname" class="visually-hidden">Voornaam</label>
-    <input id="kh-fname" name="first_name" type="text" placeholder="Voornaam" required>
-  </div>
-  <div class="input-group">
-    <label for="kh-lname" class="visually-hidden">Achternaam</label>
-    <input id="kh-lname" name="last_name" type="text" placeholder="Achternaam" required>
-  </div>
-  <div class="input-group">
-    <label for="kh-email" class="visually-hidden">E-mailadres</label>
-    <input id="kh-email" name="email" type="email" placeholder="jij@voorbeeld.nl" required>
-  </div>
-  <input type="hidden" name="_subject" value="Keuzehulp Hero Opt-in">
-  <button class="btn btn-primary" type="submit">Start saving</button>
-  <a class="btn btn-outline" href="keuzehulp.html">Naar keuzehulp</a>
-</div>
-</form>
+      <!-- REGULIERE EMAIL LEADS (Formspree) -->
+      <form class="kh-cta-form stack" action="https://formspree.io/f/mgvndydv" method="POST">
+        <label for="kh-first" class="visually-hidden">Voornaam</label>
+        <input id="kh-first" name="first_name" type="text" placeholder="Voornaam" required>
+
+        <label for="kh-last" class="visually-hidden">Achternaam</label>
+        <input id="kh-last" name="last_name" type="text" placeholder="Achternaam" required>
+
+        <label for="kh-email" class="visually-hidden">E-mail</label>
+        <input id="kh-email" name="email" type="email" placeholder="jij@voorbeeld.nl" required>
+
+        <div class="kh-actions between">
+          <button class="btn btn-outline" type="submit">Start saving</button>
+          <a class="btn btn-primary" href="keuzehulp.html">Naar keuzehulp</a>
+        </div>
+      </form>
     </div>
   </div>
 </section>
+
 
 <!-- Heating info (centered, its own container) -->
 <section class="section heat-info">
@@ -209,8 +207,21 @@
             <option value="heating">Meestal verwarmen</option>
           </select>
         </div>
+      
 
         <div class="save-result">
+          
+          <!-- Opt-in under results (REGULAR EMAIL LEADS) -->
+<form class="save-optin" action="https://formspree.io/f/mgvndydv" method="POST">
+  <div class="optin-head">Start saving</div>
+  <div class="optin-grid">
+    <input type="text" name="first_name" placeholder="Voornaam" required>
+    <input type="text" name="last_name" placeholder="Achternaam" required>
+    <input type="email" name="email" placeholder="jij@voorbeeld.nl" required>
+  </div>
+  <button class="btn btn-primary" type="submit">Aanmelden</button>
+</form>
+
           <div class="big">€ <span id="save-amount">0</span> / maand</div>
 <form class="save-optin formspree" action="https://formspree.io/f/xwprybon" method="POST">
   <h3 class="optin-title">Start saving</h3>
