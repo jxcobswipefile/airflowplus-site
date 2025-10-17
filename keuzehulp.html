@@ -1,117 +1,54 @@
 <!doctype html>
 <html lang="nl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Airflow+ • Keuzehulp</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Airco Keuzehulp – Airflow+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.v13.css?v=patch1">
+  <script defer src="assets/js/main.js?v=current"></script>
+  <script defer src="assets/js/forms.addons.js?v=patch1"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
+    <nav class="nav">
+      <a href="keuzehulp.html">Keuzehulp</a>
+      <a href="airco.html">Airco</a>
+      <a href="diensten.html">Diensten</a>
+      <a href="prijzen.html">Prijzen</a>
+      <a href="over.html">Over ons</a>
+      <a href="contact.html" class="btn btn-primary">Bel/Offerte</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Open menu">☰</button>
+  </div>
+</header>
+<main>
 
-    <!-- Main site styles (already in your project) -->
-    <link rel="stylesheet" href="assets/css/style.v13.css" />
-  </head>
-  <body>
-    <!-- Top contact strip (optional; keep if you use it on other pages) -->
-    <div class="topbar">
-      <div class="container topbar-inner">
-        <span>Gecertificeerde airco & warmtepomp installateur</span>
-        <a class="topbar-link" href="tel:+31100000000">Bel: +31 10 000 0000</a>
+<section class="khv2-hero"><div class="container"><h1>Welke <span class="hl-blue">airco</span> past bij jou?</h1></div></section>
+<section class="khv2-stage">
+  <div class="container">
+    <div class="khv2-card">
+      <button class="khv2-close" aria-label="Sluiten">×</button>
+      <h2 class="khv2-q">In hoeveel ruimtes wil je airco?</h2>
+      <div class="kh-grid-rooms" style="justify-content:center; grid-template-columns: repeat(4,72px); gap:14px;">
+        <label class="chip round"><input type="radio" name="rooms" value="1"><span>1</span></label>
+        <label class="chip round"><input type="radio" name="rooms" value="2"><span>2</span></label>
+        <label class="chip round"><input type="radio" name="rooms" value="3"><span>3</span></label>
+        <label class="chip round"><input type="radio" name="rooms" value="4"><span>4</span></label>
       </div>
+      <div class="khv2-actions">
+        <a id="kh-next" class="btn btn-primary khv2-next-link" href="javascript:void(0)">Volgende →</a>
+      </div>
+      <div class="khv2-steps"><span class="dot is-active">1</span><span class="dot">2</span><span class="dot">3</span></div>
     </div>
+  </div>
+</section>
 
-    <!-- Site header / nav (mirrors your index) -->
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
-        <nav class="nav">
-          <a href="keuzehulp.html" aria-current="page">Keuzehulp</a>
-          <a href="airco.html">Airco</a>
-          <a href="diensten.html">Diensten</a>
-          <a href="prijzen.html">Prijzen</a>
-          <a href="over.html">Over ons</a>
-        </nav>
-        <a class="btn btn-primary" href="tel:+31100000000">Bel/Offerte</a>
-      </div>
-    </header>
-
-    <!-- Dark page header/title -->
-    <header class="khv2-hero">
-      <div class="container">
-        <h1>Welke <span class="hl-blue">airco</span> past bij jou?</h1>
-      </div>
-    </header>
-
-    <!-- Stage: centered light card + dots -->
-    <section class="khv2-stage kh-wrap">
-      <div class="container">
-
-        <!-- The main wizard card (keeps kh-card for your JS, adds khv2 styles) -->
-        <div class="kh-card khv2-card">
-          <!-- optional close; remove if you don’t want it -->
-          <button class="khv2-close" type="button" aria-label="Sluiten">×</button>
-
-          <!-- STEP 1: number of rooms -->
-          <h2 class="khv2-q">In hoeveel ruimtes wil je airco?</h2>
-
-          <div class="kh-grid-rooms" style="justify-content:center; grid-template-columns: repeat(4, 72px); gap:14px;">
-            <label class="chip round">
-              <input type="radio" name="rooms" value="1" />
-              <span>1</span>
-            </label>
-            <label class="chip round">
-              <input type="radio" name="rooms" value="2" />
-              <span>2</span>
-            </label>
-            <label class="chip round">
-              <input type="radio" name="rooms" value="3" />
-              <span>3</span>
-            </label>
-            <label class="chip round">
-              <input type="radio" name="rooms" value="4" />
-              <span>4</span>
-            </label>
-          </div>
-
-          <!-- (Optional) STEP 2/3 content would follow here, reusing your existing markup.
-               Keep your .kh-size-grid / .kh-room etc. if your JS depends on them. -->
-
-          <!-- Actions: button bottom-right inside the card -->
-          <div class="khv2-actions">
-            <button class="btn btn-primary" id="kh-next" type="button">
-              Volgende →
-            </button>
-          </div>
-        </div>
-
-        <!-- Step dots (static markup; your JS can toggle .is-active) -->
-        <nav class="khv2-steps" aria-label="Stappen">
-          <button class="dot is-active" type="button">1</button>
-          <button class="dot" type="button">2</button>
-          <button class="dot" type="button">3</button>
-        </nav>
-      </div>
-    </section>
-
-    <!-- Footer (same as site) -->
-    <footer class="site-footer">
-      <div class="container footer-grid">
-        <div>
-          <strong>Airflow+</strong>
-          <div class="muted">Gecertificeerde installatie van airco & warmtepompen. Snel, netjes en volgens norm.</div>
-        </div>
-        <div>
-          <strong>Contact</strong>
-          <div class="muted">+31 10 000 0000<br/>info@placeholder.nl<br/>Rotterdam & landelijk</div>
-        </div>
-        <div>
-          <strong>Pagina’s</strong>
-          <div class="muted">
-            Keuzehulp<br/>Airco<br/>Diensten<br/>Prijzen<br/>Over ons<br/>Contact
-          </div>
-        </div>
-      </div>
-      <div class="legal">© 2025 Airflow+</div>
-    </footer>
-
-    <!-- Your site JS (keeps any wizard logic you already have) -->
-    <script src="assets/js/main.js" defer></script>
-  </body>
+</main>
+<footer class="site-footer"><div class="container legal"><small>© <span id="year"></span> Airflow+</small></div></footer>
+</body>
 </html>
