@@ -903,3 +903,22 @@ select {
      so the rectangle itself is visually centered */
   top: calc( (var(--save-gap) / -2) - var(--save-arrow) ) !important;
 }
+
+/* Savings – bubble vertical nudge (lower it a bit) */
+#savings{
+  /* keep your current gap; tweak if you want */
+  --save-gap: 36px;
+  --save-arrow: 6px;
+}
+
+/* equal space above/below stays the same */
+#savings .save-head h3{ margin-bottom: var(--save-gap) !important; }
+#savings .save-range .range-wrap{ padding-top: var(--save-gap) !important; }
+
+/* move bubble DOWN a touch (toward the rail) */
+#savings .save-bubble{
+  transform: translateX(-50%);
+  /* was: calc((var(--save-gap)/-2) - var(--save-arrow)) */
+  top: calc((var(--save-gap) / -2) + 8px) !important;
+  /* ↑ increase the +8px to +10/+12 if you want it even lower */
+}
