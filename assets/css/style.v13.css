@@ -922,3 +922,45 @@ select {
   top: calc((var(--save-gap) / -2) + 22px) !important;
   /* ↑ increase the +8px to +10/+12 if you want it even lower */
 }
+
+/* =========================================================
+   HOMEPAGE SPACING FIX PACK — tighter vertical rhythm
+   (append-only overrides)
+   ========================================================= */
+
+/* 1) Global rhythm: reduce the default section padding */
+.section{ padding:56px 0; }              /* was ~80px */
+@media (max-width:900px){
+  .section{ padding:44px 0; }
+}
+
+/* 2) Hero: trim extra air above/below */
+.hero{ padding:18px 0 10px; }            /* was 28px 0 24px */
+
+/* 3) Keuzehulp CTA band: keep it closer to hero and to the next block */
+.kh-cta{ padding-top:8px; padding-bottom:10px; }
+.kh-cta .container{ margin-top:0; }
+.kh-cta-card.compact.seam{ transform:translateY(-28%); } /* was ~-54% */
+
+/* 4) “Comfort met airco” section: shrink height + shadow so it feels closer */
+.heat-info{ min-height:auto; padding:18px 0 28px; }      /* remove tall min-height */
+.heat-card{
+  padding:56px 40px;                                      /* was 72px 48px */
+  box-shadow:0 18px 46px rgba(0,0,0,.18);                 /* slightly smaller halo */
+}
+@media (max-width:900px){
+  .heat-card{ padding:40px 24px; }
+}
+
+/* 5) Adjacent spacing between blocks on the homepage */
+.kh-cta + .heat-info{ padding-top:10px; }                 /* snug glue */
+.heat-info + .section{ padding-top:42px; }                /* less gap into “Onze services” */
+
+/* 6) Services grid: a touch tighter on top to balance the page */
+#services.section{ padding-top:44px; }
+
+/* 7) CTA strips: don’t add extra whitespace after the card blocks */
+.cta{ padding:48px 0; }                                   /* was 64px */
+
+/* 8) Footer top edge: keep it neat */
+.site-footer{ padding-top:10px; }
