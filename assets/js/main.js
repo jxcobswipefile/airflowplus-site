@@ -453,3 +453,103 @@
   renderStep1();
 })();
 
+/* ==========================================================
+   10) Unified Formspree handler + redirect to /thank-you.html
+   - Works only on forms with [data-fs] to avoid conflicts.
+   - Preserves all existing non-[data-fs] forms.
+   ========================================================== */
+(() => {
+  const FORMS = document.querySelectorAll('form[data-fs]');
+  if (!FORMS.length) return;
+
+  const toQuery = (obj) =>
+    Object.entries(obj)
+      .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+      .join('&');
+
+  FORMS.forEach((form) => {
+    const endpoint = form.getAttribute('action');
+    if (!endpoint || !/^https:\/\/formspree\.io\/f\//.test(endpoint)) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector('[type="submit"]');
+      const spinnerAttr = 'data-loading';
+      submitBtn?.setAttribute(spinnerAttr, '1');
+
+      try {
+        const formData = new FormData(form);
+        // Optional hidden fields you can include in HTML:
+        // <input type="hidden" name="source" value="diensten-optin">
+        const meta = {
+          source: formData.get('source') || form.getAttribute('data-source') || 'site',
+          type: form.getAttribute('data-type') || 'lead'
+        };
+
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          const thanksURL = form.getAttribute('data-thanks') || '/thank-you.html';
+          const qp = toQuery(meta);
+          window.location.href = `${thanksURL}?${qp}`;
+        } else {
+          // Fallback: show a lightweight inline error
+          alert('Er is iets misgegaan bij het versturen. Probeer het opnieuw.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Netwerkfout. Controleer uw verbinding en probeer opnieuw.');
+      } finally {
+        submitBtn?.removeAttribute(spinnerAttr);
+      }
+    });
+  });
+})();
+
+/* ==========================================================
+   11) Page fade transition (Homepage → Keuzehulp, etc.)
+   - Add data-transition to links you want to fade on navigate
+   ========================================================== */
+(() => {
+  const links = document.querySelectorAll('a[data-transition]');
+  if (!links.length) return;
+
+  const fadeAndGo = (url) => {
+    document.documentElement.classList.add('is-fading');
+    // small delay to let the fade apply before navigation
+    setTimeout(() => (window.location.href = url), 180);
+  };
+
+  links.forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const url = a.getAttribute('href');
+      if (!url || url.startsWith('#') || a.target === '_blank') return;
+      e.preventDefault();
+      fadeAndGo(url);
+    });
+  });
+})();
+
+/* ==========================================================
+   12) Reveal-on-scroll for .reveal elements
+   - Add .reveal to any block you want to animate in.
+   ========================================================== */
+(() => {
+  const els = document.querySelectorAll('.reveal');
+  if (!els.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  els.forEach((el) => io.observe(el));
+})();
