@@ -444,20 +444,19 @@
 })();
 
 /* ----------------------------------------------------------------------
- /* ----------------------------------------------------------------------
-  08) Keuzehulp v2 — original 3-step wizard (clean + single handler)
+  08) Keuzehulp v2 — original 3-step wizard (robust advance)
 ---------------------------------------------------------------------- */
 (() => {
-  const card    = document.querySelector('.khv2-card');
-  const btnEl   = document.getElementById('kh-next');
-  const dots    = Array.from(document.querySelectorAll('.khv2-steps .dot'));
+  const card  = document.querySelector('.khv2-card');
+  const btnEl = document.getElementById('kh-next');
+  const dots  = Array.from(document.querySelectorAll('.khv2-steps .dot'));
   if (!card || !btnEl || dots.length === 0) return;
 
-  // Replace any old listeners by cloning the button
-  const newNext = btnEl.cloneNode(true);
-  btnEl.replaceWith(newNext);
+  // Replace button to clear any old listeners
+  const nextBtn = btnEl.cloneNode(true);
+  btnEl.replaceWith(nextBtn);
 
-  // Ensure a dedicated render container
+  // Ensure a body container
   let body = card.querySelector('.khv2-body');
   const actions = card.querySelector('.khv2-actions');
   if (!body) {
@@ -466,28 +465,26 @@
     card.insertBefore(body, actions || null);
   }
 
-  // Remove stray static Step-1 bits sitting directly under the card
+  // Remove any stray static step-1 blocks sitting directly in the card
   card.querySelectorAll(':scope > .khv2-q, :scope > .kh-grid-rooms, :scope > .kh-size-grid, :scope > #khv2-summary')
       .forEach(n => n.remove());
 
-  // ------- State -------
   const state = { step: 1, rooms: 0, sizes: [] };
 
-  // ------- Helpers -------
-  function setDot(n){ dots.forEach((d,i)=>d.classList.toggle('is-active', i===n-1)); }
-  function canAdvance(){
-    if (state.step === 1) return state.rooms > 0;
-    if (state.step === 2) return state.sizes.length === state.rooms && state.sizes.every(Boolean);
-    return true;
-  }
-  function syncNext(){ newNext.disabled = !canAdvance(); newNext.textContent = (state.step === 3) ? 'Afronden →' : 'Volgende →'; }
+  const setDot   = (n) => dots.forEach((d,i)=>d.classList.toggle('is-active', i===n-1));
+  const complete = () => (
+    state.step === 1 ? state.rooms > 0 :
+    state.step === 2 ? (state.sizes.length === state.rooms && state.sizes.every(Boolean)) :
+    true
+  );
+  const syncNext = () => { nextBtn.disabled = !complete(); nextBtn.textContent = (state.step === 3) ? 'Afronden →' : 'Volgende →'; };
 
   const SIZE_OPTS = [
     { val:'1-30',  label:'1–30 m²' },
     { val:'30-40', label:'30–40 m²' },
     { val:'40-50', label:'40–50 m²' },
   ];
-  const roomCard = i => `
+  const roomCard = (i) => `
     <div class="khv2-room-card" data-room="${i}">
       <h4>Kamer ${i}</h4>
       <div class="khv2-sizes">
@@ -499,7 +496,7 @@
       </div>
     </div>`;
 
-  // ------- Renderers -------
+  // ---------- RENDERERS ----------
   function renderStep1(){
     state.step = 1; setDot(1);
     body.innerHTML = `
@@ -511,9 +508,9 @@
             <span>${n}</span>
           </label>`).join('')}
       </div>`;
-    body.addEventListener('change', onRoomsChange, { once:true });
-    syncNext();
-  }
+
+    // Enable button immediately
+
 
   function renderStep2(){
     state.step = 2; setDot(2);
