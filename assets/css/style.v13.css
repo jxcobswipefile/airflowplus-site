@@ -1111,3 +1111,47 @@ select {
 @media (min-width:1100px){
   .save-grid{ grid-template-columns:1fr 1.05fr; }
 }
+
+/* Savings — single opt-in layout (final guard) */
+.save-result{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:12px;
+  background:#f6fbff;
+  border:1px solid #dbe7ff;
+  border-radius:14px;
+  padding:14px 16px;
+  position:relative;
+  overflow:visible;
+}
+.save-result .big{ font-size:30px; font-weight:900; line-height:1; }
+.save-tip-wrap{ position:absolute; right:12px; bottom:10px; }
+.save-tip-bubble{ z-index:60; }
+
+.save-optin{
+  margin-top:12px;
+  background:#fff;
+  border:1px solid #dbe7ff;
+  border-radius:14px;
+  padding:14px 16px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:end;
+  gap:12px;
+}
+.save-optin .optin-head{ grid-column:1 / -1; font-weight:800; margin-bottom:-4px; }
+.save-optin .optin-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.save-optin .optin-grid input{
+  width:100%; padding:12px 14px; border-radius:12px; border:1px solid #cfe0ee;
+  background:#fff; color:#0f1720;
+}
+.save-optin .optin-grid input[type="email"]{ grid-column:1 / -1; }
+.save-optin .btn{ padding:12px 18px; }
+
+@media (max-width:780px){
+  .save-result{ grid-template-columns:1fr; }
+  .save-optin{ grid-template-columns:1fr; align-items:stretch; }
+  .save-optin .optin-grid{ grid-template-columns:1fr; }
+  .save-optin .btn{ width:100%; }
+}
