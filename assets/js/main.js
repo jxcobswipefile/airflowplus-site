@@ -444,29 +444,20 @@
 })();
 
 /* ----------------------------------------------------------------------
-  08) Keuzehulp v2 — original 3-step wizard
-      Steps:
-        1) Choose number of rooms
-        2) Choose size per room
-        3) Summary   → Next redirects to quote page
-      Markup expectations:
-        - .khv2-card  (main card)
-        - #kh-next    (button)
-        - .khv2-steps .dot (three dots)
-      It re-renders the inside body (.khv2-body) each step, so you
-      won’t get the “same question on every step” bug.
+ /* ----------------------------------------------------------------------
+  08) Keuzehulp v2 — original 3-step wizard (clean + single handler)
 ---------------------------------------------------------------------- */
 (() => {
-  const card = document.querySelector('.khv2-card');
-  const nextBtn = document.getElementById('kh-next');
-  const dots = Array.from(document.querySelectorAll('.khv2-steps .dot'));
-  if (!card || !nextBtn || dots.length === 0) return;
+  const card    = document.querySelector('.khv2-card');
+  const btnEl   = document.getElementById('kh-next');
+  const dots    = Array.from(document.querySelectorAll('.khv2-steps .dot'));
+  if (!card || !btnEl || dots.length === 0) return;
 
-  // The only wizard handler for #kh-next — prevent rogue earlier listeners
-  nextBtn.replaceWith(nextBtn.cloneNode(true));
-  const newNext = document.getElementById('kh-next');
+  // Replace any old listeners by cloning the button
+  const newNext = btnEl.cloneNode(true);
+  btnEl.replaceWith(newNext);
 
-  // Prepare/ensure a body container
+  // Ensure a dedicated render container
   let body = card.querySelector('.khv2-body');
   const actions = card.querySelector('.khv2-actions');
   if (!body) {
@@ -475,47 +466,141 @@
     card.insertBefore(body, actions || null);
   }
 
-  // State
+  // Remove stray static Step-1 bits sitting directly under the card
+  card.querySelectorAll(':scope > .khv2-q, :scope > .kh-grid-rooms, :scope > .kh-size-grid, :scope > #khv2-summary')
+      .forEach(n => n.remove());
+
+  // ------- State -------
   const state = { step: 1, rooms: 0, sizes: [] };
 
-  // Helpers
-  const setDot = (n) => dots.forEach((d, i) => d.classList.toggle('is-active', i === (n - 1)));
-  const isComplete = () =>
-    state.step === 1 ? state.rooms > 0 :
-    state.step === 2 ? (state.sizes.length === state.rooms && state.sizes.every(Boolean)) :
-    true;
-  const syncNextDisabled = () => { newNext.disabled = !isComplete(); };
+  // ------- Helpers -------
+  function setDot(n){ dots.forEach((d,i)=>d.classList.toggle('is-active', i===n-1)); }
+  function canAdvance(){
+    if (state.step === 1) return state.rooms > 0;
+    if (state.step === 2) return state.sizes.length === state.rooms && state.sizes.every(Boolean);
+    return true;
+  }
+  function syncNext(){ newNext.disabled = !canAdvance(); newNext.textContent = (state.step === 3) ? 'Afronden →' : 'Volgende →'; }
 
-  const sizeOptions = [
-    { val: '1-30',  label: '1–30 m²' },
-    { val: '30-40', label: '30–40 m²' },
-    { val: '40-50', label: '40–50 m²' },
+  const SIZE_OPTS = [
+    { val:'1-30',  label:'1–30 m²' },
+    { val:'30-40', label:'30–40 m²' },
+    { val:'40-50', label:'40–50 m²' },
   ];
-  const roomCard = (idx) => `
-    <div class="khv2-room-card" data-room="${idx}">
-      <h4>Kamer ${idx}</h4>
+  const roomCard = i => `
+    <div class="khv2-room-card" data-room="${i}">
+      <h4>Kamer ${i}</h4>
       <div class="khv2-sizes">
-        ${sizeOptions.map(p => `
+        ${SIZE_OPTS.map(p => `
           <label class="kh-pill">
-            <input type="radio" name="room-${idx}-size" value="${p.val}" hidden>
+            <input type="radio" name="room-${i}-size" value="${p.val}" hidden>
             <span>${p.label}</span>
-          </label>
-        `).join('')}
+          </label>`).join('')}
       </div>
-    </div>
-  `;
+    </div>`;
 
-// ---------- Init ----------
-nextBtn.disabled = true;
+  // ------- Renderers -------
+  function renderStep1(){
+    state.step = 1; setDot(1);
+    body.innerHTML = `
+      <h2 class="khv2-q">In hoeveel ruimtes wil je airco?</h2>
+      <div class="kh-grid-rooms" style="justify-content:center; grid-template-columns:repeat(4,72px); gap:14px;">
+        ${[1,2,3,4].map(n => `
+          <label class="chip round">
+            <input type="radio" name="rooms" value="${n}">
+            <span>${n}</span>
+          </label>`).join('')}
+      </div>`;
+    body.addEventListener('change', onRoomsChange, { once:true });
+    syncNext();
+  }
 
-// 🔧 CLEANUP: remove any static Step 1 markup sitting directly in the card
-// (e.g. an extra <h2 class="khv2-q"> and the first .kh-grid-rooms that are *not*
-// inside .khv2-body). This prevents the duplicate “Vraag 1” row you're seeing.
-Array.from(card.querySelectorAll(':scope > .khv2-q, :scope > .kh-grid-rooms'))
-  .forEach(el => el.remove());
+  function renderStep2(){
+    state.step = 2; setDot(2);
+    state.sizes = new Array(state.rooms).fill(null);
+    body.innerHTML = `
+      <h2 class="khv2-q">Hoe groot zijn de ruimtes?</h2>
+      <p class="kh-sub">Kies de oppervlakte per kamer. Dit helpt ons het juiste vermogen te adviseren.</p>
+      <div class="kh-size-grid">
+        ${Array.from({length: state.rooms}, (_,i)=>roomCard(i+1)).join('')}
+      </div>`;
+    body.addEventListener('change', onSizeChange);
+    syncNext();
+  }
 
-// now render normally
-renderStep1();
+  function renderStep3(){
+    state.step = 3; setDot(3);
+    const list = state.sizes.map((sz,i)=>`<li>Kamer ${i+1}: <strong>${sz.replace('-', '–')} m²</strong></li>`).join('');
+    body.innerHTML = `
+      <h2 class="khv2-q">Overzicht</h2>
+      <p class="kh-sub">Op basis van jouw keuzes stellen we een advies op maat samen.</p>
+      <div id="khv2-summary" class="kh-result">
+        <h3>Je keuzes</h3>
+        <ul class="kh-out">${list}</ul>
+        <p class="muted">Klaar? Ga door voor een vrijblijvende offerte.</p>
+      </div>`;
+    syncNext();
+  }
+
+  // ------- Handlers -------
+  function onRoomsChange(e){
+    const input = e.target;
+    if (input?.name !== 'rooms') return;
+    state.rooms = parseInt(input.value, 10) || 0;
+    syncNext();
+    body.addEventListener('change', onRoomsChange, { once:true });
+  }
+
+  function onSizeChange(e){
+    const input = e.target;
+    if (!input || input.type !== 'radio') return;
+    const m = input.name.match(/^room-(\d+)-size$/);
+    if (!m) return;
+    const idx = parseInt(m[1], 10) - 1;
+    if (idx < 0 || idx >= state.sizes.length) return;
+
+    state.sizes[idx] = input.value;
+
+    const cardEl = input.closest('.khv2-room-card');
+    if (cardEl) {
+      cardEl.querySelectorAll('.kh-pill').forEach(l => l.classList.remove('active'));
+      input.closest('.kh-pill')?.classList.add('active');
+    }
+    syncNext();
+  }
+
+  // Dots: allow back/forward only when data for target step exists
+  document.addEventListener('click', (e) => {
+    const dot = e.target.closest('.khv2-steps .dot');
+    if (!dot) return;
+    const i = dots.indexOf(dot) + 1; // 1-based
+    if (i === 1) return renderStep1();
+    if (i === 2 && state.rooms > 0) return renderStep2();
+    if (i === 3 && state.rooms > 0 && state.sizes.length === state.rooms && state.sizes.every(Boolean)) return renderStep3();
+  });
+
+  // Next button: advance, or redirect on last step
+  newNext.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!canAdvance()) return;
+    if (state.step === 1) return renderStep2();
+    if (state.step === 2) return renderStep3();
+    // step 3 -> quote page
+    window.location.href = newNext.getAttribute('data-final-href') || 'contact.html#offerte';
+  });
+
+  // Optional close (×)
+  const closeBtn = document.querySelector('.khv2-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => { window.location.href = 'index.html'; });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') window.location.href = 'index.html'; });
+  }
+
+  // ------- Init -------
+  newNext.disabled = true;
+  renderStep1();
+})();
+
 
   // Renderers
   const renderStep1 = () => {
@@ -620,3 +705,4 @@ renderStep1();
   // Init
   renderStep1();
 })();
+
