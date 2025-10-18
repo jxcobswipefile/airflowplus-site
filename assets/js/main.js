@@ -1310,3 +1310,45 @@ requestAnimationFrame(syncTicksWidth);
   // Init
   setStep(Number(wrap.dataset.step || 1));
 })();
+
+<!-- keep your current script -->
+<script src="assets/js/main.js" defer></script>
+
+<!-- PATCH: redirect to quote page only on the last step -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const nextBtn = document.getElementById('kh-next');
+  if (!nextBtn) return;
+
+  nextBtn.addEventListener('click', function (ev) {
+    const step = getCurrentStep();
+
+    // Only on the final step: stop the normal handler and redirect
+    if (step === 3) {
+      ev.preventDefault();
+      ev.stopPropagation();          // don’t let the original JS run
+      window.location.href = 'contact.html#offerte'; // your quote page
+    }
+    // Otherwise, do nothing: the original JS advances the wizard
+  }, true); // capture phase so we intercept before older listeners
+
+  function getCurrentStep() {
+    // 1) Try the dots (recommended in your v2 skin)
+    const activeDot = document.querySelector('.khv2-steps .dot.is-active');
+    if (activeDot) {
+      const dots = Array.from(document.querySelectorAll('.khv2-steps .dot'));
+      return dots.indexOf(activeDot) + 1;
+    }
+    // 2) Try visible step sections (if you use [data-kh-step])
+    const visible = document.querySelector('[data-kh-step]:not([hidden])');
+    if (visible) return Number(visible.getAttribute('data-kh-step')) || 1;
+
+    // 3) Try a wrapper that tracks data-step
+    const wrap = document.querySelector('.kh-card[data-step]');
+    if (wrap) return Number(wrap.getAttribute('data-step')) || 1;
+
+    // Fallback
+    return 1;
+  }
+});
+</script>
