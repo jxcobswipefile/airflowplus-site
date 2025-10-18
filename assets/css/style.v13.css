@@ -304,7 +304,7 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 
 /* Reduce extra space between Services and Savings */
 #services + #savings{ padding-top:42px; }
-#savings + #maat{ padding-top:60px; }
+#savings + #maat{ padding-top:42px; }
 
 /* Op maat (light theme) refinements inside the reverted section */
 #maat .maat-lead{ color:#445164; }
