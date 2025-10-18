@@ -4,12 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Airflow+ • Keuzehulp</title>
-
-    <!-- Main site styles (already in your project) -->
     <link rel="stylesheet" href="assets/css/style.v13.css" />
   </head>
   <body>
-    <!-- Top contact strip (optional; keep if you use it on other pages) -->
+    <!-- Topbar / header identical to site -->
     <div class="topbar">
       <div class="container topbar-inner">
         <span>Gecertificeerde airco & warmtepomp installateur</span>
@@ -17,7 +15,6 @@
       </div>
     </div>
 
-    <!-- Site header / nav (mirrors your index) -->
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
@@ -32,48 +29,45 @@
       </div>
     </header>
 
-    <!-- Dark page header/title -->
     <header class="khv2-hero">
       <div class="container">
         <h1>Welke <span class="hl-blue">airco</span> past bij jou?</h1>
       </div>
     </header>
 
-    <!-- Stage: centered light card + dots -->
     <section class="khv2-stage kh-wrap">
       <div class="container">
 
-        <!-- The main wizard card (keeps kh-card for your JS, adds khv2 styles) -->
-        <div class="kh-card khv2-card">
-          <!-- optional close; remove if you don’t want it -->
+        <!-- NEW: the wizard state lives here -->
+        <div id="khv2" class="kh-card khv2-card" data-step="1" data-steps="3">
           <button class="khv2-close" type="button" aria-label="Sluiten">×</button>
 
-          <!-- STEP 1: number of rooms -->
-          <h2 class="khv2-q">In hoeveel ruimtes wil je airco?</h2>
+          <!-- STEP 1 ------------------------------------------------------- -->
+          <section data-kh-step="1">
+            <h2 class="khv2-q">In hoeveel ruimtes wil je airco?</h2>
 
-          <div class="kh-grid-rooms" style="justify-content:center; grid-template-columns: repeat(4, 72px); gap:14px;">
-            <label class="chip round">
-              <input type="radio" name="rooms" value="1" />
-              <span>1</span>
-            </label>
-            <label class="chip round">
-              <input type="radio" name="rooms" value="2" />
-              <span>2</span>
-            </label>
-            <label class="chip round">
-              <input type="radio" name="rooms" value="3" />
-              <span>3</span>
-            </label>
-            <label class="chip round">
-              <input type="radio" name="rooms" value="4" />
-              <span>4</span>
-            </label>
-          </div>
+            <div class="kh-grid-rooms" style="justify-content:center; grid-template-columns:repeat(4,72px); gap:14px;">
+              <label class="chip round"><input type="radio" name="rooms" value="1"><span>1</span></label>
+              <label class="chip round"><input type="radio" name="rooms" value="2"><span>2</span></label>
+              <label class="chip round"><input type="radio" name="rooms" value="3"><span>3</span></label>
+              <label class="chip round"><input type="radio" name="rooms" value="4"><span>4</span></label>
+            </div>
+          </section>
 
-          <!-- (Optional) STEP 2/3 content would follow here, reusing your existing markup.
-               Keep your .kh-size-grid / .kh-room etc. if your JS depends on them. -->
+          <!-- STEP 2 (put your existing content here) --------------------- -->
+          <section data-kh-step="2" hidden>
+            <!-- Example placeholder; replace with your real step-2 UI -->
+            <h2 class="khv2-q">Kies per ruimte het oppervlak</h2>
+            <!-- keep your .kh-size-grid / .kh-room etc. here if you have them -->
+          </section>
 
-          <!-- Actions: button bottom-right inside the card -->
+          <!-- STEP 3 (put your existing summary/overview here) ------------ -->
+          <section data-kh-step="3" hidden>
+            <h2 class="khv2-q">Overzicht</h2>
+            <!-- your existing summary/result UI -->
+          </section>
+
+          <!-- Actions -->
           <div class="khv2-actions">
             <button
               id="kh-next"
@@ -84,7 +78,7 @@
           </div>
         </div>
 
-        <!-- Step dots (static markup; your JS can toggle .is-active) -->
+        <!-- dots (your CSS already styles these) -->
         <nav class="khv2-steps" aria-label="Stappen">
           <button class="dot is-active" type="button">1</button>
           <button class="dot" type="button">2</button>
@@ -93,28 +87,94 @@
       </div>
     </section>
 
-    <!-- Footer (same as site) -->
     <footer class="site-footer">
       <div class="container footer-grid">
         <div>
-          <strong>Airflow+</strong>
-          <div class="muted">Gecertificeerde installatie van airco & warmtepompen. Snel, netjes en volgens norm.</div>
+          <div class="brand">Airflow<span class="accent">+</span></div>
+          <p class="muted">Gecertificeerde installatie van airco & warmtepompen. Snel, netjes en volgens norm.</p>
         </div>
         <div>
-          <strong>Contact</strong>
-          <div class="muted">+31 10 000 0000<br/>info@placeholder.nl<br/>Rotterdam & landelijk</div>
+          <h4>Contact</h4>
+          <ul class="list">
+            <li><a href="tel:+31 10 000 0000">+31 10 000 0000</a></li>
+            <li><a href="mailto:info@placeholder.nl">info@placeholder.nl</a></li>
+            <li>Rotterdam & landelijk</li>
+          </ul>
         </div>
         <div>
-          <strong>Pagina’s</strong>
-          <div class="muted">
-            Keuzehulp<br/>Airco<br/>Diensten<br/>Prijzen<br/>Over ons<br/>Contact
-          </div>
+          <h4>Pagina’s</h4>
+          <ul class="list">
+            <li><a href="keuzehulp.html">Keuzehulp</a></li>
+            <li><a href="airco.html">Airco</a></li>
+            <li><a href="diensten.html">Diensten</a></li>
+            <li><a href="prijzen.html">Prijzen</a></li>
+            <li><a href="over.html">Over ons</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
         </div>
       </div>
-      <div class="legal">© 2025 Airflow+</div>
+      <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
     </footer>
 
-    <!-- Your site JS (keeps any wizard logic you already have) -->
     <script src="assets/js/main.js" defer></script>
+    <!-- ADD: small safety shim after your main bundle loads -->
+    <script>
+    // Keuzehulp v2 – control "Volgende" so it only redirects on the last step
+    (function () {
+      const wrap   = document.getElementById('khv2');
+      const next   = document.getElementById('kh-next');
+      const dots   = () => Array.from(document.querySelectorAll('.khv2-steps .dot'));
+      if (!wrap || !next) return;
+
+      const total = Number(wrap.dataset.steps || 3);
+
+      // 1) Block any older handlers that may redirect on every click
+      next.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation();
+      }, true); // capture phase
+
+      // 2) Our controlled handler
+      next.addEventListener('click', () => {
+        let step = Number(wrap.dataset.step || 1);
+
+        if (step < total) {
+          setStep(step + 1);
+          return;
+        }
+
+        // last step → go where you want
+        const href = next.getAttribute('data-final-href') || 'contact.html#offerte';
+        window.location.href = href;
+      });
+
+      // Optional: allow clicking dots to jump to a step
+      document.addEventListener('click', (e) => {
+        const dot = e.target.closest('.khv2-steps .dot');
+        if (!dot) return;
+        const idx = dots().indexOf(dot); // 0-based
+        if (idx >= 0) setStep(idx + 1);
+      });
+
+      function setStep(n) {
+        wrap.dataset.step = String(n);
+
+        // show/hide sections if present
+        document.querySelectorAll('[data-kh-step]').forEach(sec => {
+          sec.hidden = Number(sec.dataset.khStep) !== n;
+        });
+
+        // update dots
+        dots().forEach((d, i) => d.classList.toggle('is-active', i === n - 1));
+
+        // button label
+        next.textContent = (n === total) ? 'Afronden →' : 'Volgende →';
+      }
+
+      // init
+      setStep(Number(wrap.dataset.step || 1));
+    })();
+    </script>
   </body>
 </html>
