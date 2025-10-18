@@ -32,6 +32,15 @@
 #diensten-scope .checks{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:10px 0 6px}
 #diensten-scope .checks .chk{display:inline-flex;gap:8px;align-items:center;font-weight:600}
 #diensten-scope .checks .chk svg{width:18px;height:18px;flex:0 0 18px;filter:drop-shadow(0 1px 0 rgba(0,0,0,.15))}
+</style><style id="diensten-inline-polish">
+/* Diensten scoped polish */
+#diensten-scope .section--brand { background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; }
+#diensten-scope .section--brand h2, 
+#diensten-scope .section--brand p, 
+#diensten-scope .section--brand li { color:#eaf1ff; }
+#diensten-scope .section--brand .btn { background: linear-gradient(180deg, #2b6cff, #2ab5f2); color:#fff; }
+#diensten-scope .section { padding-top: clamp(26px,5vw,60px); padding-bottom: clamp(26px,5vw,60px); }
+#diensten-scope .section.sep { border-top: 1px solid rgba(0,0,0,.08); }
 </style></head><body>
 <div class="topbar">
 <div class="container topbar-inner">
@@ -69,8 +78,8 @@
 <figure class="media-ph">Afbeelding (airco)</figure>
 </div>
 </section>
-<section class="section section--brand-deep reveal" id="svc-onderhoud">
-<div class="container grid-2">
+<section class="section section--brand-deep reveal alt" id="svc-onderhoud">
+<div class="container grid-2"><hr class="section-divider"/>
 <figure class="media-ph">Afbeelding (onderhoud)</figure>
 <div>
 <h2>Onder<span class="text-brand">houd</span></h2>
@@ -84,7 +93,7 @@
 </div>
 </section>
 <section class="section section--soft reveal" id="svc-reparatie">
-<div class="container grid-2">
+<div class="container grid-2"><hr class="section-divider"/>
 <div>
 <h2>Reparatie &amp; <span class="text-brand">storingen</span></h2>
 <p class="lead">Snelle diagnose en vakkundige reparatie wanneer het erom gaat.</p>
@@ -97,8 +106,8 @@
 <figure class="media-ph">Afbeelding (reparatie)</figure>
 </div>
 </section>
-<section class="section reveal" id="svc-wp">
-<div class="container grid-2">
+<section class="section reveal alt" id="svc-wp">
+<div class="container grid-2"><hr class="section-divider"/>
 <figure class="media-ph">Afbeelding (warmtepomp-airco)</figure>
 <div>
 <h2>Warmte<span class="text-brand">pomp-airco</span></h2>
@@ -112,7 +121,7 @@
 </div>
 </section>
 <section class="section section--brand reveal" id="svc-multisplit">
-<div class="container grid-2">
+<div class="container grid-2"><hr class="section-divider"/>
 <div>
 <h2>Multi-<span class="text-brand">split</span></h2>
 <p class="lead">Meerdere kamers koelen/verwarmen via één buitenunit — flexibel en netjes.</p>
@@ -125,8 +134,8 @@
 <figure class="media-ph">Afbeelding (multi-split)</figure>
 </div>
 </section>
-<section class="section reveal" id="svc-zakelijk">
-<div class="container grid-2">
+<section class="section reveal alt" id="svc-zakelijk">
+<div class="container grid-2"><hr class="section-divider"/>
 <figure class="media-ph">Afbeelding (zakelijk)</figure>
 <div>
 <h2><span class="text-brand">Zakelijk</span></h2>
@@ -142,11 +151,11 @@
 <section class="section reveal" id="diensten-cta"><div class="container"><article class="card-dark">
 <h2 style="margin:0 0 .25rem;">Klaar voor advies op maat?</h2>
 <div class="checks">
-  <span class="chk"><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill="#3fe086" d="M7.8 14.6L3.5 10.3l1.4-1.4 2.9 2.9 7.3-7.3 1.4 1.4z"/></svg> Gratis offerte binnen 24u</span>
-  <span class="chk"><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill="#3fe086" d="M7.8 14.6L3.5 10.3l1.4-1.4 2.9 2.9 7.3-7.3 1.4 1.4z"/></svg> Geen verborgen kosten</span>
-  <span class="chk"><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill="#3fe086" d="M7.8 14.6L3.5 10.3l1.4-1.4 2.9 2.9 7.3-7.3 1.4 1.4z"/></svg> Gecertificeerde monteurs</span>
+<span class="chk"><svg viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 14.6L3.5 10.3l1.4-1.4 2.9 2.9 7.3-7.3 1.4 1.4z" fill="#3fe086"></path></svg> Gratis offerte binnen 24u</span>
+<span class="chk"><svg viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 14.6L3.5 10.3l1.4-1.4 2.9 2.9 7.3-7.3 1.4 1.4z" fill="#3fe086"></path></svg> Geen verborgen kosten</span>
+<span class="chk"><svg viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 14.6L3.5 10.3l1.4-1.4 2.9 2.9 7.3-7.3 1.4 1.4z" fill="#3fe086"></path></svg> Gecertificeerde monteurs</span>
 </div>
-<div class="actions"><a href="keuzehulp.html" class="btn">Start keuzehulp</a><a href="contact.html#offerte" class="btn btn--ghost">Vraag offerte</a></div>
+<div class="actions"><a class="btn" href="keuzehulp.html">Start keuzehulp</a><a class="btn btn--ghost" href="contact.html#offerte">Vraag offerte</a></div>
 </article></div></section>
 </main>
 <footer class="site-footer">
