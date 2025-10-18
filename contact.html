@@ -1,144 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="nl"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Contact • Airflow+</title>
-<meta name="description" content="Airflow+ — Airco & warmtepomp installatie. Snel, netjes en gecertificeerd.">
-<link rel="icon" href="assets/img/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+<meta content="Airflow+ — Airco &amp; warmtepomp installatie. Snel, netjes en gecertificeerd." name="description"/>
+<link href="assets/img/favicon.png" rel="icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <!-- Use the new themed CSS -->
-<link rel="stylesheet" href="assets/css/style.v13.css">
-
+<link href="assets/css/style.v13.css" rel="stylesheet"/>
 <!-- Your script (keep your filename; example shown) -->
-<script defer src="assets/js/main.js?v=13"></script>
-
+<script defer="" src="assets/js/main.js?v=13"></script>
 </head><body>
-
 <div class="topbar">
-  <div class="container topbar-inner">
-    <span>Gecertificeerde airco & warmtepomp installateur</span>
-    <a href="tel:+31 10 000 0000" class="topbar-link">Bel: +31 10 000 0000</a>
-  </div>
+<div class="container topbar-inner">
+<span>Gecertificeerde airco &amp; warmtepomp installateur</span>
+<a class="topbar-link" href="tel:+31 10 000 0000">Bel: +31 10 000 0000</a>
 </div>
-
-
+</div>
 <header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
-    <nav class="nav">
-      <a href="keuzehulp.html">Keuzehulp</a>
-      <a href="airco.html">Airco</a>
-      <a href="diensten.html">Diensten</a>
-      <a href="prijzen.html">Prijzen</a>
-      <a href="over.html">Over ons</a>
-      <a href="contact.html" class="btn btn-primary">Bel/Offerte</a>
-    </nav>
-    <button class="nav-toggle" aria-label="Open menu">☰</button>
-  </div>
+<div class="container header-inner">
+<a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
+<nav class="nav">
+<a href="keuzehulp.html">Keuzehulp</a>
+<a href="airco.html">Airco</a>
+<a href="diensten.html">Diensten</a>
+<a href="prijzen.html">Prijzen</a>
+<a href="over.html">Over ons</a>
+<a class="btn btn-primary" href="contact.html">Bel/Offerte</a>
+</nav>
+<button aria-label="Open menu" class="nav-toggle">☰</button>
+</div>
 </header>
-
 <section class="section" id="contact">
-  <div class="container">
-    <h1>Offerte of vraag</h1>
-    <p class="muted">Vul je gegevens in en we reageren meestal dezelfde werkdag.</p>
-
-    <form id="contact-form"
-          action="https://formspree.io/f/xwprybon"
-          method="POST" novalidate class="contact-form">
-
-      <!-- Honeypot (spam trap) -->
-      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none">
-
-      <div class="form-grid">
-        <div class="field">
-          <label for="cf-name">Naam</label>
-          <input id="cf-name" name="name" type="text" required placeholder="Voor- en achternaam">
-          <div class="error" data-err="name"></div>
-        </div>
-
-        <div class="field">
-          <label for="cf-email">E-mail</label>
-          <input id="cf-email" name="email" type="email" required placeholder="jij@voorbeeld.nl">
-          <div class="error" data-err="email"></div>
-        </div>
-
-        <div class="field">
-          <label for="cf-phone">Telefoon (optioneel)</label>
-          <input id="cf-phone" name="phone" type="tel" inputmode="tel" placeholder="06 12345678">
-          <div class="error" data-err="phone"></div>
-        </div>
-
-        <div class="field">
-          <label for="cf-topic">Onderwerp</label>
-          <select id="cf-topic" name="topic" class="save-select">
-            <option value="offerte" selected>Offerte</option>
-            <option value="advies">Advies</option>
-            <option value="onderhoud">Onderhoud</option>
-            <option value="storingen">Storingen / Reparatie</option>
-          </select>
-        </div>
-
-        <div class="field full">
-          <label for="cf-message">Bericht</label>
-          <textarea id="cf-message" name="message" required rows="6"
-            placeholder="Vertel kort wat je zoekt (ruimtes, type woning, gewenste periode)..."></textarea>
-          <div class="error" data-err="message"></div>
-        </div>
-
-        <div class="field full terms">
-          <label class="checkbox">
-            <input type="checkbox" id="cf-consent" name="consent" required>
-            <span>Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</span>
-          </label>
-          <div class="error" data-err="consent"></div>
-        </div>
-      </div>
-
-      <!-- Hidden subject that shows up in Formspree emails -->
-      <input type="hidden" name="_subject" value="Nieuwe aanvraag via Airflow+">
-
-      <div class="cta-row">
-        <button type="submit" class="btn btn-primary">Versturen</button>
-        <a href="tel:+31100000000" class="btn btn-outline">Bel direct</a>
-      </div>
-
-      <!-- Success / error inline feedback (JS fills these) -->
-      <div class="form-status" aria-live="polite"></div>
-    </form>
-  </div>
+<div class="container">
+<h1>Offerte of vraag</h1>
+<p class="muted">Vul je gegevens in en we reageren meestal dezelfde werkdag.</p>
+<form action="https://formspree.io/f/xwprybon" class="contact-form" data-fs="" data-thanks="/thank-you.html" data-type="quote" id="contact-form" method="POST" novalidate="">
+<!-- Honeypot (spam trap) -->
+<input autocomplete="off" name="_gotcha" style="display:none" tabindex="-1" type="text"/>
+<div class="form-grid">
+<div class="field">
+<label for="cf-name">Naam</label>
+<input id="cf-name" name="name" placeholder="Voor- en achternaam" required="" type="text"/>
+<div class="error" data-err="name"></div>
+</div>
+<div class="field">
+<label for="cf-email">E-mail</label>
+<input id="cf-email" name="email" placeholder="jij@voorbeeld.nl" required="" type="email"/>
+<div class="error" data-err="email"></div>
+</div>
+<div class="field">
+<label for="cf-phone">Telefoon (optioneel)</label>
+<input id="cf-phone" inputmode="tel" name="phone" placeholder="06 12345678" type="tel"/>
+<div class="error" data-err="phone"></div>
+</div>
+<div class="field">
+<label for="cf-topic">Onderwerp</label>
+<select class="save-select" id="cf-topic" name="topic">
+<option selected="" value="offerte">Offerte</option>
+<option value="advies">Advies</option>
+<option value="onderhoud">Onderhoud</option>
+<option value="storingen">Storingen / Reparatie</option>
+</select>
+</div>
+<div class="field full">
+<label for="cf-message">Bericht</label>
+<textarea id="cf-message" name="message" placeholder="Vertel kort wat je zoekt (ruimtes, type woning, gewenste periode)..." required="" rows="6"></textarea>
+<div class="error" data-err="message"></div>
+</div>
+<div class="field full terms">
+<label class="checkbox">
+<input id="cf-consent" name="consent" required="" type="checkbox"/>
+<span>Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</span>
+</label>
+<div class="error" data-err="consent"></div>
+</div>
+</div>
+<!-- Hidden subject that shows up in Formspree emails -->
+<input name="_subject" type="hidden" value="Nieuwe aanvraag via Airflow+"/>
+<div class="cta-row">
+<button class="btn btn-primary" type="submit">Versturen</button>
+<a class="btn btn-outline" href="tel:+31100000000">Bel direct</a>
+</div>
+<!-- Success / error inline feedback (JS fills these) -->
+<div aria-live="polite" class="form-status"></div>
+</form>
+</div>
 </section>
-
-
 <footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <div class="brand">Airflow<span class="accent">+</span></div>
-      <p class="muted">Gecertificeerde installatie van airco &amp; warmtepompen. Snel, netjes en volgens norm.</p>
-    </div>
-    <div>
-      <h4>Contact</h4>
-      <ul class="list">
-        <li><a href="tel:+31 10 000 0000">+31 10 000 0000</a></li>
-        <li><a href="mailto:info@placeholder.nl">info@placeholder.nl</a></li>
-        <li>Rotterdam &amp; landelijk</li>
-      </ul>
-    </div>
-    <div>
-      <h4>Pagina’s</h4>
-      <ul class="list">
-        <li><a href="#keuzehulp-cta">Keuzehulp</a></li>
-        <li><a href="airco.html">Airco</a></li>
-        <li><a href="diensten.html">Diensten</a></li>
-        <li><a href="prijzen.html">Prijzen</a></li>
-        <li><a href="over.html">Over ons</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
+<div class="container footer-grid">
+<div>
+<div class="brand">Airflow<span class="accent">+</span></div>
+<p class="muted">Gecertificeerde installatie van airco &amp; warmtepompen. Snel, netjes en volgens norm.</p>
+</div>
+<div>
+<h4>Contact</h4>
+<ul class="list">
+<li><a href="tel:+31 10 000 0000">+31 10 000 0000</a></li>
+<li><a href="mailto:info@placeholder.nl">info@placeholder.nl</a></li>
+<li>Rotterdam &amp; landelijk</li>
+</ul>
+</div>
+<div>
+<h4>Pagina’s</h4>
+<ul class="list">
+<li><a href="#keuzehulp-cta">Keuzehulp</a></li>
+<li><a href="airco.html">Airco</a></li>
+<li><a href="diensten.html">Diensten</a></li>
+<li><a href="prijzen.html">Prijzen</a></li>
+<li><a href="over.html">Over ons</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</div>
+</div>
+<div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
 </footer>
-
 </body></html>

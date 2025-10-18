@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bedankt • Airflow+</title>
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="assets/css/style.v13.css">
+  <meta name="description" content="Bedankt voor uw aanvraag bij Airflow+. We nemen zo snel mogelijk contact met u op.">
+  <style>
+    .ty-hero { padding: clamp(3rem, 6vw, 6rem) 0; text-align: center; }
+    .ty-hero .chip { margin-bottom: 10px; display: inline-block; }
+    .ty-grid { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+    .ty-card {
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 16px;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+    .ty-actions { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; margin-top: 16px; }
+    @media (max-width: 640px) { .ty-actions { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="ty-hero section reveal">
+      <div class="ty-grid">
+        <span class="chip">Bedankt!</span>
+        <h1>We hebben uw aanvraag ontvangen</h1>
+        <p class="lead">Ons team neemt zo snel mogelijk contact met u op. U ontvangt een bevestiging per e-mail (controleer ook uw spam).</p>
+        <div class="ty-card reveal">
+          <h3>Wat is de volgende stap?</h3>
+          <p>We beoordelen uw aanvraag en nemen contact op om eventuele vragen te stellen en een afspraak in te plannen.</p>
+          <div class="ty-actions">
+            <a href="keuzehulp.html" class="btn" data-transition>Keuzehulp opnieuw doen</a>
+            <a href="index.html#savings" class="btn btn--ghost">Bekijk de besparing</a>
+          </div>
+        </div>
+        <p style="margin-top:16px; opacity:.8;">Referentie: <span id="ty-ref">—</span></p>
+      </div>
+    </section>
+  </main>
+  <script>
+    const qp = new URLSearchParams(window.location.search);
+    const ref = [qp.get('type'), qp.get('source')].filter(Boolean).join(' • ') || 'Airflow+';
+    document.getElementById('ty-ref').textContent = ref;
+  </script>
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

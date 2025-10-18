@@ -41,7 +41,35 @@
 </header>
 
 <main>
-<section class='page-header'><div class='container'><h1>Prijzen</h1><p>Pagina in ontwikkeling.</p></div></section>
+
+    <section class="section reveal">
+      <div class="container">
+        <span class="chip">Prijzen</span>
+        <h1>Indicatieve pakketprijzen</h1>
+        <p>Elke situatie is anders. Onderstaande prijzen zijn ‘vanaf’ inclusief standaard installatie.</p>
+      </div>
+    </section>
+    <section class="section section--invert reveal">
+      <div class="container">
+        <div class="optin">
+          <h4>Gerichte offerte ontvangen?</h4>
+          <form action="https://formspree.io/f/mgvndydv" method="POST" data-fs data-type="lead" data-thanks="/thank-you.html" data-source="prijzen-offerte">
+            <div class="row">
+              <input name="naam" type="text" placeholder="Uw naam" required>
+              <input name="email" type="email" placeholder="E-mail" required>
+              <select name="systeem">
+                <option value="single-split">Single‑split</option>
+                <option value="multi-split">Multi‑split</option>
+                <option value="warmtepomp-airco">Warmtepomp‑airco</option>
+              </select>
+              <input type="hidden" name="source" value="prijzen-offerte">
+            </div>
+            <button type="submit" class="btn" style="margin-top:10px;">Offerte aanvragen</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
 </main>
 
 <footer class="site-footer">
