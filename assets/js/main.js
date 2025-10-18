@@ -505,6 +505,18 @@
     </div>
   `;
 
+// ---------- Init ----------
+nextBtn.disabled = true;
+
+// 🔧 CLEANUP: remove any static Step 1 markup sitting directly in the card
+// (e.g. an extra <h2 class="khv2-q"> and the first .kh-grid-rooms that are *not*
+// inside .khv2-body). This prevents the duplicate “Vraag 1” row you're seeing.
+Array.from(card.querySelectorAll(':scope > .khv2-q, :scope > .kh-grid-rooms'))
+  .forEach(el => el.remove());
+
+// now render normally
+renderStep1();
+
   // Renderers
   const renderStep1 = () => {
     state.step = 1; setDot(1);
