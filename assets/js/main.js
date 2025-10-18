@@ -1311,9 +1311,6 @@ requestAnimationFrame(syncTicksWidth);
   setStep(Number(wrap.dataset.step || 1));
 })();
 
-<!-- keep your current script -->
-<script src="assets/js/main.js" defer></script>
-
 <!-- PATCH: redirect to quote page only on the last step -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
