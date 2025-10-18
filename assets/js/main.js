@@ -1252,3 +1252,61 @@ requestAnimationFrame(syncTicksWidth);
   setStep(getActiveIndex());
 })();
 
+// Keuzehulp v2 — advance steps, redirect only on last click
+(function () {
+  const wrap = document.getElementById('khv2');
+  const nextBtn = document.getElementById('kh-next');
+  if (!wrap || !nextBtn) return;
+
+  const total = Number(wrap.dataset.steps || 3);
+
+  // ❶ Kill any old click listeners that might redirect on every click
+  nextBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+  }, true); // capture to run before old handlers
+
+  // ❷ Our controlled handler
+  nextBtn.addEventListener('click', () => {
+    let step = Number(wrap.dataset.step || 1);
+
+    if (step < total) {
+      setStep(step + 1);
+      return;
+    }
+
+    // Last step → go to the configured target
+    const href = nextBtn.getAttribute('data-final-href') || 'contact.html#offerte';
+    window.location.href = href;
+  });
+
+  // Optional: clicking a dot jumps to that step
+  document.addEventListener('click', (e) => {
+    const dot = e.target.closest('.khv2-steps .dot');
+    if (!dot) return;
+    const dots = Array.from(document.querySelectorAll('.khv2-steps .dot'));
+    const idx = dots.indexOf(dot); // 0-based
+    if (idx >= 0) setStep(idx + 1);
+  });
+
+  function setStep(n) {
+    wrap.dataset.step = String(n);
+
+    // Show/hide panels if present
+    document.querySelectorAll('[data-kh-step]').forEach(p => {
+      const i = Number(p.dataset.khStep || 0);
+      p.hidden = (i !== n);
+    });
+
+    // Update dots
+    const dots = document.querySelectorAll('.khv2-steps .dot');
+    dots.forEach((d, i) => d.classList.toggle('is-active', i === n - 1));
+
+    // Update button label
+    nextBtn.textContent = (n === total) ? 'Afronden →' : 'Volgende →';
+  }
+
+  // Init
+  setStep(Number(wrap.dataset.step || 1));
+})();
