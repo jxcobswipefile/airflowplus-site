@@ -293,20 +293,19 @@
 
 /* -------------------- 08) Keuzehulp v2 (3-step wizard) ------------------- */
 /*
-  Markup expected:
-  .khv2-card  … <div class="khv2-actions"><button id="kh-next"></button></div>
-  <nav class="khv2-steps"><button class="dot">1</button>…</nav>
-
-  The wizard renders inside a .khv2-body container (auto-created).
-  Only redirects to quote page on the last step.
+  Expected markup:
+    .khv2-card
+      … <div class="khv2-actions"><button id="kh-next">Volgende →</button></div>
+    <nav class="khv2-steps"><button class="dot">1</button><button class="dot">2</button><button class="dot">3</button></nav>
+  Redirects to contact.html#offerte only on the LAST step.
 */
 (() => {
-  const card   = document.querySelector('.khv2-card');
-  const nextEl = document.getElementById('kh-next');
-  const dots   = [...document.querySelectorAll('.khv2-steps .dot')];
-  if (!card || !nextEl || dots.length === 0) return;
+  const card = document.querySelector('.khv2-card');
+  let nextBtn = document.getElementById('kh-next');
+  const dots = Array.from(document.querySelectorAll('.khv2-steps .dot'));
+  if (!card || !nextBtn || dots.length === 0) return;
 
-  // Ensure a dedicated body container (so stray markup doesn’t duplicate)
+  // Ensure a dedicated render body
   let body = card.querySelector('.khv2-body');
   const actions = card.querySelector('.khv2-actions') || null;
   if (!body) {
@@ -314,23 +313,33 @@
     body.className = 'khv2-body';
     card.insertBefore(body, actions);
   }
-  // Remove any static step-1 elements outside .khv2-body (prevents duplicates)
-  [...card.querySelectorAll(':scope > .khv2-q, :scope > .kh-grid-rooms')].forEach(el => el.remove());
 
+  // 🔧 Kill any static Step-1 markup that sits outside the render body
+  card.querySelectorAll('.khv2-q, .kh-grid-rooms').forEach(el => {
+    if (!body.contains(el)) el.remove();
+  });
+
+  // 🔧 Kill ALL old listeners on the Next button (clone + replace)
+  const fresh = nextBtn.cloneNode(true);
+  nextBtn.replaceWith(fresh);
+  nextBtn = document.getElementById('kh-next') || fresh; // re-grab by id
+
+  // ---------- State ----------
   const state = { step: 1, rooms: 0, sizes: [] };
 
-  const setDot = n => dots.forEach((d,i)=>d.classList.toggle('is-active', i===n-1));
-  const isComplete = () =>
+  // ---------- Helpers ----------
+  const setDot = (n) => dots.forEach((d, i) => d.classList.toggle('is-active', i === (n - 1)));
+  const complete = () =>
     state.step === 1 ? state.rooms > 0 :
     state.step === 2 ? (state.sizes.length === state.rooms && state.sizes.every(Boolean)) :
     true;
 
   const sizeOptions = [
-    { val:'1-30',  label:'1–30 m²' },
-    { val:'30-40', label:'30–40 m²' },
-    { val:'40-50', label:'40–50 m²' },
+    { val: '1-30',  label: '1–30 m²' },
+    { val: '30-40', label: '30–40 m²' },
+    { val: '40-50', label: '40–50 m²' },
   ];
-  const roomCard = i => `
+  const roomCard = (i) => `
     <div class="khv2-room-card" data-room="${i}">
       <h4>Kamer ${i}</h4>
       <div class="khv2-sizes">
@@ -342,6 +351,7 @@
       </div>
     </div>`;
 
+  // ---------- Renderers ----------
   function renderStep1() {
     state.step = 1; state.rooms = 0; setDot(1);
     body.innerHTML = `
@@ -354,26 +364,27 @@
           </label>`).join('')}
       </div>`;
     body.addEventListener('change', onRoomsChange, { once: true });
-    nextEl.textContent = 'Volgende →';
-    nextEl.disabled = true;
+    nextBtn.textContent = 'Volgende →';
+    nextBtn.disabled = true;
   }
 
   function renderStep2() {
-    state.step = 2; setDot(2); state.sizes = new Array(state.rooms).fill(null);
+    state.step = 2; setDot(2);
+    state.sizes = new Array(state.rooms).fill(null);
     body.innerHTML = `
       <h2 class="khv2-q">Hoe groot zijn de ruimtes?</h2>
       <p class="kh-sub">Kies de oppervlakte per kamer. Dit helpt ons het juiste vermogen te adviseren.</p>
       <div class="kh-size-grid">
-        ${Array.from({ length: state.rooms }, (_, i) => roomCard(i+1)).join('')}
+        ${Array.from({ length: state.rooms }, (_, i) => roomCard(i + 1)).join('')}
       </div>`;
     body.addEventListener('change', onSizeChange);
-    nextEl.textContent = 'Volgende →';
-    nextEl.disabled = true;
+    nextBtn.textContent = 'Volgende →';
+    nextBtn.disabled = true;
   }
 
   function renderStep3() {
     state.step = 3; setDot(3);
-    const list = state.sizes.map((sz, i)=>`<li>Kamer ${i+1}: <strong>${sz.replace('-', '–')} m²</strong></li>`).join('');
+    const list = state.sizes.map((sz, i) => `<li>Kamer ${i + 1}: <strong>${sz.replace('-', '–')} m²</strong></li>`).join('');
     body.innerHTML = `
       <h2 class="khv2-q">Overzicht</h2>
       <p class="kh-sub">Op basis van jouw keuzes stellen we een advies op maat samen.</p>
@@ -382,16 +393,17 @@
         <ul class="kh-out">${list}</ul>
         <p class="muted">Klaar? Ga door voor een vrijblijvende offerte.</p>
       </div>`;
-    nextEl.textContent = 'Afronden →';
-    nextEl.disabled = false;
+    nextBtn.textContent = 'Afronden →';
+    nextBtn.disabled = false;
   }
 
+  // ---------- Handlers ----------
   function onRoomsChange(e) {
     const input = e.target;
     if (input?.name !== 'rooms') return;
     state.rooms = parseInt(input.value, 10) || 0;
-    nextEl.disabled = !isComplete();
-    // keep listening if user changes without clicking next
+    nextBtn.disabled = !complete();
+    // keep listening if user clicks different option before Next
     body.addEventListener('change', onRoomsChange, { once: true });
   }
 
@@ -403,14 +415,14 @@
     if (Number.isFinite(idx) && idx >= 1 && idx <= state.rooms) {
       state.sizes[idx - 1] = input.value;
       // pill visual
-      const card = input.closest('.khv2-room-card');
-      card?.querySelectorAll('.kh-pill').forEach(l => l.classList.remove('active'));
+      const c = input.closest('.khv2-room-card');
+      c?.querySelectorAll('.kh-pill').forEach(l => l.classList.remove('active'));
       input.closest('.kh-pill')?.classList.add('active');
-      nextEl.disabled = !isComplete();
+      nextBtn.disabled = !complete();
     }
   }
 
-  // Dots jump (keeps state)
+  // Dots allow jumping (with simple guards)
   document.addEventListener('click', (e) => {
     const dot = e.target.closest('.khv2-steps .dot');
     if (!dot) return;
@@ -420,24 +432,24 @@
     if (i === 2 && state.rooms && state.sizes.length) renderStep3();
   });
 
-  // Make sure no old listeners hijack the button:
-  nextEl.addEventListener('click', (ev) => {
-    // hard stop old handlers
+  // Next button — ensure ours is the ONLY active listener
+  nextBtn.addEventListener('click', (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
     ev.stopImmediatePropagation();
 
-    if (!isComplete()) return;
+    if (!complete()) return;
     if (state.step === 1) { renderStep2(); return; }
     if (state.step === 2) { renderStep3(); return; }
     if (state.step === 3) { window.location.href = 'contact.html#offerte'; }
-  }, true); // capture to pre-empt other listeners
+  }, true); // capture to pre-empt legacy handlers
 
   // Close (×)
   const closeBtn = document.querySelector('.khv2-close');
   closeBtn?.addEventListener('click', () => (window.location.href = 'index.html'));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') window.location.href = 'index.html'; });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') window.location.href = 'index.html'; });
 
-  // boot
+  // Boot
   renderStep1();
 })();
+
