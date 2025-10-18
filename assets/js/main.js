@@ -1206,52 +1206,49 @@ requestAnimationFrame(syncTicksWidth);
   });
 })();
 
-// Keuzehulp: only go to contact#offerte on the LAST step
+// Keuzehulp: only redirect on the LAST step
 (function () {
-  const next = document.getElementById('kh-next');
-  if (!next) return;
+  const nextBtn = document.getElementById('kh-next');
+  if (!nextBtn) return;
 
-  // Dots that indicate steps (already in your markup)
+  // Step indicators (your three dots)
   const dots = Array.from(document.querySelectorAll('.khv2-steps .dot'));
-
-  // If you have step panels, you can tag them with [data-kh-step] (optional)
+  // Optional: step panels tagged like <section data-kh-step>
   const panels = Array.from(document.querySelectorAll('[data-kh-step]'));
 
-  const activeIndex = () =>
+  const getActiveIndex = () =>
     Math.max(0, dots.findIndex(d => d.classList.contains('is-active')));
 
-  const goTo = (i) => {
+  const setStep = (i) => {
     if (!dots.length) return;
     dots.forEach((d, idx) => d.classList.toggle('is-active', idx === i));
-    panels.forEach((p, idx) => { if (p) p.hidden = idx !== i; });
-    next.textContent = (i === dots.length - 1) ? 'Afronden →' : 'Volgende →';
+    panels.forEach((p, idx) => { if (p) p.hidden = (idx !== i); });
+    nextBtn.textContent = (i === dots.length - 1) ? 'Afronden →' : 'Volgende →';
   };
 
-  // If your dots are already clickable, reflect the new label when user clicks them
+  // If user clicks a dot, keep the button label in sync
   document.addEventListener('click', (e) => {
-    const d = e.target.closest('.khv2-steps .dot');
-    if (d) requestAnimationFrame(() => goTo(activeIndex()));
+    const dot = e.target.closest('.khv2-steps .dot');
+    if (dot) requestAnimationFrame(() => setStep(getActiveIndex()));
   });
 
-  next.addEventListener('click', (e) => {
-    const i = activeIndex();
+  nextBtn.addEventListener('click', () => {
+    const i = getActiveIndex();
+    const last = dots.length ? dots.length - 1 : 0;
 
-    // Not on the last step → advance the wizard, don't leave the page
-    if (dots.length && i < dots.length - 1) {
-      e.preventDefault();
-      // Prefer using the existing click behavior on the next dot (keeps your logic)
-      if (dots[i + 1]) {
-        dots[i + 1].click();
-      } else {
-        goTo(i + 1);
-      }
+    if (i < last) {
+      // Advance to next step (prefer your existing dot logic)
+      if (dots[i + 1]) dots[i + 1].click();
+      else setStep(i + 1);
       return;
     }
 
-    // On the last step → allow the link to proceed to the quote opt-in
-    // (no preventDefault here)
+    // Final step → go to the configured destination
+    const target = nextBtn.getAttribute('data-final-href') || 'contact.html#offerte';
+    window.location.href = target;
   });
 
-  // Initialize label correctly on load
-  goTo(activeIndex());
+  // Initialize label on load
+  setStep(getActiveIndex());
 })();
+
