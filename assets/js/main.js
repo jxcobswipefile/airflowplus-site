@@ -1205,3 +1205,53 @@ requestAnimationFrame(syncTicksWidth);
     // Option B instead: window.location.href = 'prijzen.html';
   });
 })();
+
+// Keuzehulp: only go to contact#offerte on the LAST step
+(function () {
+  const next = document.getElementById('kh-next');
+  if (!next) return;
+
+  // Dots that indicate steps (already in your markup)
+  const dots = Array.from(document.querySelectorAll('.khv2-steps .dot'));
+
+  // If you have step panels, you can tag them with [data-kh-step] (optional)
+  const panels = Array.from(document.querySelectorAll('[data-kh-step]'));
+
+  const activeIndex = () =>
+    Math.max(0, dots.findIndex(d => d.classList.contains('is-active')));
+
+  const goTo = (i) => {
+    if (!dots.length) return;
+    dots.forEach((d, idx) => d.classList.toggle('is-active', idx === i));
+    panels.forEach((p, idx) => { if (p) p.hidden = idx !== i; });
+    next.textContent = (i === dots.length - 1) ? 'Afronden →' : 'Volgende →';
+  };
+
+  // If your dots are already clickable, reflect the new label when user clicks them
+  document.addEventListener('click', (e) => {
+    const d = e.target.closest('.khv2-steps .dot');
+    if (d) requestAnimationFrame(() => goTo(activeIndex()));
+  });
+
+  next.addEventListener('click', (e) => {
+    const i = activeIndex();
+
+    // Not on the last step → advance the wizard, don't leave the page
+    if (dots.length && i < dots.length - 1) {
+      e.preventDefault();
+      // Prefer using the existing click behavior on the next dot (keeps your logic)
+      if (dots[i + 1]) {
+        dots[i + 1].click();
+      } else {
+        goTo(i + 1);
+      }
+      return;
+    }
+
+    // On the last step → allow the link to proceed to the quote opt-in
+    // (no preventDefault here)
+  });
+
+  // Initialize label correctly on load
+  goTo(activeIndex());
+})();
