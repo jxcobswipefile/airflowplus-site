@@ -2093,3 +2093,8 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 /* Trust ticker fullbleed (diensten) */
 .trust-ticker.fullbleed{ width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
 .trust-ticker.fullbleed .keyword-track{ padding-left:24px; padding-right:24px; }
+
+/* Trust ticker normalize (v29.9.27) */
+.trust-ticker{ background:#081021; color:#fff; padding:10px 0; width:100%; }
+.trust-ticker .keyword-track{ display:flex; gap:36px; white-space:nowrap; animation: tt-scroll 45s linear infinite; }
+.trust-ticker .check{ display:inline-block; width:12px; height:12px; background:#10b981; border-radius:50%; margin-right:8px; }
