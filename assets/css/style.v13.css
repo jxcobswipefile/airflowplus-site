@@ -1935,3 +1935,14 @@ body.home section.kh-cta.overlap.hero-overlap{ margin-top: clamp(-120px, -20vh, 
   color:#0f172a !important;
   border:1.5px solid rgba(8,16,33,.18) !important;
 }
+
+
+/* v29.9.4 tweaks */
+.chip.active{ background:var(--primary); color:#fff; border-color:var(--primary); }
+.chip.active input{ background:#fff; border-color:#fff; }
+
+/* Lower the KH card further to sit halfway on hero border */
+body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px); }
+
+/* Ensure result block is visible */
+.savings .save-result{ opacity:1; visibility:visible; }

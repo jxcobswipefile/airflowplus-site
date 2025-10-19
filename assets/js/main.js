@@ -616,3 +616,24 @@ window.addEventListener('DOMContentLoaded', () => {
     update();
   });
 });
+
+
+/* v2994 calc patch */
+(() => {
+  const root = document.getElementById('savings');
+  if (!root) return;
+  const number = root.querySelector('#save-bill-input');
+  const range  = root.querySelector('#save-bill');
+  const chips  = [...root.querySelectorAll('.save-systems .chip')];
+  const profileSel = root.querySelector('#save-profile');
+  const outAmt = root.querySelector('#save-amount');
+  if (!number || !range || !chips.length || !outAmt) return;
+  // ensure change is captured (some browsers fire change on spinner clicks)
+  const trigger = () => number.dispatchEvent(new Event('input', {bubbles:true}));
+  number.addEventListener('change', () => { trigger(); });
+  // make active state visible
+  chips.forEach(c => c.addEventListener('click', () => {
+    chips.forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+  }));
+})();
