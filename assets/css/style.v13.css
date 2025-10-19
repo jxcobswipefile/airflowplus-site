@@ -1979,3 +1979,18 @@ body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px);
 .hero-poster-softer .hero-video {
   filter: brightness(0.92) contrast(0.98);
 }
+
+/* =========================================================
+   SECTION: Keuzehulp hero overlap fix (v29.9.6)
+   ========================================================= */
+section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-50%) !important; }
+@media (max-width: 960px){
+  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-38%) !important; }
+}
+
+/* Hero mute button positioning */
+.hero .hero-mute{
+  position:absolute;left:16px;bottom:16px;z-index:6;
+  padding:8px 12px;font-size:14px;border-radius:10px;
+  opacity:.92;backdrop-filter:saturate(1.2) blur(4px);
+}

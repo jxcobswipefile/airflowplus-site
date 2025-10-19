@@ -679,3 +679,25 @@ window.addEventListener('DOMContentLoaded', () => {
     // no-op (defensive)
   }
 })();
+
+// =========================================================
+// SECTION: Hero video mute toggle (v29.9.6)
+// =========================================================
+(function(){
+  try {
+    var video = document.querySelector('[data-hero-video]') || document.querySelector('.hero video');
+    var btn = document.querySelector('[data-hero-mute]') || document.querySelector('.hero-mute, .btn-mute');
+    if (!video || !btn) return;
+    function syncLabel(){
+      var isMuted = !!video.muted;
+      var on = btn.getAttribute('data-label-unmuted') || 'Mute';
+      var off = btn.getAttribute('data-label-muted') || 'Unmute';
+      btn.textContent = isMuted ? off : on;
+      btn.setAttribute('aria-pressed', (!isMuted).toString());
+    }
+    video.muted = video.muted !== false;
+    btn.addEventListener('click', function(){ video.muted = !video.muted; syncLabel(); }, {passive:true});
+    video.addEventListener('volumechange', syncLabel);
+    syncLabel();
+  } catch(e){}
+})();
