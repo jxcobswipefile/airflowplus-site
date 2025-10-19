@@ -639,108 +639,30 @@ window.addEventListener('DOMContentLoaded', () => {
 })();
 
 
-// SECTION: #muteToggle binding (v29.9.10)
-(function(){
-  try{
-    var v=document.querySelector('.hero-video')||document.querySelector('[data-hero-video]');
-    var b=document.getElementById('muteToggle');
-    if(!v||!b)return;
-    function s(){ if(v.muted){ b.textContent='🔇'; b.setAttribute('aria-label','Unmute'); } else { b.textContent='🔊'; b.setAttribute('aria-label','Mute'); } }
-    v.muted=true; s();
-    b.addEventListener('click', function(){ v.muted=!v.muted; s(); }, {passive:true});
-    v.addEventListener('volumechange', s);
-  }catch(e){}
-})();
-
-
-// SECTION: #muteToggle harden (v29.9.11)
+// Hero video mute/unmute — bulletproof (v29.9.13)
 (function(){
   try{
     var video = document.querySelector('.hero-video') || document.querySelector('[data-hero-video]');
     var btn = document.getElementById('muteToggle') || document.querySelector('.mute-btn');
     if(!video || !btn) return;
-
-    function sync(){
-      if(video.muted || video.volume === 0){
-        btn.textContent = '🔇';
-        btn.setAttribute('aria-label','Unmute');
-      }else{
-        btn.textContent = '🔊';
-        btn.setAttribute('aria-label','Mute');
-      }
-    }
-
-    // Default: start muted for autoplay
-    video.muted = true;
-    sync();
-
-    btn.addEventListener('click', function(){
-      try{
-        if(video.muted || video.volume === 0){
-          video.muted = false;
-          if(video.volume === 0) video.volume = 0.5;
-          var p = video.play();
-          if(p && typeof p.catch === 'function'){ p.catch(function(){ /* ignore */ }); }
-        } else {
-          video.muted = true;
-        }
-        sync();
-      }catch(e){}
-    }, {passive:true});
-
-    video.addEventListener('volumechange', sync);
-  }catch(e){}
-})();
-
-
-// SECTION: Hero video mute/unmute — bulletproof (v29.9.12)
-(function(){
-  try{
-    var video = document.querySelector('.hero-video') || document.querySelector('[data-hero-video]');
-    var btn = document.getElementById('muteToggle') || document.querySelector('.mute-btn');
-    if(!video || !btn) return;
-
-    // Ensure baseline for autoplay: start muted
-    video.muted = true;
-    video.setAttribute('playsinline','');
-    video.setAttribute('webkit-playsinline','');
-
-    // Visual state on button
+    video.muted = true; // required for autoplay
+    video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
     function render(){
       var muted = video.muted || video.volume === 0;
-      btn.classList.toggle('is-muted', muted);
-      btn.classList.toggle('is-unmuted', !muted);
+      btn.textContent = muted ? '🔇' : '🔊';
       btn.setAttribute('aria-pressed', (!muted).toString());
       btn.setAttribute('aria-label', muted ? 'Unmute' : 'Mute');
-      btn.title = muted ? 'Unmute' : 'Mute';
-      btn.textContent = muted ? '🔇' : '🔊';
     }
-
-    function unmuteWithNudge(){
-      // Fully unmute and set audible volume
+    function unmute(){
       video.muted = false;
-      if (video.volume === 0) video.volume = 0.5;
-      var p = video.play();
-      if (p && typeof p.catch === 'function') {
-        p.catch(function(){ /* ignore: some browsers require second gesture */ });
-      }
+      if(video.volume === 0) video.volume = 0.5;
+      var p = video.play(); if (p && p.catch) p.catch(function(){});
     }
-
     btn.addEventListener('click', function(){
-      try{
-        if (video.muted || video.volume === 0){
-          unmuteWithNudge();
-        } else {
-          video.muted = true;
-        }
-        render();
-      }catch(e){}
+      if(video.muted || video.volume === 0){ unmute(); } else { video.muted = true; }
+      render();
     }, {passive:true});
-
-    // Keep UI in sync if anything else changes volume
     video.addEventListener('volumechange', render, {passive:true});
-
-    // Initial render
     render();
   }catch(e){}
 })();

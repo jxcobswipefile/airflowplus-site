@@ -1948,65 +1948,7 @@ body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px);
 .savings .save-result{ opacity:1; visibility:visible; }
 
 /* =========================================================
-   SECTION: Promo banner/card styling (v29.9.10)
-   ========================================================= */
-.promo { background:#0b1f33; color:#fff; padding:24px 0; }
-.promo .promo-card{
-  background:#fff;
-  color:#0f172a;
-  border-radius:20px;
-  box-shadow:0 24px 60px rgba(15,23,42,.12);
-  padding:24px 28px;
-  display:grid;
-  grid-template-columns: 1fr auto;
-  gap:16px 24px;
-  align-items:center;
-}
-.promo .badge{
-  display:inline-block;
-  font-weight:700;
-  font-size:12px;
-  letter-spacing:.06em;
-  color:#0a5bd3;
-  background:rgba(10,91,211,.08);
-  border:1px solid rgba(10,91,211,.22);
-  border-radius:999px;
-  padding:6px 10px;
-  margin-bottom:6px;
-}
-.promo .title{ font-size:28px; font-weight:800; margin:6px 0 10px; display:inline-block;}
-.promo .subtitle{ margin:0 0 10px; color:#0f172a; }
-.promo .info-row{
-  display:flex; flex-wrap:wrap; gap:18px;
-  font-size:14px; color:#334155;
-}
-.promo .info-row .dot::before{ content:"•"; margin:0 8px; color:#94a3b8 }
-.promo .cta-row{
-  display:flex; gap:12px; flex-wrap:wrap;
-  justify-content: center;
-}
-.promo .cta-row .btn{ height:40px; padding:0 16px; line-height:40px; }
-.promo .cta-row .btn.btn-primary{ background:#22a3ff; color:#fff; }
-.promo .cta-row .btn.btn-outline{ background:#fff; color:#0b2a3c; border:1px solid rgba(2,32,71,.15); }
-@media (max-width: 960px){
-  .promo .promo-card{ grid-template-columns: 1fr; }
-  .promo .cta-row{ justify-content: center; }
-}
-
-/* Promo CTA centering (v29.9.11) */
-.promo .cta-row{ justify-content: center; }
-
-/* =========================================================
-   Keuzehulp final lock (v29.9.11)
-   Keep card low near border regardless of earlier rules.
-   ========================================================= */
-section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-8%) !important; }
-@media (max-width: 960px){
-  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-6%) !important; }
-}
-
-/* =========================================================
-   SECTION: Promo (client data) v29.9.12
+   SECTION: Promo (client data) v29.9.13
    ========================================================= */
 .promo{ background:#081021; color:#fff; padding:28px 0 34px; }
 .promo .promo-card{
@@ -2027,7 +1969,7 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
 .promo .price-new{ color:#0a5bd3; font-weight:900; font-size:24px; }
 .promo .price-qualifier{ color:#64748b; font-size:14px; }
 
-.promo .brands{ margin:8px 0 10px; gap:10px; }
+.promo .brands{ margin:8px 0 10px; gap:10px; display:flex; flex-wrap:wrap; }
 .promo .brand-chip{
   background:#f1f5f9; color:#0f172a; border:1px solid #e2e8f0; border-radius:999px;
   padding:6px 10px; font-size:14px;
@@ -2049,4 +1991,10 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
 @media (max-width: 1024px){
   .promo .promo-card{ grid-template-columns: 1fr; }
   .promo .promo-right{ align-items:flex-start; }
+}
+
+/* Keuzehulp lock — keep lower placement */
+section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-8%) !important; }
+@media (max-width: 960px){
+  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-6%) !important; }
 }
