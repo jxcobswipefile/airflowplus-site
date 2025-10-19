@@ -553,3 +553,50 @@
 
   els.forEach((el) => io.observe(el));
 })();
+
+/* === Airflow+: thin rotating checkmark ticker ============================== */
+(function () {
+  const raf = window.requestAnimationFrame;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.afp-ticker').forEach(ticker => {
+    const track = ticker.querySelector('.afp-ticker__track');
+    if (!track) return;
+
+    // Duplicate items until we can loop seamlessly
+    const baseItems = Array.from(track.children);
+    const ensureLoopWidth = () => {
+      const target = ticker.clientWidth * 2; // 2x viewport width = safe loop
+      while (track.scrollWidth < target) {
+        baseItems.forEach(n => track.appendChild(n.cloneNode(true)));
+      }
+    };
+    ensureLoopWidth();
+    window.addEventListener('resize', ensureLoopWidth, { passive: true });
+
+    if (prefersReduced) return; // no motion; content still visible
+
+    let lastTs, x = 0, id;
+    const speed = Number(ticker.dataset.speed || 40); // px/s
+    const halfWidth = () => track.scrollWidth / 2;
+
+    const step = (ts) => {
+      if (!lastTs) lastTs = ts;
+      const dt = (ts - lastTs) / 1000;
+      lastTs = ts;
+
+      // move left
+      x -= speed * dt;
+      if (-x > halfWidth()) x += halfWidth();
+      track.style.transform = `translateX(${x}px)`;
+      id = raf(step);
+    };
+
+    const play = () => { ticker.dataset.paused = "false"; lastTs = undefined; id = raf(step); };
+    const pause = () => { ticker.dataset.paused = "true"; if (id) cancelAnimationFrame(id); };
+
+    play();
+    ticker.addEventListener('mouseenter', pause);
+    ticker.addEventListener('mouseleave', play);
+  });
+})();
