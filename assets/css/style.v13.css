@@ -1686,43 +1686,54 @@ label.checkbox input[type="checkbox"]{ inline-size:18px; block-size:18px; }
 .keyword-ticker[data-dir="ltr"] .keyword-track{ animation-name: tt-scroll-right; }
 
 
-/* v29.8.0 — revert-safe, targeted tweaks */
+/* v29.6.3 — ultra-thin trust band */
+.trust-band{ margin: 6px 0 2px; }
+.trust-band .container{ padding: 0; }
+.trust-ticker{ background:#081021 !important; color:#fff !important; border-radius:0; padding:4px 0; }
+.trust-ticker .keyword-track{ display:flex; gap:28px; align-items:center; white-space:nowrap; will-change:transform; }
+.trust-ticker .item{ display:flex; align-items:center; gap:8px; font-size:0.95rem; line-height:1.2; }
+.trust-ticker .item .check{ width:14px; height:14px; border-radius:50%; background:#17c964; position:relative; flex:0 0 14px; }
+.trust-ticker .item .check::after{ content:''; position:absolute; left:4px; top:2px; width:5px; height:8px; border:2px solid #081021; border-top:0; border-left:0; transform:rotate(45deg); }
+@keyframes tt-scroll-right{ from{ transform: translateX(0);} to{ transform: translateX(50%);} }
+.keyword-ticker[data-dir="ltr"] .keyword-track{ animation: tt-scroll-right 28s linear infinite; }
+@media (max-width: 768px){
+  .trust-ticker .keyword-track{ gap:22px; }
+}
 
-/* Thin navy strip, CSS-only marquee */
-.trust-band{ margin: 12px 0 8px; }
-.trust-ticker{ background:#081021; color:#fff; padding:6px 0; overflow:hidden; }
-.trust-ticker .marquee-track{ display:flex; width:max-content; animation: marquee-ltr 28s linear infinite; }
-.trust-ticker .row{ display:inline-flex; gap:32px; align-items:center; margin:0; padding:0 24px; list-style:none; }
-.trust-ticker .item{ display:inline-flex; gap:8px; white-space:nowrap; }
-.trust-ticker .check{ width:14px; height:14px; border-radius:50%; background:#17c964; display:inline-block; position:relative; }
+
+/* v29.6.4 — Position keuzehulp half-over hero on index only */
+.home .hero{ position:relative; }
+.home .hero .kh-card{ position:absolute; left:50%; transform:translate(-50%, -10%); bottom:-22vh; z-index:3; }
+@media (max-width: 992px){
+  .home .hero .kh-card{ position:relative; left:auto; transform:none; bottom:auto; margin-top:16px; }
+}
+
+
+/* v29.6.5 — trust band universal rules */
+.trust-band{ margin: 10px 0 6px; }
+.trust-band .container{ padding: 0; }
+.trust-ticker{ background:#081021 !important; color:#fff !important; border-radius:0; padding:6px 0; }
+.trust-ticker .keyword-track{ display:flex; gap:28px; align-items:center; white-space:nowrap; will-change:transform; }
+.trust-ticker .item{ display:flex; align-items:center; gap:8px; font-size:0.95rem; line-height:1.2; }
+.trust-ticker .item .check{ width:14px; height:14px; border-radius:50%; background:#17c964; position:relative; flex:0 0 14px; }
+.trust-ticker .item .check::after{ content:''; position:absolute; left:4px; top:2px; width:5px; height:8px; border:2px solid #081021; border-top:0; border-left:0; transform:rotate(45deg); }
+/* Fallback movement if JS disabled */
+@keyframes tt-scroll-right{ from{ transform: translateX(0);} to{ transform: translateX(50%);} }
+.keyword-ticker[data-dir="ltr"] .keyword-track{ animation: tt-scroll-right 28s linear infinite; }
+
+
+/* v29.7.0 — CSS-only marquee trust band (ultra-thin, LTR) */
+.trust-band{ margin: 10px 0 6px; }
+.trust-band .container{ padding: 0; }
+.trust-ticker{ background:#081021; color:#fff; border-radius:0; padding:6px 0; overflow:hidden; }
+.trust-ticker .marquee-track{ display:flex; width:max-content; }
+.trust-ticker .row{ display:inline-flex; gap:32px; align-items:center; padding:0 24px; margin:0; list-style:none; }
+.trust-ticker .item{ display:inline-flex; gap:8px; font-size:0.95rem; line-height:1.2; white-space:nowrap; }
+.trust-ticker .check{ width:14px; height:14px; border-radius:50%; background:#17c964; position:relative; flex:0 0 14px; display:inline-block; }
 .trust-ticker .check::after{ content:''; position:absolute; left:4px; top:2px; width:5px; height:8px; border:2px solid #081021; border-top:0; border-left:0; transform:rotate(45deg); }
+.css-marquee .marquee-track{ position:relative; animation: marquee-ltr 28s linear infinite; }
 @keyframes marquee-ltr{ from{ transform: translateX(-50%);} to{ transform: translateX(0);} }
-
-/* Buttons — restore bright brand blue */
-:root{ --afp-blue:#16A1FF; }
-.btn.btn-primary{ background:var(--afp-blue); color:#fff; border-color:transparent; }
-.btn.btn-primary:hover{ filter:brightness(0.96); }
-.btn.btn-outline{ color:var(--afp-blue); border-color:var(--afp-blue); }
-.btn.btn-outline:hover{ background:var(--afp-blue); color:#fff; }
-
-/* Keuzehulp card white (match three white side containers) */
-.section.kh-cta .kh-cta-card{ background:#fff; color:#0f172a; }
-.section.kh-cta .kh-cta-card h2,
-.section.kh-cta .kh-cta-card p,
-.section.kh-cta .kh-cta-card li{ color:#0f172a; }
-.section.kh-cta .kh-cta-card .btn.btn-primary{ background:var(--afp-blue); color:#fff; }
-
-/* Show full hero video on home — remove any dark overlay banners */
-.home .promo-banner{ display:none; }
-.home .hero::before, .home .hero::after{ content:none; display:none; }
-
-/* Diensten: make all sections (except first) same height as first and ensure readable contrast.
-   We scope narrowly to the diensten page to avoid global regressions. */
-body.diensten .section{ padding-top:72px; padding-bottom:72px; }
-body.diensten .section:first-of-type{ padding-top:72px; padding-bottom:72px; }
-body.diensten .section h1, 
-body.diensten .section h2, 
-body.diensten .section h3, 
-body.diensten .section p, 
-body.diensten .section li{ color:#0f172a; }
-body.diensten .section:not(.section--brand-dark):not(.section--deep-dark){ background:#ffffff; }
+@media (max-width: 768px){
+  .trust-ticker{ padding:8px 0; }
+  .trust-ticker .row{ gap:24px; }
+}

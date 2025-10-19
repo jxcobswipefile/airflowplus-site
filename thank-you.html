@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Bedankt • Airflow+</title>
 <link href="assets/img/favicon.png" rel="icon"/>
-<link href="assets/css/style.v13.css?v=29.8.0" rel="stylesheet"/>
+<link href="assets/css/style.v13.css?v=29.6.3" rel="stylesheet"/>
 <meta content="Bedankt voor uw aanvraag bij Airflow+. We nemen zo snel mogelijk contact met u op." name="description"/>
 <style>
     .ty-hero { padding: clamp(3rem, 6vw, 6rem) 0; text-align: center; }
@@ -41,12 +41,25 @@
 <p style="margin-top:16px; opacity:.8;">Referentie: <span id="ty-ref">—</span></p>
 </div>
 </section>
+<section class="section section-navy section-tight trust-band">
+<div class="container">
+<div aria-label="Pluspunten" class="trust-ticker keyword-ticker" data-dir="ltr" data-speed="0.6">
+<div class="keyword-track" role="list">
+<span class="item" role="listitem"><span class="check"></span> Binnen 7 dagen geplaatst</span>
+<span class="item" role="listitem"><span class="check"></span> Gecertificeerde monteurs</span>
+<span class="item" role="listitem"><span class="check"></span> Geen verborgen kosten</span>
+<span class="item" role="listitem"><span class="check"></span> Gratis offerte binnen 24u</span>
+</div>
+</div>
+</div>
+</section>
+
 </main>
 <script>
     const qp = new URLSearchParams(window.location.search);
     const ref = [qp.get('type'), qp.get('source')].filter(Boolean).join(' • ') || 'Airflow+';
     document.getElementById('ty-ref').textContent = ref;
   </script>
-<script defer="" src="assets/js/main.js?v=29.8.0"></script>
+<script defer="" src="assets/js/main.js?v=29.6.3"></script>
 </body>
 </html>

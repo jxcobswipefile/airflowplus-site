@@ -561,7 +561,7 @@
     const track = ticker.querySelector('.keyword-track');
     if(!track) return;
     let pos = 0;
-    const speed = parseFloat(ticker.dataset.speed || "0.5");
+    const speed = parseFloat(ticker.dataset.speed || "0.5"); const dir=(ticker.dataset.dir||'ltr').toLowerCase();
     const dir = (ticker.dataset.dir||'rtl').toLowerCase(); // 'rtl' (default) or 'ltr'
     // duplicate content for infinite loop
     track.innerHTML = track.innerHTML + track.innerHTML;
