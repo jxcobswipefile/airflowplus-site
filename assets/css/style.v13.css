@@ -1946,3 +1946,36 @@ body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px);
 
 /* Ensure result block is visible */
 .savings .save-result{ opacity:1; visibility:visible; }
+
+
+/* =========================================================
+   SECTION: Hero & Keuzehulp overlap (v29.9.5)
+   - Positions the keuzehulp card so it overlaps the hero by ~50%
+   - Adds a subtle dark overlay to reduce poster/video glare
+   ========================================================= */
+.hero-wrap { position: relative; }
+.hero-wrap .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.15); /* slightly darker to reduce whiteness */
+  pointer-events: none;
+}
+
+.overlap-hero-50 {
+  position: relative;
+  z-index: 3;
+  /* Pull the card upward to sit ~half over the bottom border of the hero */
+  margin-top: -15vh; /* tune as needed per design */
+}
+
+@media (max-width: 960px) {
+  .overlap-hero-50 {
+    margin-top: -10vh;
+  }
+}
+
+/* Optional utility for fine-tuning if needed */
+.hero-poster-softer video,
+.hero-poster-softer .hero-video {
+  filter: brightness(0.92) contrast(0.98);
+}

@@ -637,3 +637,45 @@ window.addEventListener('DOMContentLoaded', () => {
     c.classList.add('active');
   }));
 })();
+
+
+// =========================================================
+// SECTION: Hero video mute toggle (v29.9.5)
+// - Looks for [data-hero-video] and [data-hero-mute]
+// - Toggles the `muted` state and updates button label/icon
+// =========================================================
+(function(){
+  try {
+    var video = document.querySelector('[data-hero-video]') || document.querySelector('.hero video');
+    var btn = document.querySelector('[data-hero-mute]') || document.querySelector('.hero-mute, .btn-mute');
+    if (!video || !btn) return;
+
+    // initial sync
+    function syncLabel() {
+      var isMuted = !!video.muted;
+      var label = btn.getAttribute('data-label-muted') || 'Unmute';
+      var label2 = btn.getAttribute('data-label-unmuted') || 'Mute';
+      // If muted, show "Unmute"; if not, show "Mute"
+      btn.textContent = isMuted ? label : label2;
+      btn.setAttribute('aria-pressed', (!isMuted).toString());
+    }
+
+    // If the video is allowed to autoplay muted, ensure muted by default
+    if (typeof video.muted === 'boolean') {
+      video.muted = video.muted !== false; // default true if absent
+    }
+
+    btn.addEventListener('click', function(e){
+      try {
+        video.muted = !video.muted;
+        syncLabel();
+      } catch (err) {}
+    }, { passive: true });
+
+    // Also sync when volume/muted changes (e.g., programmatic)
+    video.addEventListener('volumechange', syncLabel);
+    syncLabel();
+  } catch (e) {
+    // no-op (defensive)
+  }
+})();
