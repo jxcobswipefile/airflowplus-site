@@ -2115,3 +2115,11 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 #svc-airco-grid .list-check{margin-left:0;}
 /* Consistent media figure style */
 .section .media img{display:block;width:100%;height:auto;border-radius:14px;object-fit:cover;}
+
+
+/* === v29.9.29-patch-2: trust strip visual parity with homepage === */
+.trust-band { padding-top: 0; padding-bottom: 0; }
+.trust-band .container { max-width: 100%; padding-left: 0; padding-right: 0; }
+.trust-band .trust-ticker { border-radius: 0; box-shadow: none; margin: 0; }
+.trust-band .trust-ticker .marquee-track { padding: 12px 28px; }
+.trust-band .trust-ticker .item { opacity: 0.95; }
