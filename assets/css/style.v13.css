@@ -2117,9 +2117,59 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .section .media img{display:block;width:100%;height:auto;border-radius:14px;object-fit:cover;}
 
 
-/* === v29.9.29-patch-3: force full-bleed trust strip on diensten === */
-.section.trust-band { padding-left:0 !important; padding-right:0 !important; }
-.trust-band .container { max-width:100% !important; width:100% !important; padding-left:0 !important; padding-right:0 !important; }
-.trust-band .trust-ticker { width:100% !important; max-width:100% !important; margin:0 !important; border-radius:0 !important; box-shadow:none !important; background:#0b1f33 !important; }
-.trust-band .trust-ticker .marquee-track { width:max-content; padding:12px 28px; animation:marquee-ltr 28s linear infinite; }
-.trust-band .trust-ticker .row { display:flex; gap:28px; align-items:center; white-space:nowrap; }
+/* === v29.9.29-patch-4: ticker single-line, compact height, white text === */
+.trust-band { padding-top: 0 !important; padding-bottom: 0 !important; }
+.trust-band .container { max-width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
+
+/* Full-bleed strip, compact */
+.trust-band .trust-ticker {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: #0b1f33 !important;
+  color: #fff !important;
+}
+
+/* Ensure SINGLE ROW (clone sits inline, not below) */
+.trust-band .trust-ticker .marquee-track {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: max-content !important;
+  padding: 8px 22px !important; /* shorter band height */
+  animation: marquee-ltr 26s linear infinite !important;
+  white-space: nowrap !important;
+}
+.trust-band .trust-ticker .row {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  white-space: nowrap !important;
+}
+.trust-band .trust-ticker .item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  font-weight: 600;
+}
+.trust-band .trust-ticker .item .check {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: rgba(23,201,100,.16);
+  box-shadow: 0 0 0 2px rgba(23,201,100,.35) inset;
+  position: relative;
+}
+.trust-band .trust-ticker .item .check:before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 7px; height: 3px;
+  border-left: 2px solid #17c964;
+  border-bottom: 2px solid #17c964;
+  transform: translate(-50%,-60%) rotate(-45deg);
+}
