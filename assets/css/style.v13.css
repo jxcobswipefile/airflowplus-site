@@ -1785,3 +1785,52 @@ body.diensten .section h2, body.diensten .section p, body.diensten .section li{ 
 
 /* Minor: ensure trust band stays thin */
 .trust-ticker{ padding:6px 0 !important; }
+
+
+/* v29.7.4 — UI fixes per 5 screenshots */
+
+/* (1) Remove navy overlay under hero to show full video */
+.home .promo-banner{ display:none !important; }
+.home .hero::before, .home .hero::after{ content:none !important; display:none !important; }
+.home .hero{ background:transparent !important; }
+
+/* (2) Bright blue CTAs */
+:root{ --afp-blue:#16A1FF; }
+.btn.btn-primary, .btn.btn-cta, .btn.primary, .btn.cta-primary{ 
+  background: var(--afp-blue) !important; 
+  color:#fff !important; 
+  border-color: transparent !important; 
+}
+.btn.btn-primary:hover{ filter:brightness(0.95); }
+.btn.btn-outline{ color: var(--afp-blue) !important; border-color: var(--afp-blue) !important; }
+.btn.btn-outline:hover{ background: var(--afp-blue) !important; color:#fff !important; }
+
+/* (3) Keuzehulp card: white background and readable text */
+.section.kh-cta .kh-cta-card{ 
+  background:#ffffff !important; 
+  color:#0f172a !important;
+  box-shadow: 0 20px 50px rgba(10, 37, 64, 0.25);
+}
+.section.kh-cta .kh-cta-card h2,
+.section.kh-cta .kh-cta-card p,
+.section.kh-cta .kh-cta-card li{ color:#0f172a !important; }
+.section.kh-cta .kh-cta-card .btn.btn-primary{ background: var(--afp-blue) !important; color:#fff !important; }
+
+/* (4) "Airconditioning op maat" section back to white (ensure) */
+.section.alt-blue{ background:#ffffff !important; }
+.section.alt-blue h2, .section.alt-blue p, .section.alt-blue li{ color:#0f172a !important; }
+
+/* (5) Diensten page: unify section heights (match first), fix contrast */
+body.diensten .section{ padding-top:80px !important; padding-bottom:80px !important; }
+body.diensten .section:first-of-type{ padding-top:80px !important; padding-bottom:80px !important; }
+body.diensten .section.section--brand,
+body.diensten .section.section--brand-deep,
+body.diensten .section.section--soft,
+body.diensten .section.alt{ background:#ffffff !important; color:#0f172a !important; }
+body.diensten .section h2,
+body.diensten .section p,
+body.diensten .section li{ color:#0f172a !important; }
+
+/* Trust band stays thin */
+.trust-ticker{ padding:6px 0 !important; background:#081021 !important; color:#fff !important; }
+.trust-ticker .row{ list-style:none !important; }
