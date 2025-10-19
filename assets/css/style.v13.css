@@ -33,7 +33,7 @@ h2{font-size:30px;margin:0 0 18px}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:999px;border:1px solid #cfe0ee;font-weight:700;transition:transform .05s,box-shadow .18s}
 .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.10)}
-.btn-primary{background:linear-gradient(180deg,#00a7ef,#008fce);border-color:transparent;color:#fff;box-shadow:0 6px 18px rgba(0,143,206,.28)}
+.btn-primary{background: linear-gradient(180deg, #0b1f33, #0a243d);border-color:transparent;color:#fff;box-shadow:0 6px 18px rgba(0,143,206,.28)}
 .btn-primary:hover{filter:brightness(1.05)}
 .btn-outline{background:#fff;color:var(--primary-700);border-color:#99d4ef}
 .btn-outline:hover{background:#f0f9ff}
@@ -57,11 +57,11 @@ h2{font-size:30px;margin:0 0 18px}
 .hero .cta-row{display:flex;gap:16px;margin-top:24px}
 
 /* -------------------------------- Keuzehulp CTA -------------------------- */
-.kh-cta{background:linear-gradient(180deg,#f7fbff 0%,#ffffff 70%);border-top:1px solid #e6e9ee;padding-top:0;margin-top:0;position:relative;z-index:5}
+.kh-cta{background: linear-gradient(180deg, #0b1f33, #0a243d);border-top:1px solid #e6e9ee;padding-top:0;margin-top:0;position:relative;z-index:5}
 .kh-cta .container.left{display:flex;justify-content:flex-start}
 .kh-cta-card{display:flex;flex-direction:column;gap:12px;align-items:flex-start;justify-content:flex-start;background:#fff;border:1px solid #dbe7ff;border-radius:20px;padding:24px;box-shadow:0 16px 40px rgba(0,93,143,.08)}
 .kh-cta-card.compact.seam{max-width:720px;transform:translateY(-54%)}
-.kh-cta-card.compact.seam.blue{background:linear-gradient(180deg,#0a8fd0 0%, #0a78b0 100%);color:#fff;border-color:rgba(255,255,255,.22);box-shadow:0 28px 70px rgba(0,93,143,.22)}
+.kh-cta-card.compact.seam.blue{background: linear-gradient(180deg, #0b1f33, #0a243d);color:#fff;border-color:rgba(255,255,255,.22);box-shadow:0 28px 70px rgba(0,93,143,.22)}
 .kh-cta-card.compact.seam.blue h2,.kh-cta-card.compact.seam.blue p,.kh-cta-card.compact.seam.blue li{color:#fff}
 .checklist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .checklist.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:6px 0 2px}
@@ -83,8 +83,8 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 .card.service img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:12px}
 
 /* -------------------------- “Airconditioning op maat” --------------------- */
-.maat{background:linear-gradient(180deg,#f7fbff 0%,#ffffff 60%);border-top:1px solid #e6e9ee;border-bottom:1px solid #e6e9ee}
-.maat.invert.simple{background:linear-gradient(180deg,#085786 0%, #073f66 100%);color:#fff}
+.maat{background: linear-gradient(180deg, #0b1f33, #0a243d);border-top:1px solid #e6e9ee;border-bottom:1px solid #e6e9ee}
+.maat.invert.simple{background: linear-gradient(180deg, #0b1f33, #0a243d);color:#fff}
 .maat-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:start}
 .maat-lead{color:#d9ecff;max-width:60ch}
 .maat-points{margin:14px 0 0;padding-left:0;list-style:none;display:grid;gap:8px}
@@ -98,7 +98,7 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 .heat-info .container{width:100%;display:flex;justify-content:center}
 .heat-card{
   max-width:980px;width:min(980px,92%);text-align:center;
-  background:linear-gradient(180deg,#0b1f33 0%, #0a2942 100%);
+  background: linear-gradient(180deg, #0b1f33, #0a243d);
   color:#eaf1ff;border:1px solid rgba(255,255,255,.18);
   border-radius:22px;padding:52px 40px;box-shadow:0 28px 70px rgba(0,0,0,.25)
 }
@@ -131,7 +131,7 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
   box-shadow:0 16px 40px rgba(0,93,143,.08);padding:16px;scroll-snap-align:start;display:flex;flex-direction:column
 }
 .rev-card .head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.rev-card .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(180deg,#eaf6ff,#fff);border:1px solid #dbe7ff}
+.rev-card .avatar{width:38px;height:38px;border-radius:50%;background: linear-gradient(180deg, #0b1f33, #0a243d);border:1px solid #dbe7ff}
 .rev-card .name{font-weight:800;font-size:15px}
 .rev-card p{font-size:15px;line-height:1.55;color:#0f1720;margin:6px 0 0}
 .rev-nav{
@@ -145,12 +145,12 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 /* --------------------------------- CTA ----------------------------------- */
 .cta{padding:64px 0}
 .cta-inner{background:#eef7ff;border:1px solid #dbe7ff;padding:28px;border-radius:16px;text-align:center}
-.cta.blue{background:linear-gradient(180deg,#0a8fd0 0%, #0a78b0 100%);color:#fff}
+.cta.blue{background: linear-gradient(180deg, #0b1f33, #0a243d);color:#fff}
 .cta.blue .cta-inner{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.22)}
 .cta.blue h2,.cta.blue p{color:#fff}
 .cta.blue .btn-outline{background:transparent;color:#fff;border-color:#fff}
 .cta.blue .btn-outline:hover{background:rgba(255,255,255,.12)}
-.cta.alt-dark{background:linear-gradient(180deg,#0a2942 0%, #0b1f33 100%);color:#eaf1ff}
+.cta.alt-dark{background: linear-gradient(180deg, #0b1f33, #0a243d);color:#eaf1ff}
 .cta.alt-dark .cta-inner{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18)}
 .cta.alt-dark h2,.cta.alt-dark p{color:#eaf1ff}
 .cta.alt-dark .btn-outline{color:#fff;border-color:#fff;background:transparent}
@@ -198,7 +198,7 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 /* ========================================================================== */
 
 .savings{
-  background: linear-gradient(180deg, #085786 0%, #073f66 100%);
+  background: linear-gradient(180deg, #0b1f33, #0a243d);
   color:#ffffff;
   border-top:1px solid rgba(255,255,255,.12);
   border-bottom:1px solid rgba(255,255,255,.12);
@@ -308,7 +308,7 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 
 /* Op maat (light theme) refinements inside the reverted section */
 #maat .maat-lead{ color:#445164; }
-#maat .btn-primary{ background:linear-gradient(180deg,#00a7ef,#008fce); color:#fff; border-color:transparent; }
+#maat .btn-primary{ background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; border-color:transparent; }
 #maat .btn-outline{ background:#fff; color:var(--primary-700); border-color:#99d4ef; }
 #maat .btn-outline:hover{ background:#f0f9ff; }
 #maat .mini-card p{ color:#445164; }
@@ -369,7 +369,7 @@ a.card.service:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,93
 /* Keuzehulp v2 skin */
 .khv2-hero{ background:#0b1f33; color:#eaf1ff; padding:40px 0 24px; border-bottom:1px solid rgba(255,255,255,.12); }
 .khv2-hero h1{ margin:0; font-weight:800; line-height:1.1; font-size:44px; }
-.khv2-stage{ background:linear-gradient(180deg,#0b1f33 0%, #0a243d 100%); padding:32px 0 56px; }
+.khv2-stage{ background: linear-gradient(180deg, #0b1f33, #0a243d); padding:32px 0 56px; }
 .khv2-card{
   position:relative; background:#f3f8ff; border:1px solid #dbe7ff; border-radius:20px;
   padding:28px; box-shadow:0 18px 40px rgba(0,93,143,.08); max-width:980px; margin:0 auto; min-height:320px;
@@ -1201,10 +1201,7 @@ select {
   background: var(--brand-50, #f4f8ff);
   color: var(--brand-900, #0a1c3a);
 }
-.section--brand {
-  background: var(--brand-600, #2b6cff);
-  color: #fff;
-}
+.section--brand{background:linear-gradient(180deg,#0b1f33,#0a243d);color:#fff}
 .section .container {
   max-width: 1200px;
   margin-inline: auto;
@@ -1271,78 +1268,472 @@ html.is-fading body {
   .reveal { transition: none; transform: none; opacity: 1; }
 }
 
-/* === Airflow+ thin rotating checkmark ticker ============================== */
-.afp-ticker {
-  --ticker-bg: #091e31;           /* dark navy (matches your dark card) */
-  --ticker-grad: linear-gradient(180deg,#0a2136 0%,#0e2b45 100%);
-  --ticker-fg: #eaf6ff;
-  --ticker-shadow: 0 24px 60px rgba(0,0,0,.25);
-  --ticker-height: 42px;
-  --ticker-gap: 28px;
-  --ticker-speed: 40;             /* px / s; can override via data-speed on the element */
-  position: relative;
-  height: var(--ticker-height);
-  border-radius: 999px;
-  color: var(--ticker-fg);
-  background: var(--ticker-grad, var(--ticker-bg));
-  box-shadow: var(--ticker-shadow);
+
+
+/* ==============================
+   17) Feature strip (checkmarks)
+   ============================== */
+.feature-strip {
+  --bg: var(--brand-50, #f4f8ff);
+  background: var(--bg);
+  border-top: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
   overflow: hidden;
 }
-
-.afp-ticker__track {
-  display: inline-flex;
-  gap: var(--ticker-gap);
-  align-items: center;
+.feature-strip__inner {
+  display: flex;
+  gap: 20px;
+  padding: 12px 0;
   white-space: nowrap;
-  will-change: transform;
-  padding-inline: var(--ticker-gap);
+  animation: fs-marquee 18s linear infinite;
 }
-
-.afp-ticker__item {
+.feature-pill {
   display: inline-flex;
   align-items: center;
-  font-weight: 600;
-  letter-spacing: .2px;
-  opacity: .96;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 999px;
+  padding: 8px 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  font-weight: 500;
+}
+.feature-pill::before {
+  content: "✓";
+  font-weight: 700;
+}
+@keyframes fs-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-.afp-ticker__item .afp-i-check {
-  width: 18px; height: 18px;
-  display: inline-block;
-  margin-right: 10px;
-  border-radius: 50%;
-  background: #12b76a;           /* green */
-  position: relative;
-  box-shadow: 0 0 0 3px rgba(18,183,106,.18) inset;
-}
-.afp-ticker__item .afp-i-check::after {
-  content: "";
-  position: absolute;
-  left: 5px; top: 2px;
-  width: 6px; height: 10px;
-  border-right: 2px solid #fff;
-  border-bottom: 2px solid #fff;
-  transform: rotate(45deg);
-}
+/* Pause animation on hover for accessibility */
+.feature-strip:hover .feature-strip__inner { animation-play-state: paused; }
 
-/* Pause on hover */
-.afp-ticker[data-paused="true"] .afp-ticker__track { transition: none; }
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .afp-ticker__track { transform: none !important; }
+/* ==============================
+   18) Promo strip (attention)
+   ============================== */
+.promo-strip {
+  background: #ffed8a; /* bright */
+  color: #0a1c3a;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.promo-strip .container {
+  display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;
+}
+.promo-strip .badge {
+  background: #0a1c3a; color: #fff; border-radius: 999px; padding: 6px 10px; font-size: .9rem;
 }
 
-/* === Certs dark band ====================================================== */
-.band { padding: clamp(40px, 7vw, 80px) 0; }
-.band--dark {
+/* ==============================
+   19) Service grid / cards
+   ============================== */
+.service-grid {
+  display: grid; gap: 18px;
+  grid-template-columns: repeat(12, 1fr);
+}
+.service-card {
+  grid-column: span 6;
+  background: #fff; border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px; padding: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+.service-card h3 { margin: 0 0 .35rem; }
+.service-card p { margin: 0 0 .75rem; opacity: .9; }
+.service-card .btn { margin-top: 4px; }
+@media (max-width: 900px) { .service-card { grid-column: span 12; } }
+
+/* ==============================
+   20) About timeline / badges
+   ============================== */
+.badges { display:flex; flex-wrap:wrap; gap:8px; margin: 8px 0 0; }
+.badge {
+  display:inline-flex; align-items:center; padding:6px 10px;
+  border-radius:999px; background: #eef3ff; color:#0a1c3a; border:1px solid rgba(0,0,0,0.06);
+}
+.timeline { display:grid; gap:16px; margin-top: 10px; }
+.timeline .item { background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px; }
+
+
+
+/* ==============================
+   21) Page polish helpers
+   ============================== */
+.kicker { display:inline-block; font-size:.9rem; letter-spacing:.04em; text-transform:uppercase; opacity:.8; margin-bottom:.25rem; }
+.lead { font-size: clamp(1.05rem, 1.2vw, 1.2rem); opacity:.95; }
+.twocol { display:grid; grid-template-columns: 1.2fr 1fr; gap: clamp(16px, 3vw, 28px); align-items: start; }
+@media (max-width: 900px) { .twocol { grid-template-columns: 1fr; } }
+.figure-card { background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:16px; padding:14px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+.fig-muted { font-size:.9rem; opacity:.7; margin-top:.25rem; }
+.list-check { list-style:none; padding:0; margin:0; }
+.list-check li { padding-left:1.4rem; position:relative; margin:.4rem 0; }
+.list-check li::before { content:"✓"; position:absolute; left:0; top:0; font-weight:700; }
+.section .eyebrow { font-size:.8rem; letter-spacing:.06em; text-transform:uppercase; opacity:.7; margin-bottom:.2rem; }
+
+
+
+/* ==============================
+   22) Theme accents & gradients
+   ============================== */
+.text-brand { color: var(--brand-600, #2b6cff); }
+.text-gradient {
+  background: linear-gradient(90deg, #2b6cff, #2ab5f2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.section--brand-deep{background: linear-gradient(180deg, #0b1f33, #0a243d);color:#fff;}
+.section--brand-deep .optin { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); }
+.section--brand-deep a.btn.btn--ghost { border-color:#fff; color:#fff; }
+.h-accent strong { color: var(--brand-600, #2b6cff); }
+
+/* ==============================
+   23) Promo banner (lower on page)
+   ============================== */
+.promo-banner {
+  background: linear-gradient(135deg, #0b1f33, #2b6cff);
   color: #fff;
-  background: radial-gradient(120% 140% at 20% 0%, #0a2136 0%, #0e2b45 55%, #091e31 100%);
+  padding: clamp(16px, 3vw, 22px) 0;
 }
-.band--dark h2,
-.band--dark p { color: #fff; }
-.band--dark .chip { background: rgba(255,255,255,.08); color:#eaf6ff; border-color: rgba(255,255,255,.18); }
-.band--dark .chip:hover { background: rgba(255,255,255,.12); }
+.promo-banner .card {
+  max-width: 1100px; margin: 0 auto; padding: 16px;
+  display: grid; gap: 14px; grid-template-columns: 1.5fr 1fr;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+@media (max-width: 900px) { .promo-banner .card { grid-template-columns: 1fr; } }
+.promo-banner .meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
+.promo-banner .badge { background: rgba(255,255,255,0.15); color:#fff; border-radius:999px; padding:6px 10px; font-size:.9rem; }
+.promo-banner .btn { background:#fff; color:#0a1c3a; }
+.promo-banner .btn.btn--ghost { background: transparent; border:1px solid #fff; color:#fff; }
 
-/* Tighten spacing on Over-ons page body so sections connect better */
-.section--tight { margin-block: clamp(28px, 5vw, 48px); }
+/* ==============================
+   24) Hero overlap for keuzehulp preview
+   ============================== */
+.hero-overlap { margin-top: clamp(-90px, -12vw, -140px); position: relative; z-index: 2; }
+@media (max-width: 768px) { .hero-overlap { margin-top: 0; } }
+
+
+
+/* ==============================
+   25) Alternating service bands
+   ============================== */
+.svc{ display:grid; grid-template-columns: 1.1fr 1fr; gap: clamp(18px, 4vw, 34px); align-items:center; }
+.svc .svc__img{ border-radius:18px; background:linear-gradient(135deg,#0b1f33 0%, #0a243d 100%); min-height:220px; box-shadow:0 20px 60px rgba(0,93,143,.18); border:1px solid rgba(255,255,255,.15); }
+.svc .svc__img.placeholder{ display:flex; align-items:center; justify-content:center; color:#eaf1ff; opacity:.9; font-weight:600; letter-spacing:.4px; }
+.svc .svc__body .kicker{ margin-bottom:.4rem; }
+.svc .svc__body h2{ margin:0 0 .5rem; }
+.svc .svc__body .lead{ margin:0 0 .65rem; }
+.svc.flip{ grid-template-columns: 1fr 1.1fr; }
+@media (max-width: 900px){ .svc, .svc.flip{ grid-template-columns: 1fr; } }
+
+/* Airco page feature grid */
+.features{ display:grid; grid-template-columns: repeat(12,1fr); gap:16px; }
+.feature-card{ grid-column: span 4; background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:16px; padding:14px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+@media (max-width: 900px){ .feature-card{ grid-column: span 12; } }
+.feature-card h3{ margin:0 0 .35rem; }
+.feature-card p{ margin:0; opacity:.92; }
+
+
+
+/* ==============================
+   26) Dark card + checks (homepage style)
+   ============================== */
+.card-dark {
+  background: linear-gradient(180deg, #0b1f33, #0a243d);
+  color: #fff;
+  border-radius: 26px;
+  box-shadow: 0 40px 80px rgba(0,0,0,.25);
+  padding: clamp(18px,3vw,28px);
+  border: 1px solid rgba(255,255,255,.12);
+}
+.card-dark .btn { background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; }
+.card-dark .btn.btn--ghost { background: transparent; border:1px solid #fff; color:#fff; }
+.check-row { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin: 12px 0 6px; opacity:.98; }
+.check-row .check { display:inline-flex; align-items:center; gap:8px; }
+.check-row .check::before { content:"✓"; color: #3fe086; font-weight: 800; }
+
+/* ==============================
+   27) Refined grids and media placeholders
+   ============================== */
+.grid-2 { display:grid; grid-template-columns: 1.1fr 1fr; gap: clamp(18px,4vw,34px); align-items:center; }
+.grid-3 { display:grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px,2.5vw,18px); }
+@media (max-width: 960px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } }
+.media-ph { min-height: 260px; border-radius: 24px; background: linear-gradient(135deg, #0b1f33, #0a243d); 
+            box-shadow: 0 30px 70px rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.14);
+            display:flex; align-items:center; justify-content:center; color:#eaf1ff; font-weight:700; letter-spacing:.3px; }
+.feature-mini { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:16px; padding:14px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+.feature-mini h3 { margin:0 0 .35rem; }
+
+/* ==============================
+   28) Heading blues (match homepage)
+   ============================== */
+.h-accent strong, .text-brand { color: #2b6cff; }
+.text-gradient { background: linear-gradient(90deg, #2b6cff, #2ab5f2); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.section--brand-deep { background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; }
+
+
+
+/* ==============================
+   29) Layout refinements
+   ============================== */
+.container.container-narrow { max-width: 980px; }
+.section--soft { background: linear-gradient(180deg, rgba(13,36,61,.03), rgba(13,36,61,.05)); }
+.hr-soft { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent); border:0; margin: 10px 0 0; }
+
+/* Card-dark tightened */
+.card-dark {
+  background: linear-gradient(180deg, #0b1f33, #0a243d);
+  color: #fff;
+  border-radius: 28px;
+  box-shadow: 0 48px 110px rgba(0,0,0,.35);
+  padding: clamp(22px,3.2vw,34px);
+  border: 1px solid rgba(255,255,255,.14);
+}
+.card-dark h2 { margin: 0 0 .35rem; }
+.card-dark .lead { opacity:.95; }
+.card-dark .actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top: 12px; }
+
+/* Checks row a bit bigger */
+.check-row { display:flex; flex-wrap:wrap; gap:18px; justify-content:center; margin: 14px 0 8px; }
+.check-row .check{ display:inline-flex; align-items:center; gap:8px; font-weight:600; }
+.check-row .check::before{ content:"✓"; color:#3fe086; font-weight:900; }
+
+/* Media placeholders spacing */
+.media-ph { min-height: 300px; border-radius: 26px; }
+
+
+
+/* 30) Dark card polish: visible actions + bigger checks */
+.card-dark .btn, .card-dark .btn:visited { color:#fff !important; opacity:1 !important; }
+.card-dark .btn--ghost { background: rgba(255,255,255,0.06) !important; border:1px solid rgba(255,255,255,.5) !important; }
+.card-dark .btn--ghost:hover { background: rgba(255,255,255,0.14) !important; border-color:#fff !important; }
+.card-dark .btn:hover { transform: translateY(-1px); }
+.check-row .check { font-size: 16px; letter-spacing:.2px; }
+.check-row .check::before { font-size: 20px; line-height: 1; transform: translateY(-2px); }
+.card-dark .lead { opacity:.96; }
+.card-dark .meta { font-size: 12.5px; opacity: .75; margin-top: 6px; }
+.section--soft { background: linear-gradient(180deg, rgba(11,31,51,.03), rgba(10,36,61,.06)); }
+.feature-mini { transition: transform .2s ease, box-shadow .2s ease; }
+.feature-mini:hover { transform: translateY(-2px); box-shadow:0 14px 34px rgba(0,0,0,.08); }
+
+/* 31) Page polish */
+.spaced-y { margin: clamp(28px,6vw,88px) 0; }
+.section-divider { height:1px; border:0; background:linear-gradient(90deg, transparent, rgba(0,0,0,.12), transparent); margin: clamp(18px,4vw,36px) 0; }
+.feature-mini { background: #fff; border:1px solid rgba(0,0,0,.06); border-radius:16px; padding:16px; box-shadow:0 12px 28px rgba(0,0,0,.05); }
+.section.alt { background: linear-gradient(180deg, rgba(11,31,51,.03), rgba(10,36,61,.06)); }
+.section.alt-dark { background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; }
+.section.alt-dark .feature-mini { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.16); color:#eaf1ff; }
+.section.alt-dark h2, .section.alt-dark h3 { color:#fff; }
+.text-brand { color:#2b6cff; }
+
+/* --- Keyword Ticker --- */
+.keyword-ticker{background:#0b1f33;color:#eaf1ff;border-radius:14px;padding:8px 0;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.25);margin:18px 0}
+.keyword-ticker .keyword-track{display:flex;gap:24px;white-space:nowrap;will-change:transform;align-items:center}
+.keyword-ticker .item{display:flex;align-items:center;gap:8px;opacity:.95}
+.keyword-ticker .item .check{width:16px;height:16px;border-radius:50%;background:#17c964;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(23,201,100,.35) inset}
+.keyword-ticker .item .check:before{content:"";width:8px;height:8px;border:2px solid #fff;border-top:0;border-left:0;transform:rotate(45deg);display:block;margin-top:-2px}
+/* Comfort card spacing tightening */
+.home-comfort-tight{margin-top:32px!important;margin-bottom:36px!important}
+/* Keuzehulp overlap tweak */
+.khv2-overlap{transform:translateY(-35%);}
+@media (max-width: 840px){
+  .khv2-overlap{transform:translateY(-20%);}
+}
+/* Agreement checkbox inline */
+.agree-inline{display:flex;align-items:center;gap:10px}
+.agree-inline input[type="checkbox"]{position:relative;top:0;transform:none;margin:0}
+
+
+/* ==========================================================================
+   SECTION: Helper utilities added in v29 (documented)
+   - .section-navy : dark-navy background section wrapper
+   - .section-tight: reduced vertical padding for tighter flow
+   - .trust-ticker : thin auto-scrolling checkmark strip (uses existing .keyword-ticker JS)
+   - .align-right  : right-align text within grid column
+   - .agree-inline : inline consent label next to checkbox
+   ========================================================================== */
+.section-navy{ background: linear-gradient(180deg, #0b1f33, #0a243d); color:#eaf1ff; }
+.section-navy h2, .section-navy h3, .section-navy p, .section-navy li{ color:#eaf1ff; }
+.section-tight{ padding-top: clamp(16px,3.2vw,28px) !important; padding-bottom: clamp(16px,3.2vw,28px) !important; }
+.align-right{ text-align:right; }
+.align-right .list-check{ margin-left:auto; }
+.trust-ticker{ background:#0b1f33;color:#eaf1ff;border-radius:12px;padding:10px 12px; overflow:hidden; box-shadow:0 8px 28px rgba(0,0,0,.25); }
+.trust-ticker .keyword-track{ display:flex; gap:24px; white-space:nowrap; will-change:transform; align-items:center; }
+.trust-ticker .item{ display:flex; align-items:center; gap:8px; opacity:.95; }
+.trust-ticker .item .check{ width:16px;height:16px;border-radius:50%; background:#18c964; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px rgba(23,201,100,.35) inset; }
+.trust-ticker .item .check:before{ content:""; width:8px;height:8px;border-left:2px solid #0b1f33;border-bottom:2px solid #0b1f33; transform:rotate(-45deg); display:block; }
+label.checkbox{ display:flex; align-items:center; gap:8px; }
+label.checkbox input[type="checkbox"]{ inline-size:18px; block-size:18px; }
+.agree-inline{ display:inline; }
+@media (max-width:768px){
+  .align-right{ text-align:left; }
+}
+/* Tighten comfort card vertical space slightly */
+.heat-info{ min-height:48vh; }
+
+
+/* v29.1: Contact form actions & consent alignment */
+#contact .cta-row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:16px; }
+#contact .terms{ margin-top:6px; }
+#contact label.checkbox{ gap:10px; line-height:1.3; }
+#contact label.checkbox input[type="checkbox"]{ transform: translateY(1px); }
+
+
+/* v29.1: Hero overlap & comfort spacing */
+.hero-overlap{ margin-top: clamp(-220px, -22vw, -320px); position: relative; z-index: 3; }
+.heat-info{ padding-top: clamp(12px,3vw,24px); padding-bottom: clamp(12px,3vw,24px); min-height: auto; }
+
+/* v29.2 contact fixes */
+#contact .form-grid{ row-gap: 14px; }
+#contact .field.full.terms{ margin-top: 6px; }
+#contact label.checkbox{ display:flex; align-items:center; gap:10px; font-weight:500; }
+#contact label.checkbox input[type="checkbox"]{ width:18px; height:18px; }
+#contact .cta-row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:flex-start; margin-top:14px; }
+
+/* v29.2 index overlap */
+.hero-overlap{ margin-top: -26vh !important; z-index: 3; }
+@media (max-width: 768px){ .hero-overlap{ margin-top: 0 !important; } }
+.heat-info{ padding-top: 8px !important; padding-bottom: 24px !important; min-height: auto !important; }
+
+/* v29.3 contact single-focus fix */
+#contact .form-grid{ row-gap:14px; }
+#contact .field.full.terms{ margin-top:8px; }
+#contact label.checkbox{ display:inline-flex; align-items:center; gap:10px; }
+#contact label.checkbox input[type="checkbox"]{ width:18px; height:18px; }
+#contact .agree-inline{ display:inline; }
+#contact .contact-actions{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:14px; }
+
+/* v29.3.1 contact checkbox inline hard fix */
+#contact .field.full.terms label.checkbox{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:10px !important;
+  width:auto !important;
+}
+#contact .field.full.terms label.checkbox > span{
+  flex:0 0 auto !important;
+  display:inline !important;
+  margin:0 !important;
+}
+#contact .field.full.terms label.checkbox > input[type="checkbox"]{
+  flex:0 0 auto !important;
+  margin:0 !important;
+  position:static !important;
+  transform:none !important;
+}
+
+/* v29.3.2 contact consent-row grid (robust) */
+#contact .terms .consent-row{
+  display:inline-grid;
+  grid-auto-flow:column;
+  align-items:center;
+  gap:10px;
+}
+#contact .terms .consent-row input[type="checkbox"]{
+  width:18px; height:18px; margin:0;
+}
+#contact .terms .consent-row label{
+  margin:0; display:inline; font-weight:600;
+}
+
+/* v29.5 trust-ticker */
+.section-navy{background:#081021;color:#fff;}
+.section-navy a.btn{background:#0091ff;color:#fff;border:none;}
+.section-tight{padding-top:28px;padding-bottom:28px;}
+.trust-ticker{overflow:hidden;background:#081021;border-radius:12px;padding:10px 0;}
+.trust-ticker .keyword-track{display:flex;gap:40px;white-space:nowrap;will-change:transform;animation:tt-scroll 25s linear infinite;}
+.trust-ticker .item{display:inline-flex;align-items:center;gap:10px;color:#fff;opacity:.95;font-weight:500;}
+.trust-ticker .check::before{content:"✓";font-weight:700;display:inline-block;}
+.trust-ticker .check{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#0e1a30;border:1px solid #1c2a46;margin-right:2px;}
+.trust-ticker .check::before{color:#22c55e;line-height:1;}
+@keyframes tt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (max-width: 768px){
+  .trust-ticker .keyword-track{gap:28px;animation-duration:20s;}
+}
+
+/* v29.5.3 trust-ticker */
+.section-navy{background:#081021;color:#fff;}
+.section-tight{padding-top:28px;padding-bottom:28px;}
+.trust-ticker{overflow:hidden;background:#081021;border-radius:12px;padding:10px 0;}
+.trust-ticker .keyword-track{display:inline-flex;gap:40px;white-space:nowrap;will-change:transform;animation:tt-scroll 24s linear infinite;}
+.trust-ticker .item{display:inline-flex;align-items:center;gap:10px;color:#fff;opacity:.95;font-weight:500;padding:0 6px;}
+.trust-ticker .check{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#0e1a30;border:1px solid #1c2a46;}
+.trust-ticker .check::before{content:"✓";color:#22c55e;font-weight:800;line-height:1;}
+@keyframes tt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (max-width:768px){.trust-ticker .keyword-track{gap:28px;animation-duration:18s;}}
+
+
+/* === v29.6: Trust ticker hardening & color lock === */
+.trust-ticker{background:#081021 !important;color:#ffffff !important;overflow:hidden;border-radius:12px;padding:10px 0;}
+.trust-ticker .keyword-track{display:flex;gap:40px;align-items:center;white-space:nowrap;will-change:transform;padding:6px 0;}
+.trust-ticker .item{display:flex;align-items:center;gap:10px;font-weight:500;}
+.trust-ticker .item .check{display:inline-block;width:16px;height:16px;border-radius:50%;background:#17c964;box-shadow:0 0 0 2px rgba(23,201,100,.32) inset;position:relative;}
+.trust-ticker .item .check::after{content:'';position:absolute;left:4px;top:2px;width:6px;height:10px;border:2px solid #081021;border-top:0;border-left:0;transform:rotate(45deg);}
+@keyframes tt-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* Fallback CSS animation if JS not running */
+.keyword-ticker .keyword-track{animation:tt-scroll 28s linear infinite;}
+@media (max-width:768px){
+  .keyword-ticker .keyword-track{gap:28px;animation-duration:22s;}
+}
+
+
+/* v29.6.1 — trust-band section + LTR motion */
+.trust-band{ margin: 18px 0 12px; }
+@keyframes tt-scroll-right{ from{ transform: translateX(0);} to{ transform: translateX(50%);} }
+.keyword-ticker[data-dir="ltr"] .keyword-track{ animation-name: tt-scroll-right; }
+
+
+/* v29.6.3 — ultra-thin trust band */
+.trust-band{ margin: 6px 0 2px; }
+.trust-band .container{ padding: 0; }
+.trust-ticker{ background:#081021 !important; color:#fff !important; border-radius:0; padding:4px 0; }
+.trust-ticker .keyword-track{ display:flex; gap:28px; align-items:center; white-space:nowrap; will-change:transform; }
+.trust-ticker .item{ display:flex; align-items:center; gap:8px; font-size:0.95rem; line-height:1.2; }
+.trust-ticker .item .check{ width:14px; height:14px; border-radius:50%; background:#17c964; position:relative; flex:0 0 14px; }
+.trust-ticker .item .check::after{ content:''; position:absolute; left:4px; top:2px; width:5px; height:8px; border:2px solid #081021; border-top:0; border-left:0; transform:rotate(45deg); }
+@keyframes tt-scroll-right{ from{ transform: translateX(0);} to{ transform: translateX(50%);} }
+.keyword-ticker[data-dir="ltr"] .keyword-track{ animation: tt-scroll-right 28s linear infinite; }
+@media (max-width: 768px){
+  .trust-ticker .keyword-track{ gap:22px; }
+}
+
+
+/* v29.6.4 — Position keuzehulp half-over hero on index only */
+.home .hero{ position:relative; }
+.home .hero .kh-card{ position:absolute; left:50%; transform:translate(-50%, -10%); bottom:-22vh; z-index:3; }
+@media (max-width: 992px){
+  .home .hero .kh-card{ position:relative; left:auto; transform:none; bottom:auto; margin-top:16px; }
+}
+
+
+/* v29.6.5 — trust band universal rules */
+.trust-band{ margin: 10px 0 6px; }
+.trust-band .container{ padding: 0; }
+.trust-ticker{ background:#081021 !important; color:#fff !important; border-radius:0; padding:6px 0; }
+.trust-ticker .keyword-track{ display:flex; gap:28px; align-items:center; white-space:nowrap; will-change:transform; }
+.trust-ticker .item{ display:flex; align-items:center; gap:8px; font-size:0.95rem; line-height:1.2; }
+.trust-ticker .item .check{ width:14px; height:14px; border-radius:50%; background:#17c964; position:relative; flex:0 0 14px; }
+.trust-ticker .item .check::after{ content:''; position:absolute; left:4px; top:2px; width:5px; height:8px; border:2px solid #081021; border-top:0; border-left:0; transform:rotate(45deg); }
+/* Fallback movement if JS disabled */
+@keyframes tt-scroll-right{ from{ transform: translateX(0);} to{ transform: translateX(50%);} }
+.keyword-ticker[data-dir="ltr"] .keyword-track{ animation: tt-scroll-right 28s linear infinite; }
+
+
+/* v29.7.0 — CSS-only marquee trust band (ultra-thin, LTR) */
+.trust-band{ margin: 10px 0 6px; }
+.trust-band .container{ padding: 0; }
+.trust-ticker{ background:#081021; color:#fff; border-radius:0; padding:6px 0; overflow:hidden; }
+.trust-ticker .marquee-track{ display:flex; width:max-content; }
+.trust-ticker .row{ display:inline-flex; gap:32px; align-items:center; padding:0 24px; margin:0; list-style:none; }
+.trust-ticker .item{ display:inline-flex; gap:8px; font-size:0.95rem; line-height:1.2; white-space:nowrap; }
+.trust-ticker .check{ width:14px; height:14px; border-radius:50%; background:#17c964; position:relative; flex:0 0 14px; display:inline-block; }
+.trust-ticker .check::after{ content:''; position:absolute; left:4px; top:2px; width:5px; height:8px; border:2px solid #081021; border-top:0; border-left:0; transform:rotate(45deg); }
+.css-marquee .marquee-track{ position:relative; animation: marquee-ltr 28s linear infinite; }
+@keyframes marquee-ltr{ from{ transform: translateX(-50%);} to{ transform: translateX(0);} }
+@media (max-width: 768px){
+  .trust-ticker{ padding:8px 0; }
+  .trust-ticker .row{ gap:24px; }
+}
