@@ -1913,3 +1913,25 @@ body.home section.kh-cta.overlap.hero-overlap{ margin-top: clamp(-120px, -20vh, 
 
 /* Keuzehulp card outline */
 .kh-cta-card{ box-shadow: 0 28px 70px rgba(8,16,33,.35), 0 0 0 2px rgba(255,255,255,.6) inset; }
+
+
+/* v29.9.3 — revert Keuzehulp page container to white */
+.kh-card.khv2-card{
+  background:#ffffff !important;
+  color:#0f172a !important;
+  box-shadow: 0 24px 60px rgba(8,16,33,.18) !important;
+}
+.kh-card.khv2-card h1,
+.kh-card.khv2-card h2,
+.kh-card.khv2-card p,
+.kh-card.khv2-card li{ color:#0f172a !important; }
+.kh-card.khv2-card .btn.btn-primary{
+  background:#16A1FF !important;
+  color:#ffffff !important;
+  border-color: transparent !important;
+}
+.kh-card.khv2-card .btn.btn-outline{
+  background:#ffffff !important;
+  color:#0f172a !important;
+  border:1.5px solid rgba(8,16,33,.18) !important;
+}
