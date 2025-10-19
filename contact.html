@@ -70,17 +70,21 @@
 <label for="cf-message">Bericht</label>
 <textarea id="cf-message" name="message" placeholder="Vertel kort wat je zoekt (ruimtes, type woning, gewenste periode)..." required="" rows="6"></textarea>
 <div class="error" data-err="message"></div>
+<div class="field full terms">
+  <label class="checkbox">
+    <input id="cf-consent" name="consent" type="checkbox" required />
+    <span class="agree-inline">Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</span>
+  </label>
+  <div class="error" data-err="consent"></div>
 </div>
-<div class="field full terms"><label class="checkbox"><input id="cf-consent" name="consent" type="checkbox" required /><span>Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</span></label><div class="error" data-err="consent"></div></div></div></div>
+
+<div class="cta-row contact-actions">
+  <button class="btn btn-primary" type="submit">Versturen</button>
+  <a class="btn btn-outline" href="tel:+31100000000">Bel direct</a>
 </div>
-<!-- Hidden subject that shows up in Formspree emails -->
-<input name="_subject" type="hidden" value="Nieuwe aanvraag via Airflow+"/>
-<div class="cta-row">
-<button class="btn btn-primary" type="submit">Versturen</button>
-<a class="btn btn-outline" href="tel:+31100000000">Bel direct</a>
-</div>
+
 <!-- Success / error inline feedback (JS fills these) -->
-<div aria-live="polite" class="form-status"></div>
+<div class="form-status" aria-live="polite"></div>
 </form>
 </div>
 </section>
