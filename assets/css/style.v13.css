@@ -1864,3 +1864,14 @@ body.diensten .media-ph, body.diensten .image-card, body.diensten .img-box{
 
 /* Trust band thin */
 .trust-ticker{ padding:6px 0 !important; }
+
+
+/* === CSS-only patch on top of REV3 === */
+:root{ --afp-blue:#16A1FF; }
+/* Homepage only: bright blue KH card (keuzehulp) */
+body.home section.kh-cta .kh-cta-card{ background:var(--afp-blue) !important; color:#ffffff !important; }
+body.home section.kh-cta .kh-cta-card h2,
+body.home section.kh-cta .kh-cta-card p,
+body.home section.kh-cta .kh-cta-card li{ color:#ffffff !important; }
+/* Diensten final CTA heading white when section has .cta-light */
+body.diensten section.cta-light h2{ color:#ffffff !important; }
