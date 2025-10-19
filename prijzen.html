@@ -10,7 +10,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <!-- Use the new themed CSS -->
-<link href="assets/css/style.v13b.css?v=29.7.2" rel="stylesheet"/>
+<link href="assets/css/style.v13.css?v=29.7.3" rel="stylesheet"/>
 <!-- Your script (keep your filename; example shown) -->
 <style id="prijzen-inline-polish">
 /* Prijzen page polish */
@@ -38,7 +38,18 @@
 #prijzen-scope .section{padding-top:38px;padding-bottom:38px}
 #prijzen-scope .card-dark{margin:22px auto 20px auto}
 #prijzen-scope .price-grid{margin-top:12px}
-</style></head><body>
+</style>
+<style id="critical-v2973">
+:root{--afp-blue:#16A1FF}
+.btn.btn-primary{background:var(--afp-blue);color:#fff;border-color:transparent}
+.trust-ticker{background:#081021;color:#fff;padding:6px 0;overflow:hidden}
+.trust-ticker .row{list-style:none;margin:0;padding:0;display:inline-flex;gap:32px}
+.trust-ticker .item{list-style:none;white-space:nowrap;display:inline-flex;gap:8px}
+.trust-ticker .check{width:14px;height:14px;border-radius:50%;background:#17c964;display:inline-block;position:relative}
+.trust-ticker .check::after{content:'';position:absolute;left:4px;top:2px;width:5px;height:8px;border:2px solid #081021;border-top:0;border-left:0;transform:rotate(45deg)}
+</style>
+
+</head><body>
 <div class="topbar">
 <div class="container topbar-inner">
 <span>Gecertificeerde airco &amp; warmtepomp installateur</span>
@@ -167,5 +178,5 @@
 </div>
 <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
 </footer>
-<script src="assets/js/main.b.js?v=29.7.2"></script>
+<script src="assets/js/main.js?v=29.7.3"></script>
 </body></html>
