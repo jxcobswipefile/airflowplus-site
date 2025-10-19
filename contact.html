@@ -10,9 +10,31 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <!-- Use the new themed CSS -->
-<link href="assets/css/style.v13.css?v=v18" rel="stylesheet"/>
+<link href="assets/css/style.v13.css?v29.3.2" rel="stylesheet"/>
 <!-- Your script (keep your filename; example shown) -->
-<script defer="" src="assets/js/main.js?v=13"></script>
+<script defer="" src="assets/js/main.js?v29.3.2"></script>
+
+<!-- TEMP override start -->
+<style>
+/* TEMP override for consent row; remove once deploy is healthy */
+#contact .field.full.terms label.checkbox {
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:10px !important;
+}
+#contact .field.full.terms label.checkbox > input[type="checkbox"] {
+  margin:0 !important;
+  position:static !important;
+  transform:none !important;
+}
+#contact .field.full.terms label.checkbox > span {
+  display:inline !important;
+  margin:0 !important;
+  white-space:normal !important;
+}
+</style>
+<!-- TEMP override end -->
+
 </head><body>
 <div class="topbar">
 <div class="container topbar-inner">
@@ -71,18 +93,12 @@
 <textarea id="cf-message" name="message" placeholder="Vertel kort wat je zoekt (ruimtes, type woning, gewenste periode)..." required="" rows="6"></textarea>
 <div class="error" data-err="message"></div>
 <div class="field full terms">
-  <label class="checkbox">
+  <div class="consent-row">
     <input id="cf-consent" name="consent" type="checkbox" required />
-    <span class="agree-inline">Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</span>
-  </label>
+    <label for="cf-consent">Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</label>
+  </div>
   <div class="error" data-err="consent"></div>
 </div>
-
-<div class="cta-row contact-actions">
-  <button class="btn btn-primary" type="submit">Versturen</button>
-  <a class="btn btn-outline" href="tel:+31100000000">Bel direct</a>
-</div>
-
 <!-- Success / error inline feedback (JS fills these) -->
 <div class="form-status" aria-live="polite"></div>
 </form>
