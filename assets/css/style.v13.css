@@ -2089,3 +2089,7 @@ section[data-align="left"], section[data-align="left"] * { text-align:left !impo
 /* Enforce alignment helper */
 section[data-align="left"], section[data-align="left"] *{ text-align:left !important; }
 section[data-align="right"], section[data-align="right"] *{ text-align:right !important; }
+
+/* Trust ticker fullbleed (diensten) */
+.trust-ticker.fullbleed{ width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
+.trust-ticker.fullbleed .keyword-track{ padding-left:24px; padding-right:24px; }
