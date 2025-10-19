@@ -2004,3 +2004,49 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
 @media (max-width: 960px){
   section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-6%) !important; }
 }
+
+/* =========================================================
+   SECTION: Promo (client data) v29.9.12
+   ========================================================= */
+.promo{ background:#081021; color:#fff; padding:28px 0 34px; }
+.promo .promo-card{
+  background:#fff; color:#0f172a;
+  border-radius:22px; box-shadow:0 28px 70px rgba(8,16,33,.18);
+  padding:28px;
+  display:grid; grid-template-columns: 1.6fr 1fr; gap:24px;
+}
+.promo .badge{ display:inline-block; font-weight:700; font-size:12px; letter-spacing:.06em;
+  color:#0a5bd3; background:rgba(10,91,211,.08); border:1px solid rgba(10,91,211,.22);
+  border-radius:999px; padding:6px 10px; }
+.promo .promo-heading{ margin:8px 0 6px; }
+.promo .subtitle{ margin:0 0 10px; color:#334155; }
+
+.promo .price-row{ display:flex; align-items:center; gap:10px; margin:6px 0 14px; }
+.promo .price-old{ color:#9ca3af; text-decoration:line-through; font-weight:600; }
+.promo .price-arrow{ color:#64748b; font-weight:700; }
+.promo .price-new{ color:#0a5bd3; font-weight:900; font-size:24px; }
+.promo .price-qualifier{ color:#64748b; font-size:14px; }
+
+.promo .brands{ margin:8px 0 10px; gap:10px; }
+.promo .brand-chip{
+  background:#f1f5f9; color:#0f172a; border:1px solid #e2e8f0; border-radius:999px;
+  padding:6px 10px; font-size:14px;
+}
+
+.promo .bullets{ margin:10px 0 0; font-size:14px; color:#334155; }
+.promo .bullets .dot::before{ content:'•'; margin:0 8px; color:#94a3b8 }
+.promo .bullets .check{ display:inline-block; width:14px; height:14px; margin-right:6px;
+  border-radius:50%; background:#10b981; vertical-align:-2px; }
+
+.promo .promo-right{ display:flex; flex-direction:column; gap:16px; justify-content:space-between; }
+.promo .promo-notes p{ margin:0 0 6px; font-weight:700; }
+.promo .promo-notes ul{ margin:0; padding-left:18px; color:#334155; }
+.promo .cta-row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.promo .cta-row .btn{ height:42px; padding:0 18px; line-height:42px; }
+.promo .cta-row .btn.btn-primary{ background:#22a3ff; color:#fff; }
+.promo .cta-row .btn.btn-outline{ background:#fff; color:#0b2a3c; border:1px solid rgba(2,32,71,.15); }
+
+@media (max-width: 1024px){
+  .promo .promo-card{ grid-template-columns: 1fr; }
+  .promo .promo-right{ align-items:flex-start; }
+}

@@ -10,7 +10,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <!-- Use the new themed CSS -->
-<link href="assets/css/style.v13.css?v=29.9.11?v=rev3" rel="stylesheet"/>
+<link href="assets/css/style.v13.css?v=29.9.12?v=rev3" rel="stylesheet"/>
 <!-- Your script (keep your filename; example shown) -->
 </head><body class="home">
 <div class="topbar">
@@ -34,223 +34,53 @@
 </div>
 </header>
 <main>
-<section class="hero hero-tall reveal">
-<!-- Background video -->
-<div class="hero-bg">
-<video autoplay="" class="hero-video" loop="" muted="" playsinline="" poster="" preload="auto">
-<source src="assets/video/airflowplus hero video.mp4" type="video/mp4"/>
-</video><button aria-label="Toggle mute" class="mute-btn" id="muteToggle">🔇</button>
-<div class="hero-overlay"></div>
-</div>
-<div class="container hero-inner">
-<div class="hero-copy">
-<h1>Airflow+ is <span class="hl-blue">dé airco specialist</span> in de regio Amsterdam</h1>
-<div class="cta-row">
-<a class="btn btn-primary" data-transition="" href="keuzehulp.html">Doe de keuzehulp</a>
-<a class="btn btn-outline" href="tel:+31100000000">Bel nu</a>
-</div>
-</div>
-<!-- Remove the old hero image by deleting this block entirely.
-         If you prefer to keep an image, you can move it INTO another section later. -->
-<!-- <div class="hero-media"> ... </div> -->
-</div>
-</section>
-<!-- Keuzehulp CTA (hero card) -->
-<section class="section kh-cta overlap hero-overlap" id="keuzehulp-cta">
-<div class="container left">
-<div class="kh-cta-card compact seam blue">
-<div class="kh-cta-text">
-<h2>Doe de airco keuzehulp</h2>
-<ul class="checklist row">
-<li><span class="check"></span> Klaar in 3 stappen</li>
-<li><span class="check"></span> Eerlijk advies op maat</li>
-</ul>
-</div>
-<!-- REGULIERE EMAIL LEADS (Formspree) -->
-<form action="https://formspree.io/f/mgvndydv" class="kh-cta-form stack" data-fs="" data-thanks="/thank-you.html" data-type="lead" method="POST">
-<label class="visually-hidden" for="kh-first">Voornaam</label>
-<input id="kh-first" name="first_name" placeholder="Voornaam" required="" type="text"/>
-<label class="visually-hidden" for="kh-last">Achternaam</label>
-<input id="kh-last" name="last_name" placeholder="Achternaam" required="" type="text"/>
-<label class="visually-hidden" for="kh-email">E-mail</label>
-<input id="kh-email" name="email" placeholder="jij@voorbeeld.nl" required="" type="email"/>
-<div class="kh-actions between">
-<button class="btn btn-outline" type="submit">Begin Met Sparen</button>
-<a class="btn btn-primary" data-transition="" href="keuzehulp.html">Naar keuzehulp</a>
-</div>
-</form>
-</div>
-</div>
-</section>
-<!-- Heating info (centered, its own container) -->
-<section class="section heat-info">
-<div class="container">
-<div class="heat-card">
-<h2>Comfort met airco in <span class="hl-blue">winter én zomer</span></h2>
-<p class="lead">
-        Het wordt kouder — met onze airco (warmtepomp) zit je warm in de winter en koel in de zomer.
-        We installeren netjes waar jij het wilt: woonkamer, slaapkamer of kantoor.
-      </p>
-<ul class="checklist row dark">
-<li><span class="check"></span> Verwarmen tot -10 °C</li>
-<li><span class="check"></span> Koelen &amp; verwarmen in één</li>
-<li><span class="check"></span> Netjes geplaatst op jouw gewenste plek</li>
-</ul>
-<a class="btn btn-primary heat-read" href="airco.html">Lees meer over airco</a>
-</div>
-</div>
-</section><section class="section section-navy section-tight trust-band" id="trust-band">
-<div class="container">
-<div aria-label="Pluspunten" class="trust-ticker css-marquee">
-<div class="marquee-track">
-<ul aria-hidden="false" class="row">
-<li class="item"><span class="check"></span> Binnen 7 dagen geplaatst</li>
-<li class="item"><span class="check"></span> Gecertificeerde monteurs</li>
-<li class="item"><span class="check"></span> Geen verborgen kosten</li>
-<li class="item"><span class="check"></span> Gratis offerte binnen 24u</li>
-</ul>
-<ul aria-hidden="true" class="row clone">
-<li class="item"><span class="check"></span> Binnen 7 dagen geplaatst</li>
-<li class="item"><span class="check"></span> Gecertificeerde monteurs</li>
-<li class="item"><span class="check"></span> Geen verborgen kosten</li>
-<li class="item"><span class="check"></span> Gratis offerte binnen 24u</li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<section class="section alt-blue">
-<div class="container">
-<h2>Onze services</h2>
-<div class="cards">
-<a class="card service" href="airco-plaatsen.html">
-<img alt="Airflow+ installatie en service" loading="lazy" src="https://images.unsplash.com/photo-1598300183876-3b8536b9c3d3?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"/>
-<h3>Split airco</h3>
-<p>Ideaal voor 1 ruimte. Stil en energiezuinig.</p>
-</a>
-<a class="card service" href="multi-split.html">
-<img alt="Airflow+ installatie en service" loading="lazy" src="https://images.unsplash.com/photo-1603190287605-e6ade32fa852?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"/>
-<h3>Multi-split</h3>
-<p>Meerdere kamers met één buitenunit.</p>
-</a>
-<a class="card service" href="warmtepomp-airco.html">
-<img alt="Airflow+ installatie en service" loading="lazy" src="https://images.unsplash.com/photo-1614586125858-6fcd9d9d1b4f?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"/>
-<h3>Warmtepomp airco</h3>
-<p>Koelen én verwarmen met hoog rendement.</p>
-</a>
-<a class="card service" href="onderhoud.html">
-<img alt="Airflow+ installatie en service" loading="lazy" src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"/>
-<h3>Onderhoud</h3>
-<p>Jaarlijkse check voor top-prestaties.</p>
-</a>
-<a class="card service" href="zakelijk.html">
-<img alt="Airflow+ installatie en service" loading="lazy" src="https://images.unsplash.com/photo-1512914890250-1dc5a1a6549f?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"/>
-<h3>Zakelijk</h3>
-<p>Winkel, horeca, kantooroplossingen.</p>
-</a>
-<a class="card service" href="reparatie.html">
-<img alt="Airflow+ installatie en service" loading="lazy" src="https://images.unsplash.com/photo-1565992441121-4367c2967103?q=80&amp;w=1200&amp;auto=format&amp;fit=crop"/>
-<h3>Reparatie &amp; storingen</h3>
-<p>Snel geholpen, ook buiten kantoortijd.</p>
-</a>
-</div>
-</div>
-</section>
-<!-- Energy Savings Calculator -->
-<section class="section savings reveal" id="savings">
-<div class="container">
-<div class="save-grid">
-<div class="save-copy">
-<h2><span class="hl-blue">Energiebesparing</span> calculator</h2>
-<p class="lead">
-          Schuif en kies je systeem – we schatten je <strong>maandelijkse besparing</strong> op basis van een realistische efficiëntie.
-        </p>
-<ul class="save-points">
-<li>Direct indicatie op basis van je huidige maandkosten</li>
-<li>Realistische aannames voor split, multi-split en warmtepomp-airco</li>
-<li>Eerlijk, onafhankelijk en indicatief (prijzen/gebruik kunnen verschillen)</li>
-</ul>
-</div>
-<!-- SINGLE, CLEAN CARD -->
-<div class="save-card">
-<!-- row 1: bill slider + number -->
-<div class="save-row">
-<label class="save-label" for="save-bill">Huidige energiekosten per maand (€)</label>
-<div class="save-bill-wrap">
-<input id="save-bill" max="600" min="50" step="5" type="range" value="180"/>
-<input id="save-bill-input" min="0" step="1" type="number" value="180"/>
-</div>
-</div>
-<!-- row 2: system buttons -->
-<div class="save-row">
-<div class="save-label">Kies je systeem</div>
-<div class="save-systems">
-<button class="chip active" data-system="split">Split airco</button>
-<button class="chip" data-system="multi">Multi-split</button>
-<button class="chip" data-system="hp">Warmtepomp airco</button>
-</div>
-</div>
-<!-- row 3: profile -->
-<div class="save-row">
-<label class="save-label" for="save-profile">Gebruiksprofiel</label>
-<select class="save-select" id="save-profile">
-<option value="cooling">Meestal koelen</option>
-<option selected="" value="mixed">50% koelen / 50% verwarmen</option>
-<option value="heating">Meestal verwarmen</option>
-</select>
-</div>
-<!-- results -->
-<div class="save-result">
-<div class="big">€ <span id="save-amount">0</span> / maand</div>
-<div class="note">Gebaseerd op <span id="save-rate">0</span>% besparing.</div>
-<span class="save-tip-wrap">
-<button aria-label="Uitleg besparing" class="save-tip" type="button">i</button>
-<div class="save-tip-bubble">
-<h5>Hoe we dit schatten</h5>
-<p id="save-tip-body">Indicatieve schatting op basis van gemiddelde profielen.</p>
-<p class="muted">Indicatie, geen offerte. Werkelijk verbruik en tarieven kunnen variëren.</p>
-</div>
-</span>
-</div>
-<!-- REGULIERE EMAIL LEADS -->
-<form action="https://formspree.io/f/mgvndydv" class="save-optin" data-fs="" data-thanks="/thank-you.html" data-type="lead" method="POST">
-<div class="optin-head">Start saving</div>
-<div class="optin-grid">
-<input name="first_name" placeholder="Voornaam" required="" type="text"/>
-<input name="last_name" placeholder="Achternaam" required="" type="text"/>
-<input name="email" placeholder="jij@voorbeeld.nl" required="" type="email"/>
-</div>
-<button class="btn btn-primary" type="submit">Aanmelden</button>
-</form>
-<div class="save-disclaimer">
-          Indicatie o.b.v. gemiddelde efficiëntie en verbruik; daadwerkelijke besparingen kunnen afwijken per woning, toestel en tarief.
+
+<section class="promo" id="promo">
+  <div class="container">
+    <div class="promo-card">
+      <div class="promo-left">
+        <span class="badge">ACTIE</span>
+        <h2 class="promo-heading"><span class="title">Daikin Emura 2,5 kW — single‑split</span></h2>
+        <p class="subtitle">Meest luxe variant, incl. materiaal &amp; montage — <strong>zolang de voorraad strekt</strong>.</p>
+        <div class="price-row">
+          <span class="price-old">€2.800</span>
+          <span class="price-arrow">→</span>
+          <span class="price-new">€2.400</span>
+          <span class="price-qualifier">incl. materiaal &amp; montage</span>
         </div>
-</div>
-<!-- /save-card -->
-</div>
-</div>
+
+        <div class="info-row brands">
+          <div class="brand-chip"><strong>Daikin</strong> • vanaf <b>€1.800</b></div>
+          <div class="brand-chip"><strong>Panasonic</strong> • vanaf <b>€1.600</b></div>
+          <div class="brand-chip"><strong>Haier</strong> • vanaf <b>€1.300</b></div>
+        </div>
+
+        <div class="bullets">
+          <span class="check"></span> Gecertificeerde monteurs
+          <span class="dot"></span> Geen verborgen kosten
+          <span class="dot"></span> Binnen 7 dagen geplaatst
+          <span class="dot"></span> Gratis offerte binnen 24u
+        </div>
+      </div>
+
+      <div class="promo-right">
+        <div class="promo-notes">
+          <p><strong>Merken &amp; positionering</strong></p>
+          <ul>
+            <li><b>Daikin</b>: premium, zeer efficiënt en stil.</li>
+            <li><b>Panasonic</b>: comfort &amp; luchtkwaliteit (nanoe™ X), sterke prijs‑kwaliteit.</li>
+            <li><b>Haier</b>: scherp geprijsd, slimme functies (wifi/app) en energiezuinig.</li>
+          </ul>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-outline" href="airco.html">Meer over airco</a>
+          <a class="btn btn-primary" href="contact.html">Claim de aanbieding</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-<section class="promo-banner reveal">
-<div class="container">
-<div class="promo-card">
-<div class="promo-left">
-<div class="eyebrow">Actie</div>
-<h2>Daikin Emura 2,5 kW</h2>
-<p>Nu voor <strong>€2.400</strong> incl. materiaal &amp; montage — zolang voorraad strekt.</p>
-<ul class="promo-benefits">
-<li>Gecertificeerde monteurs</li>
-<li>Geen verborgen kosten</li>
-<li>Binnen 7 dagen geplaatst</li>
-<li>Gratis offerte binnen 24u</li>
-</ul>
-<div class="promo-ctas">
-<a class="btn btn-outline" href="airco.html">Meer over airco</a>
-<a class="btn btn-primary" href="prijzen.html">Claim de aanbieding</a>
-</div>
-</div>
-</div>
-</div>
-</section>
+
 <!-- Airconditioning op maat -->
 <section class="section maat" id="maat">
 <div class="container">
@@ -552,5 +382,5 @@
 </div>
 <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
 </footer>
-<script src="assets/js/main.js?v=29.9.11?v=rev3"></script>
+<script src="assets/js/main.js?v=29.9.12?v=rev3"></script>
 </body></html>

@@ -691,3 +691,56 @@ window.addEventListener('DOMContentLoaded', () => {
     video.addEventListener('volumechange', sync);
   }catch(e){}
 })();
+
+
+// SECTION: Hero video mute/unmute — bulletproof (v29.9.12)
+(function(){
+  try{
+    var video = document.querySelector('.hero-video') || document.querySelector('[data-hero-video]');
+    var btn = document.getElementById('muteToggle') || document.querySelector('.mute-btn');
+    if(!video || !btn) return;
+
+    // Ensure baseline for autoplay: start muted
+    video.muted = true;
+    video.setAttribute('playsinline','');
+    video.setAttribute('webkit-playsinline','');
+
+    // Visual state on button
+    function render(){
+      var muted = video.muted || video.volume === 0;
+      btn.classList.toggle('is-muted', muted);
+      btn.classList.toggle('is-unmuted', !muted);
+      btn.setAttribute('aria-pressed', (!muted).toString());
+      btn.setAttribute('aria-label', muted ? 'Unmute' : 'Mute');
+      btn.title = muted ? 'Unmute' : 'Mute';
+      btn.textContent = muted ? '🔇' : '🔊';
+    }
+
+    function unmuteWithNudge(){
+      // Fully unmute and set audible volume
+      video.muted = false;
+      if (video.volume === 0) video.volume = 0.5;
+      var p = video.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(function(){ /* ignore: some browsers require second gesture */ });
+      }
+    }
+
+    btn.addEventListener('click', function(){
+      try{
+        if (video.muted || video.volume === 0){
+          unmuteWithNudge();
+        } else {
+          video.muted = true;
+        }
+        render();
+      }catch(e){}
+    }, {passive:true});
+
+    // Keep UI in sync if anything else changes volume
+    video.addEventListener('volumechange', render, {passive:true});
+
+    // Initial render
+    render();
+  }catch(e){}
+})();
