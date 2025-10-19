@@ -639,107 +639,15 @@ window.addEventListener('DOMContentLoaded', () => {
 })();
 
 
-// =========================================================
-// SECTION: Hero video mute toggle (v29.9.5)
-// - Looks for [data-hero-video] and [data-hero-mute]
-// - Toggles the `muted` state and updates button label/icon
-// =========================================================
+// SECTION: #muteToggle binding (v29.9.10)
 (function(){
-  try {
-    var video = document.querySelector('[data-hero-video]') || document.querySelector('.hero video');
-    var btn = document.querySelector('[data-hero-mute]') || document.querySelector('.hero-mute, .btn-mute');
-    if (!video || !btn) return;
-
-    // initial sync
-    function syncLabel() {
-      var isMuted = !!video.muted;
-      var label = btn.getAttribute('data-label-muted') || 'Unmute';
-      var label2 = btn.getAttribute('data-label-unmuted') || 'Mute';
-      // If muted, show "Unmute"; if not, show "Mute"
-      btn.textContent = isMuted ? label : label2;
-      btn.setAttribute('aria-pressed', (!isMuted).toString());
-    }
-
-    // If the video is allowed to autoplay muted, ensure muted by default
-    if (typeof video.muted === 'boolean') {
-      video.muted = video.muted !== false; // default true if absent
-    }
-
-    btn.addEventListener('click', function(e){
-      try {
-        video.muted = !video.muted;
-        syncLabel();
-      } catch (err) {}
-    }, { passive: true });
-
-    // Also sync when volume/muted changes (e.g., programmatic)
-    video.addEventListener('volumechange', syncLabel);
-    syncLabel();
-  } catch (e) {
-    // no-op (defensive)
-  }
-})();
-
-// =========================================================
-// SECTION: Hero video mute toggle (v29.9.6)
-// =========================================================
-(function(){
-  try {
-    var video = document.querySelector('[data-hero-video]') || document.querySelector('.hero video');
-    var btn = document.querySelector('[data-hero-mute]') || document.querySelector('.hero-mute, .btn-mute');
-    if (!video || !btn) return;
-    function syncLabel(){
-      var isMuted = !!video.muted;
-      var on = btn.getAttribute('data-label-unmuted') || 'Mute';
-      var off = btn.getAttribute('data-label-muted') || 'Unmute';
-      btn.textContent = isMuted ? off : on;
-      btn.setAttribute('aria-pressed', (!isMuted).toString());
-    }
-    video.muted = video.muted !== false;
-    btn.addEventListener('click', function(){ video.muted = !video.muted; syncLabel(); }, {passive:true});
-    video.addEventListener('volumechange', syncLabel);
-    syncLabel();
-  } catch(e){}
-})();
-
-
-// =========================================================
-// SECTION: Hero muteToggle binding (v29.9.7)
-// - Uses #muteToggle button that already exists in markup
-// - Targets .hero-video or [data-hero-video]
-// =========================================================
-(function(){
-  try {
-    var video = document.querySelector('.hero-video') || document.querySelector('[data-hero-video]');
-    var btn = document.getElementById('muteToggle');
-    if (!video || !btn) return;
-
-    function syncIcon(){
-      // Update button icon/label to reflect current state
-      if (video.muted){
-        btn.textContent = '🔇';
-        btn.setAttribute('aria-label','Unmute');
-      } else {
-        btn.textContent = '🔊';
-        btn.setAttribute('aria-label','Mute');
-      }
-    }
-
-    // Ensure default mute for autoplay policies; then sync
-    if (typeof video.muted === 'boolean' && !video.hasAttribute('data-muted-initialized')){
-      video.muted = true;
-      video.setAttribute('data-muted-initialized','1');
-    }
-    syncIcon();
-
-    btn.addEventListener('click', function(){
-      try {
-        video.muted = !video.muted;
-        syncIcon();
-      } catch(e){}
-    }, {passive:true});
-
-    // Keep in sync if anything else toggles volume
-    video.addEventListener('volumechange', syncIcon);
-  } catch(e){}
+  try{
+    var v=document.querySelector('.hero-video')||document.querySelector('[data-hero-video]');
+    var b=document.getElementById('muteToggle');
+    if(!v||!b)return;
+    function s(){ if(v.muted){ b.textContent='🔇'; b.setAttribute('aria-label','Unmute'); } else { b.textContent='🔊'; b.setAttribute('aria-label','Mute'); } }
+    v.muted=true; s();
+    b.addEventListener('click', function(){ v.muted=!v.muted; s(); }, {passive:true});
+    v.addEventListener('volumechange', s);
+  }catch(e){}
 })();
