@@ -639,14 +639,71 @@ window.addEventListener('DOMContentLoaded', () => {
 })();
 
 
-// Hero video mute/unmute — bulletproof (v29.9.13)
+// SECTION: #muteToggle binding (v29.9.10)
+(function(){
+  try{
+    var v=document.querySelector('.hero-video')||document.querySelector('[data-hero-video]');
+    var b=document.getElementById('muteToggle');
+    if(!v||!b)return;
+    function s(){ if(v.muted){ b.textContent='🔇'; b.setAttribute('aria-label','Unmute'); } else { b.textContent='🔊'; b.setAttribute('aria-label','Mute'); } }
+    v.muted=true; s();
+    b.addEventListener('click', function(){ v.muted=!v.muted; s(); }, {passive:true});
+    v.addEventListener('volumechange', s);
+  }catch(e){}
+})();
+
+
+// SECTION: #muteToggle harden (v29.9.11)
 (function(){
   try{
     var video = document.querySelector('.hero-video') || document.querySelector('[data-hero-video]');
     var btn = document.getElementById('muteToggle') || document.querySelector('.mute-btn');
     if(!video || !btn) return;
-    video.muted = true; // required for autoplay
+
+    function sync(){
+      if(video.muted || video.volume === 0){
+        btn.textContent = '🔇';
+        btn.setAttribute('aria-label','Unmute');
+      }else{
+        btn.textContent = '🔊';
+        btn.setAttribute('aria-label','Mute');
+      }
+    }
+
+    // Default: start muted for autoplay
+    video.muted = true;
+    sync();
+
+    btn.addEventListener('click', function(){
+      try{
+        if(video.muted || video.volume === 0){
+          video.muted = false;
+          if(video.volume === 0) video.volume = 0.5;
+          var p = video.play();
+          if(p && typeof p.catch === 'function'){ p.catch(function(){ /* ignore */ }); }
+        } else {
+          video.muted = true;
+        }
+        sync();
+      }catch(e){}
+    }, {passive:true});
+
+    video.addEventListener('volumechange', sync);
+  }catch(e){}
+})();
+
+
+// Hero video mute/unmute — bulletproof (v29.9.17)
+(function(){
+  try{
+    var video = document.querySelector('.hero-video') || document.querySelector('[data-hero-video]');
+    var btn = document.getElementById('muteToggle') || document.querySelector('.mute-btn');
+    if(!video || !btn) return;
+
+    // Start muted for autoplay policy
+    video.muted = true;
     video.setAttribute('playsinline',''); video.setAttribute('webkit-playsinline','');
+
     function render(){
       var muted = video.muted || video.volume === 0;
       btn.textContent = muted ? '🔇' : '🔊';
@@ -655,13 +712,15 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     function unmute(){
       video.muted = false;
-      if(video.volume === 0) video.volume = 0.5;
+      if (video.volume === 0) video.volume = 0.5;
       var p = video.play(); if (p && p.catch) p.catch(function(){});
     }
+
     btn.addEventListener('click', function(){
-      if(video.muted || video.volume === 0){ unmute(); } else { video.muted = true; }
+      if (video.muted || video.volume === 0) { unmute(); } else { video.muted = true; }
       render();
     }, {passive:true});
+
     video.addEventListener('volumechange', render, {passive:true});
     render();
   }catch(e){}
