@@ -2076,3 +2076,16 @@ section[data-align="left"] h3 { text-align:left; }
 
 /* Airco feature hard align (v29.9.23) */
 section[data-align="left"], section[data-align="left"] * { text-align:left !important; }
+
+/* Diensten fixes (v29.9.25) */
+.trust-ticker.section-navy{ background:#081021; color:#fff; width:100%; margin:0; padding:10px 0; }
+.trust-ticker .keyword-track{ display:flex; gap:36px; white-space:nowrap; animation: tt-scroll 40s linear infinite; }
+.trust-ticker .kw{ color:#fff; opacity:.9; }
+.trust-ticker .check{ display:inline-block; width:10px; height:10px; margin-right:8px; background:#10b981; border-radius:50%; }
+@media (max-width: 768px){
+  .trust-ticker.section-navy{ padding:8px 0; }
+  .trust-ticker .keyword-track{ gap:24px; }
+}
+/* Enforce alignment helper */
+section[data-align="left"], section[data-align="left"] *{ text-align:left !important; }
+section[data-align="right"], section[data-align="right"] *{ text-align:right !important; }
