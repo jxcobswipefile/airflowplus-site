@@ -2073,3 +2073,6 @@ section[data-align="left"] p,
 section[data-align="left"] h1, 
 section[data-align="left"] h2, 
 section[data-align="left"] h3 { text-align:left; }
+
+/* Airco feature hard align (v29.9.23) */
+section[data-align="left"], section[data-align="left"] * { text-align:left !important; }
