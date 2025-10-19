@@ -10,9 +10,9 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <!-- Use the new themed CSS -->
-<link href="assets/css/style.v13.css?v=29.7.3" rel="stylesheet"/>
+<link href="assets/css/style.v13.css?v=29.6.3" rel="stylesheet"/>
 <!-- Your script (keep your filename; example shown) -->
-<script defer="" src="assets/js/main.js?v=29.7.3"></script>
+<script defer="" src="assets/js/main.js?v=29.6.3"></script>
 <!-- TEMP override start -->
 <style>
 /* TEMP override for consent row; remove once deploy is healthy */
@@ -51,17 +51,6 @@
 #contact .cta-row { display:flex; gap:12px; align-items:center; margin-top:14px; justify-content:flex-start; }
 #contact .cta-row .btn { padding:10px 22px; border-radius:50px; font-weight:600; }
 </style>
-
-<style id="critical-v2973">
-:root{--afp-blue:#16A1FF}
-.btn.btn-primary{background:var(--afp-blue);color:#fff;border-color:transparent}
-.trust-ticker{background:#081021;color:#fff;padding:6px 0;overflow:hidden}
-.trust-ticker .row{list-style:none;margin:0;padding:0;display:inline-flex;gap:32px}
-.trust-ticker .item{list-style:none;white-space:nowrap;display:inline-flex;gap:8px}
-.trust-ticker .check{width:14px;height:14px;border-radius:50%;background:#17c964;display:inline-block;position:relative}
-.trust-ticker .check::after{content:'';position:absolute;left:4px;top:2px;width:5px;height:8px;border:2px solid #081021;border-top:0;border-left:0;transform:rotate(45deg)}
-</style>
-
 </head><body>
 <div class="topbar">
 <div class="container topbar-inner">
@@ -135,15 +124,22 @@
 <div aria-live="polite" class="form-status"></div>
 </div></form>
 </div>
-</section>
-<section class="section section-navy section-tight trust-band">
+</section><section class="section section-navy section-tight trust-band" data-inserted="v2971" id="trust-band">
 <div class="container">
-<div aria-label="Pluspunten" class="trust-ticker keyword-ticker" data-dir="ltr" data-speed="0.6">
-<div class="keyword-track" role="list">
-<span class="item" role="listitem"><span class="check"></span> Binnen 7 dagen geplaatst</span>
-<span class="item" role="listitem"><span class="check"></span> Gecertificeerde monteurs</span>
-<span class="item" role="listitem"><span class="check"></span> Geen verborgen kosten</span>
-<span class="item" role="listitem"><span class="check"></span> Gratis offerte binnen 24u</span>
+<div aria-label="Pluspunten" class="trust-ticker css-marquee">
+<div class="marquee-track">
+<ul aria-hidden="false" class="row">
+<li class="item"><span class="check"></span> Binnen 7 dagen geplaatst</li>
+<li class="item"><span class="check"></span> Gecertificeerde monteurs</li>
+<li class="item"><span class="check"></span> Geen verborgen kosten</li>
+<li class="item"><span class="check"></span> Gratis offerte binnen 24u</li>
+</ul>
+<ul aria-hidden="true" class="row clone">
+<li class="item"><span class="check"></span> Binnen 7 dagen geplaatst</li>
+<li class="item"><span class="check"></span> Gecertificeerde monteurs</li>
+<li class="item"><span class="check"></span> Geen verborgen kosten</li>
+<li class="item"><span class="check"></span> Gratis offerte binnen 24u</li>
+</ul>
 </div>
 </div>
 </div>
