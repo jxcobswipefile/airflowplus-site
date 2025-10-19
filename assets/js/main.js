@@ -600,3 +600,19 @@
     ticker.addEventListener('mouseleave', play);
   });
 })();
+
+
+/* ---------------------------- 06) Hero video mute toggle ---------------------------- */
+(() => {
+  const video = document.querySelector('.hero-video');
+  const btn = document.getElementById('muteToggle');
+  if (!video || !btn) return;
+  // default muted
+  video.muted = true;
+  const setUI = () => { btn.setAttribute('data-state', video.muted ? 'muted' : 'unmuted'); btn.innerHTML = video.muted ? '🔇' : '🔊'; };
+  setUI();
+  btn.addEventListener('click', () => {
+    video.muted = !video.muted;
+    setUI();
+  });
+})();

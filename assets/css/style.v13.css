@@ -1875,3 +1875,16 @@ body.home section.kh-cta .kh-cta-card p,
 body.home section.kh-cta .kh-cta-card li{ color:#ffffff !important; }
 /* Diensten final CTA heading white when section has .cta-light */
 body.diensten section.cta-light h2{ color:#ffffff !important; }
+
+
+/* v29.9.1 hero + promo fixes */
+.home .promo-banner{ display:block !important; } /* override any hide */
+.mute-btn{
+  position:absolute; right:18px; bottom:18px; z-index:4;
+  width:44px; height:44px; border-radius:999px; border:1px solid rgba(255,255,255,.6);
+  background:rgba(8,16,33,.25); backdrop-filter: blur(4px);
+  color:#fff; font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+}
+.hero-video{ outline:none; }
+.kh-cta-card{ box-shadow: 0 24px 60px rgba(8,16,33,.35), 0 0 0 2px rgba(255,255,255,.55) inset; } /* clearer outline */
