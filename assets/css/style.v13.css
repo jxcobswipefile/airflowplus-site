@@ -1831,3 +1831,36 @@ body.diensten .section li{ color:#0f172a !important; }
 /* Trust band stays thin */
 .trust-band .container{ padding-left:0; padding-right:0; }
 .trust-ticker{ padding:6px 0 !important; }
+
+
+/* === hotfix v-REV3 (scoped, high-specificity) === */
+:root{ --afp-blue:#16A1FF; }
+
+/* Keuzehulp card: light blue like Bel/Offerte */
+section.kh-cta.overlap.hero-overlap{ background: transparent !important; }
+section.kh-cta .kh-cta-card,
+.kh-cta-card.blue{ background: var(--afp-blue) !important; color:#fff !important; }
+section.kh-cta .kh-cta-card h2,
+section.kh-cta .kh-cta-card p,
+section.kh-cta .kh-cta-card li{ color:#fff !important; }
+section.kh-cta .kh-cta-card .btn.btn-primary{ background:#ffffff !important; color:#0b2a3c !important; }
+
+/* Airconditioning op maat (index) back to white */
+section.maat{ background:#ffffff !important; color:#0f172a !important; }
+section.maat h2, section.maat p, section.maat li{ color:#0f172a !important; }
+
+/* Ensure promo banner visible */
+.promo-banner{ display:block !important; opacity:1 !important; visibility:visible !important; }
+
+/* Diensten page: shrink sections, parallel grid, readable contrast */
+body.diensten .section{ padding-top:56px !important; padding-bottom:56px !important; background:#ffffff !important; color:#0f172a !important; }
+body.diensten .section h1, body.diensten .section h2, body.diensten .section h3,
+body.diensten .section p, body.diensten .section li{ color:#0f172a !important; }
+body.diensten .section .container.grid-2{ display:grid; grid-template-columns: 1fr 1fr; gap:48px; align-items:center; }
+body.diensten .section .section-divider{ display:none !important; } /* kill extra height */
+body.diensten .media-ph, body.diensten .image-card, body.diensten .img-box{ 
+  background:#0b2236; color:#fff; border-radius:24px; padding:32px; box-shadow:0 16px 36px rgba(2,18,36,.18);
+}
+
+/* Trust band thin */
+.trust-ticker{ padding:6px 0 !important; }
