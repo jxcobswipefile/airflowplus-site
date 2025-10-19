@@ -1737,3 +1737,51 @@ label.checkbox input[type="checkbox"]{ inline-size:18px; block-size:18px; }
   .trust-ticker{ padding:8px 0; }
   .trust-ticker .row{ gap:24px; }
 }
+
+
+/* v29.7.1 — trust band hardening (no bullets, ultra-thin) */
+.trust-ticker{ background:#081021; color:#fff; border-radius:0; padding:6px 0; overflow:hidden; }
+.trust-ticker .marquee-track{ display:flex; width:max-content; }
+.trust-ticker .row{ display:inline-flex; gap:32px; align-items:center; padding:0 24px; margin:0; list-style:none !important; }
+.trust-ticker .row .item{ display:inline-flex; gap:8px; white-space:nowrap; list-style:none !important; }
+.trust-ticker .check{ width:14px; height:14px; border-radius:50%; background:#17c964; position:relative; flex:0 0 14px; display:inline-block; }
+.trust-ticker .check::after{ content:''; position:absolute; left:4px; top:2px; width:5px; height:8px; border:2px solid #081021; border-top:0; border-left:0; transform:rotate(45deg); }
+
+.css-marquee .marquee-track{ position:relative; animation: marquee-ltr 28s linear infinite; }
+@keyframes marquee-ltr{ from{ transform: translateX(-50%);} to{ transform: translateX(0);} }
+
+
+/* v29.7.2 — UI polish per request */
+/* 1) Show full hero video: hide the dark promo band overlay on home */
+.home .promo-banner{ display:none !important; }
+/* If hero had any overlay, remove it */
+.home .hero::before, .home .hero::after{ display:none !important; background:transparent !important; }
+
+/* 2) Restore bright blue buttons for Bel/Offerte, Lees meer over airco, Doe de keuzehulp */
+:root{ --afp-blue:#16a1ff; } /* bright brand blue */
+.btn.btn-primary{ background: var(--afp-blue) !important; color:#fff !important; border-color: transparent !important; }
+.btn.btn-primary:hover{ filter: brightness(0.95); }
+.btn.btn-outline{ color: var(--afp-blue); border-color: var(--afp-blue); }
+.btn.btn-outline:hover{ background: var(--afp-blue); color:#fff; }
+
+/* ensure specific buttons inherit */
+a.btn.heat-read{ background: var(--afp-blue) !important; color:#fff !important; }
+.header .btn, nav .btn{ border-radius: 12px; } /* keep style */
+
+/* 3) Airconditioning-op-maat section back to white and readable */
+.home .section.alt-blue, .home .cta.alt-dark{ background:#ffffff !important; color:#0f172a !important; }
+.home .section.alt-blue h2, .home .cta.alt-dark h2,
+.home .section.alt-blue p, .home .cta.alt-dark p,
+.home .section.alt-blue li, .home .cta.alt-dark li{ color:#0f172a !important; }
+.home .section.alt-blue .btn.btn-primary{ background: var(--afp-blue) !important; }
+
+/* 4) Diensten page: make all sections (except the first) same compact height & proper contrast */
+body.diensten .section{ padding-top:64px; padding-bottom:64px; }
+body.diensten .section:first-of-type{ padding-top:96px; padding-bottom:96px; } /* keep current first section size */
+body.diensten .section.section--brand,
+body.diensten .section.section--brand-deep,
+body.diensten .section.section--soft{ background:#ffffff !important; color:#0f172a !important; }
+body.diensten .section h2, body.diensten .section p, body.diensten .section li{ color:#0f172a !important; }
+
+/* Minor: ensure trust band stays thin */
+.trust-ticker{ padding:6px 0 !important; }
