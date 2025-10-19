@@ -1779,3 +1779,55 @@ body.diensten .section:not(.section--deep):not(.section--overlay){ background:#f
 
 /* Keep the strip thin even inside generic section wrappers */
 .trust-band .container{ padding-left:0 !important; padding-right:0 !important; }
+
+
+/* === v-REVERSION-fix2 === */
+/* Buttons + brand blue */
+:root{ --afp-blue:#16A1FF; }
+
+/* Keuzehulp card: light brand blue background, white text */
+.section.kh-cta,
+.section.kh-cta .container{ background:transparent !important; }
+.kh-cta-card, .kh-card, .keuzehulp-card{
+  background: var(--afp-blue) !important;
+  color:#ffffff !important;
+  box-shadow: 0 20px 50px rgba(10,37,64,.20);
+}
+.kh-cta-card h2, .kh-cta-card p, .kh-cta-card li{ color:#ffffff !important; }
+.kh-cta-card .btn.btn-primary{ background:#ffffff !important; color:#0b2a3c !important; }
+.kh-cta-card .btn.btn-outline{ color:#ffffff !important; border-color:#ffffff !important; }
+.home .hero .kh-cta-card{ background: var(--afp-blue) !important; }
+
+/* Hero keuzehulp container fully transparent (no navy band) */
+.home .promo-banner{ background:transparent !important; box-shadow:none !important; }
+.home .hero::before, .home .hero::after{ content:none !important; display:none !important; }
+
+/* Airconditioning op maat back to white */
+.section.alt-blue, .section.alt, .section.section--alt{ background:#ffffff !important; }
+.section.alt-blue h2, .section.alt-blue p, .section.alt-blue li{ color:#0f172a !important; }
+
+/* Diensten page: make every section same vertical rhythm as the first */
+body.diensten .section{ padding-top:72px !important; padding-bottom:72px !important; }
+body.diensten .section .container{ max-width: 1200px; }
+/* Parallel layout for image/text like section 1 */
+body.diensten .section .grid, 
+body.diensten .section .row{ display:grid; grid-template-columns: 1fr 1fr; gap:48px; align-items:center; }
+body.diensten .section .grid > *, 
+body.diensten .section .row > *{ min-width:0; }
+/* Ensure readable contrast */
+body.diensten .section{ background:#ffffff !important; color:#0f172a !important; }
+body.diensten .section h2, 
+body.diensten .section p, 
+body.diensten .section li{ color:#0f172a !important; }
+/* Media boxes */
+.media-card, .image-card, .img-box{
+  background:#0b2236;
+  color:#fff;
+  border-radius:24px;
+  padding:32px;
+  box-shadow: 0 18px 40px rgba(2,18,36,.22);
+}
+
+/* Trust band stays thin */
+.trust-band .container{ padding-left:0; padding-right:0; }
+.trust-ticker{ padding:6px 0 !important; }
