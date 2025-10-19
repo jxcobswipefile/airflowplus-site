@@ -554,57 +554,49 @@
   els.forEach((el) => io.observe(el));
 })();
 
-/* v29.6 keywordTicker (RAF + CSS fallback) */
-(function(){
-  const tickers = document.querySelectorAll('.keyword-ticker');
-  tickers.forEach(ticker => {
-    const track = ticker.querySelector('.keyword-track');
-    if(!track) return;
-    let pos = 0;
-    const speed = parseFloat(ticker.dataset.speed || "0.5"); const dir=(ticker.dataset.dir||'ltr').toLowerCase();
-    const dir = (ticker.dataset.dir||'rtl').toLowerCase(); // 'rtl' (default) or 'ltr'
-    // duplicate content for infinite loop
-    track.innerHTML = track.innerHTML + track.innerHTML;
-    function step(){
-      pos += (dir==='ltr'? speed : -speed);
-      // reset when shifted by first half width
-      const w = track.scrollWidth / 2;
-      if (-pos >= w) pos = 0;
-      track.style.transform = `translateX(${pos}px)`;
-      requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
+/* === Airflow+: thin rotating checkmark ticker ============================== */
+(function () {
+  const raf = window.requestAnimationFrame;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.afp-ticker').forEach(ticker => {
+    const track = ticker.querySelector('.afp-ticker__track');
+    if (!track) return;
+
+    // Duplicate items until we can loop seamlessly
+    const baseItems = Array.from(track.children);
+    const ensureLoopWidth = () => {
+      const target = ticker.clientWidth * 2; // 2x viewport width = safe loop
+      while (track.scrollWidth < target) {
+        baseItems.forEach(n => track.appendChild(n.cloneNode(true)));
+      }
+    };
+    ensureLoopWidth();
+    window.addEventListener('resize', ensureLoopWidth, { passive: true });
+
+    if (prefersReduced) return; // no motion; content still visible
+
+    let lastTs, x = 0, id;
+    const speed = Number(ticker.dataset.speed || 40); // px/s
+    const halfWidth = () => track.scrollWidth / 2;
+
+    const step = (ts) => {
+      if (!lastTs) lastTs = ts;
+      const dt = (ts - lastTs) / 1000;
+      lastTs = ts;
+
+      // move left
+      x -= speed * dt;
+      if (-x > halfWidth()) x += halfWidth();
+      track.style.transform = `translateX(${x}px)`;
+      id = raf(step);
+    };
+
+    const play = () => { ticker.dataset.paused = "false"; lastTs = undefined; id = raf(step); };
+    const pause = () => { ticker.dataset.paused = "true"; if (id) cancelAnimationFrame(id); };
+
+    play();
+    ticker.addEventListener('mouseenter', pause);
+    ticker.addEventListener('mouseleave', play);
   });
-})();
-
-
-/* ---------------- 07) Dynamic headline from utm_term (DTR) --------------- */
-(() => {
-  const params = new URLSearchParams(location.search);
-  const term = (params.get('utm_term')||'').toLowerCase();
-  if (!term) return;
-  // Map some known terms to short headline tweaks on index only
-  const isHome = document.body?.contains(document.querySelector('.hero'));
-  if (!isHome) return;
-  const h1 = document.querySelector('.hero .hero-copy h1');
-  if (!h1) return;
-  if (term.includes('airco-als-verwarming')) {
-    h1.innerHTML = 'Airflow+ — <span class="hl-blue">airco als verwarming</span> zonder gedoe';
-  } else if (term.includes('hybride warmtepomp')) {
-    h1.innerHTML = 'Airflow+ — <span class="hl-blue">hybride warmtepomp</span> slim geïnstalleerd';
-  }
-})();
-
-
-
-
-// SECTION: trust ticker (v29.5.3)
-(function(){
-  try {
-    document.querySelectorAll('.trust-ticker .keyword-track').forEach(function(track){
-      if (track.getAttribute('data-duped') === '1') return;
-      track.setAttribute('data-duped','1');
-      track.innerHTML = track.innerHTML + track.innerHTML;
-    });
-  } catch(e) {}
 })();
