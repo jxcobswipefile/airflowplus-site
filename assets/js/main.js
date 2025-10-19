@@ -226,7 +226,7 @@
 
   if (location.hash) {
     const el = document.getElementById(location.hash.slice(1));
-    if (el?.tagName === 'DETAILS') el.open = true;
+    if (el?.tagName === 'DETAILS') { el.open = true; history.replaceState(null, '', location.pathname + location.search); }
   } else {
     const last = localStorage.getItem(KEY);
     if (last) document.getElementById(last)?.setAttribute('open','');
@@ -235,7 +235,7 @@
   items.forEach(d => d.addEventListener('toggle', () => {
     if (d.open) {
       localStorage.setItem(KEY, d.id);
-      history.replaceState(null, '', '#' + d.id);
+      // (patched) no URL hash update on toggle
     }
   }));
 

@@ -2098,3 +2098,20 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .trust-ticker{ background:#081021; color:#fff; padding:10px 0; width:100%; }
 .trust-ticker .keyword-track{ display:flex; gap:36px; white-space:nowrap; animation: tt-scroll 45s linear infinite; }
 .trust-ticker .check{ display:inline-block; width:12px; height:12px; background:#10b981; border-radius:50%; margin-right:8px; }
+
+
+/* === v29.9.29-patch: diensten fixes (ticker LTR + grid order + full-width) === */
+.trust-band .container{max-width:100%;padding-left:0;padding-right:0;}
+.trust-ticker{width:100%;}
+.trust-ticker .marquee-track{display:flex;width:max-content;animation:marquee-ltr 28s linear infinite;}
+@keyframes marquee-ltr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.trust-ticker .row{display:flex;gap:28px;align-items:center;white-space:nowrap;padding:6px 0;}
+
+/* Airconditioning section: force text left, image right */
+#svc-airco-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(18px,4vw,34px);align-items:center;}
+#svc-airco-grid > div{order:1;text-align:left;}
+#svc-airco-grid > figure{order:2;}
+/* Prevent accidental right alignment carryover */
+#svc-airco-grid .list-check{margin-left:0;}
+/* Consistent media figure style */
+.section .media img{display:block;width:100%;height:auto;border-radius:14px;object-fit:cover;}
