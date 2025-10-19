@@ -19,6 +19,22 @@
 #prijzen-scope .spaced-y { margin: clamp(32px,7vw,96px) 0; }
 #prijzen-scope .section-divider { height:1px; background:linear-gradient(90deg,transparent,rgba(0,0,0,.14),transparent); border:0; margin: clamp(18px,4vw,36px) 0; }
 #prijzen-scope .section.alt { background: linear-gradient(180deg, rgba(11,31,51,.03), rgba(10,36,61,.06)); }
+</style><style id="prijzen-tighten">
+/* Prices tighten */
+#prijzen-scope .chips { display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 10px;}
+#prijzen-scope .chip { background: rgba(43,108,255,.08); color:#0b1f33; border:1px solid rgba(43,108,255,.25); }
+#prijzen-scope .section.alt { background: linear-gradient(180deg, rgba(11,31,51,.03), rgba(10,36,61,.06)); }
+#prijzen-scope .section.alt-dark { background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; }
+#prijzen-scope .section.alt-dark h2, #prijzen-scope .section.alt-dark p, #prijzen-scope .section.alt-dark li { color:#eaf1ff; }
+#prijzen-scope .price-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:18px; }
+#prijzen-scope .card-price { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:18px; padding:18px; box-shadow:0 18px 40px rgba(0,0,0,.07); }
+#prijzen-scope .card-price h3 { margin:.25rem 0 .35rem; font-size:1.25rem; }
+#prijzen-scope .card-price .price { font-size:1.6rem; font-weight:800; }
+#prijzen-scope .card-price .price .euro { color:#2b6cff; }
+#prijzen-scope .card-price ul { margin:.5rem 0 0 1rem; }
+#prijzen-scope .badge { display:inline-block; font-size:.8rem; padding:.25rem .55rem; border-radius:999px; background:rgba(42,181,242,.14); color:#1076b5; border:1px solid rgba(42,181,242,.35); }
+#prijzen-scope .section-divider { height:1px; background:linear-gradient(90deg,transparent,rgba(0,0,0,.14),transparent); border:0; margin: clamp(18px,4vw,36px) 0; }
+#prijzen-scope .lead strong { color:#2b6cff; }
 </style></head><body>
 <div class="topbar">
 <div class="container topbar-inner">
@@ -43,7 +59,7 @@
 <main id="prijzen-scope">
 <section class="section reveal" style="padding: 1rem 0;">
 <div class="container" style="display:flex; flex-wrap:wrap; gap:8px;">
-<span class="chip">Binnen 7 dagen geplaatst</span>
+<div class="chips"><span class="chip">Binnen 7 dagen*</span><span class="chip">Gecertificeerde monteurs</span><span class="chip">Gratis offerte 24u</span><span class="chip">Geen verborgen kosten</span></div><span class="chip">Binnen 7 dagen geplaatst</span>
 <span class="chip">Gecertificeerde monteurs</span>
 <span class="chip">Gratis offerte 24u</span>
 <span class="chip">Geen verborgen kosten</span>
@@ -106,29 +122,7 @@
 </div>
 </div>
 </section>
-<section class="section section--invert reveal" id="prijzen-cards">
-<div class="container"><hr class="section-divider"/>
-<h2>Vanaf-prijzen per merk (incl. materiaal &amp; montage)</h2>
-<div class="service-grid">
-<div class="service-card">
-<h3>Daikin</h3>
-<p><strong>Vanaf €1.800</strong>. Premium rendement, stille modellen, lange levensduur.</p>
-<a class="btn" data-transition="" href="contact.html#offerte">Offerte voor Daikin</a>
-</div>
-<div class="service-card">
-<h3>Panasonic</h3>
-<p><strong>Vanaf €1.600</strong>. Comfort &amp; luchtkwaliteit (nanoe™ X), stil en stijlvol.</p>
-<a class="btn" data-transition="" href="contact.html#offerte">Offerte voor Panasonic</a>
-</div>
-<div class="service-card">
-<h3>Haier</h3>
-<p><strong>Vanaf €1.300</strong>. Slim geprijsd, slimme functies (wifi/app), energiezuinig.</p>
-<a class="btn" data-transition="" href="contact.html#offerte">Offerte voor Haier</a>
-</div>
-</div>
-<p style="margin-top:10px; opacity:.85;">Prijzen zijn indicatief en afhankelijk van situatie, leidinglengte en afwerking.</p>
-</div>
-</section>
+
 <section class="section reveal" id="faq-prijzen"><div class="container"><hr class="section-divider"/><h2>Veelgestelde <span class="text-brand">vragen</span></h2><div class="faq"><details id="faq-prijzen-inbegrepen"><summary>Wat is inbegrepen bij de prijs?</summary><p>Standaardmontage, tot 4 meter leiding, inbedrijfstelling en uitleg. Meerwerk stemmen we vooraf af.</p></details><details id="faq-prijzen-vast"><summary>Zijn dit vaste prijzen?</summary><p>Het zijn richtprijzen. De uiteindelijke prijs hangt af van uw situatie ter plaatse.</p></details><details id="faq-prijzen-subsidie"><summary>Helpen jullie met ISDE‑subsidie?</summary><p>Ja, we adviseren over de mogelijkheden en leveren de benodigde informatie.</p></details><details id="faq-prijzen-betaling"><summary>Hoe gaat de betaling?</summary><p>Na akkoord plannen we in. Facturatie volgens afspraak; geen verborgen kosten.</p></details><details id="faq-prijzen-advies"><summary>Kan ik een exacte offerte krijgen?</summary><p>Zeker. Vraag een gratis offerte aan — vaak binnen 24 uur.</p></details></div></div></section></main>
 <footer class="site-footer">
 <div class="container footer-grid">
