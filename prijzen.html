@@ -1,158 +1,108 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="nl"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prijzen • Airflow+</title>
-<meta content="Airflow+ — Airco &amp; warmtepomp installatie. Snel, netjes en gecertificeerd." name="description"/>
-<link href="assets/img/favicon.png" rel="icon"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<meta name="description" content="Airflow+ — Airco & warmtepomp installatie. Snel, netjes en gecertificeerd.">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <!-- Use the new themed CSS -->
-<link href="assets/css/style.v13.css?v=v18" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.v13.css">
+
 <!-- Your script (keep your filename; example shown) -->
-<script defer="" src="assets/js/main.js?v=13"></script>
-<style id="prijzen-inline-polish">
-/* Prijzen page polish */
-#prijzen-scope .card-dark { background: linear-gradient(180deg,#0b1f33,#0a243d); color:#fff; border-radius:28px; box-shadow:0 48px 110px rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.14); padding:clamp(22px,3.2vw,34px); }
-#prijzen-scope .spaced-y { margin: clamp(32px,7vw,96px) 0; }
-#prijzen-scope .section-divider { height:1px; background:linear-gradient(90deg,transparent,rgba(0,0,0,.14),transparent); border:0; margin: clamp(18px,4vw,36px) 0; }
-#prijzen-scope .section.alt { background: linear-gradient(180deg, rgba(11,31,51,.03), rgba(10,36,61,.06)); }
-</style><style id="prijzen-tighten">
-/* Prices tighten */
-#prijzen-scope .chips { display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 10px;}
-#prijzen-scope .chip { background: rgba(43,108,255,.08); color:#0b1f33; border:1px solid rgba(43,108,255,.25); }
-#prijzen-scope .section.alt { background: linear-gradient(180deg, rgba(11,31,51,.03), rgba(10,36,61,.06)); }
-#prijzen-scope .section.alt-dark { background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; }
-#prijzen-scope .section.alt-dark h2, #prijzen-scope .section.alt-dark p, #prijzen-scope .section.alt-dark li { color:#eaf1ff; }
-#prijzen-scope .price-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:18px; }
-#prijzen-scope .card-price { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:18px; padding:18px; box-shadow:0 18px 40px rgba(0,0,0,.07); }
-#prijzen-scope .card-price h3 { margin:.25rem 0 .35rem; font-size:1.25rem; }
-#prijzen-scope .card-price .price { font-size:1.6rem; font-weight:800; }
-#prijzen-scope .card-price .price .euro { color:#2b6cff; }
-#prijzen-scope .card-price ul { margin:.5rem 0 0 1rem; }
-#prijzen-scope .badge { display:inline-block; font-size:.8rem; padding:.25rem .55rem; border-radius:999px; background:rgba(42,181,242,.14); color:#1076b5; border:1px solid rgba(42,181,242,.35); }
-#prijzen-scope .section-divider { height:1px; background:linear-gradient(90deg,transparent,rgba(0,0,0,.14),transparent); border:0; margin: clamp(18px,4vw,36px) 0; }
-#prijzen-scope .lead strong { color:#2b6cff; }
-</style><style id="prijzen-tight-gap">
-#prijzen-scope .section{padding-top:38px;padding-bottom:38px}
-#prijzen-scope .card-dark{margin:22px auto 20px auto}
-#prijzen-scope .price-grid{margin-top:12px}
-</style></head><body>
+<script defer src="assets/js/main.js?v=13"></script>
+
+</head><body>
+
 <div class="topbar">
-<div class="container topbar-inner">
-<span>Gecertificeerde airco &amp; warmtepomp installateur</span>
-<a class="topbar-link" href="tel:+31 10 000 0000">Bel: +31 10 000 0000</a>
+  <div class="container topbar-inner">
+    <span>Gecertificeerde airco & warmtepomp installateur</span>
+    <a href="tel:+31 10 000 0000" class="topbar-link">Bel: +31 10 000 0000</a>
+  </div>
 </div>
-</div>
+
+
 <header class="site-header">
-<div class="container header-inner">
-<a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
-<nav class="nav">
-<a href="keuzehulp.html">Keuzehulp</a>
-<a href="airco.html">Airco</a>
-<a href="diensten.html">Diensten</a>
-<a href="prijzen.html">Prijzen</a>
-<a href="over.html">Over ons</a>
-<a class="btn btn-primary" href="contact.html">Bel/Offerte</a>
-</nav>
-<button aria-label="Open menu" class="nav-toggle">☰</button>
-</div>
+  <div class="container header-inner">
+    <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
+    <nav class="nav">
+      <a href="keuzehulp.html">Keuzehulp</a>
+      <a href="airco.html">Airco</a>
+      <a href="diensten.html">Diensten</a>
+      <a href="prijzen.html">Prijzen</a>
+      <a href="over.html">Over ons</a>
+      <a href="contact.html" class="btn btn-primary">Bel/Offerte</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Open menu">☰</button>
+  </div>
 </header>
-<main id="prijzen-scope">
-<section class="section reveal" style="padding: 1rem 0;">
-<div class="container" style="display:flex; flex-wrap:wrap; gap:8px;">
-<span class="chip">Binnen 7 dagen geplaatst</span>
-<span class="chip">Gecertificeerde monteurs</span>
-<span class="chip">Gratis offerte 24u</span>
-<span class="chip">Geen verborgen kosten</span>
-</div><div class="keyword-ticker"><div class="keyword-track"><span class="item"><i class="check"></i> Binnen 7 dagen*</span><span class="item"><i class="check"></i> Gecertificeerde monteurs</span><span class="item"><i class="check"></i> Geen verborgen kosten</span><span class="item"><i class="check"></i> Gratis offerte binnen 24u</span></div></div>
-</section><section class="section reveal spaced-y" id="prijzen-value"><div class="container container-narrow"><article class="card-dark"><h2>Eerlijke prijzen, <span class="text-brand">geen verrassingen</span></h2><p class="lead">Indicatieve vanaf‑prijzen met nette montage. Voor een exacte prijs maken we gratis een offerte op maat.</p></article></div></section>
-<section class="section section--invert reveal" id="startprijzen">
-<div class="container"><hr class="section-divider"/>
-<h2><span class="text-brand">Indicatieve</span> vanaf-prijzen</h2>
-<table class="price-table" style="width:100%; border-collapse:collapse;">
-<thead>
-<tr>
-<th style="text-align:left; padding:8px; border-bottom:1px solid rgba(0,0,0,0.1);">Merk</th>
-<th style="text-align:left; padding:8px; border-bottom:1px solid rgba(0,0,0,0.1);">Vanaf</th>
-<th style="text-align:left; padding:8px; border-bottom:1px solid rgba(0,0,0,0.1);">Inclusief</th>
-</tr>
-</thead>
-<tbody>
-<tr><td style="padding:8px;">Daikin</td><td style="padding:8px;">€1.800</td><td style="padding:8px;">Materiaal &amp; montage</td></tr>
-<tr><td style="padding:8px;">Panasonic</td><td style="padding:8px;">€1.600</td><td style="padding:8px;">Materiaal &amp; montage</td></tr>
-<tr><td style="padding:8px;">Haier</td><td style="padding:8px;">€1.300</td><td style="padding:8px;">Materiaal &amp; montage</td></tr>
-</tbody>
-</table>
-<p style="margin-top:10px; opacity:.85;">Prijzen zijn indicatief en afhankelijk van situatie, leidinglengte en afwerking. U ontvangt binnen 24 uur een vrijblijvende offerte.</p>
+
+\1
+
+<div class="trust-ticker trust-ticker--thin" aria-label="voordelen">
+  <div class="trust-track">
+    <div class="trust-item"><i class="check"></i> Binnen 7 dagen geplaatst*</div>
+    <div class="trust-item"><i class="check"></i> Gecertificeerde monteurs</div>
+    <div class="trust-item"><i class="check"></i> Gratis offerte 24u</div>
+    <div class="trust-item"><i class="check"></i> Geen verborgen kosten</div>
+    <div class="trust-item"><i class="check"></i> ISDE-advies mogelijk</div>
+  </div>
 </div>
+<section class='page-header'><div class='container'><h1>Prijzen</h1><p>Pagina in ontwikkeling.</p></div></section>
+
+<section class="section-tight">
+  <div class="container">
+    <h2>Veelgestelde vragen over prijzen</h2>
+    <div class="faq">
+    <div class="faq-item">
+      <button class="faq-q">Wat zit er in de vanaf-prijs?<span>+</span></button>
+      <div class="faq-a"><p>Incl. materiaal en nette montage; exacte prijs na gratis offerte.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Subsidie mogelijk?<span>+</span></button>
+      <div class="faq-a"><p>We adviseren over ISDE, afhankelijk van model en situatie.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Waarom kan de prijs verschillen?<span>+</span></button>
+      <div class="faq-a"><p>Leidingwerk, locatie en keuze van merk/model spelen mee.</p></div>
+    </div>
+    </div>
+  </div>
 </section>
-<section class="section reveal" id="kwaliteit">
-<div class="container"><hr class="section-divider"/>
-<h2>Waarom Airflow+</h2>
-<ul>
-<li>Binnen 7 dagen geplaatst (indien voorraad en planning beschikbaar)</li>
-<li>Gecertificeerde monteurs, strakke afwerking</li>
-<li>Geen verborgen kosten — duidelijke afspraken</li>
-</ul>
-</div>
-</section>
-<section class="section reveal">
-<div class="container"><hr class="section-divider"/>
-<span class="chip">Prijzen</span>
-<h1>Indicatieve pakketprijzen</h1>
-<p>Elke situatie is anders. Onderstaande prijzen zijn ‘vanaf’ inclusief standaard installatie.</p>
-</div>
-</section>
-<section class="section section--invert reveal">
-<div class="container"><hr class="section-divider"/>
-<div class="optin">
-<h4>Gerichte offerte ontvangen?</h4>
-<form action="https://formspree.io/f/mgvndydv" data-fs="" data-source="prijzen-offerte" data-thanks="/thank-you.html" data-type="lead" method="POST">
-<div class="row">
-<input name="naam" placeholder="Uw naam" required="" type="text"/>
-<input name="email" placeholder="E-mail" required="" type="email"/>
-<select name="systeem">
-<option value="single-split">Single‑split</option>
-<option value="multi-split">Multi‑split</option>
-<option value="warmtepomp-airco">Warmtepomp‑airco</option>
-</select>
-<input name="source" type="hidden" value="prijzen-offerte"/>
-</div>
-<button class="btn" style="margin-top:10px;" type="submit">Offerte aanvragen</button>
-</form>
-</div>
-</div>
-</section>
-<section class="section reveal" id="faq-prijzen"><div class="container"><hr class="section-divider"/><h2>Veelgestelde <span class="text-brand">vragen</span></h2><div class="faq"><details id="faq-prijzen-inbegrepen"><summary>Wat is inbegrepen bij de prijs?</summary><p>Standaardmontage, tot 4 meter leiding, inbedrijfstelling en uitleg. Meerwerk stemmen we vooraf af.</p></details><details id="faq-prijzen-vast"><summary>Zijn dit vaste prijzen?</summary><p>Het zijn richtprijzen. De uiteindelijke prijs hangt af van uw situatie ter plaatse.</p></details><details id="faq-prijzen-subsidie"><summary>Helpen jullie met ISDE‑subsidie?</summary><p>Ja, we adviseren over de mogelijkheden en leveren de benodigde informatie.</p></details><details id="faq-prijzen-betaling"><summary>Hoe gaat de betaling?</summary><p>Na akkoord plannen we in. Facturatie volgens afspraak; geen verborgen kosten.</p></details><details id="faq-prijzen-advies"><summary>Kan ik een exacte offerte krijgen?</summary><p>Zeker. Vraag een gratis offerte aan — vaak binnen 24 uur.</p></details></div></div></section></main>
+</main>
+
 <footer class="site-footer">
-<div class="container footer-grid">
-<div>
-<div class="brand">Airflow<span class="accent">+</span></div>
-<p class="muted">Gecertificeerde installatie van airco &amp; warmtepompen. Snel, netjes en volgens norm.</p>
-</div>
-<div>
-<h4>Contact</h4>
-<ul class="list">
-<li><a href="tel:+31 10 000 0000">+31 10 000 0000</a></li>
-<li><a href="mailto:info@placeholder.nl">info@placeholder.nl</a></li>
-<li>Rotterdam &amp; landelijk</li>
-</ul>
-</div>
-<div>
-<h4>Pagina’s</h4>
-<ul class="list">
-<li><a href="#keuzehulp-cta">Keuzehulp</a></li>
-<li><a href="airco.html">Airco</a></li>
-<li><a href="diensten.html">Diensten</a></li>
-<li><a href="prijzen.html">Prijzen</a></li>
-<li><a href="over.html">Over ons</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</div>
-</div>
-<div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
+  <div class="container footer-grid">
+    <div>
+      <div class="brand">Airflow<span class="accent">+</span></div>
+      <p class="muted">Gecertificeerde installatie van airco &amp; warmtepompen. Snel, netjes en volgens norm.</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul class="list">
+        <li><a href="tel:+31 10 000 0000">+31 10 000 0000</a></li>
+        <li><a href="mailto:info@placeholder.nl">info@placeholder.nl</a></li>
+        <li>Rotterdam &amp; landelijk</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Pagina’s</h4>
+      <ul class="list">
+        <li><a href="#keuzehulp-cta">Keuzehulp</a></li>
+        <li><a href="airco.html">Airco</a></li>
+        <li><a href="diensten.html">Diensten</a></li>
+        <li><a href="prijzen.html">Prijzen</a></li>
+        <li><a href="over.html">Over ons</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
 </footer>
+
 </body></html>

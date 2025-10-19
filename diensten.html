@@ -1,189 +1,108 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="nl"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Diensten • Airflow+</title>
-<meta content="Airflow+ — Airco &amp; warmtepomp installatie. Snel, netjes en gecertificeerd." name="description"/>
-<link href="assets/img/favicon.png" rel="icon"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<meta name="description" content="Airflow+ — Airco & warmtepomp installatie. Snel, netjes en gecertificeerd.">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <!-- Use the new themed CSS -->
-<link href="assets/css/style.v13.css?v=v18" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.v13.css">
+
 <!-- Your script (keep your filename; example shown) -->
-<script defer="" src="assets/js/main.js?v=13"></script>
-<style id="diensten-scope-inline">
-/* Scoped overrides for diensten-scope */
-#diensten-scope .card-dark {
-  background: linear-gradient(180deg, #0b1f33, #0a243d);
-  color: #fff;
-  border-radius: 28px;
-  box-shadow: 0 48px 110px rgba(0,0,0,.35);
-  border: 1px solid rgba(255,255,255,.14);
-  padding: clamp(22px,3.2vw,34px);
-}
-#diensten-scope .card-dark h2{margin:0 0 .4rem;}
-#diensten-scope .card-dark .lead{opacity:.96}
-#diensten-scope .card-dark .actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:12px}
-#diensten-scope .btn{color:#fff;background:linear-gradient(180deg,#2b6cff,#2ab5f2);}
-#diensten-scope .btn.btn--ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.6);color:#fff}
-#diensten-scope .soft{background:linear-gradient(180deg, rgba(11,31,51,.03), rgba(10,36,61,.06));border-radius:18px;padding:18px}
-#diensten-scope .checks{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:10px 0 6px}
-#diensten-scope .checks .chk{display:inline-flex;gap:8px;align-items:center;font-weight:600}
-#diensten-scope .checks .chk svg{width:18px;height:18px;flex:0 0 18px;filter:drop-shadow(0 1px 0 rgba(0,0,0,.15))}
-</style><style id="diensten-inline-polish">
-/* Diensten scoped polish */
-#diensten-scope .section--brand { background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; }
-#diensten-scope .section--brand h2, 
-#diensten-scope .section--brand p, 
-#diensten-scope .section--brand li { color:#eaf1ff; }
-#diensten-scope .section--brand .btn { background: linear-gradient(180deg, #2b6cff, #2ab5f2); color:#fff; }
-#diensten-scope .section { padding-top: clamp(26px,5vw,60px); padding-bottom: clamp(26px,5vw,60px); }
-#diensten-scope .section.sep { border-top: 1px solid rgba(0,0,0,.08); }
-</style></head><body>
+<script defer src="assets/js/main.js?v=13"></script>
+
+</head><body>
+
 <div class="topbar">
-<div class="container topbar-inner">
-<span>Gecertificeerde airco &amp; warmtepomp installateur</span>
-<a class="topbar-link" href="tel:+31 10 000 0000">Bel: +31 10 000 0000</a>
+  <div class="container topbar-inner">
+    <span>Gecertificeerde airco & warmtepomp installateur</span>
+    <a href="tel:+31 10 000 0000" class="topbar-link">Bel: +31 10 000 0000</a>
+  </div>
 </div>
-</div>
+
+
 <header class="site-header">
-<div class="container header-inner">
-<a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
-<nav class="nav">
-<a href="keuzehulp.html">Keuzehulp</a>
-<a href="airco.html">Airco</a>
-<a href="diensten.html">Diensten</a>
-<a href="prijzen.html">Prijzen</a>
-<a href="over.html">Over ons</a>
-<a class="btn btn-primary" href="contact.html">Bel/Offerte</a>
-</nav>
-<button aria-label="Open menu" class="nav-toggle">☰</button>
-</div>
+  <div class="container header-inner">
+    <a class="brand" href="index.html">Airflow<span class="accent">+</span></a>
+    <nav class="nav">
+      <a href="keuzehulp.html">Keuzehulp</a>
+      <a href="airco.html">Airco</a>
+      <a href="diensten.html">Diensten</a>
+      <a href="prijzen.html">Prijzen</a>
+      <a href="over.html">Over ons</a>
+      <a href="contact.html" class="btn btn-primary">Bel/Offerte</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Open menu">☰</button>
+  </div>
 </header>
-<main id="diensten-scope">
-<section class="section reveal" id="svc-airco">
-<div class="container grid-2">
-<div>
-<span class="kicker">Diensten</span>
-<h2>Air<span class="text-brand">conditioning</span></h2>
-<p class="lead">Single- en multi-split systemen, strak afgewerkt en stil in gebruik.</p>
-<ul class="list-check">
-<li>Advies per ruimte: capaciteit, geluidsniveau, afwerking</li>
-<li>Energiezuinig met hoge SEER/SCOP</li>
-</ul>
-<a class="btn" data-transition="" href="airco.html">Meer over airco</a>
+
+\1
+
+<div class="trust-ticker trust-ticker--thin" aria-label="voordelen">
+  <div class="trust-track">
+    <div class="trust-item"><i class="check"></i> Binnen 7 dagen geplaatst*</div>
+    <div class="trust-item"><i class="check"></i> Gecertificeerde monteurs</div>
+    <div class="trust-item"><i class="check"></i> Gratis offerte 24u</div>
+    <div class="trust-item"><i class="check"></i> Geen verborgen kosten</div>
+    <div class="trust-item"><i class="check"></i> ISDE-advies mogelijk</div>
+  </div>
 </div>
-<figure class="media-ph">Afbeelding (airco)</figure>
-</div>
+<section class='page-header'><div class='container'><h1>Diensten</h1><p>Pagina in ontwikkeling.</p></div></section>
+
+<section class="section-tight">
+  <div class="container">
+    <h2>Diensten – veelgestelde vragen</h2>
+    <div class="faq">
+    <div class="faq-item">
+      <button class="faq-q">Bieden jullie onderhoudscontracten?<span>+</span></button>
+      <div class="faq-a"><p>Ja, servicecontracten of losse onderhoudsbeurten zijn mogelijk.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Hebben jullie storingsdienst?<span>+</span></button>
+      <div class="faq-a"><p>Ja, snelle diagnose en vakkundige reparatie.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Werken jullie ook zakelijk?<span>+</span></button>
+      <div class="faq-a"><p>Ja, HVAC-oplossingen voor kantoren en winkels.</p></div>
+    </div>
+    </div>
+  </div>
 </section>
-<section class="section section--brand-deep reveal alt" id="svc-onderhoud">
-<div class="container grid-2"><hr class="section-divider"/>
-<figure class="media-ph">Afbeelding (onderhoud)</figure>
-<div>
-<h2>Onder<span class="text-brand">houd</span></h2>
-<p class="lead">Periodieke beurten voor maximale levensduur en top-rendement.</p>
-<ul class="list-check">
-<li>Filters reinigen, lekdichtheid, prestatiecheck</li>
-<li><strong>Servicecontract</strong> of losse beurt</li>
-</ul>
-<a class="btn btn--ghost" data-transition="" href="onderhoud.html">Bekijk onderhoud</a>
-</div>
-</div>
-</section>
-<section class="section section--soft reveal" id="svc-reparatie">
-<div class="container grid-2"><hr class="section-divider"/>
-<div>
-<h2>Reparatie &amp; <span class="text-brand">storingen</span></h2>
-<p class="lead">Snelle diagnose en vakkundige reparatie wanneer het erom gaat.</p>
-<ul class="list-check">
-<li>Snelle responstijden in Zuid-Holland</li>
-<li>Transparante kosten, duidelijke afspraken</li>
-</ul>
-<a class="btn" data-transition="" href="reparatie.html">Hulp nodig?</a>
-</div>
-<figure class="media-ph">Afbeelding (reparatie)</figure>
-</div>
-</section>
-<section class="section reveal alt" id="svc-wp">
-<div class="container grid-2"><hr class="section-divider"/>
-<figure class="media-ph">Afbeelding (warmtepomp-airco)</figure>
-<div>
-<h2>Warmte<span class="text-brand">pomp-airco</span></h2>
-<p class="lead">Verwarmen én koelen met hoog rendement — comfort in elk seizoen.</p>
-<ul class="list-check">
-<li>Hybride of all-electric opties</li>
-<li>ISDE-advies mogelijk</li>
-</ul>
-<a class="btn" data-transition="" href="warmtepomp-airco.html">Ontdek warmtepomp-airco</a>
-</div>
-</div>
-</section>
-<section class="section section--brand reveal" id="svc-multisplit">
-<div class="container grid-2"><hr class="section-divider"/>
-<div>
-<h2>Multi-<span class="text-brand">split</span></h2>
-<p class="lead">Meerdere kamers koelen/verwarmen via één buitenunit — flexibel en netjes.</p>
-<ul class="list-check">
-<li>Op maat ontworpen leidingloop en afwerking</li>
-<li>Geschikt voor woningen en kleine bedrijven</li>
-</ul>
-<a class="btn btn--ghost" data-transition="" href="multi-split.html">Bekijk multi-split</a>
-</div>
-<figure class="media-ph">Afbeelding (multi-split)</figure>
-</div>
-</section>
-<section class="section reveal alt" id="svc-zakelijk">
-<div class="container grid-2"><hr class="section-divider"/>
-<figure class="media-ph">Afbeelding (zakelijk)</figure>
-<div>
-<h2><span class="text-brand">Zakelijk</span></h2>
-<p class="lead">HVAC-oplossingen voor kantoren en winkels — stil, zuinig en betrouwbaar.</p>
-<ul class="list-check">
-<li>Comfort en luchtkwaliteit voor medewerkers en klanten</li>
-<li>Onderhoud en storingsdienst op maat</li>
-</ul>
-<a class="btn" data-transition="" href="zakelijk.html">Zakelijke oplossingen</a>
-</div>
-</div>
-</section>
-<section class="section reveal" id="diensten-cta"><div class="container"><article class="card-dark">
-<h2 style="margin:0 0 .25rem;">Klaar voor advies op maat?</h2>
-<div class="checks">
-<span class="chk"><svg viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 14.6L3.5 10.3l1.4-1.4 2.9 2.9 7.3-7.3 1.4 1.4z" fill="#3fe086"></path></svg> Gratis offerte binnen 24u</span>
-<span class="chk"><svg viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 14.6L3.5 10.3l1.4-1.4 2.9 2.9 7.3-7.3 1.4 1.4z" fill="#3fe086"></path></svg> Geen verborgen kosten</span>
-<span class="chk"><svg viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 14.6L3.5 10.3l1.4-1.4 2.9 2.9 7.3-7.3 1.4 1.4z" fill="#3fe086"></path></svg> Gecertificeerde monteurs</span>
-</div>
-<div class="actions"><a class="btn" href="keuzehulp.html">Start keuzehulp</a><a class="btn btn--ghost" href="contact.html#offerte">Vraag offerte</a></div>
-</article></div></section>
-<section class="section reveal" id="faq-diensten"><div class="container"><h2>Veelgestelde <span class="text-brand">vragen</span></h2><div class="faq"><details id="faq-diensten-contract"><summary>Werken jullie met servicecontracten?</summary><p>Ja. We bieden servicecontracten en losse onderhoudsbeurten — wat het beste past bij uw situatie.</p></details><details id="faq-diensten-regio"><summary>In welke regio werken jullie?</summary><p>Voornamelijk Zuid‑Holland, maar we zijn inzetbaar door heel Nederland.</p></details><details id="faq-diensten-reparatie"><summary>Hoe snel helpen jullie bij storingen?</summary><p>We plannen snel in en helpen prioriteit bij urgente storingen; bel of vraag online hulp.</p></details><details id="faq-diensten-merken"><summary>Met welke merken werken jullie?</summary><p>Daikin, Panasonic en Haier — we adviseren het merk dat past bij budget en wensen.</p></details><details id="faq-diensten-garantie"><summary>Welke garantie krijg ik?</summary><p>U krijgt fabrieksgarantie op apparatuur plus onze montagegarantie volgens afspraak.</p></details></div></div></section></main>
+</main>
+
 <footer class="site-footer">
-<div class="container footer-grid">
-<div>
-<div class="brand">Airflow<span class="accent">+</span></div>
-<p class="muted">Gecertificeerde installatie van airco &amp; warmtepompen. Snel, netjes en volgens norm.</p>
-</div>
-<div>
-<h4>Contact</h4>
-<ul class="list">
-<li><a href="tel:+31 10 000 0000">+31 10 000 0000</a></li>
-<li><a href="mailto:info@placeholder.nl">info@placeholder.nl</a></li>
-<li>Rotterdam &amp; landelijk</li>
-</ul>
-</div>
-<div>
-<h4>Pagina’s</h4>
-<ul class="list">
-<li><a href="#keuzehulp-cta">Keuzehulp</a></li>
-<li><a href="airco.html">Airco</a></li>
-<li><a href="diensten.html">Diensten</a></li>
-<li><a href="prijzen.html">Prijzen</a></li>
-<li><a href="over.html">Over ons</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</div>
-</div>
-<div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
+  <div class="container footer-grid">
+    <div>
+      <div class="brand">Airflow<span class="accent">+</span></div>
+      <p class="muted">Gecertificeerde installatie van airco &amp; warmtepompen. Snel, netjes en volgens norm.</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul class="list">
+        <li><a href="tel:+31 10 000 0000">+31 10 000 0000</a></li>
+        <li><a href="mailto:info@placeholder.nl">info@placeholder.nl</a></li>
+        <li>Rotterdam &amp; landelijk</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Pagina’s</h4>
+      <ul class="list">
+        <li><a href="#keuzehulp-cta">Keuzehulp</a></li>
+        <li><a href="airco.html">Airco</a></li>
+        <li><a href="diensten.html">Diensten</a></li>
+        <li><a href="prijzen.html">Prijzen</a></li>
+        <li><a href="over.html">Over ons</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
 </footer>
+
 </body></html>
