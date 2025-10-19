@@ -44,6 +44,20 @@
 #contact .cta-row{display:flex!important;gap:12px!important;align-items:center!important;flex-wrap:wrap!important;margin-top:14px!important;}
 </style>
 
+
+<!-- FINAL contact form visual fix (v29.3.4) -->
+<style>
+#contact form { max-width: 700px; margin: 0 auto; }
+#contact .field.full.terms { display:flex; align-items:center; justify-content:flex-start; margin:10px 0 5px; }
+#contact .field.full.terms label.checkbox { display:flex; align-items:center; gap:10px; font-weight:500; margin:0; width:auto; }
+#contact .field.full.terms input[type="checkbox"] { width:18px; height:18px; margin:0; transform: translateY(1px); }
+#contact .field.full.terms span { white-space: nowrap; display:inline; }
+#contact .cta-row { display:flex; gap:12px; align-items:center; margin-top:14px; justify-content:flex-start; }
+#contact .cta-row .btn { padding:10px 22px; border-radius:50px; font-weight:600; }
+#contact .cta-row .btn:first-child { background-color:#0091ff; color:#fff; border:none; }
+#contact .cta-row .btn:first-child:hover { background-color:#0078d6; }
+</style>
+
 </head><body>
 <div class="topbar">
 <div class="container topbar-inner">
@@ -108,6 +122,7 @@
   </label>
   <div class="error" data-err="consent"></div>
 </div>
+
 <div class="cta-row">
   <button class="btn" type="submit">Versturen</button>
   <a class="btn btn--ghost" href="tel:+31100000000">Bel direct</a>
