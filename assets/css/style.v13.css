@@ -60,7 +60,7 @@ h2{font-size:30px;margin:0 0 18px}
 .kh-cta{background: linear-gradient(180deg, #0b1f33, #0a243d);border-top:1px solid #e6e9ee;padding-top:0;margin-top:0;position:relative;z-index:5}
 .kh-cta .container.left{display:flex;justify-content:flex-start}
 .kh-cta-card{display:flex;flex-direction:column;gap:12px;align-items:flex-start;justify-content:flex-start;background:#fff;border:1px solid #dbe7ff;border-radius:20px;padding:24px;box-shadow:0 16px 40px rgba(0,93,143,.08)}
-.kh-cta-card.compact.seam{max-width:720px;transform:translateY(-54%)}
+.kh-cta-card.compact.seam{max-width:720px;transform:translateY(-24%)}
 .kh-cta-card.compact.seam.blue{background: linear-gradient(180deg, #0b1f33, #0a243d);color:#fff;border-color:rgba(255,255,255,.22);box-shadow:0 28px 70px rgba(0,93,143,.22)}
 .kh-cta-card.compact.seam.blue h2,.kh-cta-card.compact.seam.blue p,.kh-cta-card.compact.seam.blue li{color:#fff}
 .checklist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
@@ -940,7 +940,7 @@ select {
 /* 3) Keuzehulp CTA band: keep it closer to hero and to the next block */
 .kh-cta{ padding-top:8px; padding-bottom:10px; }
 .kh-cta .container{ margin-top:0; }
-.kh-cta-card.compact.seam{ transform:translateY(-28%); } /* was ~-54% */
+.kh-cta-card.compact.seam{ transform:translateY(-24%); } /* was ~-54% */
 
 /* 4) “Comfort met airco” section: shrink height + shadow so it feels closer */
 .heat-info{ min-height:auto; padding:18px 0 28px; }      /* remove tall min-height */
@@ -1983,9 +1983,9 @@ body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px);
 /* =========================================================
    SECTION: Keuzehulp hero overlap fix (v29.9.6)
    ========================================================= */
-section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-50%) !important; }
+section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-24%) !important; }
 @media (max-width: 960px){
-  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-38%) !important; }
+  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-24%) !important; }
 }
 
 /* Hero mute button positioning */
@@ -1993,4 +1993,12 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
   position:absolute;left:16px;bottom:16px;z-index:6;
   padding:8px 12px;font-size:14px;border-radius:10px;
   opacity:.92;backdrop-filter:saturate(1.2) blur(4px);
+}
+
+/* =========================================================
+   SECTION: Keuzehulp hero overlap (v29.9.7 desktop/mobile)
+   ========================================================= */
+section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-24%) !important; }
+@media (max-width: 960px){
+  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-16%) !important; }
 }

@@ -701,3 +701,45 @@ window.addEventListener('DOMContentLoaded', () => {
     syncLabel();
   } catch(e){}
 })();
+
+
+// =========================================================
+// SECTION: Hero muteToggle binding (v29.9.7)
+// - Uses #muteToggle button that already exists in markup
+// - Targets .hero-video or [data-hero-video]
+// =========================================================
+(function(){
+  try {
+    var video = document.querySelector('.hero-video') || document.querySelector('[data-hero-video]');
+    var btn = document.getElementById('muteToggle');
+    if (!video || !btn) return;
+
+    function syncIcon(){
+      // Update button icon/label to reflect current state
+      if (video.muted){
+        btn.textContent = '🔇';
+        btn.setAttribute('aria-label','Unmute');
+      } else {
+        btn.textContent = '🔊';
+        btn.setAttribute('aria-label','Mute');
+      }
+    }
+
+    // Ensure default mute for autoplay policies; then sync
+    if (typeof video.muted === 'boolean' && !video.hasAttribute('data-muted-initialized')){
+      video.muted = true;
+      video.setAttribute('data-muted-initialized','1');
+    }
+    syncIcon();
+
+    btn.addEventListener('click', function(){
+      try {
+        video.muted = !video.muted;
+        syncIcon();
+      } catch(e){}
+    }, {passive:true});
+
+    // Keep in sync if anything else toggles volume
+    video.addEventListener('volumechange', syncIcon);
+  } catch(e){}
+})();
