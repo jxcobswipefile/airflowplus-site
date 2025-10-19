@@ -2065,3 +2065,11 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
   padding: 8px 10px;
   line-height: 1;
 }
+
+/* Airco feature alignment (v29.9.22) */
+section[data-align="left"]{ text-align:left; }
+section[data-align="left"] .checklist, 
+section[data-align="left"] p, 
+section[data-align="left"] h1, 
+section[data-align="left"] h2, 
+section[data-align="left"] h3 { text-align:left; }
