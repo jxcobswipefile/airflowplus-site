@@ -725,3 +725,59 @@ window.addEventListener('DOMContentLoaded', () => {
     render();
   }catch(e){}
 })();
+
+
+// SECTION: Hero video mute/unmute — hardened (v29.9.18)
+(function(){
+  try{
+    // Try several ways to find the hero video
+    var video = document.querySelector('[data-hero-video]')
+             || document.querySelector('.hero video')
+             || document.querySelector('.hero-wrap video')
+             || document.querySelector('#hero video, video#hero-video')
+             || document.querySelector('video[autoplay]');
+
+    // Try several ways to find the existing right-side mute button
+    var btn = document.querySelector('#muteToggle')
+          || document.querySelector('.mute-btn')
+          || document.querySelector('.hero [data-mute]')
+          || document.querySelector('.hero .btn-mute')
+          || document.querySelector('.hero .mute-toggle');
+
+    if(!video || !btn) return;
+
+    // Autoplay requirements
+    video.setAttribute('playsinline','');
+    video.setAttribute('webkit-playsinline','');
+    // Start muted for autoplay
+    video.muted = true;
+
+    function render(){
+      var muted = video.muted || video.volume === 0;
+      btn.setAttribute('aria-pressed', (!muted).toString());
+      btn.setAttribute('aria-label', muted ? 'Unmute' : 'Mute');
+      // Show a clear icon/text
+      btn.textContent = muted ? '🔇' : '🔊';
+    }
+
+    function unmute(){
+      // Fully enable sound
+      video.muted = false;
+      try { if (video.volume === 0) video.volume = 0.5; } catch(e){}
+      var p = video.play();
+      if (p && typeof p.catch === 'function') { p.catch(function(){}); }
+    }
+
+    btn.addEventListener('click', function(ev){
+      try {
+        ev.stopPropagation();
+        if (video.muted || video.volume === 0) { unmute(); }
+        else { video.muted = true; }
+        render();
+      } catch(e){}
+    }, {passive:true});
+
+    video.addEventListener('volumechange', render, {passive:true});
+    render();
+  }catch(e){}
+})();
