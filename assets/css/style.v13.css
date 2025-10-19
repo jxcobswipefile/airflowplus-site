@@ -1737,3 +1737,45 @@ label.checkbox input[type="checkbox"]{ inline-size:18px; block-size:18px; }
   .trust-ticker{ padding:8px 0; }
   .trust-ticker .row{ gap:24px; }
 }
+
+
+/* === v29.7.1 (REVERSION fixes) === */
+
+/* Show full hero video (remove extra dark band if any) */
+.home .promo-banner{ display:none !important; }
+.home .hero::before, .home .hero::after{ content:none !important; display:none !important; }
+
+/* Bright blue universal button */
+:root{ --afp-blue:#16A1FF; }
+.btn.btn-primary{ background:var(--afp-blue) !important; color:#fff !important; border-color: transparent !important; }
+.btn.btn-primary:hover{ filter:brightness(0.95); }
+
+/* Keuzehulp CTA: white card + readable text */
+.section.kh-cta .kh-cta-card,
+.kh-cta-card, .kh-card{
+  background:#fff !important; color:#0f172a !important;
+  box-shadow:0 20px 50px rgba(10,37,64,.25);
+}
+.kh-cta-card h2, .kh-cta-card p, .kh-cta-card li{ color:#0f172a !important; }
+.kh-cta-card .btn.btn-primary{ background:var(--afp-blue) !important; }
+
+/* Services (diensten) — unify vertical rhythm & contrast */
+body.diensten .section{ padding-top:72px; padding-bottom:72px; }
+body.diensten .section h1, 
+body.diensten .section h2,
+body.diensten .section h3,
+body.diensten .section p,
+body.diensten .section li{ color:#0f172a; }
+body.diensten .section:not(.section--deep):not(.section--overlay){ background:#ffffff; }
+
+/* Trust band: ultra-thin, navy, CSS-only marquee */
+.trust-ticker{ background:#081021; color:#fff; padding:6px 0; overflow:hidden; }
+.trust-ticker .marquee-track{ display:flex; width:max-content; animation: marquee-ltr 28s linear infinite; }
+.trust-ticker .row{ display:inline-flex; gap:32px; align-items:center; margin:0; padding:0 24px; list-style:none; }
+.trust-ticker .item{ display:inline-flex; gap:8px; white-space:nowrap; }
+.trust-ticker .check{ width:14px; height:14px; border-radius:50%; background:#17c964; position:relative; display:inline-block; }
+.trust-ticker .check::after{ content:''; position:absolute; left:4px; top:2px; width:5px; height:8px; border:2px solid #081021; border-top:0; border-left:0; transform:rotate(45deg); }
+@keyframes marquee-ltr{ from{ transform: translateX(-50%);} to{ transform: translateX(0);} }
+
+/* Keep the strip thin even inside generic section wrappers */
+.trust-band .container{ padding-left:0 !important; padding-right:0 !important; }
