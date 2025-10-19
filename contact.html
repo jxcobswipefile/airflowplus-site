@@ -35,6 +35,15 @@
 </style>
 <!-- TEMP override end -->
 
+
+<!-- TEMP consent inline force -->
+<style>
+#contact .field.full.terms label.checkbox{display:inline-flex!important;align-items:center!important;gap:10px!important;}
+#contact .field.full.terms label.checkbox>input[type="checkbox"]{margin:0!important;position:static!important;transform:none!important;}
+#contact .field.full.terms label.checkbox>span{display:inline!important;margin:0!important;white-space:normal!important;}
+#contact .cta-row{display:flex!important;gap:12px!important;align-items:center!important;flex-wrap:wrap!important;margin-top:14px!important;}
+</style>
+
 </head><body>
 <div class="topbar">
 <div class="container topbar-inner">
@@ -93,11 +102,16 @@
 <textarea id="cf-message" name="message" placeholder="Vertel kort wat je zoekt (ruimtes, type woning, gewenste periode)..." required="" rows="6"></textarea>
 <div class="error" data-err="message"></div>
 <div class="field full terms">
-  <div class="consent-row">
+  <label class="checkbox">
     <input id="cf-consent" name="consent" type="checkbox" required />
-    <label for="cf-consent">Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</label>
-  </div>
+    <span>Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</span>
+  </label>
   <div class="error" data-err="consent"></div>
+</div>
+<div class="cta-row">
+  <button class="btn" type="submit">Versturen</button>
+  <a class="btn btn--ghost" href="tel:+31100000000">Bel direct</a>
+</div><div class="error" data-err="consent"></div>
 </div>
 <!-- Success / error inline feedback (JS fills these) -->
 <div class="form-status" aria-live="polite"></div>
