@@ -2117,9 +2117,9 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .section .media img{display:block;width:100%;height:auto;border-radius:14px;object-fit:cover;}
 
 
-/* === v29.9.29-patch-2: trust strip visual parity with homepage === */
-.trust-band { padding-top: 0; padding-bottom: 0; }
-.trust-band .container { max-width: 100%; padding-left: 0; padding-right: 0; }
-.trust-band .trust-ticker { border-radius: 0; box-shadow: none; margin: 0; }
-.trust-band .trust-ticker .marquee-track { padding: 12px 28px; }
-.trust-band .trust-ticker .item { opacity: 0.95; }
+/* === v29.9.29-patch-3: force full-bleed trust strip on diensten === */
+.section.trust-band { padding-left:0 !important; padding-right:0 !important; }
+.trust-band .container { max-width:100% !important; width:100% !important; padding-left:0 !important; padding-right:0 !important; }
+.trust-band .trust-ticker { width:100% !important; max-width:100% !important; margin:0 !important; border-radius:0 !important; box-shadow:none !important; background:#0b1f33 !important; }
+.trust-band .trust-ticker .marquee-track { width:max-content; padding:12px 28px; animation:marquee-ltr 28s linear infinite; }
+.trust-band .trust-ticker .row { display:flex; gap:28px; align-items:center; white-space:nowrap; }
