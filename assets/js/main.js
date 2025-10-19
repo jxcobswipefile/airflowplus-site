@@ -651,3 +651,43 @@ window.addEventListener('DOMContentLoaded', () => {
     v.addEventListener('volumechange', s);
   }catch(e){}
 })();
+
+
+// SECTION: #muteToggle harden (v29.9.11)
+(function(){
+  try{
+    var video = document.querySelector('.hero-video') || document.querySelector('[data-hero-video]');
+    var btn = document.getElementById('muteToggle') || document.querySelector('.mute-btn');
+    if(!video || !btn) return;
+
+    function sync(){
+      if(video.muted || video.volume === 0){
+        btn.textContent = '🔇';
+        btn.setAttribute('aria-label','Unmute');
+      }else{
+        btn.textContent = '🔊';
+        btn.setAttribute('aria-label','Mute');
+      }
+    }
+
+    // Default: start muted for autoplay
+    video.muted = true;
+    sync();
+
+    btn.addEventListener('click', function(){
+      try{
+        if(video.muted || video.volume === 0){
+          video.muted = false;
+          if(video.volume === 0) video.volume = 0.5;
+          var p = video.play();
+          if(p && typeof p.catch === 'function'){ p.catch(function(){ /* ignore */ }); }
+        } else {
+          video.muted = true;
+        }
+        sync();
+      }catch(e){}
+    }, {passive:true});
+
+    video.addEventListener('volumechange', sync);
+  }catch(e){}
+})();

@@ -1,6 +1,6 @@
 /* ========================================================================== 
    Airflow+ — condensed stylesheet (keeps current behavior)
-   ========================================================================== */ 
+   ========================================================================== */
 
 :root{
   --bg:#ffffff; --card:#ffffff; --text:#0f1720; --muted:#5b6470;
@@ -1983,12 +1983,24 @@ body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px);
 .promo .info-row .dot::before{ content:"•"; margin:0 8px; color:#94a3b8 }
 .promo .cta-row{
   display:flex; gap:12px; flex-wrap:wrap;
-  justify-content:flex-end;
+  justify-content: center;
 }
 .promo .cta-row .btn{ height:40px; padding:0 16px; line-height:40px; }
 .promo .cta-row .btn.btn-primary{ background:#22a3ff; color:#fff; }
 .promo .cta-row .btn.btn-outline{ background:#fff; color:#0b2a3c; border:1px solid rgba(2,32,71,.15); }
 @media (max-width: 960px){
   .promo .promo-card{ grid-template-columns: 1fr; }
-  .promo .cta-row{ justify-content:flex-start; }
+  .promo .cta-row{ justify-content: center; }
+}
+
+/* Promo CTA centering (v29.9.11) */
+.promo .cta-row{ justify-content: center; }
+
+/* =========================================================
+   Keuzehulp final lock (v29.9.11)
+   Keep card low near border regardless of earlier rules.
+   ========================================================= */
+section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-8%) !important; }
+@media (max-width: 960px){
+  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-6%) !important; }
 }
