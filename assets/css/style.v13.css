@@ -1983,9 +1983,9 @@ body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px);
 /* =========================================================
    SECTION: Keuzehulp hero overlap fix (v29.9.6)
    ========================================================= */
-section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-24%) !important; }
+section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-8%) !important; }
 @media (max-width: 960px){
-  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-24%) !important; }
+  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-8%) !important; }
 }
 
 /* Hero mute button positioning */
@@ -1998,7 +1998,15 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
 /* =========================================================
    SECTION: Keuzehulp hero overlap (v29.9.7 desktop/mobile)
    ========================================================= */
-section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-24%) !important; }
+section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-8%) !important; }
 @media (max-width: 960px){
-  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-16%) !important; }
+  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-8%) !important; }
+}
+
+/* =========================================================
+   SECTION: Keuzehulp hero overlap (v29.9.8 tuned lower)
+   ========================================================= */
+section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-8%) !important; }
+@media (max-width: 960px){
+  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-6%) !important; }
 }
