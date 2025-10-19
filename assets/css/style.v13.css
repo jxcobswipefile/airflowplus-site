@@ -1877,14 +1877,39 @@ body.home section.kh-cta .kh-cta-card li{ color:#ffffff !important; }
 body.diensten section.cta-light h2{ color:#ffffff !important; }
 
 
-/* v29.9.1 hero + promo fixes */
-.home .promo-banner{ display:block !important; } /* override any hide */
-.mute-btn{
-  position:absolute; right:18px; bottom:18px; z-index:4;
-  width:44px; height:44px; border-radius:999px; border:1px solid rgba(255,255,255,.6);
-  background:rgba(8,16,33,.25); backdrop-filter: blur(4px);
-  color:#fff; font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center;
-  cursor:pointer;
+/* ===== v29.9.2 UI adjustments ===== */
+.home .promo-banner{ display:block !important; }
+.promo-banner{ padding: 24px 0; }
+.promo-banner .promo-card{
+  background:#fff; color:#0f172a; border-radius:18px;
+  box-shadow: 0 20px 50px rgba(8,16,33,.18); padding:24px;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
 }
-.hero-video{ outline:none; }
-.kh-cta-card{ box-shadow: 0 24px 60px rgba(8,16,33,.35), 0 0 0 2px rgba(255,255,255,.55) inset; } /* clearer outline */
+.promo-banner .promo-left{ display:flex; flex-direction:column; gap:12px; }
+.promo-banner .eyebrow{ font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#0a7ddf; }
+.promo-banner h2{ margin:0; font-size: clamp(20px, 2.4vw, 28px); color:#0f172a; }
+.promo-banner p{ margin:0; color:#0f172a; }
+.promo-banner .promo-benefits{ display:flex; gap:18px; list-style:none; padding:0; margin:0; flex-wrap:wrap; }
+.promo-banner .promo-ctas{ display:flex; gap:12px; margin-left:auto; }
+.promo-banner .btn{ height:42px; padding:0 16px; display:inline-flex; align-items:center; }
+
+/* KH form sits halfway on hero */
+body.home section.kh-cta.overlap.hero-overlap{ margin-top: clamp(-120px, -20vh, -200px); position: relative; z-index:3; }
+@media (max-width: 768px){ body.home section.kh-cta.overlap.hero-overlap{ margin-top: -60px; } }
+
+/* Hero overlay transparency tweak */
+.hero::before{ background: rgba(255,255,255,.18) !important; }
+.hero::after{ opacity: .12 !important; }
+
+/* Mute button clickability */
+.mute-btn{
+  position:absolute; right:18px; bottom:18px; z-index:5;
+  width:44px; height:44px; border-radius:999px; border:1px solid rgba(255,255,255,.6);
+  background:rgba(8,16,33,.28); backdrop-filter: blur(4px);
+  color:#fff; font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; pointer-events:auto;
+}
+.mute-btn:hover{ background:rgba(8,16,33,.38); }
+
+/* Keuzehulp card outline */
+.kh-cta-card{ box-shadow: 0 28px 70px rgba(8,16,33,.35), 0 0 0 2px rgba(255,255,255,.6) inset; }

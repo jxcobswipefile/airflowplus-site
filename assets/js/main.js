@@ -602,17 +602,17 @@
 })();
 
 
-/* ---------------------------- 06) Hero video mute toggle ---------------------------- */
-(() => {
+/* Hero video mute toggle v2 */
+window.addEventListener('DOMContentLoaded', () => {
   const video = document.querySelector('.hero-video');
   const btn = document.getElementById('muteToggle');
   if (!video || !btn) return;
-  // default muted
-  video.muted = true;
-  const setUI = () => { btn.setAttribute('data-state', video.muted ? 'muted' : 'unmuted'); btn.innerHTML = video.muted ? '🔇' : '🔊'; };
-  setUI();
-  btn.addEventListener('click', () => {
+  try{ video.muted = true; }catch(e){}
+  const update = () => { btn.setAttribute('data-state', video.muted ? 'muted' : 'unmuted'); btn.textContent = video.muted ? '🔇' : '🔊'; };
+  update();
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
     video.muted = !video.muted;
-    setUI();
+    update();
   });
-})();
+});
