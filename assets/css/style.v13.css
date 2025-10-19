@@ -2117,12 +2117,13 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .section .media img{display:block;width:100%;height:auto;border-radius:14px;object-fit:cover;}
 
 
-/* === v29.9.29-patch-5: hero border removal + darker overlay === */
-.hero{ border-bottom: 0 !important; }
+/* === v29.9.29-patch-6: remove hero seam + lighten overlay === */
+.hero, .hero::before, .hero::after { border-bottom: 0 !important; }
+.hero-bg, .hero-bg::before, .hero-bg::after { border-bottom: 0 !important; }
 .hero-overlay{
   background:
-    radial-gradient(60% 40% at 30% 20%, rgba(0,0,0,.22), rgba(0,0,0,0) 70%),
-    linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.10)) !important;
+    radial-gradient(60% 40% at 30% 20%, rgba(0,0,0,.08), rgba(0,0,0,0) 70%),
+    linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.02)) !important;
 }
-/* Ensure overlap section is transparent so no seam shows */
-.overlap.hero-overlap{ background: transparent !important; }
+/* Remove any top border on the next section to avoid a seam */
+.hero-overlap, .hero-overlap::before, .hero-overlap::after { border-top: 0 !important; background: transparent !important; }
