@@ -2117,10 +2117,22 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .section .media img{display:block;width:100%;height:auto;border-radius:14px;object-fit:cover;}
 
 
-/* === v29.9.29-patch-8: revert 'dé airco specialist' to brand blue === */
+/* === v29.9.29-patch-9: gradient blue for .hl-blue + white glow for full headline === */
+/* Full headline stays white with a subtle white glow for readability over video */
+.hero .hero-copy h1{
+  color:#fff !important;
+  text-shadow:
+    0 0 1px rgba(255,255,255,.75),
+    0 0 8px rgba(255,255,255,.45);
+}
+
+/* Make the blue phrase match the gradient style used elsewhere (e.g., 'winter én zomer') */
 .hero .hero-copy h1 .hl-blue{
-  /* Use the site's brand variable (fallback to previous site blue) */
-  color: var(--brand-600, #2b6cff) !important;
-  -webkit-text-stroke: 0 !important;   /* restore original (no stroke) */
-  text-shadow: none !important;        /* keep the blue crisp like before */
+  background: linear-gradient(90deg, #2b6cff 0%, #39b8ff 60%, #41d1ff 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  text-shadow:
+    0 0 1px rgba(255,255,255,.50),
+    0 0 6px rgba(255,255,255,.30); /* faint white glow around gradient */
 }
