@@ -2242,3 +2242,58 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
   ) !important;
   background-color: transparent !important;
 }
+
+/* === Keuzehulp header uniformity hotfix === */
+/* Force the same white header skin used site-wide */
+body.keuzehulp,
+.page-keuzehulp,
+.khv2,
+.kh-wizard {
+  /* nothing here; just selector anchors */
+}
+
+body.keuzehulp .site-header,
+.page-keuzehulp .site-header,
+.khv2 .site-header,
+.kh-wizard .site-header {
+  position: sticky; top: 0;
+  background: #fff !important;
+  box-shadow: 0 8px 28px rgba(2, 8, 23, .06), 0 1px 0 rgba(16, 24, 40, .06) !important;
+  border-bottom: none !important;
+  z-index: 1000;
+  padding: 12px 0 !important;   /* match other pages */
+}
+
+/* Link colors + hover, same as global */
+.khv2 .site-header .nav a,
+.kh-wizard .site-header .nav a,
+.page-keuzehulp .site-header .nav a {
+  color: #0b1f33 !important;
+}
+.khv2 .site-header .nav a:hover,
+.kh-wizard .site-header .nav a:hover,
+.page-keuzehulp .site-header .nav a:hover {
+  color: #1ea7ff !important;    /* same blue as CTAs */
+}
+
+/* Keep the CTA styled the same */
+.khv2 .site-header .btn-primary,
+.kh-wizard .site-header .btn-primary,
+.page-keuzehulp .site-header .btn-primary {
+  position: relative; z-index: 1;
+}
+
+/* If the wizard adds an inverted/dark header class, neutralize it here */
+.site-header.header--inverted,
+.site-header.is-dark {
+  background: #fff !important;
+  color: #0b1f33 !important;
+}
+
+/* Avoid any gradient/overlay from the wizard bleeding into the header */
+.khv2 .site-header::before,
+.khv2 .site-header::after,
+.kh-wizard .site-header::before,
+.kh-wizard .site-header::after {
+  content: none !important;
+}
