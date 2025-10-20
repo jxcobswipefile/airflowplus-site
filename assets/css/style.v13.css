@@ -2159,3 +2159,38 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .hero .btn,
 .hero .btn-primary,
 .hero .btn-outline { position: relative; z-index: 1; }
+
+/* === Hotfix: hero overlay + headline + brand-blue sync === */
+
+/* Dark L→R overlay; heavy left, clear right */
+.hero-overlay{
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.62) 0%,
+      rgba(0,0,0,.48) 30%,
+      rgba(0,0,0,.30) 55%,
+      rgba(0,0,0,.12) 80%,
+      rgba(0,0,0,0) 100%) !important;
+  z-index: 0;
+}
+
+/* Headline: white, no glow, just dark shadow for readability */
+.hero .hero-copy h1{
+  color:#fff !important;
+  -webkit-text-stroke:0 !important;
+  text-shadow: 0 2px 14px rgba(0,0,0,.60), 0 1px 2px rgba(0,0,0,.85) !important;
+}
+
+/* “dé airco specialist” — use the same blue as cards/buttons */
+.hero .hero-copy h1 .hl-blue{
+  color: #1ea7ff !important; /* match your primary card/button blue */
+  background:none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-stroke:0 !important;
+  text-shadow: 0 2px 14px rgba(0,0,0,.60), 0 1px 2px rgba(0,0,0,.85) !important;
+}
+
+/* Remove any seam under hero */
+.hero, .hero::before, .hero::after { border-bottom:0 !important; }
+/* Keep CTAs above overlay */
+.hero .btn, .hero .btn-primary, .hero .btn-outline { position:relative; z-index:1; }
