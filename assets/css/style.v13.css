@@ -2297,3 +2297,51 @@ body.keuzehulp .site-header,
 .kh-wizard .site-header::after {
   content: none !important;
 }
+
+/* === Diensten trust strip: restore full-width, single row, L→R scroll === */
+#trust-band { padding: 0 !important; }
+#trust-band .container { max-width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
+
+/* strip visuals exactly like homepage */
+#trust-band .trust-ticker{
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: #0b1f33 !important;   /* same dark band */
+  color: #fff !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* single, continuous row */
+#trust-band .trust-ticker .marquee-track{
+  display: inline-flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  width: max-content !important;
+  padding: 10px 28px !important;
+  animation: marquee-ltr 28s linear infinite !important; /* left → right */
+}
+
+/* items & spacing */
+#trust-band .trust-ticker .row{
+  display: inline-flex !important;
+  gap: 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+}
+#trust-band .trust-ticker .item{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  font-weight: 600;
+}
+
+/* keyframes (scans only this page if missing globally) */
+@keyframes marquee-ltr {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
