@@ -2117,22 +2117,45 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .section .media img{display:block;width:100%;height:auto;border-radius:14px;object-fit:cover;}
 
 
-/* === v29.9.29-patch-9: gradient blue for .hl-blue + white glow for full headline === */
-/* Full headline stays white with a subtle white glow for readability over video */
-.hero .hero-copy h1{
-  color:#fff !important;
-  text-shadow:
-    0 0 1px rgba(255,255,255,.75),
-    0 0 8px rgba(255,255,255,.45);
+/* === v29.9.29-patch-12: dark L→R hero overlay, solid blue span, dark text shadow === */
+
+/* Remove any light seam and ensure hero has no bottom border */
+.hero, .hero::before, .hero::after { border-bottom: 0 !important; }
+
+/* Darken the left side significantly; fade to clear on the right */
+.hero-overlay{
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.62) 0%,
+      rgba(0,0,0,.48) 30%,
+      rgba(0,0,0,.30) 55%,
+      rgba(0,0,0,.12) 80%,
+      rgba(0,0,0,0) 100%) !important;
+  /* keep it above the video but below text */
+  z-index: 0;
 }
 
-/* Make the blue phrase match the gradient style used elsewhere (e.g., 'winter én zomer') */
-.hero .hero-copy h1 .hl-blue{
-  background: linear-gradient(90deg, #2b6cff 0%, #39b8ff 60%, #41d1ff 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  color: transparent !important;
+/* Headline: white text with a subtle dark shadow — no glow/stroke */
+.hero .hero-copy h1{
+  color:#fff !important;
+  -webkit-text-stroke: 0 !important;
   text-shadow:
-    0 0 1px rgba(255,255,255,.50),
-    0 0 6px rgba(255,255,255,.30); /* faint white glow around gradient */
+    0 2px 14px rgba(0,0,0,.60),
+    0 1px 2px rgba(0,0,0,.85) !important;
 }
+
+/* Blue phrase: SOLID brand blue, same dark shadow, no gradient/glow */
+.hero .hero-copy h1 .hl-blue{
+  color: var(--brand-600, #2b6cff) !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow:
+    0 2px 14px rgba(0,0,0,.60),
+    0 1px 2px rgba(0,0,0,.85) !important;
+}
+
+/* Ensure buttons remain readable and not affected by overlay */
+.hero .btn,
+.hero .btn-primary,
+.hero .btn-outline { position: relative; z-index: 1; }
