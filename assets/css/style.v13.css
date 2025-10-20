@@ -2117,13 +2117,30 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .section .media img{display:block;width:100%;height:auto;border-radius:14px;object-fit:cover;}
 
 
-/* === v29.9.29-patch-6: remove hero seam + lighten overlay === */
-.hero, .hero::before, .hero::after { border-bottom: 0 !important; }
-.hero-bg, .hero-bg::before, .hero-bg::after { border-bottom: 0 !important; }
+/* === v29.9.29-patch-7: darker hero + glowing headline (white), keep blue span === */
 .hero-overlay{
   background:
-    radial-gradient(60% 40% at 30% 20%, rgba(0,0,0,.08), rgba(0,0,0,0) 70%),
-    linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.02)) !important;
+    radial-gradient(60% 40% at 30% 20%, rgba(0,0,0,.28), rgba(0,0,0,0) 70%),
+    linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.15)) !important;
 }
-/* Remove any top border on the next section to avoid a seam */
-.hero-overlap, .hero-overlap::before, .hero-overlap::after { border-top: 0 !important; background: transparent !important; }
+
+.hero .hero-copy h1{
+  color:#fff !important;
+  /* thin outline + soft glow for readability on video */
+  -webkit-text-stroke: 0.5px rgba(255,255,255,.55);
+  text-shadow:
+    0 0 1px rgba(255,255,255,.65),
+    0 0 6px rgba(255,255,255,.35);
+}
+
+.hero .hero-copy h1 .hl-blue{
+  color:#2b6cff !important;
+  /* optional subtle stroke so blue remains legible on dark areas */
+  -webkit-text-stroke: 0.35px rgba(255,255,255,.35);
+  /* keep the blue crisp; reduce glow compared to white text */
+  text-shadow:
+    0 0 1px rgba(255,255,255,.35);
+}
+
+/* In case any generic hero headings override color */
+.hero h1, .hero h2, .hero h3 { color:#fff; }
