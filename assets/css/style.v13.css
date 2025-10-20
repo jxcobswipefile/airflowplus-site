@@ -2194,3 +2194,39 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .hero, .hero::before, .hero::after { border-bottom:0 !important; }
 /* Keep CTAs above overlay */
 .hero .btn, .hero .btn-primary, .hero .btn-outline { position:relative; z-index:1; }
+
+/* === Hero clarity hotfix === */
+/* Make sure the actual video isn’t dimmed anywhere */
+.hero-bg video,
+.hero video {
+  opacity: 1 !important;
+  filter: none !important;          /* no brightness/blur/contrast filters */
+}
+
+/* Kill any leftover white haze on pseudo layers */
+.hero-overlay::before,
+.hero-overlay::after,
+.hero-bg::before,
+.hero-bg::after {
+  background: none !important;
+  opacity: 0 !important;
+}
+
+/* Keep the left→right dark fade for text readability, but remove cloudiness */
+.hero-overlay{
+  /* darker on the far left, then quickly clear out */
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,.58) 0%,
+    rgba(0,0,0,.34) 35%,
+    rgba(0,0,0,.08) 65%,
+    rgba(0,0,0,0) 100%
+  ) !important;
+  background-color: transparent !important;  /* no milky base */
+}
+
+/* Keep headline legible with a subtle dark shadow (no glow) */
+.hero .hero-copy h1,
+.hero .hero-copy h1 .hl-blue{
+  text-shadow: 0 2px 14px rgba(0,0,0,.60), 0 1px 2px rgba(0,0,0,.85) !important;
+}
