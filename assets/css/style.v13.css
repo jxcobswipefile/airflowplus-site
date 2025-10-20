@@ -2117,30 +2117,10 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 .section .media img{display:block;width:100%;height:auto;border-radius:14px;object-fit:cover;}
 
 
-/* === v29.9.29-patch-7: darker hero + glowing headline (white), keep blue span === */
-.hero-overlay{
-  background:
-    radial-gradient(60% 40% at 30% 20%, rgba(0,0,0,.28), rgba(0,0,0,0) 70%),
-    linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.15)) !important;
-}
-
-.hero .hero-copy h1{
-  color:#fff !important;
-  /* thin outline + soft glow for readability on video */
-  -webkit-text-stroke: 0.5px rgba(255,255,255,.55);
-  text-shadow:
-    0 0 1px rgba(255,255,255,.65),
-    0 0 6px rgba(255,255,255,.35);
-}
-
+/* === v29.9.29-patch-8: revert 'dé airco specialist' to brand blue === */
 .hero .hero-copy h1 .hl-blue{
-  color:#2b6cff !important;
-  /* optional subtle stroke so blue remains legible on dark areas */
-  -webkit-text-stroke: 0.35px rgba(255,255,255,.35);
-  /* keep the blue crisp; reduce glow compared to white text */
-  text-shadow:
-    0 0 1px rgba(255,255,255,.35);
+  /* Use the site's brand variable (fallback to previous site blue) */
+  color: var(--brand-600, #2b6cff) !important;
+  -webkit-text-stroke: 0 !important;   /* restore original (no stroke) */
+  text-shadow: none !important;        /* keep the blue crisp like before */
 }
-
-/* In case any generic hero headings override color */
-.hero h1, .hero h2, .hero h3 { color:#fff; }
