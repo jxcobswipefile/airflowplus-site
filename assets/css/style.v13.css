@@ -2509,3 +2509,19 @@ input:focus, select:focus, textarea:focus{
 /* Catalog CTA readability fix */
 .modellen-cta h2, .modellen-cta p{color:#0f172a}
 .modellen-cta h2 .accent-green{color:#1bb34a}
+
+
+/* === Phase 2.3 additions === */
+.card-energy{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.eu-chip{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;color:#fff}
+.eu-chip[data-grade="A+++"]{background:#1bb34a}
+.eu-chip[data-grade="A++"]{background:#4cc158}
+.eu-chip[data-grade="A+"]{background:#7bcb67}
+.eu-chip[data-grade="A"]{background:#a6d375}
+
+.compare-rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px, 1fr);gap:16px;overflow-x:auto;padding:8px 4px}
+.compare-card{border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:16px;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.05)}
+.compare-card h3{font-size:16px;margin:0 0 8px}
+.compare-spec{font-size:14px;color:var(--gray-text);line-height:1.4}
+.compare-spec strong{color:#000}
+.compare-card .card-energy{margin-top:10px}

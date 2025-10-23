@@ -837,3 +837,95 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }catch(e){}
 })();
+
+/* === Phase 2.3 injected === */
+const ROOT_BASE = '/airflowplus-site/';
+
+const items = [
+  {slug:'products/panasonic-tz.html', name:'Panasonic TZ', kw:2.5, min_m2:10, max_m2:25, seer:'A++', scop:'A+', noise_in:20, noise_out:46, tags:['single']},
+  {slug:'products/panasonic-etherea.html', name:'Panasonic Etherea', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:19, noise_out:48, tags:['single','quiet']},
+  {slug:'products/daikin-comfora.html', name:'Daikin Comfora', kw:2.5, min_m2:10, max_m2:25, seer:'A++', scop:'A+', noise_in:20, noise_out:46, tags:['single']},
+  {slug:'products/daikin-perfera.html', name:'Daikin Perfera', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:19, noise_out:48, tags:['single','quiet']},
+  {slug:'products/daikin-emura.html', name:'Daikin Emura', kw:2.5, min_m2:15, max_m2:30, seer:'A++', scop:'A+', noise_in:19, noise_out:46, tags:['design','quiet']},
+  {slug:'products/haier-revive-plus.html', name:'Haier Revive Plus', kw:2.5, min_m2:12, max_m2:28, seer:'A++', scop:'A+', noise_in:21, noise_out:47, tags:['single']},
+  {slug:'products/haier-expert-nordic.html', name:'Haier Expert Nordic', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:19, noise_out:48, tags:['lowtemp']}
+];
+
+function renderCompareRail() {
+  const rails = document.querySelectorAll('.compare-rail[data-compare="auto"]');
+  rails.forEach(rail => {
+    rail.innerHTML = items.map(it => {
+      const url = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/') + it.slug;
+      return (
+        '<a class="compare-card" href="'+ url +'">'+
+          '<h3>'+ it.name +'</h3>'+
+          '<div class="compare-spec"><strong>'+ it.kw +' kW</strong> • '+ it.min_m2 +'-'+ it.max_m2 +' m²</div>'+
+          '<div class="compare-spec">Binnen '+ it.noise_in +' dB(A) • Buiten '+ it.noise_out +' dB(A)</div>'+
+          '<div class="card-energy">'+
+            '<span class="eu-chip" data-grade="'+ it.seer +'">Koelen: '+ it.seer +'</span>'+
+            '<span class="eu-chip" data-grade="'+ it.scop +'">Verwarmen: '+ it.scop +'</span>'+
+          '</div>'+
+        '</a>'
+      );
+    }).join('');
+  });
+}
+document.addEventListener('DOMContentLoaded', renderCompareRail);
+
+function pickRecommendation(totalRooms, avgRoomM2, preferQuiet){
+  var totalM2 = totalRooms * avgRoomM2;
+  if (totalRooms >= 3){
+    var pool = items.filter(function(it){ return it.kw >= 3.5; });
+    if (preferQuiet){
+      var q = pool.filter(function(it){ return (it.tags||[]).indexOf('quiet')>-1; });
+      if (q.length) pool = q;
+    }
+    return pool[0] || items[0];
+  }
+  var pool2 = items.filter(function(it){
+    return (totalM2 >= it.min_m2 && totalM2 <= it.max_m2) ||
+           (avgRoomM2 >= it.min_m2 && avgRoomM2 <= it.max_m2);
+  });
+  if (preferQuiet){
+    var q2 = pool2.filter(function(it){ return (it.tags||[]).indexOf('quiet')>-1; });
+    if (q2.length) pool2 = q2;
+  }
+  if (!pool2.length){
+    pool2 = items.slice().sort(function(a,b){
+      function mid(x){ return (x.min_m2 + x.max_m2)/2; }
+      return Math.abs(mid(a)-totalM2) - Math.abs(mid(b)-totalM2);
+    });
+  }
+  return pool2[0] || items[0];
+}
+
+function onKeuzeSubmit(){
+  try{
+    var roomsEl = document.querySelector('[name="rooms"]');
+    var sizeEl = document.querySelector('[name="room_size"]');
+    var quietEl = document.querySelector('[name="quiet"]');
+    var rooms = parseInt((roomsEl && roomsEl.value) || '1', 10);
+    var avg = parseInt((sizeEl && sizeEl.value) || '20', 10);
+    var quiet = !!(quietEl && (quietEl.checked || quietEl.value === 'true'));
+    var rec = pickRecommendation(rooms, avg, quiet);
+    var node = document.getElementById('kh-reco');
+    var reason = 'Gekozen omdat '+ rooms +' kamer(s) × '+ avg +' m² ⇒ ~'+ (rooms*avg) +' m² totaal.';
+    if (node){
+      var urlBase = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
+      node.innerHTML = ''+
+        '<div class="kh-reco">'+
+          '<h3>'+ rec.name +'</h3>'+
+          '<p class="muted">'+ reason +'</p>'+
+          '<a class="btn btn-green" href="'+ urlBase + rec.slug +'">Bekijk product</a>'+
+          '<div class="card-energy" style="margin-top:10px">'+
+            '<span class="eu-chip" data-grade="'+ rec.seer +'">Koelen: '+ rec.seer +'</span>'+
+            '<span class="eu-chip" data-grade="'+ rec.scop +'">Verwarmen: '+ rec.scop +'</span>'+
+          '</div>'+
+        '</div>';
+    }
+  }catch(e){ console.warn('Keuzehulp fallback', e); }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('kh-submit');
+  if (btn){ btn.addEventListener('click', function(e){ e.preventDefault(); onKeuzeSubmit(); }); }
+});
