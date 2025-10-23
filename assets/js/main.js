@@ -783,36 +783,57 @@ window.addEventListener('DOMContentLoaded', () => {
 })();
 
 
-// === Product catalog + Keuzehulp recommendation (defensive) ===
+// === SECTION: Product list and cross-links (auto-filled) ===
 (function(){
   try{
-    var catalog = [
-      {slug:'daikin-emura-25kw', name:'Daikin Emura 2.5kW', cool_area_m2:25, img:'assets/img/products/daikin-emura-25kw/hero.jpg', url:'products/daikin-emura-25kw.html'},
-      {slug:'panasonic-etherea-25kw', name:'Panasonic Etherea 2.5kW', cool_area_m2:25, img:'assets/img/products/panasonic-etherea-25kw/hero.jpg', url:'products/panasonic-etherea-25kw.html'},
-      {slug:'haier-flexis-25kw', name:'Haier Flexis 2.5kW', cool_area_m2:25, img:'assets/img/products/haier-flexis-25kw/hero.jpg', url:'products/haier-flexis-25kw.html'}
+    var items = [
+      {slug:'panasonic-tz', name:'Panasonic TZ', img:'assets/img/products/panasonic-tz/hero.jpg', url:'products/panasonic-tz.html', cool_area_m2:25},
+      {slug:'daikin-comfora', name:'Daikin Comfora', img:'assets/img/products/daikin-comfora/hero.jpg', url:'products/daikin-comfora.html', cool_area_m2:25},
+      {slug:'haier-revive-plus', name:'Haier Revive Plus', img:'assets/img/products/haier-revive-plus/hero.jpg', url:'products/haier-revive-plus.html', cool_area_m2:25},
+      {slug:'daikin-perfera', name:'Daikin Perfera', img:'assets/img/products/daikin-perfera/hero.jpg', url:'products/daikin-perfera.html', cool_area_m2:25},
+      {slug:'panasonic-etherea', name:'Panasonic Etherea', img:'assets/img/products/panasonic-etherea/hero.jpg', url:'products/panasonic-etherea.html', cool_area_m2:25},
+      {slug:'haier-expert', name:'Haier Expert', img:'assets/img/products/haier-expert/hero.jpg', url:'products/haier-expert.html', cool_area_m2:25},
+      {slug:'daikin-emura', name:'Daikin Emura', img:'assets/img/products/daikin-emura/hero.jpg', url:'products/daikin-emura.html', cool_area_m2:25}
     ];
-    function getTotalArea(){
-      var total=0;
-      document.querySelectorAll('[data-room-m2], .save-room-size, input[name^="room-"]').forEach(function(el){
-        var v=parseFloat(el.value||el.getAttribute('data-room-m2')||'0'); if(!isNaN(v)) total+=v;
-      });
-      var slider=document.querySelector('.save-slider'); if(total===0&&slider){var s=parseFloat(slider.value); if(!isNaN(s)) total=s;}
-      return total;
+
+    // Fill "Bekijk ook" scrollers if present
+    items.forEach(function(a){
+      var scroller = document.getElementById('also-'+a.slug);
+      if(scroller){
+        items.filter(function(b){ return b.slug!==a.slug; }).slice(0,6).forEach(function(b){
+          var el = document.createElement('a'); el.className='scroll-card'; el.href='../'+b.url;
+          el.innerHTML = '<img src="../'+b.img+'"><span>'+b.name+'</span>';
+          scroller.appendChild(el);
+        });
+      }
+    });
+
+    // Keuzehulp mapping enhancement (if kh-reco exists)
+    var kh = document.getElementById('kh-reco');
+    if(kh){
+      // improve pick logic once we have exact m2 per model; placeholder uses cool_area_m2
+      function totalM2(){
+        var total=0;
+        document.querySelectorAll('[data-room-m2], .save-room-size, input[name^="room-"]').forEach(function(el){
+          var v=parseFloat(el.value||el.getAttribute('data-room-m2')||'0'); if(!isNaN(v)) total+=v;
+        });
+        var slider=document.querySelector('.save-slider'); if(total===0&&slider){var s=parseFloat(slider.value); if(!isNaN(s)) total=s;}
+        return total;
+      }
+      function pick(total){
+        var sorted = items.slice().sort(function(a,b){return a.cool_area_m2-b.cool_area_m2;});
+        for(var i=0;i<sorted.length;i++) if(sorted[i].cool_area_m2>=total) return sorted[i];
+        return sorted[sorted.length-1];
+      }
+      function render(){
+        var m = pick(totalM2());
+        kh.querySelector('.kh-reco-content').innerHTML = '<div class="kh-reco-box">'
+          + '<img class="kh-reco-img" src="'+m.img+'" alt="'+m.name+'">'
+          + '<div class="kh-reco-text"><strong>'+m.name+'</strong><br><span class="muted small">Schatting op basis van m²</span><br>'
+          + '<a class="btn btn--green" href="'+m.url+'">Bekijk product</a></div></div>';
+      }
+      document.addEventListener('DOMContentLoaded', render);
+      document.addEventListener('input', render, true);
     }
-    function pick(total){ var c=catalog.slice().sort(function(a,b){return a.cool_area_m2-b.cool_area_m2;});
-      for(var i=0;i<c.length;i++){ if(c[i].cool_area_m2>=total) return c[i]; } return c[c.length-1]; }
-    function render(){
-      var mount=document.getElementById('kh-reco'); if(!mount) return;
-      var total=getTotalArea(); if(!total){ mount.querySelector('.kh-reco-content').innerHTML='<p class="muted">Vul eerst je ruimtes en afmetingen in.</p>'; return; }
-      var m=pick(total);
-      mount.querySelector('.kh-reco-content').innerHTML = '<div class="kh-reco-box">'
-        + '<img class="kh-reco-img" src="'+m.img+'" alt="'+m.name+'">'
-        + '<div class="kh-reco-text"><strong>'+m.name+'</strong><br><span class="muted small">Geschikt tot ca. '+m.cool_area_m2+' m²</span><br>'
-        + '<a class="btn btn--green" href="'+m.url+'">Bekijk product</a></div></div>';
-    }
-    var css=document.createElement('style'); css.textContent='.kh-reco-box{display:flex;gap:12px;align-items:center}.kh-reco-img{width:96px;height:72px;object-fit:cover;border-radius:10px;background:#f7fafc;border:1px solid rgba(8,16,33,.08)}';
-    document.head.appendChild(css);
-    document.addEventListener('DOMContentLoaded', render);
-    document.addEventListener('input', function(e){ if(e.target && (e.target.matches('[data-room-m2], .save-room-size') || (e.target.name||'').indexOf('room-')===0)) render(); }, true);
   }catch(e){}
 })();
