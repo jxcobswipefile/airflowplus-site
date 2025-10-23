@@ -2461,3 +2461,30 @@ input:focus, select:focus, textarea:focus{
     0 0 6px #fff,
     0 0 10px rgba(255,255,255,.7);
 }
+
+/* ---- Keuzehulp: check badge (no markup changes) ---- */
+.khv2 .icon-check,
+.khv2 .check {            /* covers common class names you've used */
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:1.25em;           /* small circle */
+  height:1.25em;
+  border-radius:50%;
+  background: rgba(255,255,255,.96);   /* high-contrast circle */
+  color: var(--accent);   /* keep the green */
+  box-shadow:
+    0 0 0 1px rgba(8,16,33,.08),
+    0 2px 4px rgba(8,16,33,.18);
+  margin-right: .5rem;    /* space before the text */
+  flex: 0 0 1.25em;
+}
+
+/* If the check is an SVG inside the element, keep it centered and scaled */
+.khv2 .icon-check svg,
+.khv2 .check svg {
+  width: .85em;
+  height: .85em;
+  fill: currentColor;     /* inherit the green */
+  display: block;
+}
