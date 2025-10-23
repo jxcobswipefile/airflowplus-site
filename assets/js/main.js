@@ -382,11 +382,9 @@
     nextBtn.disabled = true;
   }
 
-  
-function renderStep3() {
+  function renderStep3() {
     state.step = 3; setDot(3);
     const list = state.sizes.map((sz, i) => `<li>Kamer ${i + 1}: <strong>${sz.replace('-', '–')} m²</strong></li>`).join('');
-    // Summary
     body.innerHTML = `
       <h2 class="khv2-q">Overzicht</h2>
       <p class="kh-sub">Op basis van jouw keuzes stellen we een advies op maat samen.</p>
@@ -394,57 +392,10 @@ function renderStep3() {
         <h3>Je keuzes</h3>
         <ul class="kh-out">${list}</ul>
         <p class="muted">Klaar? Ga door voor een vrijblijvende offerte.</p>
-      </div>
-      <div id="kh-reco" class="kh-reco-mount"></div>`;
-
-    // Compute total m² from selected ranges
-    
-  function _afp_parseRangeMid(txt){
-    if (!txt) return null;
-    txt = String(txt).replace(/\s/g,'').replace('m²','').replace('m2','');
-    var m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
-    if (m){ var a=parseFloat(m[1]), b=parseFloat(m[2]); if(!isNaN(a)&&!isNaN(b)) return (a+b)/2; }
-    var n = parseFloat(txt); return isNaN(n)?null:n;
-  }
-
-    var mids = (state.sizes||[]).map(_afp_parseRangeMid).filter(x => typeof x==='number' && !isNaN(x));
-    var totalM2 = mids.length ? mids.reduce((a,b)=>a+b,0) : 30;
-    var avg = totalM2 / Math.max(1, state.rooms||1);
-
-    // Pick recommendation from existing dataset
-    try {
-      var rec = pickVariantByArea(Math.max(1, state.rooms||1), avg, false);
-      var node = document.getElementById('kh-reco');
-      if (node && rec){
-        var urlBase = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
-        var priceByBrand = function(b){
-          if (b==='Daikin') return 'vanaf € 1.800 incl. materiaal en montage';
-          if (b==='Panasonic') return 'vanaf € 1.600 incl. materiaal en montage';
-          if (b==='Haier') return 'vanaf € 1.300 incl. materiaal en montage';
-          return 'Prijs op aanvraag';
-        };
-        node.innerHTML = ''
-          + '<div class="kh-reco-card">'
-          + '  <div class="kh-reco-main">'
-          + '    <div class="kh-reco-body">'
-          + '      <h3>'+ rec.name +'</h3>'
-          + '      <div class="muted">'+priceByBrand(rec.brand||'')+'</div>'
-          + '      <div class="card-energy" style="margin-top:10px">'
-          + '        <span class="eu-chip" data-grade="'+(rec.seer||'A++')+'">Koelen: '+(rec.seer||'A++')+'</span>'
-          + '        <span class="eu-chip" data-grade="'+(rec.scop||'A+')+'">Verwarmen: '+(rec.scop||'A+')+'</span>'
-          + '      </div>'
-          + '      <a class="btn btn-green" style="margin-top:12px" href="'+ urlBase + rec.slug +'">Bekijk aanbeveling</a>'
-          + '      <p class="muted" style="margin-top:8px">Op basis van ~'+ Math.round(totalM2) +' m² totaal.</p>'
-          + '    </div>'
-          + '  </div>'
-          + '</div>';
-      }
-    } catch(e){ console.warn('reco render failed', e); }
-
+      </div>`;
     nextBtn.textContent = 'Afronden →';
     nextBtn.disabled = false;
   }
-
 
   // ---------- Handlers ----------
   function onRoomsChange(e) {
@@ -1219,6 +1170,88 @@ document.addEventListener('DOMContentLoaded', function(){
     // Backstop: also attempt after any obvious "Next" click
     document.querySelectorAll('#kh-next, .kh-next, [data-kh-next]').forEach(function(btn){
       btn.addEventListener('click', function(){ setTimeout(tryRender, 120); });
+    });
+  });
+})();
+
+/* === Airflow+ KH v2: self-healing recommendation injector (debug id: AFP_RECO_V33B) === */
+(function(){
+  if (window.__AFP_RECO_V33B__) return; window.__AFP_RECO_V33B__ = true;
+  try { console.log('[Airflow+] KH recommender loaded (AFP_RECO_V33B)'); } catch(e){}
+  function parseRangeMid(txt){
+    if (!txt) return null;
+    txt = (''+txt).replace(/\s/g,'').replace('m²','').replace('m2','').replace(',', '.');
+    var m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
+    if (m){ var a=parseFloat(m[1]), b=parseFloat(m[2]); if(!isNaN(a)&&!isNaN(b)) return (a+b)/2; }
+    var n = parseFloat(txt); return isNaN(n)?null:n;
+  }
+  function computeTotalM2(){
+    try{
+      var sizes = (window.state && state.sizes) || [];
+      if (!sizes.length) return null;
+      var mids = sizes.map(parseRangeMid).filter(function(x){ return typeof x==='number' && !isNaN(x); });
+      if (!mids.length) return null;
+      return mids.reduce(function(a,b){ return a+b; }, 0);
+    }catch(e){ return null; }
+  }
+  function pick(){
+    try{
+      var rooms = (window.state && state.rooms) || 1;
+      var total = computeTotalM2(); if (total==null) total = 30;
+      var avg = total / Math.max(1, rooms);
+      if (typeof pickVariantByArea !== 'function') return null;
+      return { rec: pickVariantByArea(Math.max(1, rooms), avg, false), total: total };
+    }catch(e){ return null; }
+  }
+  function ensureMount(){
+    var host = document.querySelector('.khv2-card') || document.querySelector('[data-kh-step="3"]') || document.querySelector('#khv2');
+    if (!host) return null;
+    var mount = document.getElementById('kh-reco');
+    if (!mount){
+      mount = document.createElement('div');
+      mount.id = 'kh-reco'; mount.className = 'kh-reco-mount'; mount.style.marginTop = '16px';
+      host.appendChild(mount);
+    }
+    return mount;
+  }
+  function priceByBrand(b){
+    if (b==='Daikin') return 'vanaf € 1.800 incl. materiaal en montage';
+    if (b==='Panasonic') return 'vanaf € 1.600 incl. materiaal en montage';
+    if (b==='Haier') return 'vanaf € 1.300 incl. materiaal en montage';
+    return 'Prijs op aanvraag';
+  }
+  function renderOnce(){
+    var wrap = document.getElementById('khv2');
+    var step = wrap && wrap.getAttribute('data-step');
+    if (step != '3') return;
+    var target = ensureMount(); if (!target) return;
+    var got = pick(); if (!got || !got.rec) return;
+    var rec = got.rec, total = got.total;
+    var urlBase = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
+    if (target.getAttribute('data-rendered') === (rec.slug||'')) return;
+    target.setAttribute('data-rendered', rec.slug||'');
+    target.innerHTML = ''
+      + '<div class="kh-reco-card">'
+      + '  <div class="kh-reco-main">'
+      + '    <div class="kh-reco-body">'
+      + '      <h3>'+ (rec.name||'Aanbevolen model') +'</h3>'
+      + '      <div class="muted">'+ priceByBrand(rec.brand||'') +'</div>'
+      + '      <a class="btn btn-green" style="margin-top:12px" href="'+ urlBase + (rec.slug||'') +'">Bekijk aanbeveling</a>'
+      + '      <p class="muted" style="margin-top:8px">Op basis van ~'+ Math.round(total||30) +' m².</p>'
+      + '    </div>'
+      + '  </div>'
+      + '</div>';
+  }
+  function startObserver(){
+    var host = document.querySelector('#khv2') || document.body;
+    var obs = new MutationObserver(function(){ try{ renderOnce(); }catch(e){} });
+    obs.observe(host, {subtree:true, childList:true, attributes:true, attributeFilter:['data-step','class']});
+    var ticks = 0, iv = setInterval(function(){ try{ renderOnce(); }catch(e){} if (++ticks>80) clearInterval(iv); }, 100);
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){ renderOnce(); startObserver(); }, 80);
+    document.querySelectorAll('#kh-next,.kh-next,[data-kh-next]').forEach(function(btn){
+      btn.addEventListener('click', function(){ setTimeout(renderOnce, 160); }, true);
     });
   });
 })();
