@@ -1053,45 +1053,42 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 })();
-
-/* === KH Step 3: force-mount under "Overzicht" and always render (Phase 2.6c) === */
-(function(){
-  function findOverviewNode(){
-    var node = document.querySelector('.overview, .khv2-card .overview, .summary, .khv2-card .summary');
-    if (node) return node;
-    var hs = document.querySelectorAll('h1,h2,h3,h4');
-    for (var i=0;i<hs.length;i++){
-      var t=(hs[i].textContent||'').trim().toLowerCase();
-      if (t.indexOf('overzicht')>-1){ return hs[i].parentElement || hs[i]; }
-    }
-    return document.querySelector('.kh-step.step-3, .kh-step[data-step="3"], .kh-step:last-child') || document.body;
+/* Keuzehulp: auto-mount & render on step 3 */
+(function khAutoReco(){
+  function ensureKhRecoMount(){
+    var el = document.getElementById('kh-reco');
+    if (el) return el;
+    var step3 = document.querySelector('[data-kh-step="3"]');
+    if (!step3) return null;
+    el = document.createElement('div');
+    el.id = 'kh-reco';
+    el.className = 'kh-reco-mount';
+    el.style.marginTop = '16px';
+    step3.appendChild(el);
+    return el;
   }
-  function ensureRecoMount(){
-    var mount = document.getElementById('kh-reco');
-    if (mount) return mount;
-    var ref = findOverviewNode();
-    mount = document.createElement('div');
-    mount.id = 'kh-reco';
-    mount.style.marginTop = '18px';
-    if (ref && ref.parentNode && ref.nextSibling){
-      ref.parentNode.insertBefore(mount, ref.nextSibling);
-    }else if (ref && ref.appendChild){
-      ref.appendChild(mount);
-    }else{
-      document.body.appendChild(mount);
-    }
-    return mount;
-  }
-  function tryRender(){
-    ensureRecoMount();
-    if (typeof renderRecommendation === 'function'){
-      renderRecommendation();
+  function renderIfStep3(){
+    var wrap = document.getElementById('khv2');
+    if (!wrap) return;
+    if (String(wrap.dataset.step||'1') === '3'){
+      ensureKhRecoMount();
+      try {
+        // call existing handler to fill content
+        var btn = document.getElementById('kh-submit');
+        if (btn) { btn.click(); } // reuse existing rendering path
+      } catch(e){}
     }
   }
   document.addEventListener('DOMContentLoaded', function(){
-    setTimeout(tryRender, 80);
-    document.addEventListener('click', function(){ setTimeout(tryRender, 120); }, true);
-    var mo = new MutationObserver(function(){ tryRender(); });
-    mo.observe(document.body, {subtree:true, childList:true, attributes:true, attributeFilter:['class']});
+    ensureKhRecoMount();
+    renderIfStep3();
+    var wrap = document.getElementById('khv2');
+    if (!wrap) return;
+    var obs = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if (m.type==='attributes' && m.attributeName==='data-step'){ renderIfStep3(); }
+      });
+    });
+    obs.observe(wrap, {attributes:true});
   });
 })();
