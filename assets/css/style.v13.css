@@ -2530,3 +2530,56 @@ input:focus, select:focus, textarea:focus{
   background: rgba(0,157,224,.12);
 }
 */
+
+/* ===== Keuzehulp card: readable check badges on blue ===== */
+/* Adjust ".khv2" to the parent class of your keuzehulp card if needed */
+.khv2 .feature-list li,
+.khv2 .kh-bullets li,
+.khv2 li {
+  position: relative;
+  list-style: none;
+  padding-left: 1.9rem; /* room for the circular badge */
+}
+
+/* 1) Hide the original leading "✔" character if it's typed into the text */
+.khv2 .feature-list li::first-letter,
+.khv2 .kh-bullets li::first-letter,
+.khv2 li::first-letter {
+  font-size: 0;            /* effectively hides the first glyph */
+  line-height: 0;
+}
+
+/* 2) Draw the white circular badge */
+.khv2 .feature-list li::before,
+.khv2 .kh-bullets li::before,
+.khv2 li::before {
+  content: "";             /* circle only; the check comes in ::after */
+  position: absolute;
+  left: 0; top: 0.2rem;
+  width: 1.25rem; height: 1.25rem;
+  border-radius: 50%;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 0 0 1px rgba(8,16,33,.08), 0 2px 4px rgba(8,16,33,.18);
+}
+
+/* 3) Place a green check on top of the circle */
+.khv2 .feature-list li::after,
+.khv2 .kh-bullets li::after,
+.khv2 li::after {
+  content: "✔";
+  position: absolute;
+  left: 0; top: 0.2rem;
+  width: 1.25rem; height: 1.25rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--accent, #16a34a);  /* your brand green */
+  font-size: .85rem; font-weight: 700; line-height: 1;
+}
+
+/* Optional: use a very light blue circle instead of white */
+/*
+.khv2 .feature-list li::before,
+.khv2 .kh-bullets li::before,
+.khv2 li::before {
+  background: rgba(0,157,224,.12);
+}
+*/
