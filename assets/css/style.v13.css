@@ -2488,3 +2488,45 @@ input:focus, select:focus, textarea:focus{
   fill: currentColor;     /* inherit the green */
   display: block;
 }
+
+/* ---- Keuzehulp (index) : readable check badges without changing HTML ---- */
+/* Target the checklist UL inside the keuzehulp card.
+   If your UL has a different class, keep both selectors. */
+.khv2 .feature-list li,
+.khv2 li.khv2-check { /* fallback if items are plain <li> */
+  position: relative;
+  padding-left: 1.8rem; /* space for the circle */
+  list-style: none;      /* hide default bullets */
+}
+
+.khv2 .feature-list li::before,
+.khv2 li.khv2-check::before,
+.khv2 li::marker { /* marker fallback ignored by most browsers for custom content */
+  content: "✔";                     /* the check */
+  position: absolute;
+  left: 0; top: 0.15rem;
+  width: 1.25rem; height: 1.25rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,.96);              /* white circle for contrast */
+  color: var(--accent, #16a34a);                   /* keep your brand green */
+  font-size: .85rem; line-height: 1; font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(8,16,33,.08), 0 2px 4px rgba(8,16,33,.18);
+}
+
+/* If your list uses inline SVG checks inside the LI text, tint them to the green
+   and let the white circle do the contrast work. */
+.khv2 .feature-list li svg { 
+  width: .9rem; height: .9rem; 
+  fill: currentColor;
+  vertical-align: middle;
+  color: var(--accent, #16a34a);
+}
+
+/* Optional: very light blue instead of pure white for the circle (uncomment to use) */
+/*
+.khv2 .feature-list li::before,
+.khv2 li.khv2-check::before {
+  background: rgba(0,157,224,.12);
+}
+*/
