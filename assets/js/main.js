@@ -993,7 +993,7 @@ if (typeof items === 'undefined'){ var items = []; }
     {slug:'products/haier-revive-plus-50kw.html', name:'Haier Revive Plus 5.0 kW', brand:'Haier', kw:5.0, min_m2:30, max_m2:50, seer:'A++', scop:'A+', noise_in:24, noise_out:50, price:2699, cap:5.0},
     {slug:'products/haier-expert-nordic-25kw.html', name:'Haier Expert Nordic 2.5 kW', brand:'Haier', kw:2.5, min_m2:12, max_m2:28, seer:'A++', scop:'A+', noise_in:19, noise_out:46, price:2299, cap:2.5},
     {slug:'products/haier-expert-nordic-35kw.html', name:'Haier Expert Nordic 3.5 kW', brand:'Haier', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:20, noise_out:48, price:2599, cap:3.5},
-    {slug:'products/haier-expert-nordic-50kw.html', name:'Haier Expert Nordic 5.0 kW', brand:'Haier', kw:5.0, min_m2:30, max_m2:50, seer:'A++', scop:'A+', noise_in:22, noise_out:50, price:3099, cap:5.0}
+    {slug:'REMOVED_EXPERT50', name:'Haier Expert Nordic 5.0 kW', brand:'Haier', kw:5.0, min_m2:30, max_m2:50, seer:'A++', scop:'A+', noise_in:22, noise_out:50, price:3099, cap:5.0}
   ];
   if (!Array.isArray(items)) window.items = [];
   // Merge without duplicates by slug
@@ -1050,6 +1050,38 @@ function pickVariantByArea(totalRooms, avgRoomM2, preferQuiet){
             '</div>'+
           '</div>';
       }
+    });
+  });
+})();
+
+
+/* === Keuzehulp: resilient 'Volgende' handler === */
+(function ensureKhNext(){
+  function nextStep(){
+    var steps = Array.prototype.slice.call(document.querySelectorAll('.kh-step'));
+    if (!steps.length) return;
+    var idx = steps.findIndex(function(s){ return s.classList.contains('is-active'); });
+    var next = (idx>=0 && steps[idx+1]) ? steps[idx+1] : steps[0];
+    if (next){
+      steps.forEach(function(s){ s.classList.remove('is-active'); });
+      next.classList.add('is-active');
+      var dots = document.querySelectorAll('.kh-dots .dot');
+      if (dots && dots.length){
+        Array.prototype.forEach.call(dots, function(d){ d.classList.remove('is-active'); });
+        if (dots[idx+1]) dots[idx+1].classList.add('is-active');
+      }
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    var btns = document.querySelectorAll('#kh-next, .kh-next, [data-kh-next]');
+    Array.prototype.forEach.call(btns, function(btn){
+      btn.addEventListener('click', function(e){
+        // don't block in-page hash anchors
+        if (!(this.tagName==='A' && (this.getAttribute('href')||'').charAt(0)==='#')){
+          e.preventDefault();
+        }
+        nextStep();
+      });
     });
   });
 })();
