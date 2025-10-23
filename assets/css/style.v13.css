@@ -2436,3 +2436,28 @@ input:focus, select:focus, textarea:focus{
   background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
   border-radius: 2px;
 }
+
+/* ---- Headline contrast helpers (for "Doe") ---- */
+.headline-contrast { display:inline-block }
+
+/* A) Plain white (cleanest, highest contrast) */
+.text-white { color:#fff !important; }
+
+/* B) White outline around green (keeps brand color, adds legibility) */
+.text-outline {
+  color:#16a34a; /* your brand green */
+  text-shadow:
+    -1px 0 #fff, 1px 0 #fff,
+     0 -1px #fff, 0 1px #fff; /* faux stroke */
+  /* Optional crisp stroke for WebKit browsers */
+  -webkit-text-stroke: 1px #fff;
+}
+
+/* C) Soft white glow around green */
+.text-glow {
+  color:#16a34a;
+  text-shadow:
+    0 0 3px #fff,
+    0 0 6px #fff,
+    0 0 10px rgba(255,255,255,.7);
+}
