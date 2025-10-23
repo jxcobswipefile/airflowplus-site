@@ -2495,3 +2495,17 @@ input:focus, select:focus, textarea:focus{
 .badge--cool{border-color:rgba(0,145,240,.25)}
 .badge--heat{border-color:rgba(1,180,120,.25)}
 .model-code{font-size:13px;color:var(--muted);margin:.2rem 0 .8rem}
+
+
+/* === EU Energy arrow labels === */
+.eu-label{position:relative; display:inline-block; padding:4px 10px 4px 12px; color:#fff; font-weight:700; font-size:12px; border-radius:4px 0 0 4px}
+.eu-label::after{content:''; position:absolute; right:-10px; top:0; border-left:10px solid currentColor; border-top:12px solid transparent; border-bottom:12px solid transparent}
+.eu-label[data-grade="A+++"]{background:#1bb34a; color:#1bb34a}
+.eu-label[data-grade="A++"]{background:#4cc158; color:#4cc158}
+.eu-label[data-grade="A+"]{background:#7bcb67; color:#7bcb67}
+.eu-label[data-grade="A"]{background:#a6d375; color:#a6d375}
+.eu-labels .eu-label{color:#fff !important}
+
+/* Catalog CTA readability fix */
+.modellen-cta h2, .modellen-cta p{color:#0f172a}
+.modellen-cta h2 .accent-green{color:#1bb34a}
