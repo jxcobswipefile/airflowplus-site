@@ -1054,44 +1054,44 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 
-/* === KH Step 3 mount + auto-render (Phase 2.6b) === */
+/* === KH Step 3: force-mount under "Overzicht" and always render (Phase 2.6c) === */
 (function(){
+  function findOverviewNode(){
+    var node = document.querySelector('.overview, .khv2-card .overview, .summary, .khv2-card .summary');
+    if (node) return node;
+    var hs = document.querySelectorAll('h1,h2,h3,h4');
+    for (var i=0;i<hs.length;i++){
+      var t=(hs[i].textContent||'').trim().toLowerCase();
+      if (t.indexOf('overzicht')>-1){ return hs[i].parentElement || hs[i]; }
+    }
+    return document.querySelector('.kh-step.step-3, .kh-step[data-step="3"], .kh-step:last-child') || document.body;
+  }
   function ensureRecoMount(){
     var mount = document.getElementById('kh-reco');
     if (mount) return mount;
-    // Try to attach right under the step-3 content card
-    var step3 = document.querySelector('.kh-step.step-3, .kh-step[data-step="3"], .kh-step.is-last, .kh-step:last-child');
-    var card = step3 ? step3.querySelector('.khv2-card, .kh-card, .card, .summary, .overview') : null;
-    var parent = (card && card.parentNode) || step3 || document.querySelector('#kh-root') || document.body;
+    var ref = findOverviewNode();
     mount = document.createElement('div');
     mount.id = 'kh-reco';
-    mount.style.marginTop = '16px';
-    parent.appendChild(mount);
+    mount.style.marginTop = '18px';
+    if (ref && ref.parentNode && ref.nextSibling){
+      ref.parentNode.insertBefore(mount, ref.nextSibling);
+    }else if (ref && ref.appendChild){
+      ref.appendChild(mount);
+    }else{
+      document.body.appendChild(mount);
+    }
     return mount;
   }
-  function renderIfOnStep3(){
-    // Detect active step index (1-based dots or .is-active kh-step)
-    var steps = Array.prototype.slice.call(document.querySelectorAll('.kh-step'));
-    var idx = steps.findIndex(function(s){ return s.classList.contains('is-active'); });
-    var isStep3 = (idx === 2) || (steps.length && steps[steps.length-1].classList.contains('is-active')); // tolerate variants
-    if (!steps.length) {
-      // fallback: if summary/overview block is visible on page
-      isStep3 = !!document.querySelector('.overview, .summary, .khv2-stage .is-last');
-    }
-    if (isStep3){
-      ensureRecoMount();
-      if (typeof renderRecommendation === 'function') renderRecommendation();
+  function tryRender(){
+    ensureRecoMount();
+    if (typeof renderRecommendation === 'function'){
+      renderRecommendation();
     }
   }
   document.addEventListener('DOMContentLoaded', function(){
-    // Initial check
-    setTimeout(renderIfOnStep3, 80);
-    // Watch step changes
-    var obs = new MutationObserver(function(){ renderIfOnStep3(); });
-    obs.observe(document.body, {subtree:true, childList:true, attributes:true, attributeFilter:['class']});
-    // Bind common CTA buttons that lead to step 3
-    document.querySelectorAll('#kh-next, .kh-next, [data-kh-next], .btn, button').forEach(function(b){
-      b.addEventListener('click', function(){ setTimeout(renderIfOnStep3, 120); });
-    });
+    setTimeout(tryRender, 80);
+    document.addEventListener('click', function(){ setTimeout(tryRender, 120); }, true);
+    var mo = new MutationObserver(function(){ tryRender(); });
+    mo.observe(document.body, {subtree:true, childList:true, attributes:true, attributeFilter:['class']});
   });
 })();
