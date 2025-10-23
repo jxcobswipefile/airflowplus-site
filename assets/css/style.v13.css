@@ -3,9 +3,8 @@
    ========================================================================== */
 
 :root{
-  --primary-300:#0292F1;
   --bg:#ffffff; --card:#ffffff; --text:#0f1720; --muted:#5b6470;
-  --primary:#0091F0; --primary-700:#005b8f; --accent:#16a34a; --ring:rgba(0,157,224,.20);
+  --primary:#009de0; --primary-700:#005b8f; --accent:#16a34a; --ring:rgba(0,157,224,.20);
   --container:1140px; --radius:14px;
 }
 
@@ -16,7 +15,7 @@ a{color:var(--text);text-decoration:none}
 .container{max-width:var(--container);margin:0 auto;padding:0 20px}
 .section{padding:80px 0}
 h2{font-size:30px;margin:0 0 18px}
-.hl-blue{color:#0091F0}
+.hl-blue{color:#2ab5f2}
 
 /* --------------------------------- Header -------------------------------- */
 .topbar{background:#0b1526;color:#eaf1ff;font-size:14px}
@@ -1377,9 +1376,9 @@ html.is-fading body {
 /* ==============================
    22) Theme accents & gradients
    ============================== */
-.text-brand { color: var(--brand-600, #0091F0); }
+.text-brand { color: var(--brand-600, #2b6cff); }
 .text-gradient {
-  background: linear-gradient(90deg, #0091F0, #0091F0);
+  background: linear-gradient(90deg, #2b6cff, #2ab5f2);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1387,13 +1386,13 @@ html.is-fading body {
 .section--brand-deep{background: linear-gradient(180deg, #0b1f33, #0a243d);color:#fff;}
 .section--brand-deep .optin { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); }
 .section--brand-deep a.btn.btn--ghost { border-color:#fff; color:#fff; }
-.h-accent strong { color: var(--brand-600, #0091F0); }
+.h-accent strong { color: var(--brand-600, #2b6cff); }
 
 /* ==============================
    23) Promo banner (lower on page)
    ============================== */
 .promo-banner {
-  background: linear-gradient(135deg, #0b1f33, #0091F0);
+  background: linear-gradient(135deg, #0b1f33, #2b6cff);
   color: #fff;
   padding: clamp(16px, 3vw, 22px) 0;
 }
@@ -1470,8 +1469,8 @@ html.is-fading body {
 /* ==============================
    28) Heading blues (match homepage)
    ============================== */
-.h-accent strong, .text-brand { color: #0091F0; }
-.text-gradient { background: linear-gradient(90deg, #0091F0, #0091F0); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.h-accent strong, .text-brand { color: #2b6cff; }
+.text-gradient { background: linear-gradient(90deg, #2b6cff, #2ab5f2); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .section--brand-deep { background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; }
 
 
@@ -1527,7 +1526,7 @@ html.is-fading body {
 .section.alt-dark { background: linear-gradient(180deg, #0b1f33, #0a243d); color:#fff; }
 .section.alt-dark .feature-mini { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.16); color:#eaf1ff; }
 .section.alt-dark h2, .section.alt-dark h3 { color:#fff; }
-.text-brand { color:#0091F0; }
+.text-brand { color:#2b6cff; }
 
 /* --- Keyword Ticker --- */
 .keyword-ticker{background:#0b1f33;color:#eaf1ff;border-radius:14px;padding:8px 0;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.25);margin:18px 0}
@@ -1642,7 +1641,7 @@ label.checkbox input[type="checkbox"]{ inline-size:18px; block-size:18px; }
 
 /* v29.5 trust-ticker */
 .section-navy{background:#081021;color:#fff;}
-.section-navy a.btn{background:#0091F0;color:#fff;border:none;}
+.section-navy a.btn{background:#0091ff;color:#fff;border:none;}
 .section-tight{padding-top:28px;padding-bottom:28px;}
 .trust-ticker{overflow:hidden;background:#081021;border-radius:12px;padding:10px 0;}
 .trust-ticker .keyword-track{display:flex;gap:40px;white-space:nowrap;will-change:transform;animation:tt-scroll 25s linear infinite;}
@@ -1747,8 +1746,7 @@ label.checkbox input[type="checkbox"]{ inline-size:18px; block-size:18px; }
 .home .hero::before, .home .hero::after{ content:none !important; display:none !important; }
 
 /* Bright blue universal button */
-:root{
-  --primary-300:#0292F1; --afp-blue:#0091F0; }
+:root{ --afp-blue:#16A1FF; }
 .btn.btn-primary{ background:var(--afp-blue) !important; color:#fff !important; border-color: transparent !important; }
 .btn.btn-primary:hover{ filter:brightness(0.95); }
 
@@ -1785,8 +1783,7 @@ body.diensten .section:not(.section--deep):not(.section--overlay){ background:#f
 
 /* === v-REVERSION-fix2 === */
 /* Buttons + brand blue */
-:root{
-  --primary-300:#0292F1; --afp-blue:#0091F0; }
+:root{ --afp-blue:#16A1FF; }
 
 /* Keuzehulp card: light brand blue background, white text */
 .section.kh-cta,
@@ -1837,8 +1834,7 @@ body.diensten .section li{ color:#0f172a !important; }
 
 
 /* === hotfix v-REV3 (scoped, high-specificity) === */
-:root{
-  --primary-300:#0292F1; --afp-blue:#0091F0; }
+:root{ --afp-blue:#16A1FF; }
 
 /* Keuzehulp card: light blue like Bel/Offerte */
 section.kh-cta.overlap.hero-overlap{ background: transparent !important; }
@@ -1871,8 +1867,7 @@ body.diensten .media-ph, body.diensten .image-card, body.diensten .img-box{
 
 
 /* === CSS-only patch on top of REV3 === */
-:root{
-  --primary-300:#0292F1; --afp-blue:#0091F0; }
+:root{ --afp-blue:#16A1FF; }
 /* Homepage only: bright blue KH card (keuzehulp) */
 body.home section.kh-cta .kh-cta-card{ background:var(--afp-blue) !important; color:#ffffff !important; }
 body.home section.kh-cta .kh-cta-card h2,
@@ -1891,7 +1886,7 @@ body.diensten section.cta-light h2{ color:#ffffff !important; }
   display:flex; align-items:center; justify-content:space-between; gap:24px;
 }
 .promo-banner .promo-left{ display:flex; flex-direction:column; gap:12px; }
-.promo-banner .eyebrow{ font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#0091F0; }
+.promo-banner .eyebrow{ font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#0a7ddf; }
 .promo-banner h2{ margin:0; font-size: clamp(20px, 2.4vw, 28px); color:#0f172a; }
 .promo-banner p{ margin:0; color:#0f172a; }
 .promo-banner .promo-benefits{ display:flex; gap:18px; list-style:none; padding:0; margin:0; flex-wrap:wrap; }
@@ -1931,7 +1926,7 @@ body.home section.kh-cta.overlap.hero-overlap{ margin-top: clamp(-120px, -20vh, 
 .kh-card.khv2-card p,
 .kh-card.khv2-card li{ color:#0f172a !important; }
 .kh-card.khv2-card .btn.btn-primary{
-  background:#0091F0 !important;
+  background:#16A1FF !important;
   color:#ffffff !important;
   border-color: transparent !important;
 }
@@ -1972,7 +1967,7 @@ body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px);
   font-weight:700;
   font-size:12px;
   letter-spacing:.06em;
-  color:#0091F0;
+  color:#0a5bd3;
   background:rgba(10,91,211,.08);
   border:1px solid rgba(10,91,211,.22);
   border-radius:999px;
@@ -1991,7 +1986,7 @@ body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px);
   justify-content: center;
 }
 .promo .cta-row .btn{ height:40px; padding:0 16px; line-height:40px; }
-.promo .cta-row .btn.btn-primary{ background:#0091F0; color:#fff; }
+.promo .cta-row .btn.btn-primary{ background:#22a3ff; color:#fff; }
 .promo .cta-row .btn.btn-outline{ background:#fff; color:#0b2a3c; border:1px solid rgba(2,32,71,.15); }
 @media (max-width: 960px){
   .promo .promo-card{ grid-template-columns: 1fr; }
@@ -2021,7 +2016,7 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
   display:grid; grid-template-columns: 1.6fr 1fr; gap:24px;
 }
 .promo .badge{ display:inline-block; font-weight:700; font-size:12px; letter-spacing:.06em;
-  color:#0091F0; background:rgba(10,91,211,.08); border:1px solid rgba(10,91,211,.22);
+  color:#0a5bd3; background:rgba(10,91,211,.08); border:1px solid rgba(10,91,211,.22);
   border-radius:999px; padding:6px 10px; }
 .promo .promo-heading{ margin:8px 0 6px; }
 .promo .subtitle{ margin:0 0 10px; color:#334155; }
@@ -2029,7 +2024,7 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
 .promo .price-row{ display:flex; align-items:center; gap:10px; margin:6px 0 14px; }
 .promo .price-old{ color:#9ca3af; text-decoration:line-through; font-weight:600; }
 .promo .price-arrow{ color:#64748b; font-weight:700; }
-.promo .price-new{ color:#0091F0; font-weight:900; font-size:24px; }
+.promo .price-new{ color:#0a5bd3; font-weight:900; font-size:24px; }
 .promo .price-qualifier{ color:#64748b; font-size:14px; }
 
 .promo .brands{ margin:8px 0 10px; gap:10px; display:flex; flex-wrap:wrap; }
@@ -2048,7 +2043,7 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
 .promo .promo-notes ul{ margin:0; padding-left:18px; color:#334155; }
 .promo .cta-row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 .promo .cta-row .btn{ height:42px; padding:0 18px; line-height:42px; }
-.promo .cta-row .btn.btn-primary{ background:#0091F0; color:#fff; }
+.promo .cta-row .btn.btn-primary{ background:#22a3ff; color:#fff; }
 .promo .cta-row .btn.btn-outline{ background:#fff; color:#0b2a3c; border:1px solid rgba(2,32,71,.15); }
 
 @media (max-width: 1024px){
@@ -2151,7 +2146,7 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 
 /* Blue phrase: SOLID brand blue, same dark shadow, no gradient/glow */
 .hero .hero-copy h1 .hl-blue{
-  color: var(--brand-600, #0091F0) !important;
+  color: var(--brand-600, #2b6cff) !important;
   background: none !important;
   -webkit-background-clip: initial !important;
   -webkit-text-stroke: 0 !important;
@@ -2188,7 +2183,7 @@ section[data-align="right"], section[data-align="right"] *{ text-align:right !im
 
 /* “dé airco specialist” — use the same blue as cards/buttons */
 .hero .hero-copy h1 .hl-blue{
-  color: #0091F0 !important; /* match your primary card/button blue */
+  color: #1ea7ff !important; /* match your primary card/button blue */
   background:none !important;
   -webkit-background-clip: initial !important;
   -webkit-text-stroke:0 !important;
@@ -2278,7 +2273,7 @@ body.keuzehulp .site-header,
 .khv2 .site-header .nav a:hover,
 .kh-wizard .site-header .nav a:hover,
 .page-keuzehulp .site-header .nav a:hover {
-  color: #0091F0 !important;    /* same blue as CTAs */
+  color: #1ea7ff !important;    /* same blue as CTAs */
 }
 
 /* Keep the CTA styled the same */
@@ -2363,7 +2358,6 @@ body.keuzehulp .site-header,
    ====================================================================== */
 
 :root{
-  --primary-300:#0292F1;
   --accent:#16a34a;               /* brand green (from logo) */
   --accent-600:#15803d;           /* darker shade for hovers/focus */
   --accent-300:#4ade80;           /* lighter shade for subtle UI */
@@ -2467,3 +2461,28 @@ input:focus, select:focus, textarea:focus{
     0 0 6px #fff,
     0 0 10px rgba(255,255,255,.7);
 }
+
+
+/* === Product catalog === */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:18px}
+.prod-card{display:block;background:var(--card);border:1px solid rgba(8,16,33,.08);border-radius:16px;overflow:hidden;box-shadow:0 10px 18px rgba(8,16,33,.06);transition:transform .2s ease, box-shadow .2s ease}
+.prod-card:hover{transform:translateY(-2px);box-shadow:0 14px 24px rgba(8,16,33,.10)}
+.prod-card img{width:100%;height:160px;object-fit:cover;background:#f7fafc}
+.prod-card-body{padding:12px 14px}
+.prod-card h3{margin:0 0 6px;font-size:18px}
+.product{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:start}
+.product-hero{width:100%;height:auto;border-radius:12px;background:#f7fafc;border:1px solid rgba(8,16,33,.06)}
+.product .thumbs{display:flex;gap:8px;margin-top:10px}
+.product .thumbs img{width:100px;height:70px;object-fit:cover;border-radius:10px;border:1px solid rgba(8,16,33,.06)}
+.product-info .overline{letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-size:12px;margin:0 0 6px}
+.product-info .price{font-weight:600;margin:.25rem 0 1rem}
+.product-info .cta-row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.product-bullets{margin:10px 0 18px;padding:0 0 0 18px}
+.spec-table{width:100%;border-collapse:separate;border-spacing:0 8px}
+.spec-table th{width:42%;text-align:left;color:var(--muted);font-weight:500}
+.spec-table td{background:#fff;border:1px solid rgba(8,16,33,.08);padding:8px 10px;border-radius:10px}
+.h-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.h-scroll .scroll-card{min-width:200px;background:#fff;border:1px solid rgba(8,16,33,.08);border-radius:12px;overflow:hidden;scroll-snap-align:start}
+.h-scroll .scroll-card img{width:100%;height:120px;object-fit:cover;background:#f7fafc}
+.h-scroll .scroll-card span{display:block;padding:8px 10px}
+@media (max-width: 980px){ .product{grid-template-columns:1fr} }

@@ -781,3 +781,38 @@ window.addEventListener('DOMContentLoaded', () => {
     render();
   }catch(e){}
 })();
+
+
+// === Product catalog + Keuzehulp recommendation (defensive) ===
+(function(){
+  try{
+    var catalog = [
+      {slug:'daikin-emura-25kw', name:'Daikin Emura 2.5kW', cool_area_m2:25, img:'assets/img/products/daikin-emura-25kw/hero.jpg', url:'products/daikin-emura-25kw.html'},
+      {slug:'panasonic-etherea-25kw', name:'Panasonic Etherea 2.5kW', cool_area_m2:25, img:'assets/img/products/panasonic-etherea-25kw/hero.jpg', url:'products/panasonic-etherea-25kw.html'},
+      {slug:'haier-flexis-25kw', name:'Haier Flexis 2.5kW', cool_area_m2:25, img:'assets/img/products/haier-flexis-25kw/hero.jpg', url:'products/haier-flexis-25kw.html'}
+    ];
+    function getTotalArea(){
+      var total=0;
+      document.querySelectorAll('[data-room-m2], .save-room-size, input[name^="room-"]').forEach(function(el){
+        var v=parseFloat(el.value||el.getAttribute('data-room-m2')||'0'); if(!isNaN(v)) total+=v;
+      });
+      var slider=document.querySelector('.save-slider'); if(total===0&&slider){var s=parseFloat(slider.value); if(!isNaN(s)) total=s;}
+      return total;
+    }
+    function pick(total){ var c=catalog.slice().sort(function(a,b){return a.cool_area_m2-b.cool_area_m2;});
+      for(var i=0;i<c.length;i++){ if(c[i].cool_area_m2>=total) return c[i]; } return c[c.length-1]; }
+    function render(){
+      var mount=document.getElementById('kh-reco'); if(!mount) return;
+      var total=getTotalArea(); if(!total){ mount.querySelector('.kh-reco-content').innerHTML='<p class="muted">Vul eerst je ruimtes en afmetingen in.</p>'; return; }
+      var m=pick(total);
+      mount.querySelector('.kh-reco-content').innerHTML = '<div class="kh-reco-box">'
+        + '<img class="kh-reco-img" src="'+m.img+'" alt="'+m.name+'">'
+        + '<div class="kh-reco-text"><strong>'+m.name+'</strong><br><span class="muted small">Geschikt tot ca. '+m.cool_area_m2+' m²</span><br>'
+        + '<a class="btn btn--green" href="'+m.url+'">Bekijk product</a></div></div>';
+    }
+    var css=document.createElement('style'); css.textContent='.kh-reco-box{display:flex;gap:12px;align-items:center}.kh-reco-img{width:96px;height:72px;object-fit:cover;border-radius:10px;background:#f7fafc;border:1px solid rgba(8,16,33,.08)}';
+    document.head.appendChild(css);
+    document.addEventListener('DOMContentLoaded', render);
+    document.addEventListener('input', function(e){ if(e.target && (e.target.matches('[data-room-m2], .save-room-size') || (e.target.name||'').indexOf('room-')===0)) render(); }, true);
+  }catch(e){}
+})();
