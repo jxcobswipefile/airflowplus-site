@@ -2345,3 +2345,75 @@ body.keuzehulp .site-header,
   from { transform: translateX(-50%); }
   to   { transform: translateX(0); }
 }
+
+/* =============================
+   COLOR SYSTEM — GREEN ACCENTS (v29.9.29)
+   ============================= */
+:root{
+  --af-green-50:  #ecfdf5;
+  --af-green-100: #d1fae5;
+  --af-green-200: #a7f3d0;
+  --af-green-300: #6ee7b7;
+  --af-green-400: #34d399;
+  --af-green-500: #10b981; /* primary green (logo-matched) */
+  --af-green-600: #059669;
+  --af-green-700: #047857;
+  --af-green-800: #065f46;
+  --af-green-900: #064e3b;
+  --af-green-shadow: rgba(16,185,129,.35);
+}
+
+/* Accent utilities (copy the way we use blue) */
+.hl-green{ color: var(--af-green-500); }                /* headline word accents */
+.underline-green{
+  background-image: linear-gradient(transparent 65%, rgba(16,185,129,.28) 0);
+}
+.link-green{ color: var(--af-green-500); }
+.link-green:hover{ color: var(--af-green-600); }
+
+/* Buttons */
+.btn--green{
+  color:#fff;
+  background: linear-gradient(180deg,var(--af-green-500),var(--af-green-600));
+  box-shadow: 0 8px 20px var(--af-green-shadow);
+  border: 1px solid rgba(16,185,129,.25);
+}
+.btn--green:hover{
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+}
+.btn--green:active{ transform: translateY(0); }
+
+/* Chips / badges */
+.chip--green{
+  color:#0f5132;
+  background: var(--af-green-100);
+  border: 1px solid var(--af-green-200);
+}
+.badge--green{ background: var(--af-green-500); color:#fff; }
+
+/* Section-level opt-in: flip local accent to green without changing markup */
+[data-accent="green"] h1 strong,
+[data-accent="green"] h2 strong,
+[data-accent="green"] .hl-accent{ color: var(--af-green-500); }
+
+[data-accent="green"] .btn-primary,
+[data-accent="green"] .btn-accent{
+  background: linear-gradient(180deg,var(--af-green-500),var(--af-green-600));
+  color:#fff;
+}
+
+/* Trust ticker already uses green ✓; keep it tokenized */
+.trust-ticker .check{ background: var(--af-green-500); }
+
+/* Optional soft panels/dividers if you want subtle green surfaces */
+.panel-green-soft{
+  background: linear-gradient(180deg, rgba(16,185,129,.06), rgba(16,185,129,.02));
+  border: 1px solid rgba(16,185,129,.14);
+  box-shadow: 0 10px 30px rgba(16,185,129,.12);
+}
+.divider-green{
+  height:3px; width:64px; border-radius:2px;
+  background: linear-gradient(90deg,var(--af-green-400),var(--af-green-600));
+}
+.icon-green{ color: var(--af-green-500); }
