@@ -1053,42 +1053,123 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 })();
-/* Keuzehulp: auto-mount & render on step 3 */
-(function khAutoReco(){
-  function ensureKhRecoMount(){
-    var el = document.getElementById('kh-reco');
-    if (el) return el;
-    var step3 = document.querySelector('[data-kh-step="3"]');
-    if (!step3) return null;
-    el = document.createElement('div');
-    el.id = 'kh-reco';
-    el.className = 'kh-reco-mount';
-    el.style.marginTop = '16px';
-    step3.appendChild(el);
-    return el;
-  }
-  function renderIfStep3(){
-    var wrap = document.getElementById('khv2');
-    if (!wrap) return;
-    if (String(wrap.dataset.step||'1') === '3'){
-      ensureKhRecoMount();
-      try {
-        // call existing handler to fill content
-        var btn = document.getElementById('kh-submit');
-        if (btn) { btn.click(); } // reuse existing rendering path
-      } catch(e){}
+
+/* === KH Step 2 parser: derive total m² from selected room ranges (Phase 2.6e) === */
+(function(){
+  function parseRangeLabelToMid(text){
+    if (!text) return null;
+    text = text.replace(/\s/g,'').replace(',', '.').toLowerCase();
+    // Expect formats like '1–30m²', '30-40m2', '40–50 m²'
+    var m = text.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
+    if (m){
+      var a = parseFloat(m[1]), b = parseFloat(m[2]);
+      if (!isNaN(a) && !isNaN(b)) return (a+b)/2;
     }
+    // Single number fallback
+    var n = parseFloat((text.match(/\d+(?:\.\d+)?/)||[''])[0]);
+    return isNaN(n) ? null : n;
   }
-  document.addEventListener('DOMContentLoaded', function(){
-    ensureKhRecoMount();
-    renderIfStep3();
-    var wrap = document.getElementById('khv2');
-    if (!wrap) return;
-    var obs = new MutationObserver(function(muts){
-      muts.forEach(function(m){
-        if (m.type==='attributes' && m.attributeName==='data-step'){ renderIfStep3(); }
+  function isSelected(el){
+    return el.classList.contains('is-selected') || el.classList.contains('selected') ||
+           el.classList.contains('active') || el.getAttribute('aria-pressed')==='true' ||
+           el.getAttribute('aria-checked')==='true' || el.checked === true;
+  }
+  function collectRoomSizes(){
+    var step2 = document.querySelector('[data-kh-step="2"]') || document.querySelector('.kh-step.step-2');
+    if (!step2) return null;
+    var rooms = [];
+    // Strategy A: containers per room with buttons inside
+    var roomBlocks = step2.querySelectorAll('[data-room], .room, .kh-room, .room-block');
+    if (roomBlocks.length){
+      roomBlocks.forEach(function(block){
+        var chosen = null;
+        var options = block.querySelectorAll('button, a, label, input[type="radio"], input[type="checkbox"]');
+        options.forEach(function(opt){
+          if (isSelected(opt) && !chosen){
+            chosen = opt.getAttribute('data-size') || opt.textContent || opt.value;
+          }
+        });
+        if (!chosen && options.length){
+          // if none explicitly selected, take first .is-active or first button
+          var firstActive = Array.prototype.find.call(options, function(o){ return o.classList.contains('is-active'); });
+          var source = firstActive || options[0];
+          chosen = source.getAttribute('data-size') || source.textContent || source.value;
+        }
+        var mid = parseRangeLabelToMid(chosen);
+        if (mid==null) mid = 30; // default per room if parsing fails
+        rooms.push(mid);
       });
+      return rooms;
+    }
+    // Strategy B: flat buttons labeled "Kamer 1", "Kamer 2" groups
+    var groups = step2.querySelectorAll('fieldset, .btn-group, .choice-group');
+    if (groups.length){
+      groups.forEach(function(g){
+        var chosen = null;
+        var opts = g.querySelectorAll('button, a, label, input[type="radio"], input[type="checkbox"]');
+        Array.prototype.forEach.call(opts, function(opt){
+          if (isSelected(opt) && !chosen){
+            chosen = opt.getAttribute('data-size') || opt.textContent || opt.value;
+          }
+        });
+        if (chosen){
+          var mid = parseRangeLabelToMid(chosen);
+          rooms.push(mid==null?30:mid);
+        }
+      });
+      if (rooms.length) return rooms;
+    }
+    // Strategy C: just read any selected range-like button
+    var opts = step2.querySelectorAll('button, a, label, .btn');
+    var picked = Array.prototype.filter.call(opts, function(o){
+      return /(m2|m²|\d+\D+\d+)/i.test(o.textContent||'') && isSelected(o);
     });
-    obs.observe(wrap, {attributes:true});
+    if (picked.length){
+      picked.forEach(function(p){
+        var mid = parseRangeLabelToMid(p.textContent||'');
+        rooms.push(mid==null?30:mid);
+      });
+      return rooms;
+    }
+    return null;
+  }
+
+  // Public helper for the recommender
+  window.khGetTotalAreaFromStep2 = function(){
+    var arr = collectRoomSizes();
+    if (!arr || !arr.length){
+      // Fallback to a single room around 30m² if nothing is detected
+      return 30;
+    }
+    return arr.reduce(function(a,b){ return a + (isNaN(b)?0:b); }, 0);
+  };
+
+  // Hook into step changes to pre-compute and render on step 3
+  document.addEventListener('DOMContentLoaded', function(){
+    var wrap = document.getElementById('khv2');
+    function tryRender(){
+      var step = (wrap && wrap.dataset && wrap.dataset.step) ? parseInt(wrap.dataset.step,10) : null;
+      if (step===3 && typeof renderRecommendation==='function'){
+        // Provide virtual values derived from step2
+        var total = window.khGetTotalAreaFromStep2();
+        var roomsCount = 1; // we don’t need exact count; recommender uses total m²
+        // Ensure the recommendation card mounts
+        var mount = document.getElementById('kh-reco');
+        if (!mount){
+          var step3 = document.querySelector('[data-kh-step="3"]') || document.querySelector('.kh-step.step-3') || document.body;
+          mount = document.createElement('div'); mount.id='kh-reco'; mount.style.marginTop='16px';
+          step3.appendChild(mount);
+        }
+        renderRecommendation();
+      }
+    }
+    if (wrap){
+      var mo = new MutationObserver(tryRender);
+      mo.observe(wrap, {attributes:true, attributeFilter:['data-step']});
+    }
+    // Backstop: also attempt after any obvious "Next" click
+    document.querySelectorAll('#kh-next, .kh-next, [data-kh-next]').forEach(function(btn){
+      btn.addEventListener('click', function(){ setTimeout(tryRender, 120); });
+    });
   });
 })();
