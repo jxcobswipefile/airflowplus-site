@@ -1053,3 +1053,167 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 })();
+
+/* === Keuzehulp Phase 2.6: smarter capacity + brand/budget/quiet/design === */
+(function(){
+  // Extend VARS with price estimation and thumbnail path
+  var BRAND_VANAF = { 'Haier':1300, 'Panasonic':1600, 'Daikin':1800 };
+  function priceEstimate(item){
+    var base = BRAND_VANAF[item.brand] || 1500;
+    var add = item.kw>=5 ? 800 : (item.kw>=3.5 ? 300 : 0);
+    return base + add;
+  }
+  function thumbFromSlug(slug){
+    try{
+      var m = slug.match(/products\/(.+?)-\d+kw\.html$/);
+      if (!m) return ROOT_BASE + 'assets/img/placeholder.jpg';
+      return ROOT_BASE + 'assets/img/products/' + m[1] + '/hero.jpg';
+    }catch(e){ return ROOT_BASE + 'assets/img/placeholder.jpg'; }
+  }
+  if (typeof VARS !== 'undefined'){
+    VARS.forEach(function(it){
+      if (typeof it.price_est === 'undefined') it.price_est = priceEstimate(it);
+      if (!it.thumb) it.thumb = thumbFromSlug(it.slug);
+      if (!it.noise_in) it.noise_in = 20;
+    });
+  }
+
+  // Pull form values defensively
+  function getVal(sel, def){
+    var el = document.querySelector(sel);
+    if (!el) return def;
+    if (el.type === 'checkbox') return !!el.checked;
+    var v = (el.value||'').trim();
+    return v==='' ? def : v;
+  }
+
+  function parseBudget(){
+    var min = parseInt(getVal('[name="budget_min"]', ''), 10);
+    var max = parseInt(getVal('[name="budget_max"]', ''), 10);
+    if (isNaN(min)) min = null; if (isNaN(max)) max = null;
+    var band = getVal('[name="budget"]', ''); // optional select with low/med/high
+    return {min:min, max:max, band:band};
+  }
+
+  function matchesBudget(item, b){
+    if (!b) return true;
+    var p = item.price_est||0;
+    if (b.min!=null && p < b.min) return false;
+    if (b.max!=null && p > b.max) return false;
+    if (b.band){
+      if (b.band==='low' && p>1700) return false;
+      if (b.band==='mid' && (p<1500 || p>2300)) return false;
+      if (b.band==='high' && p<2200) return false;
+    }
+    return true;
+  }
+
+  // Main pick function: returns a ranked list
+  window.pickRecommendations = function(){
+    var rooms = parseInt(getVal('[name="rooms"]', '1'), 10);
+    var avg = parseInt(getVal('[name="room_size"]', '20'), 10);
+    var preferQuiet = !!getVal('[name="quiet"]', false);
+    var design = !!getVal('[name="design"]', false);
+    var brandPref = getVal('[name="brand"]', ''); // 'Daikin' | 'Panasonic' | 'Haier' or ''
+    var budget = parseBudget();
+    var total = Math.max(1, rooms) * Math.max(8, avg);
+
+    // Filter by area window first
+    var pool = VARS.filter(function(it){ return total >= it.min_m2 && total <= it.max_m2; });
+    if (!pool.length){
+      // allow nearest
+      pool = VARS.slice().sort(function(a,b){
+        function mid(x){ return (x.min_m2+x.max_m2)/2; }
+        return Math.abs(mid(a)-total) - Math.abs(mid(b)-total);
+      }).slice(0, 12);
+    }
+
+    // Room count bias
+    if (rooms >= 3){
+      var big = pool.filter(function(it){ return it.kw >= 3.5; });
+      if (big.length) pool = big;
+    }
+
+    // Brand preference
+    if (brandPref){
+      var pb = pool.filter(function(it){ return it.brand === brandPref; });
+      if (pb.length) pool = pb;
+    }
+
+    // Quiet preference (<=20 dB(A) inside)
+    if (preferQuiet){
+      var pq = pool.filter(function(it){ return (it.noise_in||99) <= 20; });
+      if (pq.length) pool = pq;
+    }
+
+    // Design preference (favor Emura)
+    if (design){
+      var pd = pool.filter(function(it){ return /Emura/i.test(it.name); });
+      if (pd.length) pool = pd;
+    }
+
+    // Budget filter
+    pool = pool.filter(function(it){ return matchesBudget(it, budget); });
+
+    // Rank: area closeness, then price, then quiet
+    function mid(x){ return (x.min_m2 + x.max_m2)/2; }
+    pool.sort(function(a,b){
+      var da = Math.abs(mid(a)-total), db = Math.abs(mid(b)-total);
+      if (da!==db) return da-db;
+      if ((a.price_est||0)!==(b.price_est||0)) return (a.price_est||0)-(b.price_est||0);
+      return (a.noise_in||99) - (b.noise_in||99);
+    });
+
+    return pool.slice(0, 3);
+  };
+
+  // Render recommendation block on the wizard page
+  window.renderRecommendation = function(){
+    var node = document.getElementById('kh-reco');
+    if (!node || typeof VARS==='undefined') return;
+    var recs = pickRecommendations();
+    if (!recs.length) return;
+    var urlBase = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
+    function priceLabel(b){
+      if (b==='Daikin') return 'vanaf € 1.800 incl. materiaal en montage';
+      if (b==='Panasonic') return 'vanaf € 1.600 incl. materiaal en montage';
+      if (b==='Haier') return 'vanaf € 1.300 incl. materiaal en montage';
+      return 'Prijs op aanvraag';
+    }
+    var top = recs[0];
+    var list = recs.map(function(it){
+      return '<a class="kh-reco-mini" href="'+urlBase+it.slug+'">'
+            +'<img src="'+it.thumb+'" alt="'+it.name+'">'
+            +'<div><strong>'+it.name+'</strong><div class="muted">'+priceLabel(it.brand)+'</div></div>'
+            +'</a>';
+    }).join('');
+
+    node.innerHTML = ''
+      + '<div class="kh-reco-card">'
+      + '  <div class="kh-reco-main">'
+      + '    <img class="kh-reco-thumb" src="'+top.thumb+'" alt="'+top.name+'">'
+      + '    <div class="kh-reco-body">'
+      + '      <h3>'+ top.name +'</h3>'
+      + '      <div class="muted">'+ priceLabel(top.brand) +'</div>'
+      + '      <div class="card-energy" style="margin-top:10px">'
+      + '        <span class="eu-chip" data-grade="'+(top.seer||'A++')+'">Koelen: '+(top.seer||'A++')+'</span>'
+      + '        <span class="eu-chip" data-grade="'+(top.scop||'A+')+'">Verwarmen: '+(top.scop||'A+')+'</span>'
+      + '      </div>'
+      + '      <a class="btn btn-green" style="margin-top:12px" href="'+urlBase+top.slug+'">Bekijk aanbeveling</a>'
+      + '    </div>'
+      + '  </div>'
+      + '  <div class="kh-reco-alt">'+ list +'</div>'
+      + '</div>';
+  };
+
+  // Hook submit + step next to render results
+  document.addEventListener('DOMContentLoaded', function(){
+    var submit = document.getElementById('kh-submit');
+    if (submit){ submit.addEventListener('click', function(e){ e.preventDefault(); renderRecommendation(); }); }
+    // Also render when arriving at step 3+ if the button is used
+    var nexts = document.querySelectorAll('#kh-next, .kh-next, [data-kh-next]');
+    Array.prototype.forEach.call(nexts, function(btn){
+      btn.addEventListener('click', function(){ setTimeout(renderRecommendation, 50); });
+    });
+  });
+})();
