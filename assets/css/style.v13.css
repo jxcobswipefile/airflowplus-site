@@ -2347,26 +2347,92 @@ body.keuzehulp .site-header,
 }
 
 
-/* ---- Headline contrast helpers (for "Doe") ---- */
-.headline-contrast { display:inline-block }
+/* ======================================================================
+   Airflow+ — Brand Green Accents (non-breaking, opt‑in utilities)
+   ----------------------------------------------------------------------
+   This block introduces subtle uses of the brand green alongside existing blues.
+   - Variables: --accent (already present), ensure darker/lighter tints.
+   - Utilities: .accent-green, .btn--green, .chip--green, .badge--green
+   - Global polish: checkbox accent-color, link hover underline, list markers.
+   All rules are additive and avoid overriding core tokens.
+   ====================================================================== */
 
-/* A) Plain white (cleanest, highest contrast) */
-.text-white { color:#fff !important; }
-
-/* B) White outline around green (keeps brand color, adds legibility) */
-.text-outline {
-  color: var(--accent, #16a34a);
-  text-shadow:
-    -1px 0 #fff, 1px 0 #fff,
-     0 -1px #fff, 0 1px #fff;
-  -webkit-text-stroke: 1px #fff;
+:root{
+  --accent:#16a34a;               /* brand green (from logo) */
+  --accent-600:#15803d;           /* darker shade for hovers/focus */
+  --accent-300:#4ade80;           /* lighter shade for subtle UI */
+  --accent-ring: rgba(22,163,74,.25);
 }
 
-/* C) Soft white glow around green */
-.text-glow {
-  color: var(--accent, #16a34a);
-  text-shadow:
-    0 0 3px #fff,
-    0 0 6px #fff,
-    0 0 10px rgba(255,255,255,.7);
+/* Headline emphasis helper — wrap a word with <span class="accent-green"> */
+.accent-green{ color: var(--accent); }
+
+/* Links get a subtle green underline on hover for brand feel */
+a:hover{ text-decoration-color: var(--accent); }
+
+/* Checkbox/radio native accent */
+input[type="checkbox"], input[type="radio"]{ accent-color: var(--accent); }
+
+/* Optional green button variant using existing .btn styles */
+.btn.btn--green{
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn.btn--green:hover{
+  background: var(--accent-600);
+  border-color: var(--accent-600);
+}
+
+/* Outline version if needed */
+.btn.btn--green-outline{
+  background: transparent;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn.btn--green-outline:hover{
+  background: rgba(22,163,74,.08);
+}
+
+/* Chips / badges */
+.chip--green, .badge--green{
+  background: rgba(22,163,74,.10);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Thin trust ticker: ensure checks appear green on dark navy */
+.trust-ticker .check,
+.trust-ticker .icon-check{ color: var(--accent); }
+
+/* FAQ active state ring uses green (keeps blue headers intact) */
+.faq .item[open] summary{ box-shadow: 0 0 0 2px var(--accent-ring); }
+
+/* Bullet lists — subtle green markers */
+ul.brand-green li::marker{ color: var(--accent); }
+
+/* Form focus ring enhancement */
+input:focus, select:focus, textarea:focus{
+  outline-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+/* Reviews carousel arrows on hover — slight green tint */
+.reviews .arrow:hover{ border-color: var(--accent); }
+
+/* Calculator tooltip/knob if a CSS var exists; fallback is harmless */
+.save-tooltip, .save-bubble{ border-color: var(--accent); }
+.save-slider::-webkit-slider-thumb{ border-color: var(--accent); }
+.save-slider::-moz-range-thumb{ border-color: var(--accent); }
+
+/* Small decorative rule under section headings (opt-in) */
+.section-title--underline{
+  position: relative;
+}
+.section-title--underline::after{
+  content: "";
+  position: absolute; left: 0; right: auto; bottom: -10px;
+  width: 72px; height: 3px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 2px;
 }
