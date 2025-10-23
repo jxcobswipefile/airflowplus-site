@@ -20,61 +20,278 @@
 </div>
 </header>
 <main>
-<section class="section pad-y-lg"><div class="container">
-<h1 class="section-title--underline">Airco modellen</h1>
-<p class="muted">Alle modellen inclusief standaard montage. Klik een model voor specificaties, foto's en advies.</p>
-<div class="prod-grid">
-<a class="prod-card" href="/airflowplus-site/products/haier-revive-plus.html">
-<img alt="Haier Revive Plus" src="assets/img/products/haier-revive-plus/hero.jpg"/>
-<div class="prod-card-body">
-<h3>Haier Revive Plus</h3>
-<p class="small muted">Geschikt tot ~25 m²</p>
+<section class="section pad-y-lg"><div class="container"><div class="catalog-layout">
+<aside class="filters">
+  <h3>Filters</h3>
+  <div class="filter-block">
+    <label>Prijs (vanaf €)</label>
+    <div class="price-controls">
+      <input type="number" id="priceMin" placeholder="min" value="0">
+      <input type="number" id="priceMax" placeholder="max" value="10000">
+    </div>
+  </div>
+  <div class="filter-block">
+    <label>Merk</label>
+    <div>
+      <label><input type="checkbox" class="flt-brand" value="Daikin"> Daikin</label><br>
+      <label><input type="checkbox" class="flt-brand" value="Panasonic"> Panasonic</label><br>
+      <label><input type="checkbox" class="flt-brand" value="Haier"> Haier</label>
+    </div>
+  </div>
+  <div class="filter-block">
+    <label>Capaciteit (kW)</label>
+    <div>
+      <label><input type="checkbox" class="flt-cap" value="2.5"> 2.5 kW</label><br>
+      <label><input type="checkbox" class="flt-cap" value="3.5"> 3.5 kW</label><br>
+      <label><input type="checkbox" class="flt-cap" value="5.0"> 5.0 kW</label>
+    </div>
+  </div>
+  <button class="btn btn-outline" id="btnResetFilters">Reset</button>
+</aside>
+<div class="catalog-grid">
+<div id="cards" class="cards-wrap">
+
+  <a class="model-card" href="/airflowplus-site/products/panasonic-tz-25kw.html"
+     data-brand="Panasonic" data-capacity="2.5" data-price="0" aria-label="Panasonic TZ 2.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/panasonic-tz/hero.jpg" alt="Panasonic TZ"></div>
+    <div class="card-body">
+      <h3>Panasonic TZ — 2.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.600</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/panasonic-tz-35kw.html"
+     data-brand="Panasonic" data-capacity="3.5" data-price="0" aria-label="Panasonic TZ 3.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/panasonic-tz/hero.jpg" alt="Panasonic TZ"></div>
+    <div class="card-body">
+      <h3>Panasonic TZ — 3.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.600</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/panasonic-tz-50kw.html"
+     data-brand="Panasonic" data-capacity="5.0" data-price="0" aria-label="Panasonic TZ 5.0 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/panasonic-tz/hero.jpg" alt="Panasonic TZ"></div>
+    <div class="card-body">
+      <h3>Panasonic TZ — 5.0 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.600</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/panasonic-etherea-25kw.html"
+     data-brand="Panasonic" data-capacity="2.5" data-price="0" aria-label="Panasonic Etherea 2.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/panasonic-etherea/hero.jpg" alt="Panasonic Etherea"></div>
+    <div class="card-body">
+      <h3>Panasonic Etherea — 2.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.600</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/panasonic-etherea-35kw.html"
+     data-brand="Panasonic" data-capacity="3.5" data-price="0" aria-label="Panasonic Etherea 3.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/panasonic-etherea/hero.jpg" alt="Panasonic Etherea"></div>
+    <div class="card-body">
+      <h3>Panasonic Etherea — 3.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.600</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/panasonic-etherea-50kw.html"
+     data-brand="Panasonic" data-capacity="5.0" data-price="0" aria-label="Panasonic Etherea 5.0 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/panasonic-etherea/hero.jpg" alt="Panasonic Etherea"></div>
+    <div class="card-body">
+      <h3>Panasonic Etherea — 5.0 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.600</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/daikin-comfora-25kw.html"
+     data-brand="Daikin" data-capacity="2.5" data-price="0" aria-label="Daikin Comfora 2.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/daikin-comfora/hero.jpg" alt="Daikin Comfora"></div>
+    <div class="card-body">
+      <h3>Daikin Comfora — 2.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.800</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/daikin-comfora-35kw.html"
+     data-brand="Daikin" data-capacity="3.5" data-price="0" aria-label="Daikin Comfora 3.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/daikin-comfora/hero.jpg" alt="Daikin Comfora"></div>
+    <div class="card-body">
+      <h3>Daikin Comfora — 3.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.800</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/daikin-comfora-50kw.html"
+     data-brand="Daikin" data-capacity="5.0" data-price="0" aria-label="Daikin Comfora 5.0 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/daikin-comfora/hero.jpg" alt="Daikin Comfora"></div>
+    <div class="card-body">
+      <h3>Daikin Comfora — 5.0 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.800</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/daikin-perfera-25kw.html"
+     data-brand="Daikin" data-capacity="2.5" data-price="0" aria-label="Daikin Perfera 2.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/daikin-perfera/hero.jpg" alt="Daikin Perfera"></div>
+    <div class="card-body">
+      <h3>Daikin Perfera — 2.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.800</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/daikin-perfera-35kw.html"
+     data-brand="Daikin" data-capacity="3.5" data-price="0" aria-label="Daikin Perfera 3.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/daikin-perfera/hero.jpg" alt="Daikin Perfera"></div>
+    <div class="card-body">
+      <h3>Daikin Perfera — 3.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.800</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/daikin-perfera-50kw.html"
+     data-brand="Daikin" data-capacity="5.0" data-price="0" aria-label="Daikin Perfera 5.0 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/daikin-perfera/hero.jpg" alt="Daikin Perfera"></div>
+    <div class="card-body">
+      <h3>Daikin Perfera — 5.0 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.800</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/daikin-emura-25kw.html"
+     data-brand="Daikin" data-capacity="2.5" data-price="0" aria-label="Daikin Emura 2.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/daikin-emura/hero.jpg" alt="Daikin Emura"></div>
+    <div class="card-body">
+      <h3>Daikin Emura — 2.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.800</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/daikin-emura-35kw.html"
+     data-brand="Daikin" data-capacity="3.5" data-price="0" aria-label="Daikin Emura 3.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/daikin-emura/hero.jpg" alt="Daikin Emura"></div>
+    <div class="card-body">
+      <h3>Daikin Emura — 3.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.800</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/daikin-emura-50kw.html"
+     data-brand="Daikin" data-capacity="5.0" data-price="0" aria-label="Daikin Emura 5.0 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/daikin-emura/hero.jpg" alt="Daikin Emura"></div>
+    <div class="card-body">
+      <h3>Daikin Emura — 5.0 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.800</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/haier-revive-plus-25kw.html"
+     data-brand="Haier" data-capacity="2.5" data-price="0" aria-label="Haier Revive Plus 2.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/haier-revive-plus/hero.jpg" alt="Haier Revive Plus"></div>
+    <div class="card-body">
+      <h3>Haier Revive Plus — 2.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.300</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/haier-revive-plus-35kw.html"
+     data-brand="Haier" data-capacity="3.5" data-price="0" aria-label="Haier Revive Plus 3.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/haier-revive-plus/hero.jpg" alt="Haier Revive Plus"></div>
+    <div class="card-body">
+      <h3>Haier Revive Plus — 3.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.300</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/haier-revive-plus-50kw.html"
+     data-brand="Haier" data-capacity="5.0" data-price="0" aria-label="Haier Revive Plus 5.0 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/haier-revive-plus/hero.jpg" alt="Haier Revive Plus"></div>
+    <div class="card-body">
+      <h3>Haier Revive Plus — 5.0 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.300</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/haier-expert-nordic-25kw.html"
+     data-brand="Haier" data-capacity="2.5" data-price="0" aria-label="Haier Expert Nordic 2.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/haier-expert-nordic/hero.jpg" alt="Haier Expert Nordic"></div>
+    <div class="card-body">
+      <h3>Haier Expert Nordic — 2.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.300</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
+
+  <a class="model-card" href="/airflowplus-site/products/haier-expert-nordic-35kw.html"
+     data-brand="Haier" data-capacity="3.5" data-price="0" aria-label="Haier Expert Nordic 3.5 kW">
+    <div class="card-img"><img src="/airflowplus-site/assets/img/products/haier-expert-nordic/hero.jpg" alt="Haier Expert Nordic"></div>
+    <div class="card-body">
+      <h3>Haier Expert Nordic — 3.5 kW</h3>
+      <p class="muted">Wandmodel • WiFi • Energiezuinig</p>
+      <p class="price-under">vanaf <strong>€ 1.300</strong> incl. materiaal en montage</p>
+      <div class="card-energy"><span class="eu-chip" data-grade="A++">Koelen: A++</span><span class="eu-chip" data-grade="A+">Verwarmen: A+</span></div>
+    </div>
+  </a>
+
 </div>
-</a><a class="prod-card" href="/airflowplus-site/products/daikin-comfora.html">
-<img alt="Daikin Comfora" src="assets/img/products/daikin-comfora/hero.jpg"/>
-<div class="prod-card-body">
-<h3>Daikin Comfora</h3>
-<p class="small muted">Geschikt tot ~25 m²</p>
-</div>
-</a><a class="prod-card" href="/airflowplus-site/products/haier-expert.html">
-<img alt="Haier Expert" src="assets/img/products/haier-expert/hero.jpg"/>
-<div class="prod-card-body">
-<h3>Haier Expert</h3>
-<p class="small muted">Geschikt tot ~26 m²</p>
-</div>
-</a><a class="prod-card" href="/airflowplus-site/products/daikin-comfora.html">
-<img alt="Daikin Comfora" src="assets/img/products/daikin-comfora/hero.jpg"/>
-<div class="prod-card-body">
-<h3>Daikin Comfora</h3>
-<p class="small muted">Geschikt tot ~25 m²</p>
-</div>
-</a><a class="prod-card" href="/airflowplus-site/products/panasonic-etherea.html">
-<img alt="Panasonic Etherea" src="assets/img/products/panasonic-etherea/hero.jpg"/>
-<div class="prod-card-body">
-<h3>Panasonic Etherea</h3>
-<p class="small muted">Geschikt tot ~25 m²</p>
-</div>
-</a><a class="prod-card" href="/airflowplus-site/products/daikin-emura.html">
-<img alt="Daikin Emura" src="assets/img/products/daikin-emura/hero.jpg"/>
-<div class="prod-card-body">
-<h3>Daikin Emura</h3>
-<p class="small muted">Geschikt tot ~25 m²</p>
-</div>
-</a><a class="prod-card" href="/airflowplus-site/products/panasonic-tz.html">
-<img alt="Panasonic TZ" src="assets/img/products/panasonic-tz/hero.jpg"/>
-<div class="prod-card-body">
-<h3>Panasonic TZ</h3>
-<p class="small muted">Geschikt tot ~25 m²</p>
-</div>
-</a><a class="prod-card" href="/airflowplus-site/products/daikin-perfera.html">
-<img alt="Daikin Perfera" src="assets/img/products/daikin-perfera/hero.jpg"/>
-<div class="prod-card-body">
-<h3>Daikin Perfera</h3>
-<p class="small muted">Geschikt tot ~25 m²</p>
-</div>
-</a>
-</div>
-</div></section>
+</div></div></section>
 <section class="section pad-y-md bg-navy modellen-cta"><div class="container center">
 <h2>Weet je niet zeker? <span class="accent-green">Doe</span> de keuzehulp</h2>
 <p class="muted">Binnen 2 minuten een advies op maat + offerte.</p>

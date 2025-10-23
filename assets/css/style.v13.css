@@ -2525,3 +2525,22 @@ input:focus, select:focus, textarea:focus{
 .compare-spec{font-size:14px;color:var(--gray-text);line-height:1.4}
 .compare-spec strong{color:#000}
 .compare-card .card-energy{margin-top:10px}
+
+
+/* === Phase 2.5: catalog filters & grid === */
+.catalog-layout{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
+.filters{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:16px;position:sticky;top:100px}
+.filters h3{margin:0 0 12px}
+.filter-block{margin-bottom:16px}
+.price-controls{display:flex;gap:8px}
+.price-controls input{width:100%;border:1px solid #e6e6e6;border-radius:8px;padding:8px 10px}
+.catalog-grid .cards-wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.model-card{display:block;border:1px solid rgba(0,0,0,.06);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.05)}
+.model-card .card-img img{width:100%;height:160px;object-fit:cover;display:block}
+.model-card .card-body{padding:12px 14px}
+.model-card h3{margin:0 0 6px;font-size:16px}
+.model-card .price-under{margin:8px 0 0;font-weight:600}
+@media(max-width:1024px){.catalog-layout{grid-template-columns:1fr}.catalog-grid .cards-wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.catalog-grid .cards-wrap{grid-template-columns:1fr}}
+/* helper for product pages */
+.price-line{font-size:18px;margin:8px 0;color:#000}

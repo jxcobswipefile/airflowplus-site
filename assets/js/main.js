@@ -929,3 +929,127 @@ document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('kh-submit');
   if (btn){ btn.addEventListener('click', function(e){ e.preventDefault(); onKeuzeSubmit(); }); }
 });
+
+/* === Phase 2.5 injected === */
+const VARS = [
+  {slug:'products/panasonic-tz-25kw.html', name:'Panasonic TZ 2.5 kW', brand:'Panasonic', kw:2.5, min_m2:10, max_m2:25, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:2.5},
+  {slug:'products/panasonic-tz-35kw.html', name:'Panasonic TZ 3.5 kW', brand:'Panasonic', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:3.5},
+  {slug:'products/panasonic-tz-50kw.html', name:'Panasonic TZ 5.0 kW', brand:'Panasonic', kw:5.0, min_m2:30, max_m2:50, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:5.0},
+  {slug:'products/panasonic-etherea-25kw.html', name:'Panasonic Etherea 2.5 kW', brand:'Panasonic', kw:2.5, min_m2:10, max_m2:25, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:2.5},
+  {slug:'products/panasonic-etherea-35kw.html', name:'Panasonic Etherea 3.5 kW', brand:'Panasonic', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:3.5},
+  {slug:'products/panasonic-etherea-50kw.html', name:'Panasonic Etherea 5.0 kW', brand:'Panasonic', kw:5.0, min_m2:30, max_m2:50, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:5.0},
+  {slug:'products/daikin-comfora-25kw.html', name:'Daikin Comfora 2.5 kW', brand:'Daikin', kw:2.5, min_m2:10, max_m2:25, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:2.5},
+  {slug:'products/daikin-comfora-35kw.html', name:'Daikin Comfora 3.5 kW', brand:'Daikin', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:3.5},
+  {slug:'products/daikin-comfora-50kw.html', name:'Daikin Comfora 5.0 kW', brand:'Daikin', kw:5.0, min_m2:30, max_m2:50, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:5.0},
+  {slug:'products/daikin-perfera-25kw.html', name:'Daikin Perfera 2.5 kW', brand:'Daikin', kw:2.5, min_m2:10, max_m2:25, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:2.5},
+  {slug:'products/daikin-perfera-35kw.html', name:'Daikin Perfera 3.5 kW', brand:'Daikin', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:3.5},
+  {slug:'products/daikin-perfera-50kw.html', name:'Daikin Perfera 5.0 kW', brand:'Daikin', kw:5.0, min_m2:30, max_m2:50, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:5.0},
+  {slug:'products/daikin-emura-25kw.html', name:'Daikin Emura 2.5 kW', brand:'Daikin', kw:2.5, min_m2:10, max_m2:25, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:2.5},
+  {slug:'products/daikin-emura-35kw.html', name:'Daikin Emura 3.5 kW', brand:'Daikin', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:3.5},
+  {slug:'products/daikin-emura-50kw.html', name:'Daikin Emura 5.0 kW', brand:'Daikin', kw:5.0, min_m2:30, max_m2:50, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:5.0},
+  {slug:'products/haier-revive-plus-25kw.html', name:'Haier Revive Plus 2.5 kW', brand:'Haier', kw:2.5, min_m2:10, max_m2:25, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:2.5},
+  {slug:'products/haier-revive-plus-35kw.html', name:'Haier Revive Plus 3.5 kW', brand:'Haier', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:3.5},
+  {slug:'products/haier-revive-plus-50kw.html', name:'Haier Revive Plus 5.0 kW', brand:'Haier', kw:5.0, min_m2:30, max_m2:50, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:5.0},
+  {slug:'products/haier-expert-nordic-25kw.html', name:'Haier Expert Nordic 2.5 kW', brand:'Haier', kw:2.5, min_m2:10, max_m2:25, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:2.5},
+  {slug:'products/haier-expert-nordic-35kw.html', name:'Haier Expert Nordic 3.5 kW', brand:'Haier', kw:3.5, min_m2:20, max_m2:35, seer:'A++', scop:'A+', noise_in:20, noise_out:46, cap:3.5}
+];
+
+function setupCatalogFilters(){
+  var root = document.getElementById('cards');
+  if (!root) return;
+  var cards = Array.from(root.querySelectorAll('.model-card'));
+  var brandInputs = Array.from(document.querySelectorAll('.flt-brand'));
+  var capInputs = Array.from(document.querySelectorAll('.flt-cap'));
+  var priceMin = document.getElementById('priceMin');
+  var priceMax = document.getElementById('priceMax');
+  var btnReset = document.getElementById('btnResetFilters');
+  function apply(){
+    var brands = brandInputs.filter(i=>i.checked).map(i=>i.value);
+    var caps = capInputs.filter(i=>i.checked).map(i=>i.value);
+    var min = parseInt(priceMin.value||'0',10);
+    var max = parseInt(priceMax.value||'999999',10);
+    cards.forEach(function(c){
+      var b = c.getAttribute('data-brand');
+      var k = c.getAttribute('data-capacity');
+      // price is brand vanaf; we treat as ok for all
+      var okBrand = !brands.length || brands.indexOf(b) > -1;
+      var okCap = !caps.length || caps.indexOf(k) > -1;
+      var okPrice = true;
+      c.style.display = (okBrand && okCap && okPrice) ? '' : 'none';
+    });
+  }
+  brandInputs.concat(capInputs).forEach(i=>i.addEventListener('change', apply));
+  ['input','change'].forEach(ev=>{ if(priceMin) priceMin.addEventListener(ev, apply); if(priceMax) priceMax.addEventListener(ev, apply); });
+  if (btnReset) btnReset.addEventListener('click', function(){ brandInputs.concat(capInputs).forEach(i=> i.checked=false); if(priceMin) priceMin.value='0'; if(priceMax) priceMax.value='10000'; apply(); });
+  apply();
+}
+document.addEventListener('DOMContentLoaded', setupCatalogFilters);
+
+function pickVariantByArea(totalRooms, avgRoomM2, preferQuiet){
+  var totalM2 = totalRooms * avgRoomM2;
+  var pool = VARS.filter(function(it){ return totalM2 >= it.min_m2 && totalM2 <= it.max_m2; });
+  if (!pool.length){
+    pool = VARS.slice().sort(function(a,b){
+      function mid(x){ return (x.min_m2 + x.max_m2)/2; }
+      return Math.abs(mid(a)-totalM2) - Math.abs(mid(b)-totalM2);
+    });
+  }
+  if (totalRooms>=3){
+    var big = pool.filter(function(it){ return it.kw>=3.5; });
+    if (big.length) pool = big;
+  }
+  return pool[0] || VARS[0];
+}
+
+function onKeuzeSubmit(){
+  try{
+    var rooms = parseInt(document.querySelector('[name="rooms"]')?.value||'1',10);
+    var avg = parseInt(document.querySelector('[name="room_size"]')?.value||'20',10);
+    var rec = pickVariantByArea(rooms, avg, false);
+    var node = document.getElementById('kh-reco');
+    var urlBase = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
+    if (node){
+      node.innerHTML = ''+
+        '<div class="kh-reco">'+
+          '<h3>'+ rec.name +'</h3>'+
+          '<p class="muted">Gekozen op basis van ~'+ (rooms*avg) +' m² en '+ rooms +' kamer(s).</p>'+
+          '<a class="btn btn-green" href="'+ urlBase + rec.slug +'">Bekijk aanbeveling</a>'+
+          '<div class="card-energy" style="margin-top:10px">'+
+            '<span class="eu-chip" data-grade="'+ (rec.seer||'A++') +'">Koelen: '+ (rec.seer||'A++') +'</span>'+
+            '<span class="eu-chip" data-grade="'+ (rec.scop||'A+') +'">Verwarmen: '+ (rec.scop||'A+') +'</span>'+
+          '</div>'+
+        '</div>';
+    }
+  }catch(e){ console.warn('Keuzehulp submit fallback', e); }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('kh-submit');
+  if (btn){ btn.addEventListener('click', function(e){ e.preventDefault(); onKeuzeSubmit(); }); }
+});
+/* resilient 'Volgende' */
+(function ensureKhNext(){
+  function nextStep(){
+    var steps = Array.prototype.slice.call(document.querySelectorAll('.kh-step'));
+    if (!steps.length) return;
+    var idx = steps.findIndex(function(s){ return s.classList.contains('is-active'); });
+    var next = (idx>=0 && steps[idx+1]) ? steps[idx+1] : steps[0];
+    if (next){
+      steps.forEach(function(s){ s.classList.remove('is-active'); });
+      next.classList.add('is-active');
+      var dots = document.querySelectorAll('.kh-dots .dot');
+      if (dots && dots.length){
+        Array.prototype.forEach.call(dots, function(d){ d.classList.remove('is-active'); });
+        if (dots[idx+1]) dots[idx+1].classList.add('is-active');
+      }
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    var btns = document.querySelectorAll('#kh-next, .kh-next, [data-kh-next]');
+    Array.prototype.forEach.call(btns, function(btn){
+      btn.addEventListener('click', function(e){
+        if (!(this.tagName==='A' && (this.getAttribute('href')||'').charAt(0)==='#')){ e.preventDefault(); }
+        nextStep();
+      });
+    });
+  });
+})();
