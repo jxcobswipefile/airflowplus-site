@@ -792,7 +792,7 @@ window.addEventListener('DOMContentLoaded', () => {
       {slug:'haier-revive-plus', name:'Haier Revive Plus', img:'assets/img/products/haier-revive-plus/hero.jpg', url:'products/haier-revive-plus.html', cool_area_m2:25},
       {slug:'daikin-perfera', name:'Daikin Perfera', img:'assets/img/products/daikin-perfera/hero.jpg', url:'products/daikin-perfera.html', cool_area_m2:25},
       {slug:'panasonic-etherea', name:'Panasonic Etherea', img:'assets/img/products/panasonic-etherea/hero.jpg', url:'products/panasonic-etherea.html', cool_area_m2:25},
-      {slug:'haier-expert', name:'Haier Expert', img:'assets/img/products/haier-expert/hero.jpg', url:'products/haier-expert.html', cool_area_m2:25},
+      {slug:'haier-expert', name:'Haier Expert', img:'assets/img/products/haier-expert/hero.jpg', url:'products/haier-expert.html', cool_area_m2:26},
       {slug:'daikin-emura', name:'Daikin Emura', img:'assets/img/products/daikin-emura/hero.jpg', url:'products/daikin-emura.html', cool_area_m2:25}
     ];
 
