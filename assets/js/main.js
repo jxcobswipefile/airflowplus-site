@@ -1083,3 +1083,11 @@ function pickVariantByArea(totalRooms, avgRoomM2, preferQuiet){
     });
   });
 })();
+/* === Clickability hardening for kh-next === */
+document.addEventListener('DOMContentLoaded', function(){
+  var nb = document.getElementById('kh-next');
+  if (nb){
+    nb.style.pointerEvents = 'auto';
+    nb.style.zIndex = '300';
+  }
+});

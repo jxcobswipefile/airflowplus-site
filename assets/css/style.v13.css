@@ -2550,3 +2550,11 @@ input:focus, select:focus, textarea:focus{
 
 
 .price-line{font-size:18px;margin:8px 0;color:#000}
+
+
+/* === Clickability & overlay safety patch === */
+.hero-bg, .hero-overlay, .site-header::after { pointer-events: none !important; }
+.khv2-stage, .khv2-card, .khv2-actions, .khv2-actions .btn, #kh-next { position: relative; z-index: 200 !important; }
+.kh-cta, .kh-card, .kh-step, .kh-form { position: relative; z-index: 150; }
+/* Ensure any full-screen absolute layer doesn't capture clicks */
+body > div[style*="position: fixed"], body > div[style*="position: absolute"] { pointer-events: none; }
