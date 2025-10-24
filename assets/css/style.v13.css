@@ -3109,3 +3109,67 @@ body.keuzehulp .khv2-stage,
 .page-keuzehulp .khv2-stage {
   min-height: 60vh; /* push footer down if little content */
 }
+
+/* =========================================================
+   KEUZEHULP PAGE RESET (applies to all non-home pages)
+   Put this at the very end of your CSS.
+   ========================================================= */
+
+/* 1) Kill the home-page “hero-overlap” on non-home pages */
+body:not(.home) .hero-overlap,
+body:not(.home) section.kh-cta.hero-overlap {
+  margin-top: 0 !important;
+}
+
+/* 2) Neutralize any card lifting (negative margins/transforms) */
+body:not(.home) .khv2-card,
+body:not(.home) .kh-card,
+body:not(.home) .kh-cta-card {
+  position: relative !important;
+  top: auto !important; right: auto !important; bottom: auto !important; left: auto !important;
+  transform: none !important;
+  margin: 24px auto !important;    /* normal spacing */
+  z-index: 1 !important;           /* don’t float over header */
+}
+
+/* 3) Make the Keuzehulp stage/container breathe normally */
+body:not(.home) .khv2-stage,
+body:not(.home) .kh-wrap,
+body:not(.home) section.kh-cta {
+  padding-top: 28px !important;
+  padding-bottom: 56px !important;
+  margin-top: 0 !important;
+  overflow: visible !important;
+}
+
+/* 4) Restore the clean white card skin used before */
+body:not(.home) .khv2-card,
+body:not(.home) .kh-card,
+body:not(.home) .kh-cta-card {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #dbe7ff !important;
+  box-shadow: 0 24px 60px rgba(8,16,33,.18) !important;
+}
+
+/* 5) Buttons = brand defaults on this page */
+body:not(.home) .khv2-card .btn.btn-primary,
+body:not(.home) .kh-cta-card .btn.btn-primary {
+  background: #16A1FF !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+body:not(.home) .khv2-card .btn.btn-outline,
+body:not(.home) .kh-cta-card .btn.btn-outline {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1.5px solid rgba(8,16,33,.18) !important;
+}
+
+/* 6) Safety: prevent any pseudo-layers/borders from drawing lines on top */
+body:not(.home) .hero::before,
+body:not(.home) .hero::after { content: none !important; }
+body:not(.home) .hero { border-bottom: 0 !important; box-shadow: none !important; }
+
+/* 7) Keep the footer from creeping up on short content */
+body:not(.home) .khv2-stage { min-height: 60vh; }
