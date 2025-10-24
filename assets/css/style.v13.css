@@ -2567,3 +2567,14 @@ input:focus, select:focus, textarea:focus{
   .kh-reco--withimg { grid-template-columns: 1fr; }
   .kh-reco-media img { height: 180px; }
 }
+
+/* Round review avatars */
+[data-reviews] .rev-card img,
+[data-reviews] .rev-avatar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
