@@ -2824,3 +2824,88 @@ input:focus, select:focus, textarea:focus{
     margin-top: calc(-1 * min(35vh, 160px)) !important;
   }
 }
+
+/* =========================================================
+   HERO — SEAM KILL + 50% OVERLAP (authoritative, no JS)
+   ========================================================= */
+
+/* 0) Reset any stray borders/shadows that can create a line */
+.hero,
+.hero::before,
+.hero::after,
+.hero + section,
+.hero + .section {
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* 1) The hero is a canvas for the video — never clip, no baseline gap */
+.hero {
+  position: relative;
+  overflow: visible !important;   /* allow overlap to show */
+  background: #000 !important;    /* safe backdrop behind video */
+  line-height: 0;                 /* kills inline media baseline gap */
+  z-index: 1;
+}
+
+/* 2) Make sure the video fully covers the hero */
+.hero video,
+.hero .hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  z-index: 0;                     /* video stays at the bottom */
+}
+
+/* 3) Seam cover: a 2px black strip that overlaps the next section by 1px */
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -1px;                   /* hangs 1px below the hero */
+  height: 2px;                    /* covers sub-pixel lines at any zoom */
+  background: #000;
+  pointer-events: none;
+  z-index: 1;                     /* above video, below content */
+}
+
+/* 4) The section after the hero must allow the card to overlap */
+.hero + section,
+.hero + div {
+  position: relative;
+  overflow: visible !important;
+  z-index: 2;
+  border-top: 0 !important;       /* don’t re-introduce a line */
+}
+
+/* 5) Restore the 50% overlap: pull the KH section upward.
+      Tweak --kh-overlap if you want more/less. */
+:root { --kh-overlap: clamp(-320px, -50vh, -160px); }
+
+body.home section.kh-cta.hero-overlap {
+  margin-top: var(--kh-overlap) !important;   /* the overlap happens here */
+  z-index: 2;                                  /* above the hero video */
+}
+
+/* 6) Neutralize older transform/margin hacks on the card itself */
+body.home section.kh-cta.hero-overlap .kh-cta-card,
+body.home section.kh-cta.hero-overlap .kh-cta-card.compact.seam {
+  transform: none !important;
+  margin-top: 0 !important;
+  position: relative;
+  z-index: 3;                                  /* above seam cover */
+}
+
+/* 7) Mobile: gentler overlap so content isn’t crushed */
+@media (max-width: 640px) {
+  :root { --kh-overlap: clamp(-160px, -24vh, -90px); }
+}
+
+/* 8) Safety: containers in the hero should never add white behind video */
+.hero > .container { background: transparent !important; }
