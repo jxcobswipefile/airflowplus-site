@@ -1074,7 +1074,7 @@
 
 /* Swap all review avatars for the logo */
 (function () {
-  const LOGO = 'assets/img/ui/logo-avatar.png'; // <- path to your saved logo
+  const LOGO = 'assets/img/airflowplus_logo_circle.png'; // <- path to your saved logo
   const imgs = document.querySelectorAll('[data-reviews] .rev-card img, [data-reviews] .rev-avatar img');
   imgs.forEach(img => {
     img.src = LOGO;
