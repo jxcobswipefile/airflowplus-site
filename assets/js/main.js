@@ -1050,3 +1050,37 @@
     setTimeout(reRenderWithImage, 120);
   }
 })();
+
+/* Replace review names with Dutch placeholders */
+(function () {
+  const dutchNames = [
+    'Sanne V.', 'Daan J.', 'Lotte B.',
+    'Milan V.', 'Noa B.', 'Jasper S.',
+    'Fleur M.', 'Bram G.', 'Iris W.'
+  ];
+
+  // Adjust selectors to your markup:
+  // - container has [data-reviews]
+  // - each card has .rev-card
+  // - the name lives in .rev-name
+  const cards = document.querySelectorAll('[data-reviews] .rev-card');
+  if (!cards.length) return;
+
+  cards.forEach((card, i) => {
+    const nameEl = card.querySelector('.rev-name') || card.querySelector('[data-name]');
+    if (nameEl) nameEl.textContent = dutchNames[i % dutchNames.length];
+  });
+})();
+
+/* Swap all review avatars for the logo */
+(function () {
+  const LOGO = 'assets/img/ui/logo-avatar.png'; // <- path to your saved logo
+  const imgs = document.querySelectorAll('[data-reviews] .rev-card img, [data-reviews] .rev-avatar img');
+  imgs.forEach(img => {
+    img.src = LOGO;
+    img.srcset = ''; // prevent srcset from overriding
+    img.alt = 'AirFlow+';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+  });
+})();
