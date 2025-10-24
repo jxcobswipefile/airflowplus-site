@@ -2930,3 +2930,82 @@ body.home section.kh-cta.hero-overlap .kh-cta-card.compact.seam {
 @media (max-width: 640px){
   :root { --kh-card-pull: 35%; }
 }
+
+/* =========================================================
+   REVERT — Keuzehulp PAGE (no hero overlap, classic layout)
+   Scope: only the keuzehulp page.
+   ========================================================= */
+
+/* 0) Page scope helpers (both slugs used on your site) */
+body.keuzehulp .kh-scope,
+.page-keuzehulp .kh-scope { /* anchor (unused but harmless) */ }
+
+/* 1) Kill any card “lift/overlap” that leaked into this page */
+body.keuzehulp .kh-cta-card,
+.page-keuzehulp .kh-cta-card,
+body.keuzehulp .khv2-card,
+.page-keuzehulp .khv2-card,
+body.keuzehulp .kh-card,
+.page-keuzehulp .kh-card {
+  position: relative !important;
+  transform: none !important;
+  margin-top: 0 !important;
+}
+
+/* 2) Ensure the section wrapper around the card isn’t pulling up */
+body.keuzehulp section.kh-cta,
+.page-keuzehulp section.kh-cta {
+  margin-top: 0 !important;
+  padding-top: 0; /* keep your old spacing */
+}
+
+/* 3) Restore the Keuzehulp page card look (white card, dark text) */
+body.keuzehulp .khv2-card,
+.page-keuzehulp .khv2-card,
+body.keuzehulp .kh-cta-card,
+.page-keuzehulp .kh-cta-card,
+body.keuzehulp .kh-card,
+.page-keuzehulp .kh-card {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 24px 60px rgba(8,16,33,.18) !important;
+  border: 1px solid #dbe7ff !important;
+}
+
+/* Buttons on the Keuzehulp page: keep brand primary + readable outline */
+body.keuzehulp .khv2-card .btn.btn-primary,
+.page-keuzehulp .khv2-card .btn.btn-primary,
+body.keuzehulp .kh-cta-card .btn.btn-primary,
+.page-keuzehulp .kh-cta-card .btn.btn-primary {
+  background: #16A1FF !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+body.keuzehulp .khv2-card .btn.btn-outline,
+.page-keuzehulp .khv2-card .btn.btn-outline,
+body.keuzehulp .kh-cta-card .btn.btn-outline,
+.page-keuzehulp .kh-cta-card .btn.btn-outline {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1.5px solid rgba(8,16,33,.18) !important;
+}
+
+/* 4) Keep the page header on Keuzehulp white/sticky (as before) */
+body.keuzehulp .site-header,
+.page-keuzehulp .site-header {
+  position: sticky; top: 0;
+  background: #fff !important;
+  box-shadow: 0 8px 28px rgba(2, 8, 23, .06), 0 1px 0 rgba(16, 24, 40, .06) !important;
+  border-bottom: none !important;
+  z-index: 1000;
+  padding: 12px 0 !important;
+}
+body.keuzehulp .site-header .nav a,
+.page-keuzehulp .site-header .nav a { color: #0b1f33 !important; }
+body.keuzehulp .site-header .nav a:hover,
+.page-keuzehulp .site-header .nav a:hover { color: #1ea7ff !important; }
+
+/* 5) Make sure any “hero-overlap” rules remain HOME-only */
+body.home section.kh-cta.hero-overlap .kh-cta-card { /* home keeps overlap */
+  /* no change here; this line just protects scope */
+}
