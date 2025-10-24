@@ -867,3 +867,91 @@
     });
   });
 })();
+
+/* === Keuzehulp recommendation safety net (re-renders if missing) ======= */
+(function () {
+  if (!window.AFP) return;
+
+  function midFromRange(txt) {
+    if (!txt) return null;
+    txt = String(txt).replace(/\s/g, '').replace('m²','').replace('m2','').replace(',', '.');
+    const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
+    if (m) { const a = parseFloat(m[1]), b = parseFloat(m[2]); if (!isNaN(a) && !isNaN(b)) return (a + b) / 2; }
+    const n = parseFloat(txt);
+    return isNaN(n) ? null : n;
+  }
+
+  function renderRecoInto(mount, state) {
+    try {
+      const sizes = Array.isArray(state?.sizes) ? state.sizes : [];
+      const mids = sizes.map(midFromRange).filter(x => typeof x === 'number' && !isNaN(x));
+      const totalM2 = mids.length ? mids.reduce((a,b) => a+b, 0) : 30;
+      const rooms   = Math.max(1, state?.rooms || 1);
+      const avg     = totalM2 / rooms;
+
+      const pick = (window.AFP.pickVariantByArea || function (r,a){ return (AFP.VARS||[])[0]; });
+      const rec  = pick(rooms, avg, false);
+      if (!rec) return;
+
+      const price = (b) =>
+        b === 'Daikin'    ? 'vanaf € 1.800 incl. materiaal en montage' :
+        b === 'Panasonic' ? 'vanaf € 1.600 incl. materiaal en montage' :
+        b === 'Haier'     ? 'vanaf € 1.300 incl. materiaal en montage' :
+                            'Prijs op aanvraag';
+
+      const base = AFP.ROOT_BASE || '/airflowplus-site/';
+      mount.innerHTML =
+        '<div class="kh-reco-card">' +
+          '<div class="kh-reco-main">' +
+            '<div class="kh-reco-body">' +
+              '<h3>' + (rec.name || 'Aanbevolen model') + '</h3>' +
+              '<div class="muted">' + price(rec.brand || '') + '</div>' +
+              '<a class="btn btn-green" style="margin-top:12px" href="' + base + (rec.slug || '') + '">Bekijk aanbeveling</a>' +
+              '<p class="muted" style="margin-top:8px">Op basis van ~' + Math.round(totalM2) + ' m².</p>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    } catch (e) {
+      console.warn('KH safety net render error', e);
+    }
+  }
+
+  function ensureReco() {
+    const card = document.querySelector('.khv2-card');
+    if (!card || card.getAttribute('data-step') !== '3') return;
+
+    let mount = document.getElementById('kh-reco');
+    if (!mount) {
+      mount = document.createElement('div');
+      mount.id = 'kh-reco';
+      mount.style.marginTop = '16px';
+      // Prefer step-3 container if present, else append to card
+      (document.querySelector('[data-kh-step="3"]') || card).appendChild(mount);
+    }
+    if (!mount.innerHTML.trim()) {
+      renderRecoInto(mount, window.AFP.KH_STATE);
+    }
+  }
+
+  // Observe step changes
+  const card = document.querySelector('.khv2-card');
+  if (card) {
+    try {
+      const mo = new MutationObserver(() => setTimeout(ensureReco, 60));
+      mo.observe(card, { attributes: true, attributeFilter: ['data-step'] });
+    } catch {}
+  }
+
+  // Also try after any obvious "Next" click and on load
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#kh-next,.kh-next,[data-kh-next]')) setTimeout(ensureReco, 120);
+  }, true);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(ensureReco, 120), { once: true });
+  } else {
+    setTimeout(ensureReco, 120);
+  }
+
+  // Manual helper (handy in console): AFP.forceReco()
+  window.AFP.forceReco = ensureReco;
+})();
