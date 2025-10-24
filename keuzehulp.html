@@ -1,2 +1,167 @@
-<!-- PATCH: add before </body> -->
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Airflow+ • Keuzehulp</title>
+<link href="/airflowplus-site/assets/css/style.v13.css?v=rev3" rel="stylesheet"/>
+</head>
 <script src="assets/js/kh-reco-image.js" defer></script>
+<body>
+<!-- Topbar / header identical to site -->
+<div class="topbar">
+<div class="container topbar-inner">
+<span>Gecertificeerde airconditioning &amp; warmtepomp installateur</span>
+<a class="topbar-link" href="tel:+31640981629">Bel: +31 10 000 0000</a>
+</div>
+</div>
+<header class="site-header">
+<div class="container header-inner">
+<a class="brand" href="/airflowplus-site/index.html"><img alt="AirFlow+" src="assets/img/airflowplus-logo.png" style="height:32px;width:auto;display:block"/></a>
+<nav class="nav"><a href="/airflowplus-site/airco-modellen.html">Modellen</a>
+<a aria-current="page" href="/airflowplus-site/keuzehulp.html">Keuzehulp</a>
+<a href="/airflowplus-site/airco.html">Airconditioning</a>
+<a href="/airflowplus-site/diensten.html">Diensten</a>
+<a href="/airflowplus-site/prijzen.html">Prijzen</a>
+<a href="/airflowplus-site/over.html">Over ons</a>
+</nav>
+<a class="btn btn-primary" href="tel:+31640981629">Bel/Offerte</a>
+</div>
+</header>
+<header class="khv2-hero">
+<div class="container">
+<h1>Welke <span class="hl-blue">airconditioning</span> past bij jou?</h1>
+</div>
+</header>
+<section class="khv2-stage kh-wrap">
+<div class="container">
+<!-- NEW: the wizard state lives here -->
+<div class="kh-card khv2-card" data-step="1" data-steps="3" id="khv2">
+<button aria-label="Sluiten" class="khv2-close" type="button">×</button>
+<!-- STEP 1 ------------------------------------------------------- -->
+<section data-kh-step="1">
+<h2 class="khv2-q"><span class="accent-green">In</span> hoeveel ruimtes wil je airconditioning?</h2>
+<div class="kh-grid-rooms" style="justify-content:center; grid-template-columns:repeat(4,72px); gap:14px;">
+<label class="chip round"><input name="rooms" type="radio" value="1"/><span>1</span></label>
+<label class="chip round"><input name="rooms" type="radio" value="2"/><span>2</span></label>
+<label class="chip round"><input name="rooms" type="radio" value="3"/><span>3</span></label>
+<label class="chip round"><input name="rooms" type="radio" value="4"/><span>4</span></label>
+</div>
+</section>
+<!-- STEP 2 (put your existing content here) --------------------- -->
+<section data-kh-step="2" hidden="">
+<!-- Example placeholder; replace with your real step-2 UI -->
+<h2 class="khv2-q"><span class="accent-green">Kies</span> per ruimte het oppervlak</h2>
+<!-- keep your .kh-size-grid / .kh-room etc. here if you have them -->
+</section>
+<!-- STEP 3 (put your existing summary/overview here) ------------ -->
+<section data-kh-step="3" hidden="">
+<h2 class="khv2-q">Overzicht</h2>
+<div id="kh-reco" class="kh-reco-mount withimg" style="margin-top:16px"></div>
+<!-- your existing summary/result UI -->
+</section>
+<!-- Actions -->
+<div class="khv2-actions">
+<button class="btn btn-primary" data-final-href="/airflowplus-site/contact.html#offerte" id="kh-next" type="button">Volgende →
+            </button>
+</div>
+</div>
+<!-- dots (your CSS already styles these) -->
+<nav aria-label="Stappen" class="khv2-steps">
+<button class="dot is-active" type="button">1</button>
+<button class="dot" type="button">2</button>
+<button class="dot" type="button">3</button>
+</nav>
+</div>
+</section>
+<footer class="site-footer">
+<div class="container footer-grid">
+<div>
+<div class="brand">Airflow<span class="accent">+</span></div>
+<p class="muted">Gecertificeerde installatie van airconditioning &amp; warmtepompen. Snel, netjes en volgens norm.</p>
+</div>
+<div>
+<h4>Contact</h4>
+<ul class="list">
+<li><a href="tel:+31640981629"><img alt="AirFlow+" src="/airflowplus-site/assets/img/airflowplus-logo.png" style="height:28px;width:auto;display:block"/></a></li>
+<li><a href="mailto:info@rvrinstallaties.com">info@rvrinstallaties.com</a></li>
+<li>Rotterdam &amp; landelijk</li>
+</ul>
+</div>
+<div>
+<h4>Pagina’s</h4>
+<ul class="list">
+<li><a href="/airflowplus-site/keuzehulp.html">Keuzehulp</a></li>
+<li><a href="/airflowplus-site/airco.html">Airconditioning</a></li>
+<li><a href="/airflowplus-site/diensten.html">Diensten</a></li>
+<li><a href="/airflowplus-site/prijzen.html">Prijzen</a></li>
+<li><a href="/airflowplus-site/over.html">Over ons</a></li>
+<li><a href="/airflowplus-site/contact.html">Contact</a></li>
+</ul>
+</div>
+<a href="/airflowplus-site/airco-modellen.html">Modellen</a></div>
+<div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
+</footer>
+<script defer="" src="assets/js/main.js?v=rev3"></script>
+<!-- ADD: small safety shim after your main bundle loads -->
+<script>
+    // Keuzehulp v2 – control "Volgende" so it only redirects on the last step
+    (function () {
+      const wrap   = document.getElementById('khv2');
+      const next   = document.getElementById('kh-next');
+      const dots   = () => Array.from(document.querySelectorAll('.khv2-steps .dot'));
+      if (!wrap || !next) return;
+
+      const total = Number(wrap.dataset.steps || 3);
+
+      // 1) Block any older handlers that may redirect on every click
+      next.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation();
+      }, true); // capture phase
+
+      // 2) Our controlled handler
+      next.addEventListener('click', () => {
+        let step = Number(wrap.dataset.step || 1);
+
+        if (step < total) {
+          setStep(step + 1);
+          return;
+        }
+
+        // last step → go where you want
+        const href = next.getAttribute('data-final-href') || 'contact.html#offerte';
+        window.location.href = href;
+      });
+
+      // Optional: allow clicking dots to jump to a step
+      document.addEventListener('click', (e) => {
+        const dot = e.target.closest('.khv2-steps .dot');
+        if (!dot) return;
+        const idx = dots().indexOf(dot); // 0-based
+        if (idx >= 0) setStep(idx + 1);
+      });
+
+      function setStep(n) {
+        wrap.dataset.step = String(n);
+
+        // show/hide sections if present
+        document.querySelectorAll('[data-kh-step]').forEach(sec => {
+          sec.hidden = Number(sec.dataset.khStep) !== n;
+        });
+
+        // update dots
+        dots().forEach((d, i) => d.classList.toggle('is-active', i === n - 1));
+
+        // button label
+        next.textContent = (n === total) ? 'Afronden →' : 'Volgende →';
+      }
+
+      // init
+      setStep(Number(wrap.dataset.step || 1));
+    })();
+    </script>
+</body>
+</html>
