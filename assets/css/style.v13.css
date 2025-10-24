@@ -2618,3 +2618,72 @@ input:focus, select:focus, textarea:focus{
 .hero + .section {
   margin-top: 0;
 }
+
+/* === Kill the thin white strip across the hero ===================== */
+
+/* 1) Remove any borders/shadows that could draw a line */
+.site-header,
+.hero,
+.hero-wrap,
+.hero .container,
+.hero-wrap .container,
+.hero::before,
+.hero::after,
+.hero-wrap::before,
+.hero-wrap::after,
+.hero + section,
+.hero + .section {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+/* 2) Make the hero act as a black, overflow-hidden canvas */
+.hero,
+.hero-wrap {
+  position: relative;
+  overflow: hidden;
+  background: #000 !important;   /* safe backdrop behind video */
+  line-height: 0;                 /* kills inline baseline gap */
+  margin-bottom: -1px;            /* overlaps any sub-pixel seam below */
+}
+
+/* 3) Ensure any inner container doesn’t reintroduce a white bg */
+.hero > .container,
+.hero-wrap > .container {
+  background: transparent !important;
+}
+
+/* 4) Make the video fully cover the hero with zero baseline gap */
+.hero video,
+.hero .hero-video,
+.hero-wrap video,
+.hero-wrap .hero-video,
+.hero img {
+  position: absolute;
+  inset: 0;                       /* top:0; right:0; bottom:0; left:0 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;                 /* removes baseline gap */
+  transform: translateZ(0);       /* prevents fractional rendering lines */
+  backface-visibility: hidden;
+}
+
+/* 5) If your next section had a decorative top line, nuke it */
+.hero + section,
+.hero + .section,
+.hero-wrap + section,
+.hero-wrap + .section {
+  border-top: 0 !important;
+  background-clip: padding-box;   /* avoids bleed from borders */
+  margin-top: 0 !important;
+}
+
+/* 6) Safety: if a gradient overlay was adding a seam, disable it */
+.hero::before,
+.hero::after,
+.hero-wrap::before,
+.hero-wrap::after {
+  background: none !important;
+}
