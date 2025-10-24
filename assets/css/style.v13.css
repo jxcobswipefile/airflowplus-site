@@ -2747,3 +2747,35 @@ input:focus, select:focus, textarea:focus{
   box-shadow: none !important;
   margin-top: 0 !important;
 }
+
+/* === Keuzehulp overlap onto hero (when the card is in the *next* section) === */
+/* Tweak the numbers if you want a slightly more/less overlap */
+
+:root {
+  /* Negative margin you want. This equals ~50% of a typical hero on desktop, less on mobile. */
+  --kh-overlap: clamp(-220px, -22vw, -120px);
+}
+
+/* Make sure we cover common card class names on your site */
+.khv2-card,
+.keuzehulp,
+.lead-card,
+.kh-card,
+.khv2-banner {
+  position: relative;
+  z-index: 2; /* above video and the black cover strip */
+  margin-top: var(--kh-overlap);
+}
+
+/* If the card lives immediately after .hero/.hero-wrap this hardens the selector */
+.hero + * .khv2-card,
+.hero + * .keuzehulp,
+.hero-wrap + * .khv2-card,
+.hero-wrap + * .keuzehulp {
+  margin-top: var(--kh-overlap);
+}
+
+/* Mobile: reduce the overlap a bit so it doesn’t squash content */
+@media (max-width: 640px) {
+  :root { --kh-overlap: clamp(-120px, -18vw, -80px); }
+}
