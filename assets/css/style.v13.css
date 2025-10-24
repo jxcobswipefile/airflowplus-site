@@ -2909,3 +2909,24 @@ body.home section.kh-cta.hero-overlap .kh-cta-card.compact.seam {
 
 /* 8) Safety: containers in the hero should never add white behind video */
 .hero > .container { background: transparent !important; }
+
+/* === Hero/KH overlap: pull the card up by 50% of its own height === */
+:root { --kh-card-pull: 50%; }                 /* how much of the card to overlap */
+
+body.home section.kh-cta.hero-overlap { 
+  margin-top: 0 !important;                    /* let the card control the overlap */
+}
+
+/* Lift the card itself by half its height */
+body.home section.kh-cta.hero-overlap .kh-cta-card,
+body.home section.kh-cta.hero-overlap .kh-cta-card.compact.seam {
+  position: relative;
+  z-index: 3;
+  transform: translateY(calc(-1 * var(--kh-card-pull))) !important;
+  margin-top: 0 !important;                    /* neutralize earlier offsets */
+}
+
+/* Mobile: a little less aggressive so it doesn’t crowd */
+@media (max-width: 640px){
+  :root { --kh-card-pull: 35%; }
+}
