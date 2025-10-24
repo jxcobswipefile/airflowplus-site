@@ -955,3 +955,27 @@
   // Manual helper (handy in console): AFP.forceReco()
   window.AFP.forceReco = ensureReco;
 })();
+
+/* Place recommendation inside the Step-3 summary box */
+(function () {
+  function relocateReco() {
+    var mount = document.getElementById('kh-reco');
+    var summary = document.getElementById('khv2-summary'); // the visible Step-3 panel
+    if (mount && summary && !summary.contains(mount)) {
+      summary.insertAdjacentElement('afterend', mount);
+    }
+  }
+
+  // run now and whenever Step 3 activates
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', relocateReco, { once: true });
+  } else {
+    relocateReco();
+  }
+  var card = document.querySelector('.khv2-card');
+  if (card) {
+    try {
+      new MutationObserver(relocateReco).observe(card, { attributes: true, attributeFilter: ['data-step'] });
+    } catch {}
+  }
+})();
