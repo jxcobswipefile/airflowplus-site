@@ -671,7 +671,7 @@
       state.rooms = 0;
       setDot(1);
       body.innerHTML =
-        `<h2 class="khv2-q">In hoeveel ruimtes wil je airco?</h2>
+        `<h2 class="khv2-q">In hoeveel ruimtes wil je airconditioning?</h2>
          <div class="kh-grid-rooms" style="justify-content:center; grid-template-columns:repeat(4,72px); gap:14px;">
            ${[1, 2, 3, 4]
              .map((n) => `<label class="chip round"><input type="radio" name="rooms" value="${n}"><span>${n}</span></label>`)
