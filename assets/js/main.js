@@ -808,33 +808,89 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Keuzehulp mapping enhancement (if kh-reco exists)
-    var kh = document.getElementById('kh-reco');
-    if(kh){
-      // improve pick logic once we have exact m2 per model; placeholder uses cool_area_m2
-      function totalM2(){
-        var total=0;
-        document.querySelectorAll('[data-room-m2], .save-room-size, input[name^="room-"]').forEach(function(el){
-          var v=parseFloat(el.value||el.getAttribute('data-room-m2')||'0'); if(!isNaN(v)) total+=v;
-        });
-        var slider=document.querySelector('.save-slider'); if(total===0&&slider){var s=parseFloat(slider.value); if(!isNaN(s)) total=s;}
-        return total;
-      }
-      function pick(total){
-        var sorted = items.slice().sort(function(a,b){return a.cool_area_m2-b.cool_area_m2;});
-        for(var i=0;i<sorted.length;i++) if(sorted[i].cool_area_m2>=total) return sorted[i];
-        return sorted[sorted.length-1];
-      }
-      function render(){
-        var m = pick(totalM2());
-        kh.querySelector('.kh-reco-content').innerHTML = '<div class="kh-reco-box">'
-          + '<img class="kh-reco-img" src="'+m.img+'" alt="'+m.name+'">'
-          + '<div class="kh-reco-text"><strong>'+m.name+'</strong><br><span class="muted small">Schatting op basis van m²</span><br>'
-          + '<a class="btn btn--green" href="'+m.url+'">Bekijk product</a></div></div>';
-      }
-      document.addEventListener('DOMContentLoaded', render);
-      document.addEventListener('input', render, true);
+   // Keuzehulp mapping enhancement (if kh-reco exists)
+var kh = document.getElementById('kh-reco');
+if (kh) {
+  // total m² from any saved inputs/buttons (fallback to 30)
+  function totalM2() {
+    var total = 0;
+    document.querySelectorAll('[data-room-m2], .save-room-size, input[name^="room-"]').forEach(function (el) {
+      var v = parseFloat(el.value || el.getAttribute('data-room-m2') || '0');
+      if (!isNaN(v)) total += v;
+    });
+    var slider = document.querySelector('.save-slider');
+    if (total === 0 && slider) {
+      var s = parseFloat(slider.value);
+      if (!isNaN(s)) total = s;
     }
+    return total || 30;
+  }
+
+  // derive a "midpoint m²" per model and pick the first that meets/closest to total
+  function modelAreaMid(it) {
+    if (typeof it.min_m2 === 'number' && typeof it.max_m2 === 'number') {
+      return (it.min_m2 + it.max_m2) / 2;
+    }
+    // fallback from kW if needed (very rough)
+    if (typeof it.kw === 'number') return it.kw * 10 + 5;
+    return 30;
+  }
+  function pick(total) {
+    var sorted = items.slice().sort(function (a, b) {
+      return modelAreaMid(a) - modelAreaMid(b);
+    });
+    // first that covers total; else the closest
+    for (var i = 0; i < sorted.length; i++) {
+      if (modelAreaMid(sorted[i]) >= total) return sorted[i];
+    }
+    return sorted[sorted.length - 1];
+  }
+
+  // ensure we have a target inside #kh-reco
+  function ensureContentNode() {
+    var t = kh.querySelector('.kh-reco-content');
+    if (!t) {
+      t = document.createElement('div');
+      t.className = 'kh-reco-content';
+      kh.appendChild(t);
+    }
+    return t;
+  }
+
+  function imgFromItem(m) {
+    // prefer provided, else derive from slug: /assets/img/products/<slug-no-ext>/hero.jpg
+    if (m.img) return m.img;
+    try {
+      var base = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
+      var folder = (m.slug || '').replace(/^products\//, '').replace(/\.html$/, '');
+      return base + 'assets/img/products/' + folder + '/hero.jpg';
+    } catch (e) { return ''; }
+  }
+  function urlFromItem(m) {
+    if (m.url) return m.url;
+    var base = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
+    return base + (m.slug || '');
+  }
+
+  function render() {
+    var m = pick(totalM2());
+    if (!m) return;
+    var target = ensureContentNode();
+    var href = urlFromItem(m);
+    var img  = imgFromItem(m);
+    target.innerHTML =
+      '<div class="kh-reco-box">'
+        + (img ? '<img class="kh-reco-img" src="' + img + '" alt="' + (m.name || '') + '">' : '')
+        + '<div class="kh-reco-text"><strong>' + (m.name || 'Aanbevolen model') + '</strong><br>'
+        + '<span class="muted small">Schatting op basis van m²</span><br>'
+        + '<a class="btn btn--green" href="' + href + '">Bekijk product</a></div>'
+      + '</div>';
+  }
+
+  document.addEventListener('DOMContentLoaded', render);
+  document.addEventListener('input', render, true);
+}
+
   }catch(e){}
 })();
 
