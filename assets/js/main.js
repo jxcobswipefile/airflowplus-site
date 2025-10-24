@@ -1085,3 +1085,174 @@
     img.decoding = 'async';
   });
 })();
+
+/* ========= Keuzehulp: inject product hero image next to recommendation ========= */
+
+(function () {
+  const MOUNT_SEL = '#kh-reco'; // your mount showed this id in the screenshot
+
+  // map titles → folders you showed in assets/img/products/<folder>/hero.jpg
+  const TITLE_MAP = [
+    { test: /panasonic.*etherea.*(2\.5|25)/i, folder: 'panasonic-etherea-25kw' },
+    { test: /panasonic.*etherea/i,            folder: 'panasonic-etherea' },
+    { test: /panasonic.*tz/i,                 folder: 'panasonic-tz' },
+
+    { test: /daikin.*comfora/i,               folder: 'daikin-comfora' },
+    { test: /daikin.*emura.*(2\.5|25)/i,      folder: 'daikin-emura-25kw' },
+    { test: /daikin.*emura/i,                 folder: 'daikin-emura' },
+    { test: /daikin.*perfera/i,               folder: 'daikin-perfera' },
+
+    { test: /haier.*flexis.*(2\.5|25)/i,      folder: 'haier-flexis-25kw' },
+    { test: /haier.*expert/i,                 folder: 'haier-expert' },
+    { test: /haier.*revive.*plus/i,           folder: 'haier-revive-plus' },
+  ];
+
+  // strip known -XXkw suffixes from slugs
+  const stripSize = (s) => s.replace(/-(?:2\.5|25|35|40|45|50|60|70)kw$/i, '');
+
+  // try a list of hero.jpg urls until one exists
+  async function tryHero(paths) {
+    for (const url of paths) {
+      try {
+        const res = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+        if (res.ok) return url;
+      } catch (e) { /* ignore */ }
+    }
+    return null;
+  }
+
+  function getBasePath() {
+    // If site is served under /airflowplus-site/, keep it; else relative is fine.
+    const p = location.pathname;
+    return p.includes('/airflowplus-site') ? '/airflowplus-site' : '';
+  }
+
+  function guessFolderFromTitle(title) {
+    for (const rule of TITLE_MAP) {
+      if (rule.test.test(title)) return rule.folder;
+    }
+    return null;
+  }
+
+  function getRecoRoot() {
+    const mount = document.querySelector(MOUNT_SEL);
+    if (!mount) return null;
+    // The recommendation content is inside the mount. We'll decorate that block.
+    return mount;
+  }
+
+  function getRecoTitleAndLink(root) {
+    // Title (e.g. “Panasonic TZ 3.5 kW”)
+    const h3 = root.querySelector('h3, h2, .kh-reco-title');
+    const title = (h3 && h3.textContent.trim()) || '';
+
+    // The “Bekijk aanbeveling” link or any product link
+    const link = root.querySelector('a[href*="products"]');
+    let slug = '';
+    if (link) {
+      try {
+        const url = new URL(link.href, location.origin);
+        // last path segment without extension
+        const segs = url.pathname.split('/').filter(Boolean);
+        slug = (segs.pop() || '').replace(/\.(html?)$/i, '');
+      } catch (_) { /* ignore */ }
+    }
+    return { title, slug, linkEl: link };
+  }
+
+  function ensureLayout(root) {
+    // If the card already has our layout, bail
+    if (root.querySelector('.kh-reco--withimg')) return root.querySelector('.kh-reco--withimg');
+
+    // Find main body container (the block that holds text). If not obvious, wrap the whole mount.
+    // We'll create: <div class="kh-reco--withimg"><div class="kh-reco-media"></div><div class="kh-reco-body">...</div></div>
+    const bodyCandidate =
+      root.querySelector('.kh-reco-card, .kh-reco-main, .kh-reco-body') || root;
+
+    // Build wrapper
+    const wrapper = document.createElement('div');
+    wrapper.className = 'kh-reco--withimg';
+
+    const media = document.createElement('div');
+    media.className = 'kh-reco-media';
+
+    const body = document.createElement('div');
+    body.className = 'kh-reco-body';
+
+    // Move existing children into body
+    while (bodyCandidate.firstChild) {
+      body.appendChild(bodyCandidate.firstChild);
+    }
+    bodyCandidate.appendChild(wrapper);
+    wrapper.appendChild(media);
+    wrapper.appendChild(body);
+
+    return wrapper;
+  }
+
+  async function injectImage() {
+    const root = getRecoRoot();
+    if (!root) return;
+
+    const { title, slug } = getRecoTitleAndLink(root);
+    if (!title && !slug) return; // nothing to go on yet
+
+    const base = getBasePath();
+
+    // Build candidate folder list
+    const candidates = [];
+
+    if (slug) {
+      candidates.push(slug);
+      const withoutSize = stripSize(slug);
+      if (withoutSize !== slug) candidates.push(withoutSize);
+    }
+
+    const mapped = guessFolderFromTitle(title);
+    if (mapped) candidates.push(mapped);
+
+    // Deduplicate
+    const uniqueFolders = [...new Set(candidates.filter(Boolean))];
+
+    // Build hero.jpg attempt list
+    const urls = uniqueFolders.map(f => `${base}/assets/img/products/${f}/hero.jpg`);
+
+    const found = await tryHero(urls);
+    if (!found) return; // nothing to show; fail silently
+
+    // Ensure layout and inject
+    const layout = ensureLayout(root);
+    const media = layout.querySelector('.kh-reco-media');
+    if (!media) return;
+
+    // Avoid double insert
+    if (media.querySelector('img')) return;
+
+    const img = document.createElement('img');
+    img.alt = title || 'Productfoto';
+    img.src = found;
+    media.appendChild(img);
+  }
+
+  // Observe recommendation mount for changes (wizard updates)
+  const start = () => {
+    const mount = document.querySelector(MOUNT_SEL);
+    if (!mount) return;
+
+    // Run once now
+    injectImage();
+
+    const mo = new MutationObserver(() => injectImage());
+    mo.observe(mount, { childList: true, subtree: true });
+  };
+
+  // Start when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+
+  // DevTools helper (optional): run window._khImage() to re-try
+  window._khImage = injectImage;
+})();
