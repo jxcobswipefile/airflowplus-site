@@ -848,34 +848,106 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Keuzehulp mapping enhancement (if kh-reco exists)
-    var kh = document.getElementById('kh-reco');
-    if(kh){
-      // improve pick logic once we have exact m2 per model; placeholder uses cool_area_m2
-      function totalM2(){
-        var total=0;
-        document.querySelectorAll('[data-room-m2], .save-room-size, input[name^="room-"]').forEach(function(el){
-          var v=parseFloat(el.value||el.getAttribute('data-room-m2')||'0'); if(!isNaN(v)) total+=v;
-        });
-        var slider=document.querySelector('.save-slider'); if(total===0&&slider){var s=parseFloat(slider.value); if(!isNaN(s)) total=s;}
-        return total;
-      }
-      function pick(total){
-        var sorted = items.slice().sort(function(a,b){return a.cool_area_m2-b.cool_area_m2;});
-        for(var i=0;i<sorted.length;i++) if(sorted[i].cool_area_m2>=total) return sorted[i];
-        return sorted[sorted.length-1];
-      }
-      function render(){
-        var m = pick(totalM2());
-        kh.querySelector('.kh-reco-content').innerHTML = '<div class="kh-reco-box">'
-          + '<img class="kh-reco-img" src="'+m.img+'" alt="'+m.name+'">'
-          + '<div class="kh-reco-text"><strong>'+m.name+'</strong><br><span class="muted small">Schatting op basis van m²</span><br>'
-          + '<a class="btn btn--green" href="'+m.url+'">Bekijk product</a></div></div>';
-      }
-      document.addEventListener('DOMContentLoaded', render);
-      document.addEventListener('input', render, true);
+   // ===== KH RECO v33 — hotfix (safe, step-3 only, no crashes) =====
+(function () {
+  // Avoid the old crashing "render" name and any global collisions
+  const KH_RECO_DEBUG = 'KH_RECO_V33_HOTFIX';
+
+  // 1) Helpers
+  function midFromRange(txt) {
+    if (!txt) return null;
+    txt = String(txt).replace(/\s/g, '').replace('m²', '').replace('m2', '').replace(',', '.');
+    const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
+    if (m) {
+      const a = parseFloat(m[1]), b = parseFloat(m[2]);
+      if (!isNaN(a) && !isNaN(b)) return (a + b) / 2;
     }
-  }catch(e){}
+    const n = parseFloat(txt);
+    return isNaN(n) ? null : n;
+  }
+
+  function ensureMount() {
+    let el = document.getElementById('kh-reco');
+    if (!el) {
+      // try to put it into step 3 if author forgot to add the div
+      const host = document.querySelector('[data-kh-step="3"]') || document.querySelector('.khv2-card');
+      if (!host) return null;
+      el = document.createElement('div');
+      el.id = 'kh-reco';
+      el.className = 'kh-reco-mount';
+      el.style.marginTop = '16px';
+      host.appendChild(el);
+    }
+    return el;
+  }
+
+  function getTotalM2AndRooms() {
+    // use wizard state if present; otherwise try to infer
+    const st = (window.state && typeof window.state === 'object') ? window.state : {};
+    const sizes = Array.isArray(st.sizes) ? st.sizes : [];
+    const mids = sizes.map(midFromRange).filter(x => typeof x === 'number' && !isNaN(x));
+    const total = mids.length ? mids.reduce((a, b) => a + b, 0) : 30;
+    const rooms = Math.max(1, st.rooms || 1);
+    return { total, rooms, avg: total / rooms };
+  }
+
+  function brandVanaf(b) {
+    if (b === 'Daikin') return 'vanaf € 1.800 incl. materiaal en montage';
+    if (b === 'Panasonic') return 'vanaf € 1.600 incl. materiaal en montage';
+    if (b === 'Haier') return 'vanaf € 1.300 incl. materiaal en montage';
+    return 'Prijs op aanvraag';
+  }
+
+  function renderRecommendation() {
+    const mount = ensureMount();
+    if (!mount || typeof pickVariantByArea !== 'function') return;
+
+    const { total, rooms, avg } = getTotalM2AndRooms();
+    const rec = pickVariantByArea(rooms, avg, false);
+    if (!rec) return;
+
+    const base = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
+    mount.innerHTML =
+      '<div class="kh-reco-card">' +
+        '<div class="kh-reco-main">' +
+          '<div class="kh-reco-body">' +
+            '<h3>' + (rec.name || 'Aanbevolen model') + '</h3>' +
+            '<div class="muted">' + brandVanaf(rec.brand || '') + '</div>' +
+            '<a class="btn btn-green" style="margin-top:12px" href="' + base + (rec.slug || '') + '">Bekijk aanbeveling</a>' +
+            '<p class="muted" style="margin-top:8px">Op basis van ~' + Math.round(total) + ' m².</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function onStepMaybe3() {
+    const wrap = document.getElementById('khv2');
+    const step = wrap && wrap.getAttribute('data-step');
+    if (!wrap) {
+      // Some builds don’t have #khv2 — just try rendering anyway
+      renderRecommendation();
+      return;
+    }
+    if (step === '3') renderRecommendation();
+  }
+
+  // 2) Wire it up — but only re-check on step changes / next button
+  document.addEventListener('DOMContentLoaded', function () {
+    // run soon after first paint
+    setTimeout(onStepMaybe3, 80);
+
+    // react to step changes
+    const root = document.getElementById('khv2') || document.body;
+    try {
+      const mo = new MutationObserver(() => onStepMaybe3());
+      mo.observe(root, { attributes: true, attributeFilter: ['data-step'] });
+    } catch (_) {}
+
+    // react to the wizard Next button(s)
+    document.querySelectorAll('#kh-next, .kh-next, [data-kh-next]').forEach(btn => {
+      btn.addEventListener('click', () => setTimeout(onStepMaybe3, 120), true);
+    });
+  });
 })();
 
 /* === Phase 2.3 injected === */
