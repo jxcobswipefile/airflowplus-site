@@ -1,142 +1,99 @@
-
-/*! Airflow+ — Keuzehulp recommendation image injector (v3) */
-(function(){
-  const IMG_ROOT = "/assets/img/products";
-  const HERO_NAME = "hero.jpg";
-
-  const ALIASES = {
-    "panasonic tz": "panasonic-tz",
-    "panasonic- tz": "panasonic-tz",
-    "panasonic etherea": "panasonic-etherea",
-    "panasonic etherea 25kw": "panasonic-etherea-25kw",
-    "daikin comfora": "daikin-comfora",
-    "daikin emura": "daikin-emura",
-    "daikin emura 25kw": "daikin-emura-25kw",
-    "daikin perfera": "daikin-perfera",
-    "haier expert": "haier-expert",
-    "haier flexis 25kw": "haier-flexis-25kw",
-    "haier revive plus": "haier-revive-plus"
-  };
-
-  const qs = (s, el=document)=>el.querySelector(s);
-
-  function norm(s){
-    return (s||"").toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,'-');
-  }
-  function stripSizeSuffix(slug){
-    return slug.replace(/-?\d+(\.\d+)?-?k?w?$/,'').replace(/-+$/,'');
-  }
-
-  function deriveFolder(rootEl){
-    const cta = qs('a[href*="products/"]', rootEl);
-    if (cta){
-      try{
-        const url = new URL(cta.href, location.href);
-        let last = (url.pathname.split('/').pop()||'').replace(/\.html?$/,'');
-        let folder = stripSizeSuffix(last);
-        if (folder) return folder;
-      }catch(e){}
+/*! Airflow+ — Keuzehulp recommendation image injector (safe, idempotent) */
+(function () {
+  function ready(fn){ if(document.readyState !== 'loading'){ fn(); } else { document.addEventListener('DOMContentLoaded', fn, {once:true}); } }
+  ready(function(){
+    var mount = document.querySelector('#kh-reco') || document.querySelector('.kh-card, .khv2-card, .khv2-stage');
+    if(!mount) return;
+    var triedOnce = false;
+    function tryInject(){
+      var card = mount.querySelector('.kh-reco-card') ||
+                 mount.querySelector('.kh-reco-main') ||
+                 mount.querySelector('.kh-card') ||
+                 mount;
+      if(!card || card.dataset.imgInjected) return;
+      var titleEl = card.querySelector('h3, h2, .kh-title, .kh-reco-title') || mount.querySelector('h3, h2');
+      var linkEl  = card.querySelector('a[href*="/products/"]') || mount.querySelector('a[href*="/products/"]');
+      var title   = titleEl ? (titleEl.textContent || '').trim() : '';
+      var href    = linkEl ? (linkEl.getAttribute('href') || '') : '';
+      resolveImage(title, href).then(function(src){
+        if(!src){ card.dataset.imgInjected = 'noimg'; return; }
+        var wrapper = document.createElement('div');
+        wrapper.className = 'kh-reco--withimg';
+        var media = document.createElement('div');
+        media.className = 'kh-reco-media';
+        var img = new Image();
+        img.alt = title || 'Aanbevolen model';
+        img.src = src;
+        media.appendChild(img);
+        var body = document.createElement('div');
+        body.className = 'kh-reco-body';
+        var mover = document.createDocumentFragment();
+        while(card.firstChild){ mover.appendChild(card.firstChild); }
+        body.appendChild(mover);
+        wrapper.appendChild(media);
+        wrapper.appendChild(body);
+        card.appendChild(wrapper);
+        card.dataset.imgInjected = 'true';
+      });
+      triedOnce = true;
     }
-    const h3 = qs('h3, .kh-reco-title, .kh-title, .title, h2', rootEl);
-    if (h3){
-      let txt = (h3.textContent||'').replace(/op basis.*$/i,'').trim();
-      let basic = norm(txt);
-      if (ALIASES[basic]) return ALIASES[basic];
-      basic = stripSizeSuffix(basic.replace(/-?\d+(\.\d+)?-?k?w?/,'').replace(/--+/g,'-'));
-      if (ALIASES[basic]) return ALIASES[basic];
-      if (basic) return basic;
+    var mo = new MutationObserver(function(){ tryInject(); });
+    mo.observe(mount, {childList:true, subtree:true});
+    tryInject();
+    setTimeout(function(){ if(!triedOnce) tryInject(); }, 300);
+  });
+  function resolveImage(title, href){
+    var slug = '';
+    if(href){
+      try{ slug = href.split('?')[0].split('#')[0].split('/').pop().replace(/\.html$/i,''); }catch(e){ slug = ''; }
     }
-    return null;
-  }
-
-  function candidates(folder){
-    const base = folder.replace(/\/+$/,'');
-    const baseNo = stripSizeSuffix(base);
-    const set = new Set();
-    const add = (p)=>{ if(p) set.add(p); };
-    add(`${IMG_ROOT}/${base}/${HERO_NAME}`);
-    add(`${IMG_ROOT}/${baseNo}/${HERO_NAME}`);
-    add(`${IMG_ROOT}/${base}/main.jpg`);
-    add(`${IMG_ROOT}/${baseNo}/main.jpg`);
-    add(`${IMG_ROOT}/${base}.jpg`);
-    add(`${IMG_ROOT}/${baseNo}.jpg`);
-    return Array.from(set);
-  }
-
-  async function firstExisting(urls){
-    for (const u of urls){
-      try{
-        const res = await fetch(u, { method: 'HEAD', cache:'no-store' });
-        if (res.ok) return u;
-      }catch(e){}
+    var candidates = [];
+    if(slug){
+      candidates.push('/assets/img/products/' + slug + '/hero.jpg');
+      var baseSlug = slug.replace(/-(\d+(?:\.\d+)?)\s*kw$/i,'').replace(/-\d+kw$/i,'');
+      if(baseSlug && baseSlug !== slug){
+        candidates.push('/assets/img/products/' + baseSlug + '/hero.jpg');
+      }
     }
-    return null;
-  }
-
-  function ensureStructure(rootEl){
-    if (rootEl.dataset.recoImgReady === '1') return rootEl;
-    if (!qs('.kh-reco-body', rootEl)){
-      const body = document.createElement('div');
-      body.className = 'kh-reco-body';
-      while (rootEl.firstChild) body.appendChild(rootEl.firstChild);
-      rootEl.appendChild(body);
+    var folder = mapTitleToFolder(title);
+    if(folder){ candidates.push('/assets/img/products/' + folder + '/hero.jpg'); }
+    if(slug){
+      candidates.push('/assets/img/products/' + slug + '/main.jpg');
+      candidates.push('/assets/img/products/' + slug + '.jpg');
     }
-    if (!qs('.kh-reco-media', rootEl)){
-      const media = document.createElement('div');
-      media.className = 'kh-reco-media';
-      rootEl.insertBefore(media, rootEl.firstChild);
+    if(folder){
+      candidates.push('/assets/img/products/' + folder + '/main.jpg');
+      candidates.push('/assets/img/products/' + folder + '.jpg');
     }
-    rootEl.classList.add('kh-reco--withimg');
-    rootEl.dataset.recoImgReady = '1';
-    return rootEl;
+    var seen = Object.create(null);
+    var list = candidates.filter(function(p){ if(!p || seen[p]) return false; seen[p]=1; return true; });
+    return firstExisting(list);
   }
-
-  function mountImage(rootEl, url){
-    const media = qs('.kh-reco-media', rootEl);
-    if (!media) return;
-    const img = media.querySelector('img');
-    if (img && img.src && img.src.includes(url)) return;
-    media.innerHTML = '';
-    const im = new Image();
-    im.alt = 'Aanbevolen model';
-    im.loading = 'lazy';
-    im.decoding = 'async';
-    im.src = url;
-    media.appendChild(im);
-  }
-
-  async function tryRender(rootEl){
-    try{
-      const folder = deriveFolder(rootEl);
-      if (!folder) return;
-      const url = await firstExisting(candidates(folder));
-      if (!url) return;
-      ensureStructure(rootEl);
-      mountImage(rootEl, url);
-    }catch(e){}
-  }
-
-  function findMount(){
-    return document.querySelector('#kh-reco, .kh-reco-mount, .kh-result');
-  }
-
-  function setupObserver(){
-    const obs = new MutationObserver(()=>{
-      const t = findMount();
-      if (t) tryRender(t);
+  function firstExisting(paths){
+    var p = Promise.resolve(null);
+    paths.forEach(function(path){
+      p = p.then(function(found){
+        if(found) return found;
+        return fetch(path, {method:'HEAD', cache:'no-cache'}).then(function(r){
+          return r.ok ? path : null;
+        }).catch(function(){ return null; });
+      });
     });
-    obs.observe(document.body, { childList:true, subtree:true });
-    window.addEventListener('load', ()=>{
-      const t = findMount();
-      if (t) tryRender(t);
-      setTimeout(()=>{ const t2 = findMount(); if (t2) tryRender(t2); }, 400);
-      setTimeout(()=>{ const t3 = findMount(); if (t3) tryRender(t3); }, 1000);
-    }, { once:true });
+    return p;
   }
-
-  if (document.readyState === 'complete' || document.readyState === 'interactive'){
-    setupObserver();
-  }else{
-    document.addEventListener('DOMContentLoaded', setupObserver, { once:true });
+  function mapTitleToFolder(s){
+    if(!s) return '';
+    s = (s||'').toLowerCase();
+    if(s.includes('panasonic') && s.includes('tz')) return 'panasonic-tz';
+    if(s.includes('panasonic') && s.includes('etherea') && /25\s*kw/.test(s)) return 'panasonic-etherea-25kw';
+    if(s.includes('panasonic') && s.includes('etherea')) return 'panasonic-etherea';
+    if(s.includes('daikin') && s.includes('comfora')) return 'daikin-comfora';
+    if(s.includes('daikin') && s.includes('emura') && /25\s*kw/.test(s)) return 'daikin-emura-25kw';
+    if(s.includes('daikin') && s.includes('emura')) return 'daikin-emura';
+    if(s.includes('daikin') && s.includes('perfera')) return 'daikin-perfera';
+    if(s.includes('haier') && s.includes('expert')) return 'haier-expert';
+    if(s.includes('haier') && s.includes('flexis') && /25\s*kw/.test(s)) return 'haier-flexis-25kw';
+    if(s.includes('haier') && (s.includes('revive') || s.includes('revive plus'))) return 'haier-revive-plus';
+    return '';
   }
 })();
