@@ -3009,3 +3009,103 @@ body.keuzehulp .site-header .nav a:hover,
 body.home section.kh-cta.hero-overlap .kh-cta-card { /* home keeps overlap */
   /* no change here; this line just protects scope */
 }
+
+/* =========================================================
+   HARD REVERT — Keuzehulp PAGE ONLY (clean, non-overlapping)
+   Paste at the very end of your CSS.
+   ========================================================= */
+
+/* Scope to both slugs you use for the page */
+body.keuzehulp, .page-keuzehulp { --kh-overlap: 0 !important; }
+
+/* 1) Kill any “hero-overlap” margins coming from the home page */
+body.keuzehulp section.kh-cta.hero-overlap,
+.page-keuzehulp section.kh-cta.hero-overlap,
+body.keuzehulp .hero-overlap,
+.page-keuzehulp .hero-overlap {
+  margin-top: 0 !important;
+}
+
+/* 2) Neutralize any negative margins/transforms that lift the card */
+body.keuzehulp .khv2-card,
+.page-keuzehulp .khv2-card,
+body.keuzehulp .kh-card,
+.page-keuzehulp .kh-card,
+body.keuzehulp .kh-cta-card,
+.page-keuzehulp .kh-cta-card {
+  position: relative !important;
+  top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
+  transform: none !important;
+  margin: 24px auto !important;    /* normal breathing room */
+  z-index: 1 !important;           /* no floating above header */
+}
+
+/* 3) Make sure the block that contains the wizard has proper padding */
+body.keuzehulp .khv2-stage,
+.page-keuzehulp .khv2-stage,
+body.keuzehulp .kh-wrap,
+.page-keuzehulp .kh-wrap,
+body.keuzehulp section.kh-cta,
+.page-keuzehulp section.kh-cta {
+  padding-top: 28px !important;
+  padding-bottom: 56px !important;
+  margin-top: 0 !important;
+  overflow: visible !important;
+}
+
+/* 4) Header shouldn’t cover the card: add safe top offset for sticky header */
+body.keuzehulp main > :first-child,
+.page-keuzehulp main > :first-child {
+  scroll-margin-top: 90px;         /* anchor jumps safe */
+  padding-top: min(10px, 2vh);     /* small cushion below sticky header */
+}
+
+/* 5) Restore the “white card / dark text” skin used previously */
+body.keuzehulp .khv2-card,
+.page-keuzehulp .khv2-card,
+body.keuzehulp .kh-card,
+.page-keuzehulp .kh-card,
+body.keuzehulp .kh-cta-card,
+.page-keuzehulp .kh-cta-card {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #dbe7ff !important;
+  box-shadow: 0 24px 60px rgba(8,16,33,.18) !important;
+}
+
+/* 6) Buttons back to brand defaults on this page */
+body.keuzehulp .khv2-card .btn.btn-primary,
+.page-keuzehulp .khv2-card .btn.btn-primary,
+body.keuzehulp .kh-cta-card .btn.btn-primary,
+.page-keuzehulp .kh-cta-card .btn.btn-primary {
+  background: #16A1FF !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+body.keuzehulp .khv2-card .btn.btn-outline,
+.page-keuzehulp .khv2-card .btn.btn-outline,
+body.keuzehulp .kh-cta-card .btn.btn-outline,
+.page-keuzehulp .kh-cta-card .btn.btn-outline {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1.5px solid rgba(8,16,33,.18) !important;
+}
+
+/* 7) Extra guards: disable any pseudo-layers or top borders that can “float” in */
+body.keuzehulp .hero::before,
+body.keuzehulp .hero::after,
+.page-keuzehulp .hero::before,
+.page-keuzehulp .hero::after {
+  content: none !important;
+}
+body.keuzehulp .hero,
+.page-keuzehulp .hero {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+/* 8) Ensure footer doesn’t pull up under the wizard on short pages */
+body.keuzehulp .khv2-stage,
+.page-keuzehulp .khv2-stage {
+  min-height: 60vh; /* push footer down if little content */
+}
