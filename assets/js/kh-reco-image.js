@@ -1,153 +1,142 @@
 
-/*! Airflow+ — Keuzehulp recommendation image injector (v2)
- *  Safe, idempotent, zero-deps. Works even when #kh-reco mounts later.
- *  1) Waits for the recommendation box to appear (MutationObserver).
- *  2) Derives a product slug from the CTA href OR title text.
- *  3) Tries several image paths; if one loads it renders a media block.
- *  4) Adds .kh-reco--withimg to activate existing CSS layout.
- */
-(function () {
-  const STATE_FLAG = 'data-reco-img-ready';
+/*! Airflow+ — Keuzehulp recommendation image injector (v3) */
+(function(){
+  const IMG_ROOT = "/assets/img/products";
+  const HERO_NAME = "hero.jpg";
 
-  // Small helper: debounce microtasks
-  const raf = (fn) => requestAnimationFrame(fn);
+  const ALIASES = {
+    "panasonic tz": "panasonic-tz",
+    "panasonic- tz": "panasonic-tz",
+    "panasonic etherea": "panasonic-etherea",
+    "panasonic etherea 25kw": "panasonic-etherea-25kw",
+    "daikin comfora": "daikin-comfora",
+    "daikin emura": "daikin-emura",
+    "daikin emura 25kw": "daikin-emura-25kw",
+    "daikin perfera": "daikin-perfera",
+    "haier expert": "haier-expert",
+    "haier flexis 25kw": "haier-flexis-25kw",
+    "haier revive plus": "haier-revive-plus"
+  };
 
-  function $(sel, root = document) {
-    return root.querySelector(sel);
+  const qs = (s, el=document)=>el.querySelector(s);
+
+  function norm(s){
+    return (s||"").toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,'-');
   }
-  function $all(sel, root = document) {
-    return Array.prototype.slice.call(root.querySelectorAll(sel));
+  function stripSizeSuffix(slug){
+    return slug.replace(/-?\d+(\.\d+)?-?k?w?$/,'').replace(/-+$/,'');
   }
 
-  // Attempt to infer slug from link or title
-  function inferSlug(recoEl) {
-    // 1) CTA href wins
-    const a = recoEl.querySelector('a[href*="/products/"]');
-    if (a) {
-      try {
-        const url = new URL(a.href, location.origin);
-        const m = url.pathname.match(/\/products\/([^\/]+)\.html?/i);
-        if (m && m[1]) return m[1].toLowerCase();
-      } catch (e) {}
+  function deriveFolder(rootEl){
+    const cta = qs('a[href*="products/"]', rootEl);
+    if (cta){
+      try{
+        const url = new URL(cta.href, location.href);
+        let last = (url.pathname.split('/').pop()||'').replace(/\.html?$/,'');
+        let folder = stripSizeSuffix(last);
+        if (folder) return folder;
+      }catch(e){}
     }
-
-    // 2) From title text
-    const h = recoEl.querySelector('h3, h2, .title, .kh-reco-title');
-    const txt = (h && h.textContent || '').trim().toLowerCase();
-
-    if (txt) {
-      // Known mappings first
-      const map = {
-        'panasonic tz 3.5 kw': 'panasonic-tz-35kw',
-        'panasonic tz 5.0 kw': 'panasonic-tz-50kw',
-        'panasonic tz 2.5 kw': 'panasonic-tz-25kw',
-        'panasonic tz 7.1 kw': 'panasonic-tz-71kw'
-      };
-      if (map[txt]) return map[txt];
-
-      // Fallback: make a slug-ish string
-      let s = txt
-        .replace(/[\s\/_]+/g, '-')
-        .replace(/[^\w\-\.]+/g, '')       // keep letters, numbers, dash, dot
-        .replace(/\.+/g, '-')             // 3.5 -> 3-5
-        .replace(/-+/g, '-')
-        .replace(/(^-|-$)/g, '');
-      // normalize kw patterns: 3-5-kw -> 35kw
-      s = s.replace(/(\d)-(\d)-?kw/, (_m, a, b) => `${a}${b}kw`);
-      // common prefix
-      if (!/^panasonic-/.test(s) && /panasonic/.test(s)) {
-        s = s.replace(/^panasonic-?/, 'panasonic-');
-      }
-      return s;
+    const h3 = qs('h3, .kh-reco-title, .kh-title, .title, h2', rootEl);
+    if (h3){
+      let txt = (h3.textContent||'').replace(/op basis.*$/i,'').trim();
+      let basic = norm(txt);
+      if (ALIASES[basic]) return ALIASES[basic];
+      basic = stripSizeSuffix(basic.replace(/-?\d+(\.\d+)?-?k?w?/,'').replace(/--+/g,'-'));
+      if (ALIASES[basic]) return ALIASES[basic];
+      if (basic) return basic;
     }
-
     return null;
   }
 
-  // Try image candidates until one loads
-  function tryLoadImage(slug) {
-    if (!slug) return Promise.resolve(null);
-    const candidates = [
-      `/assets/img/products/${slug}/hero.jpg`,
-      `/assets/img/products/${slug}/main.jpg`,
-      `/assets/img/products/${slug}.jpg`,
-      `/products/${slug}.jpg`
-    ];
-
-    return new Promise((resolve) => {
-      let idx = 0;
-      const probe = () => {
-        if (idx >= candidates.length) return resolve(null);
-        const src = candidates[idx++];
-        const img = new Image();
-        img.onload = () => resolve(src);
-        img.onerror = probe;
-        img.src = src;
-      };
-      probe();
-    });
+  function candidates(folder){
+    const base = folder.replace(/\/+$/,'');
+    const baseNo = stripSizeSuffix(base);
+    const set = new Set();
+    const add = (p)=>{ if(p) set.add(p); };
+    add(`${IMG_ROOT}/${base}/${HERO_NAME}`);
+    add(`${IMG_ROOT}/${baseNo}/${HERO_NAME}`);
+    add(`${IMG_ROOT}/${base}/main.jpg`);
+    add(`${IMG_ROOT}/${baseNo}/main.jpg`);
+    add(`${IMG_ROOT}/${base}.jpg`);
+    add(`${IMG_ROOT}/${baseNo}.jpg`);
+    return Array.from(set);
   }
 
-  // Render the media block once
-  async function renderMedia(recoEl) {
-    if (!recoEl || recoEl.hasAttribute(STATE_FLAG)) return;
-    const slug = inferSlug(recoEl);
-    const found = await tryLoadImage(slug);
-    if (!found) return; // fail quietly
-
-    // Ensure a body wrapper exists
-    let body = recoEl.querySelector('.kh-reco-body, .kh-reco-main');
-    if (!body) {
-      // wrap everything into a body container
-      body = document.createElement('div');
-      body.className = 'kh-reco-body';
-      while (recoEl.firstChild) body.appendChild(recoEl.firstChild);
-      recoEl.appendChild(body);
+  async function firstExisting(urls){
+    for (const u of urls){
+      try{
+        const res = await fetch(u, { method: 'HEAD', cache:'no-store' });
+        if (res.ok) return u;
+      }catch(e){}
     }
-
-    // If media already present, stop
-    if (recoEl.querySelector('.kh-reco-media')) return;
-
-    // Create media block
-    const media = document.createElement('div');
-    media.className = 'kh-reco-media';
-    const img = document.createElement('img');
-    img.src = found;
-    img.alt = 'Aanbevolen airco';
-    img.decoding = 'async';
-    img.loading = 'lazy';
-    media.appendChild(img);
-
-    // Insert media before body
-    recoEl.insertBefore(media, body);
-    // Activate layout
-    recoEl.classList.add('kh-reco--withimg');
-    // Mark as done
-    recoEl.setAttribute(STATE_FLAG, '1');
+    return null;
   }
 
-  // Find the recommendation mount (supports #kh-reco or .kh-reco-mount)
-  function findReco() {
-    return document.getElementById('kh-reco') ||
-           document.querySelector('.kh-reco-mount') ||
-           null;
+  function ensureStructure(rootEl){
+    if (rootEl.dataset.recoImgReady === '1') return rootEl;
+    if (!qs('.kh-reco-body', rootEl)){
+      const body = document.createElement('div');
+      body.className = 'kh-reco-body';
+      while (rootEl.firstChild) body.appendChild(rootEl.firstChild);
+      rootEl.appendChild(body);
+    }
+    if (!qs('.kh-reco-media', rootEl)){
+      const media = document.createElement('div');
+      media.className = 'kh-reco-media';
+      rootEl.insertBefore(media, rootEl.firstChild);
+    }
+    rootEl.classList.add('kh-reco--withimg');
+    rootEl.dataset.recoImgReady = '1';
+    return rootEl;
   }
 
-  function initWhenReady() {
-    const first = findReco();
-    if (first) renderMedia(first);
+  function mountImage(rootEl, url){
+    const media = qs('.kh-reco-media', rootEl);
+    if (!media) return;
+    const img = media.querySelector('img');
+    if (img && img.src && img.src.includes(url)) return;
+    media.innerHTML = '';
+    const im = new Image();
+    im.alt = 'Aanbevolen model';
+    im.loading = 'lazy';
+    im.decoding = 'async';
+    im.src = url;
+    media.appendChild(im);
+  }
 
-    // Observe for later mounts / content updates
-    const obs = new MutationObserver(() => {
-      const el = findReco();
-      if (el) renderMedia(el);
+  async function tryRender(rootEl){
+    try{
+      const folder = deriveFolder(rootEl);
+      if (!folder) return;
+      const url = await firstExisting(candidates(folder));
+      if (!url) return;
+      ensureStructure(rootEl);
+      mountImage(rootEl, url);
+    }catch(e){}
+  }
+
+  function findMount(){
+    return document.querySelector('#kh-reco, .kh-reco-mount, .kh-result');
+  }
+
+  function setupObserver(){
+    const obs = new MutationObserver(()=>{
+      const t = findMount();
+      if (t) tryRender(t);
     });
-    obs.observe(document.body, { childList: true, subtree: true });
+    obs.observe(document.body, { childList:true, subtree:true });
+    window.addEventListener('load', ()=>{
+      const t = findMount();
+      if (t) tryRender(t);
+      setTimeout(()=>{ const t2 = findMount(); if (t2) tryRender(t2); }, 400);
+      setTimeout(()=>{ const t3 = findMount(); if (t3) tryRender(t3); }, 1000);
+    }, { once:true });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initWhenReady, { once: true });
-  } else {
-    initWhenReady();
+  if (document.readyState === 'complete' || document.readyState === 'interactive'){
+    setupObserver();
+  }else{
+    document.addEventListener('DOMContentLoaded', setupObserver, { once:true });
   }
 })();
