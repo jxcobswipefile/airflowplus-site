@@ -1,3 +1,4 @@
+
 /* ======================================================================
    Airflow+ — Main JS (namespaced & idempotent)
    ====================================================================== */ 
@@ -1084,20 +1085,3 @@
     img.decoding = 'async';
   });
 })();
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const hero = document.querySelector('.hero, .hero-wrap');
-  const card = document.querySelector('.khv2-card, .keuzehulp, .lead-card, .kh-card, .khv2-banner');
-  if (!hero || !card) return;
-  function place() {
-    const h = hero.getBoundingClientRect().height;
-    const shift = -Math.round(h * 0.5); // 50% overlap
-    card.style.marginTop = shift + 'px';
-    card.style.zIndex = 2;
-    card.style.position = 'relative';
-  }
-  place();
-  window.addEventListener('resize', place, { passive: true });
-});
-</script>
