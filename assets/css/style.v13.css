@@ -2578,3 +2578,43 @@ input:focus, select:focus, textarea:focus{
   background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
+
+/* --- Fix the thin white strip through the hero --- */
+
+/* 1) Prevent inline-media baseline gap */
+.hero video,
+.hero .hero-video,
+.hero img {
+  display: block;           /* kills the 1px baseline gap */
+}
+
+/* 2) Make sure nothing with a white bg/outline sits on top of the video */
+.hero,
+.hero-wrap,
+.hero .khv2-hero {
+  position: relative;
+  overflow: hidden;         /* hides any sub-pixel bleed */
+  background: #000;         /* safe backdrop behind video */
+}
+
+.hero > .container,
+.hero-wrap > .container {
+  background: transparent;  /* no white container background */
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+
+/* 3) Ensure the video fully covers the hero without exposing edges */
+.hero video,
+.hero .hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 4) If your next section had a negative/positive margin creating a seam */
+.hero + section,
+.hero + .section {
+  margin-top: 0;
+}
