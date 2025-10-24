@@ -2687,3 +2687,63 @@ input:focus, select:focus, textarea:focus{
 .hero-wrap::after {
   background: none !important;
 }
+
+/* === Hero seam fix (keeps overlap) ================================== */
+
+/* Let content spill out again so the keuzehulp card can overlap */
+.hero,
+.hero-wrap {
+  overflow: visible !important;        /* was hidden; this restores the overlap */
+  position: relative;                  /* needed for the ::after cover strip */
+  background: #000 !important;         /* safe backing behind the video */
+}
+
+/* Keep the video as the bottom-most layer */
+.hero video,
+.hero .hero-video,
+.hero-wrap video,
+.hero-wrap .hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  z-index: 0;                          /* important: stays behind everything */
+}
+
+/* Draw a 2px black cover strip half outside the hero to hide any sub-pixel seam */
+.hero::after,
+.hero-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;                        /* sits 1px “below” the hero edge */
+  height: 2px;                         /* covers the line on all zoom levels */
+  background: #000;                    /* same as hero backing/video edge */
+  pointer-events: none;
+  z-index: 1;                          /* above the video, below content */
+}
+
+/* Make sure your keuzehulp card sits above the cover/video */
+.hero .khv2-card,
+.hero .keuzehulp,
+.hero .lead-card,
+.hero .kh-card,
+.hero .khv2-banner {
+  position: relative;
+  z-index: 2;                          /* content layer */
+}
+
+/* If the next section had a border/shadow, keep it from reintroducing the line */
+.hero + section,
+.hero + .section,
+.hero-wrap + section,
+.hero-wrap + .section {
+  border-top: 0 !important;
+  box-shadow: none !important;
+  margin-top: 0 !important;
+}
