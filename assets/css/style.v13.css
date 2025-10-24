@@ -2779,3 +2779,48 @@ input:focus, select:focus, textarea:focus{
 @media (max-width: 640px) {
   :root { --kh-overlap: clamp(-120px, -18vw, -80px); }
 }
+
+/* === HERO/KEUZEHULP OVERLAP — FORCE IT, NO JS ======================== */
+/* 1) The hero must not clip overlapping content */
+.hero, .hero-wrap { 
+  overflow: visible !important; 
+  position: relative; 
+  z-index: 1; 
+}
+
+/* 2) The section immediately after the hero must also allow overlap */
+.hero + section,
+.hero + div,
+.hero-wrap + section,
+.hero-wrap + div {
+  overflow: visible !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* 3) Lift the keuzehulp card up to overlap the hero (~50% of viewport) */
+.khv2-card,
+.keuzehulp,
+.lead-card,
+.kh-card,
+.khv2-banner {
+  position: relative !important;
+  z-index: 3 !important;
+  /* Overlap amount: pick whichever looks best on your site */
+  /* A) Responsive: half the viewport height, capped at 320px */
+  margin-top: calc(-1 * min(50vh, 320px)) !important;
+  /* If you prefer a fixed value, comment the line above and uncomment one: */
+  /* margin-top: -220px !important; */   /* desktop-ish default */
+  /* margin-top: -180px !important; */   /* slightly gentler */
+}
+
+/* 4) Mobile: reduce the overlap so it doesn't crush content */
+@media (max-width: 640px) {
+  .khv2-card,
+  .keuzehulp,
+  .lead-card,
+  .kh-card,
+  .khv2-banner {
+    margin-top: calc(-1 * min(35vh, 160px)) !important;
+  }
+}
