@@ -979,3 +979,74 @@
     } catch {}
   }
 })();
+
+/* === KH recommendation: add product image & nicer layout === */
+(function () {
+  // Derive hero image from a slug like "products/panasonic-tz-50kw.html"
+  function productHeroFromSlug(slug) {
+    try {
+      if (!slug) return null;
+      var base = String(slug).split('/')[1] || ''; // "panasonic-tz-50kw.html"
+      var folder = base.split('-').slice(0, 2).join('-'); // "panasonic-tz"
+      // Existing pattern in your repo: assets/img/products/<folder>/hero.jpg
+      return 'assets/img/products/' + folder + '/hero.jpg';
+    } catch (_) { return null; }
+  }
+
+  // keep a reference to the original renderer if you kept it somewhere
+  // otherwise we just re-render after the hotfix put content in #kh-reco
+  function reRenderWithImage() {
+    var mount = document.getElementById('kh-reco');
+    if (!mount) return;
+
+    // Try to read what you just chose
+    var st = (window.state && typeof window.state === 'object') ? window.state : {};
+    var rooms = Math.max(1, st.rooms || 1);
+    var sizes = Array.isArray(st.sizes) ? st.sizes : [];
+    var mids = sizes.map(function (txt) {
+      if (!txt) return 30;
+      txt = String(txt).replace(/\s/g,'').replace('m²','').replace('m2','').replace(',', '.');
+      var m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
+      if (m) { var a = parseFloat(m[1]), b = parseFloat(m[2]); return (a+b)/2; }
+      var n = parseFloat(txt); return isNaN(n) ? 30 : n;
+    });
+    var total = mids.length ? mids.reduce((a,b)=>a+b,0) : 30;
+    var avg = total / rooms;
+
+    if (typeof pickVariantByArea !== 'function') return;
+    var rec = pickVariantByArea(rooms, avg, false);
+    if (!rec) return;
+
+    var img = productHeroFromSlug(rec.slug) || 'assets/img/products/_placeholder.jpg';
+    var base = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
+
+    mount.innerHTML =
+      '<div class="kh-reco-card kh-reco--withimg">' +
+        '<div class="kh-reco-media"><img alt="'+ (rec.name||'Airco') +'" src="'+ img +'"></div>' +
+        '<div class="kh-reco-body">' +
+          '<h3>'+ (rec.name || 'Aanbevolen model') +'</h3>' +
+          '<div class="muted">'+ (rec.brand === 'Daikin' ? 'vanaf € 1.800 incl. materiaal en montage' :
+                                  rec.brand === 'Panasonic' ? 'vanaf € 1.600 incl. materiaal en montage' :
+                                  rec.brand === 'Haier' ? 'vanaf € 1.300 incl. materiaal en montage' :
+                                  'Prijs op aanvraag') + '</div>' +
+          '<a class="btn btn-green" style="margin-top:12px" href="'+ base + (rec.slug||'') +'">Bekijk aanbeveling</a>' +
+          '<p class="muted" style="margin-top:8px">Op basis van ~'+ Math.round(total) +' m².</p>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // run whenever Step 3 is visible (same triggers you wired before)
+  var card = document.querySelector('.khv2-card');
+  if (card) {
+    try {
+      new MutationObserver(function () {
+        if (card.getAttribute('data-step') === '3') setTimeout(reRenderWithImage, 80);
+      }).observe(card, { attributes: true, attributeFilter: ['data-step'] });
+    } catch (_) {}
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(reRenderWithImage, 120); }, { once:true });
+  } else {
+    setTimeout(reRenderWithImage, 120);
+  }
+})();
