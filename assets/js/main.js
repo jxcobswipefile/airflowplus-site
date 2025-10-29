@@ -1025,6 +1025,7 @@
 
 /* === KH recommendation: add product image & nicer layout === */
 (function () {
+  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return;
   // Derive hero image from a slug like "products/panasonic-tz-50kw.html"
   function productHeroFromSlug(slug) {
     try {
