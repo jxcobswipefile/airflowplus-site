@@ -1,185 +1,236 @@
-/*! Airflow+ — KH Step 3 image injector (single-source, idempotent) */
-(function () {
-  // 0) Announce we are the only injector
-  window.__KH_IMAGE_INJECTOR_ACTIVE__ = true;
 
-  // 1) Base + helpers (no trailing/leading double slashes)
-  var BASE = (window.AFP && AFP.ROOT_BASE) || '/airflowplus-site';
-  function joinPath(p) {
-    return (BASE.replace(/\/$/, '') + '/' + String(p || '').replace(/^\//, '')).replace(/\/{2,}/g, '/');
-  }
+/* ======================================================================
+   Airflow+ — Keuzehulp Recommendation Image (hardened v38.1)
+   Purpose:
+     - SINGLE source of truth for Step‑3 image next to recommendation
+     - Remove legacy/duplicate <img> (incl. bare "hero.jpg" placeholders)
+     - Resolve correct image by variant → family with HEAD probes
+     - Remain idempotent across re-renders
+   ---------------------------------------------------------------------- */
 
-  // 2) Family detection from full variant slug, e.g. "haier-revive-plus-50kw" → "haier-revive-plus"
-  function familyFromVariantSlug(slug) {
-    if (!slug) return '';
-    slug = String(slug).toLowerCase();
-    // remove “-2.5kw / -3.5kw / -5.0kw / -25kw / -35kw / -50kw …”
-    return slug
-      .replace(/-(?:2\.5|3\.5|5\.0)\s*kw$/i, '')
-      .replace(/-(?:25|35|50)\s*kw$/i, '')
-      .replace(/-\d+(?:\.\d+)?kw$/i, '');
-  }
+(() => {
+  "use strict";
 
-  // 3) Prefer the image you defined in AFP.ITEMS by matching the family slug to it.slug
-  function afpImageForFamily(fam) {
+  // -------------------------------------------------------------------
+  // Global coordination flag (legacy injectors should early-return if set)
+  // -------------------------------------------------------------------
+  try { window.__KH_IMAGE_INJECTOR_ACTIVE__ = true; } catch(e) {}
+
+  // -------------------------------------------------------------------
+  // Small shared helpers
+  // -------------------------------------------------------------------
+  const AFP = (window.AFP = window.AFP || {});
+  const log = (...args) => (AFP && AFP.log ? AFP.log(...args) : console.debug("[KH-IMG]", ...args));
+
+  const BASE = ((AFP && AFP.ROOT_BASE) || "/airflowplus-site").replace(/\/+$/,"");
+  const joinPath = (rel) => (BASE + "/" + String(rel || "").replace(/^\/+/, "")).replace(/\/{2,}/g, "/");
+
+  const $  = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  // Simple debounce
+  const debounce = (fn, ms=50) => {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), ms);
+    };
+  };
+
+  // HEAD probe, returns true/false
+  const headOk = async (url) => {
     try {
-      if (!window.AFP || !Array.isArray(AFP.ITEMS)) return '';
-      var hit = AFP.ITEMS.find(function (it) {
-        return String(it.slug || '').toLowerCase() === fam;
+      const res = await fetch(url, { method: "HEAD", cache: "no-store" });
+      return res.ok;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  // Given variant slug like "haier-revive-plus-35kw" → "haier-revive-plus"
+  const familyFromSlug = (slug) => {
+    if (!slug) return "";
+    const m = String(slug).match(/^(.*?)-\d+kw$/i);
+    return m ? m[1] : String(slug);
+  };
+
+  // Build ordered list of candidate image URLs
+  const buildCandidates = (variantSlug, titleText) => {
+    const list = [];
+    const family = familyFromSlug(variantSlug);
+
+    // 1) Family image defined in AFP.ITEMS (if any)
+    try {
+      if (AFP.ITEMS && AFP.ITEMS[family] && AFP.ITEMS[family].img) {
+        const rel = AFP.ITEMS[family].img.replace(BASE, "").replace(/^\//, "");
+        list.push(joinPath(rel));
+      }
+    } catch (e) {}
+
+    // 2) Specific variant folder hero
+    if (variantSlug) list.push(joinPath(`assets/img/products/${variantSlug}/hero.jpg`));
+
+    // 3) Family folder hero
+    if (family) list.push(joinPath(`assets/img/products/${family}/hero.jpg`));
+
+    // 4) Conservative fallbacks
+    if (family) {
+      list.push(joinPath(`assets/img/products/${family}/main.jpg`));
+      list.push(joinPath(`assets/img/products/${family}.jpg`));
+    }
+    // last-resort placeholder (should exist in repo)
+    list.push(joinPath(`assets/img/products/placeholder.jpg`));
+
+    // Dedup while preserving order
+    const seen = new Set();
+    return list.filter(u => (seen.has(u) ? false : (seen.add(u), true)));
+  };
+
+  // Remove duplicate/legacy images inside the recommendation card
+  const purgeForeignImages = (card, chosenSrc) => {
+    // 1) Remove any stray bare hero.jpg placeholders not ours
+    $$("img", card).forEach(img => {
+      const src = img.getAttribute("src") || "";
+      if (/(^|\/)hero\.jpg$/i.test(src) && src !== chosenSrc) {
+        img.remove();
+      }
+    });
+    // 2) Keep exactly one image inside .kh-reco-media; remove others
+    const media = card.querySelector(".kh-reco-media");
+    if (media) {
+      const imgs = $$("img", card);
+      imgs.forEach(img => {
+        if (!media.contains(img)) {
+          // any <img> not inside our media is legacy → remove
+          img.remove();
+        }
       });
-      return hit && hit.img ? joinPath(hit.img) : '';
-    } catch { return ''; }
-  }
-
-  // 4) Build a clean list of image candidates
-  function buildCandidates(title, href) {
-    var candidates = [];
-    function push(p) { if (p) candidates.push(p); }
-
-    // Try to read product variant slug from href “…/products/<slug>.html”
-    var variant = '';
-    try {
-      if (href) {
-        var m = String(href).match(/products\/([^\/#?]+)\.html/i);
-        if (m) variant = m[1]; // e.g. "haier-revive-plus-50kw"
+      const mediaImgs = $$("img", media);
+      if (mediaImgs.length > 1) {
+        mediaImgs.slice(1).forEach(n => n.remove());
       }
-    } catch {}
+    } else {
+      // If no media yet, also remove ALL legacy img under card to avoid double‑render
+      $$("img", card).forEach(img => img.remove());
+    }
+  };
 
-    // A) If AFP has an image for the family, use that first
-    var fam = familyFromVariantSlug(variant);             // "haier-revive-plus"
-    var afpImg = afpImageForFamily(fam);
-    if (afpImg) push(afpImg);
+  // Extract the recommended variant slug & title from the current card
+  const readRecoMeta = (card) => {
+    // Primary: data attributes if present
+    const dataSlug = card.getAttribute("data-variant-slug") || "";
+    const titleEl = card.querySelector(".kh-reco-title, h3, h2") || card;
+    const titleText = (titleEl.textContent || "").trim();
+    // Fallback: look for href to product page
+    let hrefSlug = "";
+    const cta = card.querySelector("a[href*='/products/']");
+    if (cta) {
+      const m = cta.getAttribute("href").match(/\/products\/([^\/]+)\.html/i);
+      if (m) hrefSlug = m[1];
+    }
+    const variantSlug = dataSlug || hrefSlug || "";
+    return { variantSlug, titleText };
+  };
 
-    // B) Then try the strict variant folder hero
-    if (variant) {
-      push(joinPath('/assets/img/products/' + variant + '/hero.jpg'));  // …/haier-revive-plus-50kw/hero.jpg
-      // and the family folder hero
-      if (fam && fam !== variant) {
-        push(joinPath('/assets/img/products/' + fam + '/hero.jpg'));     // …/haier-revive-plus/hero.jpg
-      }
-      // common alternates
-      push(joinPath('/assets/img/products/' + variant + '/main.jpg'));
-      push(joinPath('/assets/img/products/' + variant + '.jpg'));
-      if (fam) {
-        push(joinPath('/assets/img/products/' + fam + '/main.jpg'));
-        push(joinPath('/assets/img/products/' + fam + '.jpg'));
-      }
+  // Ensure card structure has media/body wrappers
+  const ensureCardStructure = (card) => {
+    card.classList.add("kh-reco--withimg");
+    let media = card.querySelector(".kh-reco-media");
+    let body  = card.querySelector(".kh-reco-body");
+    if (!media) {
+      media = document.createElement("div");
+      media.className = "kh-reco-media";
+      card.insertBefore(media, card.firstChild);
+    }
+    if (!body) {
+      body = document.createElement("div");
+      body.className = "kh-reco-body";
+      while (media.nextSibling) body.appendChild(media.nextSibling);
+      card.appendChild(body);
+    }
+    return media;
+  };
+
+  // Resolve the first existing URL from candidates
+  const resolveFirst = async (cands) => {
+    for (const url of cands) {
+      // Avoid probing obviously duplicated placeholder twice
+      // Probe with HEAD to keep it light
+      // Using await sequentially so we stop at the first OK
+      /* eslint no-await-in-loop: 0 */
+      if (await headOk(url)) return url;
+    }
+    return cands[cands.length - 1]; // fallback to last
+  };
+
+  // Inject image once
+  const injectImage = async () => {
+    const card = $("#kh-reco");
+    if (!card) return;
+
+    // Bail out if we've already finalized for this render cycle
+    if (card.__khImgInjectedOnce) return;
+
+    const { variantSlug, titleText } = readRecoMeta(card);
+    // If we still can't resolve, do not proceed yet
+    if (!variantSlug && !titleText) return;
+
+    const cands = buildCandidates(variantSlug, titleText);
+    const chosen = await resolveFirst(cands);
+    log("candidates", cands, "chosen:", chosen);
+
+    // Sanitize any legacy images before insertion
+    purgeForeignImages(card, chosen);
+
+    const media = ensureCardStructure(card);
+
+    // If the same image already present, mark done and exit
+    const current = media.querySelector("img");
+    if (current && current.getAttribute("src") === chosen) {
+      card.__khImgInjectedOnce = true;
+      return;
     }
 
-    // C) Title mapping (very loose safety net)
-    var folder = mapTitleToFolder(title);
-    if (folder) {
-      push(joinPath('/assets/img/products/' + folder + '/hero.jpg'));
-      push(joinPath('/assets/img/products/' + folder + '/main.jpg'));
-      push(joinPath('/assets/img/products/' + folder + '.jpg'));
-    }
+    // Replace/insert our single image
+    const img = current || document.createElement("img");
+    img.setAttribute("alt", "Product hero");
+    img.setAttribute("loading", "lazy");
+    img.setAttribute("decoding", "async");
+    img.src = chosen;
 
-    // De-dupe preserving order
-    var seen = Object.create(null);
-    return candidates.filter(function (p) {
-      if (!p || seen[p]) return false; seen[p] = 1; return true;
-    });
-  }
+    if (!current) media.appendChild(img);
 
-  // 5) HEAD-probe candidates in sequence and return the first that exists
-  function firstExisting(urls) {
-    var chain = Promise.resolve(null);
-    urls.forEach(function (u) {
-      chain = chain.then(function (found) {
-        if (found) return found;
-        return fetch(u, { method: 'HEAD', cache: 'no-store' })
-          .then(function (r) { return r.ok ? u : null; })
-          .catch(function () { return null; });
-      });
-    });
-    return chain;
-  }
+    // Final cleanup — ensure we keep only our media image
+    purgeForeignImages(card, chosen);
 
-  // 6) Ultra-simple title→folder mapper (last resort)
-  function mapTitleToFolder(s) {
-    if (!s) return '';
-    s = String(s).toLowerCase();
-    if (s.includes('panasonic') && s.includes('tz')) return 'panasonic-tz';
-    if (s.includes('panasonic') && s.includes('etherea')) return 'panasonic-etherea';
-    if (s.includes('daikin') && s.includes('comfora')) return 'daikin-comfora';
-    if (s.includes('daikin') && s.includes('emura')) return 'daikin-emura';
-    if (s.includes('daikin') && s.includes('perfera')) return 'daikin-perfera';
-    if (s.includes('haier') && s.includes('expert')) return 'haier-expert';
-    if (s.includes('haier') && (s.includes('revive plus') || s.includes('revive'))) return 'haier-revive-plus';
-    return '';
-  }
+    // Mark idempotent completion
+    card.__khImgInjectedOnce = true;
+  };
 
-  // 7) One-time inject (and clean any previous media)
-  function injectOnce() {
-    var mount = document.querySelector('#kh-reco') || document.querySelector('.khv2-card, .kh-card');
-    if (!mount) return;
+  // Observe Step‑3 render and mutations
+  const startObserver = () => {
+    const target = document.body;
+    if (!target) return;
 
-    // Locate the recommendation block (or use mount)
-    var card = mount.querySelector('.kh-reco-card, .kh-reco-main, .kh-card') || mount;
+    const handle = debounce(() => {
+      const node = $("#kh-reco");
+      if (!node) return;
+      // fresh render → allow reinjection
+      node.__khImgInjectedOnce = false;
+      injectImage();
+    }, 40);
 
-    // Title + product link (we prefer href to derive the variant)
-    var titleEl = card.querySelector('h3, h2, .kh-reco-title, .kh-title') || mount.querySelector('h3, h2');
-    var linkEl  = card.querySelector('a[href*="/products/"]') || mount.querySelector('a[href*="/products/"]');
-    var title   = titleEl ? (titleEl.textContent || '').trim() : '';
-    var href    = linkEl ? linkEl.getAttribute('href') : '';
+    // Initial attempt (in case DOM is already there)
+    handle();
 
-    // If we already injected correctly, bail
-    if (card.dataset.imgInjected === 'true') return;
+    const mo = new MutationObserver(handle);
+    mo.observe(target, { childList: true, subtree: true });
+  };
 
-    // Clean any previously inserted media/placeholder images (prevents duplicates)
-    card.querySelectorAll('.kh-reco-media, .kh-reco--withimg').forEach(function (n) { n.remove(); });
-    // Also nuke any stray <img src="hero.jpg"> placeholders
-    card.querySelectorAll('img').forEach(function (img) {
-      if (/(^|\/)hero\.jpg$/i.test(img.getAttribute('src') || '')) img.remove();
-    });
-
-    var candidates = buildCandidates(title, href);
-    if (!candidates.length) { card.dataset.imgInjected = 'noimg'; return; }
-
-    firstExisting(candidates).then(function (src) {
-      if (!src) { card.dataset.imgInjected = 'noimg'; return; }
-
-      // Build final layout wrapper only once
-      var wrapper = document.createElement('div');
-      wrapper.className = 'kh-reco--withimg';
-
-      var media = document.createElement('div');
-      media.className = 'kh-reco-media';
-      var img = new Image();
-      img.src = src;
-      img.alt = title || 'Aanbevolen model';
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      media.appendChild(img);
-
-      var body = document.createElement('div');
-      body.className = 'kh-reco-body';
-
-      // Move current children into body
-      var frag = document.createDocumentFragment();
-      while (card.firstChild) frag.appendChild(card.firstChild);
-      body.appendChild(frag);
-
-      wrapper.appendChild(media);
-      wrapper.appendChild(body);
-      card.appendChild(wrapper);
-
-      card.dataset.imgInjected = 'true';
-    });
-  }
-
-  // 8) Run once now, and again whenever #kh-reco changes
-  function start() {
-    var mount = document.querySelector('#kh-reco');
-    if (!mount) return;
-    injectOnce();
-    var mo = new MutationObserver(injectOnce);
-    mo.observe(mount, { childList: true, subtree: true });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start, { once: true });
+  // Kick
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startObserver, { once: true });
   } else {
-    start();
+    startObserver();
   }
 })();
