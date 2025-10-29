@@ -2,6 +2,29 @@
 (function () {
   function ready(fn){ if(document.readyState !== 'loading'){ fn(); } else { document.addEventListener('DOMContentLoaded', fn, {once:true}); } }
   ready(function(){
+    // === Base-path + AFP image helpers (append-only) =========================
+var BASE = (window.AFP && AFP.ROOT_BASE) || '/airflowplus-site';
+function joinPath(p){ return (BASE.replace(/\/$/,'') + '/' + String(p||'').replace(/^\//,'')).replace(/\/{2,}/g,'/'); }
+
+// from a variant slug like "daikin-comfora-35kw" → "daikin-comfora"
+function familyFromSlug(slug){
+  if(!slug) return '';
+  slug = String(slug).toLowerCase();
+  return slug
+    .replace(/-(?:2\.5|3\.5|5\.0)\s*kw$/,'')
+    .replace(/-(?:25|35|50)\s*kw$/,'')
+    .replace(/-\d+(?:\.\d+)?kw$/,'');
+}
+
+// look up an AFP.ITEMS entry by family slug and return its img (if present)
+function afpImgForFamily(fam){
+  try {
+    if(!window.AFP || !Array.isArray(AFP.ITEMS)) return '';
+    var m = AFP.ITEMS.find(function(it){ return String(it.slug).toLowerCase() === fam; });
+    return m && m.img ? joinPath(m.img) : '';
+  } catch(_) { return ''; }
+}
+
     var mount = document.querySelector('#kh-reco') || document.querySelector('.kh-card, .khv2-card, .khv2-stage');
     if(!mount) return;
     var triedOnce = false;
@@ -55,19 +78,48 @@
         candidates.push('/assets/img/products/' + baseSlug + '/hero.jpg');
       }
     }
-    var folder = mapTitleToFolder(title);
-    if(folder){ candidates.push('/assets/img/products/' + folder + '/hero.jpg'); }
-    if(slug){
-      candidates.push('/assets/img/products/' + slug + '/main.jpg');
-      candidates.push('/assets/img/products/' + slug + '.jpg');
+    function resolveImage(title, href){
+  var slug = '';
+  if(href){
+    try{ slug = href.split('?')[0].split('#')[0].split('/').pop().replace(/\.html$/i,''); }catch(e){ slug = ''; }
+  }
+
+  var candidates = [];
+  function push(p){ if(p) candidates.push(p); }
+
+  // Prefer the AFP.ITEMS image for the *family* (e.g. "daikin-comfora") if available
+  var fam = familyFromSlug(slug);
+  var afpImg = afpImgForFamily(fam);
+  if(afpImg) push(afpImg);
+
+  // Your original slug/title-based guesses (but normalized through joinPath)
+  if(slug){
+    push(joinPath('/assets/img/products/' + slug + '/hero.jpg'));
+    var baseSlug = slug.replace(/-(\d+(?:\.\d+)?)\s*kw$/i,'').replace(/-\d+kw$/i,'');
+    if(baseSlug && baseSlug !== slug){
+      push(joinPath('/assets/img/products/' + baseSlug + '/hero.jpg'));
     }
-    if(folder){
-      candidates.push('/assets/img/products/' + folder + '/main.jpg');
-      candidates.push('/assets/img/products/' + folder + '.jpg');
-    }
-    var seen = Object.create(null);
-    var list = candidates.filter(function(p){ if(!p || seen[p]) return false; seen[p]=1; return true; });
-    return firstExisting(list);
+  }
+  var folder = mapTitleToFolder(title);
+  if(folder){ push(joinPath('/assets/img/products/' + folder + '/hero.jpg')); }
+
+  // Additional common filenames
+  if(slug){
+    push(joinPath('/assets/img/products/' + slug + '/main.jpg'));
+    push(joinPath('/assets/img/products/' + slug + '.jpg'));
+  }
+  if(folder){
+    push(joinPath('/assets/img/products/' + folder + '/main.jpg'));
+    push(joinPath('/assets/img/products/' + folder + '.jpg'));
+  }
+
+  // Deduplicate while preserving order
+  var seen = Object.create(null);
+  var list = candidates.filter(function(p){ if(!p || seen[p]) return false; seen[p]=1; return true; });
+
+  return firstExisting(list);
+}
+
   }
   function firstExisting(paths){
     var p = Promise.resolve(null);
