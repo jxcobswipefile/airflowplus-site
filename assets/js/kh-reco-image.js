@@ -191,3 +191,138 @@
   const mo = new MutationObserver(() => ensureMounted());
   mo.observe(host, { attributes: true, childList: true, subtree: true });
 })();
+
+/* =========================================================
+   v36 — KH: Prefer user-selected brands in the recommendation
+   - Non-breaking: only intervenes if preferred brand(s) exist
+     and the current pick is from a different brand.
+   - Works by swapping to an equivalent capacity in that brand.
+   ========================================================= */
+
+(function KH_PreferBrands() {
+  const MOUNT_SEL = '#kh-reco, .kh-reco-card';
+
+  // Read preferred brands (set by the Step-3 chips code)
+  const getPreferred = () => {
+    try { return JSON.parse(sessionStorage.getItem('khPreferredBrands') || '[]'); }
+    catch { return []; }
+  };
+
+  // Infer brand & capacity from slug/title
+  const brandFromText = (s='') => {
+    s = s.toLowerCase();
+    if (s.includes('daikin'))    return 'daikin';
+    if (s.includes('panasonic')) return 'panasonic';
+    if (s.includes('haier'))     return 'haier';
+    return '';
+  };
+  const capKeyFromSlug = (s='') => {
+    // expect ...-25kw / -35kw / -50kw
+    const m = s.toLowerCase().match(/-(25|35|50)\s*kw/);
+    return m ? `${m[1]}kw` : null;
+  };
+
+  // Map: for each brand + capacity, where to link and how to label
+  const PRODUCT_BY_BRAND = {
+    panasonic: {
+      '25kw': { slug: 'panasonic-tz-25kw',  title: 'Panasonic TZ — 2.5 kW' },
+      '35kw': { slug: 'panasonic-tz-35kw',  title: 'Panasonic TZ — 3.5 kW' },
+      '50kw': { slug: 'panasonic-tz-50kw',  title: 'Panasonic TZ — 5.0 kW' },
+    },
+    daikin: {
+      '25kw': { slug: 'daikin-comfora-25kw', title: 'Daikin Comfora — 2.5 kW' },
+      '35kw': { slug: 'daikin-comfora-35kw', title: 'Daikin Comfora — 3.5 kW' },
+      '50kw': { slug: 'daikin-comfora-50kw', title: 'Daikin Comfora — 5.0 kW' },
+    },
+    haier: {
+      '25kw': { slug: 'haier-revive-plus-25kw', title: 'Haier Revive Plus — 2.5 kW' },
+      '35kw': { slug: 'haier-revive-plus-35kw', title: 'Haier Revive Plus — 3.5 kW' },
+      '50kw': { slug: 'haier-revive-plus-50kw', title: 'Haier Revive Plus — 5.0 kW' },
+    }
+  };
+
+  function currentSlugFromCard(card) {
+    // Try from image path first (we already inject hero images by slug)
+    const img = card.querySelector('.kh-reco-media img');
+    if (img && img.src) {
+      const m = img.src.match(/assets\/img\/products\/([^/]+)\/hero\.jpg/i);
+      if (m) return m[1];
+    }
+    // Fallback: look for a known href on "Bekijk aanbeveling" button
+    const cta = card.querySelector('a[href*="/products/"]');
+    if (cta) {
+      const m = cta.getAttribute('href').match(/products\/([^\.]+)\.html/i);
+      if (m) return m[1];
+    }
+    return '';
+  }
+
+  function brandFromSlug(slug='') {
+    slug = slug.toLowerCase();
+    if (slug.startsWith('daikin-')) return 'daikin';
+    if (slug.startsWith('panasonic-')) return 'panasonic';
+    if (slug.startsWith('haier-')) return 'haier';
+    return '';
+  }
+
+  function swapToBrand(card, targetBrand, capacityKey) {
+    const cfg = PRODUCT_BY_BRAND[targetBrand]?.[capacityKey];
+    if (!cfg) return;
+
+    const newSlug = cfg.slug;
+    const newTitle = cfg.title;
+    const imgPath  = `assets/img/products/${newSlug}/hero.jpg`;
+    const pageHref = `/airflowplus-site/products/${newSlug}.html`;
+
+    // Update title text
+    const titleEl = card.querySelector('.kh-reco-body h4, .kh-reco-body .title, .kh-reco-title, h4');
+    if (titleEl) titleEl.textContent = newTitle;
+
+    // Update image
+    const img = card.querySelector('.kh-reco-media img');
+    if (img) { img.src = imgPath; img.alt = newTitle; img.loading = 'lazy'; img.decoding = 'async'; }
+
+    // Update details link (e.g., "Bekijk aanbeveling")
+    const cta = card.querySelector('a[href*="/products/"]');
+    if (cta) cta.setAttribute('href', pageHref);
+  }
+
+  function maybePreferBrands(card) {
+    const preferred = getPreferred();
+    if (!preferred.length) return;
+
+    const slug = currentSlugFromCard(card);
+    if (!slug) return;
+
+    const currentBrand = brandFromSlug(slug) || brandFromText(card.textContent || '');
+    const capacityKey  = capKeyFromSlug(slug) || (card.textContent.match(/(\b2\.5|\b3\.5|\b5\.0)\s*kW/i)?.[1]
+                             ?.replace('.', '') + 'kw');
+
+    if (!capacityKey) return; // can’t compute equivalent
+
+    // If current brand already preferred, keep it
+    if (preferred.includes(currentBrand)) return;
+
+    // Otherwise switch to the first preferred brand that has an equivalent
+    for (const b of preferred) {
+      if (PRODUCT_BY_BRAND[b]?.[capacityKey]) {
+        swapToBrand(card, b, capacityKey);
+        return;
+      }
+    }
+  }
+
+  // Observe recommendation rendering (reuse your existing pattern)
+  const mount = document.querySelector(MOUNT_SEL);
+  if (!mount) return;
+
+  const mo = new MutationObserver(() => {
+    const card = document.querySelector('.kh-reco--withimg, .kh-reco-card');
+    if (card) maybePreferBrands(card);
+  });
+  mo.observe(mount, { childList: true, subtree: true });
+
+  // Also run once in case the card is already present
+  const initial = document.querySelector('.kh-reco--withimg, .kh-reco-card');
+  if (initial) maybePreferBrands(initial);
+})();
