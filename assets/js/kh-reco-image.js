@@ -97,3 +97,97 @@
     return '';
   }
 })();
+
+/* =========================================================
+   v36 — KH Step 3: Brand preference chips (JS-only mount)
+   - No HTML edits required.
+   - Renders above #kh-reco when step 3 becomes visible.
+   - Persists to sessionStorage under "khPreferredBrands".
+   - Dispatches "kh:brand-preferences-changed" on document.
+   ========================================================= */
+
+(function KH_BrandChips(){
+  const STEP_SEL = 'section[data-kh-step="3"]';
+  const RECO_MOUNT_SEL = '#kh-reco';
+  const STORAGE_KEY = 'khPreferredBrands';
+  const BRANDS = [
+    { key: 'daikin',    label: 'Daikin',    logo: 'assets/img/brands/daikin.placeholder.svg' },
+    { key: 'panasonic', label: 'Panasonic', logo: 'assets/img/brands/panasonic.placeholder.svg' },
+    { key: 'haier',     label: 'Haier',     logo: 'assets/img/brands/haier.placeholder.svg' },
+    // add more here later
+  ];
+
+  const state = (window.khState = window.khState || {});
+  state.preferredBrands = state.preferredBrands || [];
+
+  const load = () => {
+    try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch { return []; }
+  };
+  const save = () => {
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state.preferredBrands)); } catch {}
+    document.dispatchEvent(new CustomEvent('kh:brand-preferences-changed', {
+      detail: { preferredBrands: state.preferredBrands.slice() }
+    }));
+  };
+
+  // Build the chip bar
+  function createChipBar() {
+    const bar = document.createElement('div');
+    bar.className = 'kh-brands';
+    BRANDS.forEach(b => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'brand-chip';
+      btn.dataset.brand = b.key;
+
+      const img = document.createElement('img');
+      img.src = b.logo; img.alt = b.label; img.loading = 'lazy';
+      btn.append(img, document.createTextNode(' ' + b.label));
+
+      btn.addEventListener('click', () => {
+        const i = state.preferredBrands.indexOf(b.key);
+        if (i >= 0) state.preferredBrands.splice(i, 1);
+        else state.preferredBrands.push(b.key);
+        sync(bar);
+        save();
+      });
+
+      bar.appendChild(btn);
+    });
+    return bar;
+  }
+
+  function sync(bar) {
+    const chips = bar.querySelectorAll('.brand-chip');
+    chips.forEach(chip => {
+      chip.classList.toggle('is-selected', state.preferredBrands.includes(chip.dataset.brand));
+    });
+  }
+
+  function ensureMounted() {
+    const step = document.querySelector(STEP_SEL);
+    const mount = document.querySelector(RECO_MOUNT_SEL);
+    if (!step || !mount) return;
+
+    // mount once, above #kh-reco
+    if (!step.querySelector('.kh-brands')) {
+      state.preferredBrands = load();
+      const bar = createChipBar();
+      mount.parentNode.insertBefore(bar, mount);
+      sync(bar);
+    }
+  }
+
+  // 1) Run once on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ensureMounted, { once: true });
+  } else {
+    ensureMounted();
+  }
+
+  // 2) If your wizard toggles visibility via "hidden" attribute, react to mutations
+  const host = document.querySelector(STEP_SEL)?.parentElement || document.body;
+  const mo = new MutationObserver(() => ensureMounted());
+  mo.observe(host, { attributes: true, childList: true, subtree: true });
+})();
