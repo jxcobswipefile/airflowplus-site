@@ -7,7 +7,19 @@
 
   // ----------------------- Namespace + shared utils -----------------------
   const AFP = (window.AFP = window.AFP || {});
-  AFP.ROOT_BASE = AFP.ROOT_BASE || "/airflowplus-site/";
+  
+  // --- KH brand-swap normalization helper (idempotent) -----------------
+  AFP.normalizeSlug = AFP.normalizeSlug || (function() {
+    const sane = (s) => String(s||"").trim().toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9\-]+/g,"").replace(/\-+/g,"-");
+    return function({ brand, family, kw }) {
+      brand = sane(brand);
+      family = sane(family);
+      kw = String(kw||"").replace(/[^\d]/g,"");
+      if (!brand || !family || !kw) return "";
+      return `${brand}-${family}-${kw}kw`;
+    };
+  })();
+AFP.ROOT_BASE = AFP.ROOT_BASE || "/airflowplus-site/";
 
   const $  = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -1604,3 +1616,37 @@ run();
     }
   }
 })();
+
+
+/* === KH brand-swap post-processor (safety) =============================
+   Normalizes CTA href + data-variant-slug using AFP.normalizeSlug
+====================================================================== */
+(function(){
+  const BASE = ((window.AFP && AFP.ROOT_BASE) || "/airflowplus-site").replace(/\/+$/,"");
+  const card = document.querySelector("#kh-reco");
+  if (!card) return;
+  const cta = card.querySelector("a[href*='/products/']");
+  if (!cta) return;
+
+  let href = cta.getAttribute("href") || "";
+  let m = href.match(/\/products\/([^\/]+)\.html/i);
+  let slug = m ? m[1] : "";
+  if (!slug || /^\-/.test(slug)) {
+    const tEl = card.querySelector(".kh-reco-title, h3, h2");
+    const t = (tEl && tEl.textContent || "").trim();
+    const tm = t.match(/^\s*([A-Za-z]+)[^\w]+([A-Za-z0-9\-\s]+)[^\d]+(\d+(?:\.\d+)?)\s*kW/i);
+    if (tm) {
+      const brand = tm[1];
+      let family = tm[2].toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9\-]+/g,"").replace(/\-+/g,"-");
+      family = family.replace(/revive\-plus.*/, "revive-plus").replace(/comfora.*/, "comfora").replace(/etherea.*/, "etherea").replace(/tz.*/, "tz").replace(/perfera.*/, "perfera");
+      const kwInt = String(Math.round(parseFloat(tm[3])*10)/10).replace(/\D/g,"");
+      const out = AFP.normalizeSlug({ brand, family, kw: kwInt });
+      if (out) slug = out;
+    }
+  }
+  if (!slug) return;
+  const abs = (BASE + "/products/" + slug + ".html").replace(/\/{2,}/g, "/");
+  if (cta.getAttribute("href") !== abs) cta.setAttribute("href", abs);
+  if (card.getAttribute("data-variant-slug") !== slug) card.setAttribute("data-variant-slug", slug);
+})();
+
