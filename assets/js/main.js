@@ -7,19 +7,7 @@
 
   // ----------------------- Namespace + shared utils -----------------------
   const AFP = (window.AFP = window.AFP || {});
-  
-  // --- KH brand-swap normalization helper (idempotent) -----------------
-  AFP.normalizeSlug = AFP.normalizeSlug || (function() {
-    const sane = (s) => String(s||"").trim().toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9\-]+/g,"").replace(/\-+/g,"-");
-    return function({ brand, family, kw }) {
-      brand = sane(brand);
-      family = sane(family);
-      kw = String(kw||"").replace(/[^\d]/g,"");
-      if (!brand || !family || !kw) return "";
-      return `${brand}-${family}-${kw}kw`;
-    };
-  })();
-AFP.ROOT_BASE = AFP.ROOT_BASE || "/airflowplus-site/";
+  AFP.ROOT_BASE = AFP.ROOT_BASE || "/airflowplus-site/";
 
   const $  = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -1618,35 +1606,90 @@ run();
 })();
 
 
-/* === KH brand-swap post-processor (safety) =============================
-   Normalizes CTA href + data-variant-slug using AFP.normalizeSlug
-====================================================================== */
+/* === KH brand controller v2 (stable, preference-aware) ==================
+   Goal: avoid defaulting to Haier; pick brand by user preference or rotate.
+   Families used for equivalents per brand (indoor images available):
+     Panasonic -> tz
+     Daikin    -> comfora
+     Haier     -> revive
+===========================================================================*/
 (function(){
   const BASE = ((window.AFP && AFP.ROOT_BASE) || "/airflowplus-site").replace(/\/+$/,"");
-  const card = document.querySelector("#kh-reco");
-  if (!card) return;
-  const cta = card.querySelector("a[href*='/products/']");
-  if (!cta) return;
+  const brands = ["panasonic","daikin","haier"];
+  const familyFor = { panasonic:"tz", daikin:"comfora", haier:"revive" };
 
-  let href = cta.getAttribute("href") || "";
-  let m = href.match(/\/products\/([^\/]+)\.html/i);
-  let slug = m ? m[1] : "";
-  if (!slug || /^\-/.test(slug)) {
-    const tEl = card.querySelector(".kh-reco-title, h3, h2");
-    const t = (tEl && tEl.textContent || "").trim();
-    const tm = t.match(/^\s*([A-Za-z]+)[^\w]+([A-Za-z0-9\-\s]+)[^\d]+(\d+(?:\.\d+)?)\s*kW/i);
-    if (tm) {
-      const brand = tm[1];
-      let family = tm[2].toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9\-]+/g,"").replace(/\-+/g,"-");
-      family = family.replace(/revive\-plus.*/, "revive-plus").replace(/comfora.*/, "comfora").replace(/etherea.*/, "etherea").replace(/tz.*/, "tz").replace(/perfera.*/, "perfera");
-      const kwInt = String(Math.round(parseFloat(tm[3])*10)/10).replace(/\D/g,"");
-      const out = AFP.normalizeSlug({ brand, family, kw: kwInt });
-      if (out) slug = out;
-    }
+  function parseSlug(slug) {
+    slug = String(slug||"").toLowerCase();
+    const m = slug.match(/^([a-z0-9]+)-([a-z0-9\-]+)-(\d+)kw$/);
+    if (!m) return null;
+    return { brand:m[1], family:m[2], kw:m[3] };
   }
-  if (!slug) return;
-  const abs = (BASE + "/products/" + slug + ".html").replace(/\/{2,}/g, "/");
-  if (cta.getAttribute("href") !== abs) cta.setAttribute("href", abs);
-  if (card.getAttribute("data-variant-slug") !== slug) card.setAttribute("data-variant-slug", slug);
+
+  function pickBrand() {
+    // 1) User preference chips stored as CSV in sessionStorage['khPreferredBrands']
+    try {
+      const raw = sessionStorage.getItem('khPreferredBrands') || "";
+      const prefs = raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+      for (const p of prefs) if (brands.includes(p)) return p;
+    } catch {}
+    // 2) Rotate among brands
+    try {
+      let i = parseInt(sessionStorage.getItem('khBrandIndex')||"0",10);
+      if (isNaN(i) || i<0 || i>=brands.length) i = 0;
+      const b = brands[i];
+      sessionStorage.setItem('khBrandIndex', String((i+1)%brands.length));
+      return b;
+    } catch { return "panasonic"; }
+  }
+
+  function swapIfNeeded() {
+    const card = document.querySelector("#kh-reco");
+    if (!card || card.__khBrandSwapDone) return;
+
+    const cta = card.querySelector("a[href*='/products/']");
+    if (!cta) return;
+
+    const m = (cta.getAttribute("href")||"").match(/\/products\/([^\/]+)\.html/i);
+    if (!m) return;
+    const cur = parseSlug(m[1]);
+    if (!cur) return;
+
+    const want = pickBrand();
+    if (cur.brand === want) { card.__khBrandSwapDone = true; return; }
+
+    const fam = familyFor[want] || cur.family;
+    const slug = `${want}-${fam}-${cur.kw}kw`;
+
+    const abs = (BASE + "/products/" + slug + ".html").replace(/\/{2,}/g,"/");
+    cta.setAttribute("href", abs);
+    card.setAttribute("data-variant-slug", slug);
+
+    // Update visible title if present (e.g., "Panasonic TZ — 3.5 kW")
+    const titleEl = card.querySelector(".kh-reco-title, h3, h2");
+    if (titleEl) {
+      const kwText = (cur.kw.length===2 ? (parseInt(cur.kw,10)/10).toFixed(1) : cur.kw);
+      const brandTitle = want.charAt(0).toUpperCase()+want.slice(1);
+      const famTitle = fam.split("-").map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(" ");
+      titleEl.textContent = `${brandTitle} ${famTitle} — ${kwText.replace(/\.0$/,"")} kW`;
+    }
+    card.__khBrandSwapDone = true;
+  }
+
+  // Run on DOM ready + after KH step 3 render (observer on #kh-reco attributes only)
+  function attach() {
+    swapIfNeeded();
+    const host = document.querySelector("#kh-reco");
+    if (!host) return;
+    const mo = new MutationObserver((muts)=>{
+      for (const m of muts) if (m.type==="attributes") { swapIfNeeded(); return; }
+    });
+    mo.observe(host, { attributes:true, subtree:true, attributeFilter:["href","data-variant-slug"] });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", attach, { once:true });
+  } else {
+    attach();
+  }
 })();
 
