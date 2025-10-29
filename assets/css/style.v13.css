@@ -3173,3 +3173,21 @@ body:not(.home) .hero { border-bottom: 0 !important; box-shadow: none !important
 
 /* 7) Keep the footer from creeping up on short content */
 body:not(.home) .khv2-stage { min-height: 60vh; }
+
+/* --- Patch: Prijzen ▸ Waarom Airflow strip (white card) --- */
+#prijzen-scope #kwaliteit .why-strip{
+  background:#fff;
+  color:#0b0b0f;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:12px;
+  padding:16px 20px;
+  box-shadow:0 12px 28px rgba(0,0,0,.10);
+  margin:14px 0 28px 0;
+}
+#prijzen-scope #kwaliteit .why-strip .trust-ticker{
+  list-style:disc;
+  margin:0 0 0 18px;
+}
+#prijzen-scope #kwaliteit .why-strip .trust-ticker li{
+  margin:6px 0; line-height:1.5;
+}
