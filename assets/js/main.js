@@ -1256,3 +1256,155 @@
   // DevTools helper (optional): run window._khImage() to re-try
   window._khImage = injectImage;
 })();
+
+/* =========================================================
+   v36 — KH: Brand diversification after recommendation render
+   - Safe to paste at the end of assets/js/main.js
+   - No HTML edits; no dependency on KH image script internals
+   - Runs only on keuzehulp page when #kh-reco mounts
+   ========================================================= */
+(function KH_BrandDiversification_Main(){
+  if (document.querySelector('[data-kh-step]') == null) return; // not on KH
+
+  const PRODUCT_EQ = {
+    panasonic: {
+      '25kw': { slug: 'panasonic-tz-25kw',  title: 'Panasonic TZ — 2.5 kW' },
+      '35kw': { slug: 'panasonic-tz-35kw',  title: 'Panasonic TZ — 3.5 kW' },
+      '50kw': { slug: 'panasonic-tz-50kw',  title: 'Panasonic TZ — 5.0 kW' },
+    },
+    daikin: {
+      '25kw': { slug: 'daikin-comfora-25kw', title: 'Daikin Comfora — 2.5 kW' },
+      '35kw': { slug: 'daikin-comfora-35kw', title: 'Daikin Comfora — 3.5 kW' },
+      '50kw': { slug: 'daikin-comfora-50kw', title: 'Daikin Comfora — 5.0 kW' },
+    },
+    haier: {
+      '25kw': { slug: 'haier-revive-plus-25kw', title: 'Haier Revive Plus — 2.5 kW' },
+      '35kw': { slug: 'haier-revive-plus-35kw', title: 'Haier Revive Plus — 3.5 kW' },
+      '50kw': { slug: 'haier-revive-plus-50kw', title: 'Haier Revive Plus — 5.0 kW' },
+    }
+  };
+
+  // --- helpers
+  const brandFromSlug = (slug='')=>{
+    slug = slug.toLowerCase();
+    if (slug.startsWith('daikin-')) return 'daikin';
+    if (slug.startsWith('panasonic-')) return 'panasonic';
+    if (slug.startsWith('haier-')) return 'haier';
+    return '';
+  };
+  const capacityKeyFrom = (s='')=>{
+    s = s.toLowerCase();
+    let m = s.match(/-(25|35|50)\s*kw/);
+    if (m) return `${m[1]}kw`;
+    m = s.match(/(\b2\.5|\b3\.5|\b5\.0)\s*kW/i);
+    if (m) return m[1].replace('.','') + 'kw';
+    return null;
+  };
+  const currentSlugFromCard = (card)=>{
+    const img = card.querySelector('.kh-reco-media img');
+    if (img?.src){
+      const mm = img.src.match(/assets\/img\/products\/([^/]+)\/hero\.jpg/i);
+      if (mm) return mm[1];
+    }
+    const cta = card.querySelector('a[href*="/products/"]');
+    if (cta){
+      const mm = cta.getAttribute('href').match(/products\/([^\.]+)\.html/i);
+      if (mm) return mm[1];
+    }
+    return '';
+  };
+
+  // Heuristics — tweak to match your stored keys if you have them
+  const getBudgetTier = ()=>{
+    try {
+      const v = (sessionStorage.getItem('khBudget')||'').toLowerCase();
+      if (/laag|low|budget/.test(v)) return 'low';
+      if (/hoog|high|premium|design/.test(v)) return 'high';
+      return v ? 'mid' : null;
+    } catch { return null; }
+  };
+  const wantsDesign   = ()=> { try { return /design|emura/i.test(sessionStorage.getItem('khPriority')||''); } catch { return false; } };
+  const wantsLowNoise = ()=> { try { return /stil|quiet|low\s*noise/i.test(sessionStorage.getItem('khPriority')||''); } catch { return false; } };
+
+  const chooseBrandByHints = ()=>{
+    const budget = getBudgetTier();
+    if (wantsDesign())   return 'daikin';
+    if (wantsLowNoise()) return 'panasonic';
+    if (budget === 'low')  return 'haier';
+    if (budget === 'high') return 'daikin';
+    return null;
+  };
+
+  // Round-robin fallback so we don’t always pick the same brand
+  const rrBrand = ()=>{
+    const order = ['daikin','panasonic','haier'];
+    let i = 0;
+    try { i = Number(sessionStorage.getItem('khBrandRR')||'0')||0; } catch {}
+    const b = order[i % order.length];
+    try { sessionStorage.setItem('khBrandRR', String((i+1)%order.length)); } catch {}
+    return b;
+  };
+
+  const swapTo = (card, brand, capKey)=>{
+    const cfg = PRODUCT_EQ[brand]?.[capKey];
+    if (!cfg) return false;
+
+    const newSlug = cfg.slug;
+    const newTitle = cfg.title;
+    const imgPath  = `assets/img/products/${newSlug}/hero.jpg`;
+    const pageHref = `/airflowplus-site/products/${newSlug}.html`;
+
+    const titleEl = card.querySelector('.kh-reco-body h4, .kh-reco-body .title, .kh-reco-title, h4');
+    if (titleEl) titleEl.textContent = newTitle;
+
+    const img = card.querySelector('.kh-reco-media img');
+    if (img) { img.src = imgPath; img.alt = newTitle; img.loading='lazy'; img.decoding='async'; }
+
+    const cta = card.querySelector('a[href*="/products/"]');
+    if (cta) cta.setAttribute('href', pageHref);
+
+    return true;
+  };
+
+  const diversify = (card)=>{
+    const slug   = currentSlugFromCard(card);
+    const capKey = capacityKeyFrom(slug || card.textContent || '');
+    if (!capKey) return;
+
+    const currentBrand = brandFromSlug(slug) || '';
+    const hinted = chooseBrandByHints();
+
+    if (hinted && hinted !== currentBrand && PRODUCT_EQ[hinted]?.[capKey]) {
+      swapTo(card, hinted, capKey);
+      return;
+    }
+    const next = rrBrand();
+    if (next && next !== currentBrand && PRODUCT_EQ[next]?.[capKey]) {
+      swapTo(card, next, capKey);
+    }
+  };
+
+  // Wait for the recommendation card your other script renders/enhances
+  const mount = document.querySelector('#kh-reco, .kh-reco-card');
+  if (!mount) return;
+
+  let ranOnce = false;
+  const run = ()=>{
+    const card = document.querySelector('.kh-reco--withimg, .kh-reco-card');
+    if (!card) return;
+    diversify(card);
+    // prevent thrashing (still safe if recommendation re-renders)
+    if (!ranOnce) ranOnce = true;
+  };
+
+  // Observe changes under the mount (plays nice with existing MutationObserver)
+  const mo = new MutationObserver(run);
+  mo.observe(mount, { childList:true, subtree:true });
+
+  // Also try once on load (in case rendered synchronously)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run, { once:true });
+  } else {
+    run();
+  }
+})();
