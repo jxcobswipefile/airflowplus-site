@@ -1568,9 +1568,19 @@
       if (card) diversify(card);
     };
     // observe mutations inside the mount
-    const mo = new MutationObserver(run);
-    mo.observe(mount, { childList:true, subtree:true });
+    let busy = false;
+const mo = new MutationObserver(() => {
+  if (busy) return;
+  busy = true;
+  requestAnimationFrame(() => {
     run();
+    // let the DOM settle before re-allowing
+    setTimeout(() => busy = false, 100);
+  });
+});
+mo.observe(mount, { childList:true, subtree:true });
+run();
+
   }
 
   function waitForMount(){
