@@ -617,6 +617,48 @@
     return pool[0] || list[0];
   };
 
+/* KH – prefer user/rotating brand for the same capacity (append-only wrapper) */
+(function KH_PickVariantBiasFix(){
+  if (!window.AFP || typeof AFP.pickVariantByArea !== 'function') return;
+  const ORIGINAL = AFP.pickVariantByArea;
+
+  const byBrand = {
+    Panasonic: { '2.5': 'panasonic-tz-25kw',  '3.5': 'panasonic-tz-35kw',  '5': 'panasonic-tz-50kw' },
+    Daikin:    { '2.5': 'daikin-comfora-25kw','3.5': 'daikin-comfora-35kw','5': 'daikin-comfora-50kw' },
+    Haier:     { '2.5': 'haier-revive-plus-25kw','3.5':'haier-revive-plus-35kw','5':'haier-revive-plus-50kw' }
+  };
+
+  function preferredBrands(){
+    try { return JSON.parse(sessionStorage.getItem('khPreferredBrands') || '[]'); }
+    catch { return []; }
+  }
+  function rrBrand(){
+    const order = ['Daikin','Panasonic','Haier'];
+    let i = 0; try { i = Number(sessionStorage.getItem('khBrandRR2')||'0')||0; } catch {}
+    const b = order[i % order.length];
+    try { sessionStorage.setItem('khBrandRR2', String((i+1)%order.length)); } catch {}
+    return b;
+  }
+
+  AFP.pickVariantByArea = function wrapped(totalRooms, avgRoomM2, preferQuiet){
+    const rec = ORIGINAL(totalRooms, avgRoomM2, preferQuiet);
+    if (!rec) return rec;
+
+    // if user has preferences, try them first; otherwise round-robin
+    const prefs = preferredBrands();
+    const brandOrder = (prefs.length ? prefs.map(s=>s.charAt(0).toUpperCase()+s.slice(1)) : [rrBrand()]);
+
+    const cap = String(rec.kw || rec.cap || '').replace(/\.0$/,''); // "2.5" | "3.5" | "5"
+    for (const Brand of brandOrder){
+      const slugKey = byBrand[Brand]?.[cap];
+      if (!slugKey) continue;
+      const match = (AFP.VARS || []).find(v => (v.slug||'').includes(slugKey));
+      if (match) return match;
+    }
+    return rec; // fallback to original
+  };
+})();
+
   // --------------------------- Keuzehulp v2 wizard ------------------------
   onReady(() => {
     const card = $(".khv2-card");
@@ -1406,5 +1448,148 @@
     document.addEventListener('DOMContentLoaded', run, { once:true });
   } else {
     run();
+  }
+})();
+
+/* =========================================================
+   KH – ensure brand diversification runs when #kh-reco appears
+   (append-only shim; safe even if other observers exist)
+   ========================================================= */
+(function KH_WaitForRecoAndDiversify(){
+  // Map of brand ↔ equivalent slugs by capacity
+  const PRODUCT_BY_BRAND = {
+    panasonic: {
+      '25kw': { slug: 'panasonic-tz-25kw',  title: 'Panasonic TZ — 2.5 kW' },
+      '35kw': { slug: 'panasonic-tz-35kw',  title: 'Panasonic TZ — 3.5 kW' },
+      '50kw': { slug: 'panasonic-tz-50kw',  title: 'Panasonic TZ — 5.0 kW' },
+    },
+    daikin: {
+      '25kw': { slug: 'daikin-comfora-25kw', title: 'Daikin Comfora — 2.5 kW' },
+      '35kw': { slug: 'daikin-comfora-35kw', title: 'Daikin Comfora — 3.5 kW' },
+      '50kw': { slug: 'daikin-comfora-50kw', title: 'Daikin Comfora — 5.0 kW' },
+    },
+    haier: {
+      '25kw': { slug: 'haier-revive-plus-25kw', title: 'Haier Revive Plus — 2.5 kW' },
+      '35kw': { slug: 'haier-revive-plus-35kw', title: 'Haier Revive Plus — 3.5 kW' },
+      '50kw': { slug: 'haier-revive-plus-50kw', title: 'Haier Revive Plus — 5.0 kW' },
+    }
+  };
+
+  function brandFromSlug(slug=''){
+    slug = slug.toLowerCase();
+    if (slug.startsWith('daikin-')) return 'daikin';
+    if (slug.startsWith('panasonic-')) return 'panasonic';
+    if (slug.startsWith('haier-')) return 'haier';
+    return '';
+  }
+  function capKeyFromSlug(s=''){
+    const m = s.toLowerCase().match(/-(25|35|50)\s*kw/);
+    return m ? `${m[1]}kw` : null;
+  }
+  function currentSlugFromCard(card){
+    const img = card.querySelector('.kh-reco-media img');
+    if (img?.src){
+      const mm = img.src.match(/assets\/img\/products\/([^/]+)\/hero\.jpg/i);
+      if (mm) return mm[1];
+    }
+    const cta = card.querySelector('a[href*="/products/"]');
+    if (cta){
+      const mm = cta.getAttribute('href')?.match(/products\/([^\.]+)\.html/i);
+      if (mm) return mm[1];
+    }
+    return '';
+  }
+
+  // Use user-selected brand chips if present; otherwise round-robin
+  function preferredBrands(){
+    try { return JSON.parse(sessionStorage.getItem('khPreferredBrands') || '[]'); }
+    catch { return []; }
+  }
+  function rrBrand(exclude){
+    const order = ['daikin','panasonic','haier'];
+    let i = 0; try { i = Number(sessionStorage.getItem('khBrandRR')||'0')||0; } catch {}
+    // pick first that isn't the excluded current brand
+    for (let n=0;n<order.length;n++){
+      const b = order[(i+n)%order.length];
+      if (b !== exclude) {
+        try { sessionStorage.setItem('khBrandRR', String((i+n+1)%order.length)); } catch {}
+        return b;
+      }
+    }
+    return exclude || 'panasonic';
+  }
+
+  function swap(card, brand, capKey){
+    const cfg = PRODUCT_BY_BRAND[brand]?.[capKey];
+    if (!cfg) return false;
+    const newSlug = cfg.slug;
+    const newTitle = cfg.title;
+    const imgPath  = `assets/img/products/${newSlug}/hero.jpg`;
+    const pageHref = `/airflowplus-site/products/${newSlug}.html`;
+
+    const titleEl = card.querySelector('.kh-reco-body h3, .kh-reco-body h4, .kh-reco-title, h3, h4');
+    if (titleEl) titleEl.textContent = newTitle;
+
+    const img = card.querySelector('.kh-reco-media img');
+    if (img) { img.src = imgPath; img.alt = newTitle; img.loading='lazy'; img.decoding='async'; }
+
+    const cta = card.querySelector('a[href*="/products/"]');
+    if (cta) cta.setAttribute('href', pageHref);
+    return true;
+  }
+
+  function diversify(card){
+    const slug = currentSlugFromCard(card);
+    if (!slug) return;
+    const cap  = capKeyFromSlug(slug);
+    if (!cap)  return;
+
+    const current = brandFromSlug(slug);
+    const prefs = preferredBrands();
+
+    // 1) honor explicit preferences
+    for (const b of prefs){
+      if (b !== current && PRODUCT_BY_BRAND[b]?.[cap]) {
+        swap(card, b, cap);
+        return;
+      }
+    }
+    // 2) otherwise rotate brands to avoid "always Panasonic"
+    const target = rrBrand(current);
+    if (target !== current && PRODUCT_BY_BRAND[target]?.[cap]) {
+      swap(card, target, cap);
+    }
+  }
+
+  function attachToMount(mount){
+    // run whenever content inside #kh-reco changes
+    const run = ()=> {
+      const card = mount.querySelector('.kh-reco--withimg, .kh-reco-card, .kh-reco-main') || mount;
+      if (card) diversify(card);
+    };
+    // observe mutations inside the mount
+    const mo = new MutationObserver(run);
+    mo.observe(mount, { childList:true, subtree:true });
+    run();
+  }
+
+  function waitForMount(){
+    const existing = document.querySelector('#kh-reco');
+    if (existing) { attachToMount(existing); return; }
+
+    const bodyMO = new MutationObserver(() => {
+      const el = document.querySelector('#kh-reco');
+      if (el) { bodyMO.disconnect(); attachToMount(el); }
+    });
+    bodyMO.observe(document.body, { childList:true, subtree:true });
+  }
+
+  // Only on KH screens
+  if (document.querySelector('[data-kh-step]')) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', waitForMount, { once:true });
+    } else {
+      waitForMount();
+    }
   }
 })();
