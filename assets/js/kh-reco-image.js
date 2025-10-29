@@ -1,10 +1,6 @@
 
 /* ======================================================================
-   Airflow+ — KH Indoor Image Replace-In-Place (v38.6)
-   - Remove any previously injected .kh-reco-media (big image)
-   - Find existing card image and replace its src with indoor-only file
-   - No probes, no fallbacks, no layout changes
-   - Triggers only when brand+family changes
+   Airflow+ — KH Indoor Image Swap (v38.7 crash-safe)
    ---------------------------------------------------------------------- */
 (() => {
   "use strict";
@@ -37,80 +33,101 @@
     return { brand:"", family:"" };
   }
 
-  function buildIndoorUrl(brand, family) {
+  function indoorUrl(brand, family) {
     if (!brand || !family) return "";
-    const filename = `${brand} ${family} indoor.jpg`; // exactly this format
-    const rel = `assets/indoor units kh/${filename}`.replace(/ /g,"%20");
-    return `${BASE}/${rel}`.replace(/\/{2,}/g,"/");
+    const filename = `${brand} ${family} indoor.jpg`;
+    const rel = `assets/indoor units kh/${filename}`.replace(/ /g, "%20");
+    return `${BASE}/${rel}`.replace(/\/{2,}/g, "/");
   }
 
-  // Remove any previously injected big image block
-  function cleanupInjected(card) {
-    const media = card.querySelector(".kh-reco-media");
-    if (media && media.dataset.injected === "kh") {
-      media.remove();
-    }
-  }
-
-  // Choose the primary image already inside the card:
-  // - visible
-  // - not tiny icon (min 48x48)
-  // - pick the largest by rendered area
-  function findPrimaryImg(card) {
-    const imgs = Array.from(card.querySelectorAll("img"));
-    let best = null, bestA = 0;
-    for (const img of imgs) {
-      const r = img.getBoundingClientRect();
-      const A = Math.round(r.width * r.height);
-      if (!A || r.width < 48 || r.height < 48) continue;
+  // Find the first suitable existing image in the card (cheap selection)
+  function findThumb(card) {
+    // ignore labels, logos, energy icons, and any previously injected block
+    const cands = card.querySelectorAll("img:not([data-kh-injected='1'])");
+    for (const img of cands) {
       const src = (img.getAttribute("src")||"").toLowerCase();
-      if (/label|icon|energy|logo|outdoor|favicon/.test(src)) continue;
-      if (A > bestA) { bestA = A; best = img; }
+      if (/label|energy|logo|favicon|outdoor/.test(src)) continue;
+      return img;
     }
-    return best;
+    return null;
   }
 
-  function updateOnce(card) {
-    const meta = readBrandFamily(card);
-    const key = meta.brand && meta.family ? `${meta.brand}::${meta.family}` : "";
-    if (!key || key === card.__khIndoorKey) return;
-    card.__khIndoorKey = key;
+  function ensureSmallMedia(card) {
+    let media = card.querySelector(".kh-reco-media[data-kh-injected='1']");
+    if (media) return media;
+    media = document.createElement("div");
+    media.className = "kh-reco-media";
+    media.setAttribute("data-kh-injected","1");
+    media.style.flex = "0 0 120px";
+    media.style.display = "block";
+    media.style.padding = "8px";
+    media.style.borderRadius = "12px";
+    card.insertBefore(media, card.firstChild);
+    return media;
+  }
 
-    // ensure we don't keep our old injected block
-    cleanupInjected(card);
+  function swapToIndoor(card) {
+    const { brand, family } = readBrandFamily(card);
+    const key = brand && family ? `${brand}::${family}` : "";
+    if (!key || key === card.__khSwapKey) return;
+    card.__khSwapKey = key;
 
-    const url = buildIndoorUrl(meta.brand, meta.family);
-    const target = findPrimaryImg(card);
+    const url = indoorUrl(brand, family);
+    if (!url) return;
+
+    const target = findThumb(card);
     if (target) {
-      target.src = url; // replace in place; preserves size/styling
+      // Replace in place
+      target.src = url;
       target.alt = "Binnenunit";
-    } else {
-      // Fallback: create a small, clearly-marked injected media only if none exists
-      const media = document.createElement("div");
-      media.className = "kh-reco-media";
-      media.dataset.injected = "kh";
-      const img = document.createElement("img");
+      return;
+    }
+
+    // If no existing image was found, add a small 120px img once
+    const media = ensureSmallMedia(card);
+    let img = media.querySelector("img");
+    if (!img) {
+      img = document.createElement("img");
       img.alt = "Binnenunit";
       img.loading = "lazy";
       img.decoding = "async";
       img.style.maxWidth = "100%";
       img.style.height = "auto";
-      img.src = url;
       media.appendChild(img);
-      card.insertBefore(media, card.firstChild);
     }
+    img.src = url;
   }
 
   function attach() {
     const card = $("#kh-reco");
     if (!card) return;
-    updateOnce(card);
-    const obs = new MutationObserver(() => updateOnce(card));
-    obs.observe(card, { childList:true, subtree:true, attributes:true, attributeFilter:["href","data-variant-slug"] });
+
+    // Initial
+    swapToIndoor(card);
+
+    // Crash-safe observer: attributes only on subtree; no childList
+    let locked = false;
+    const handle = () => {
+      if (locked) return;
+      locked = true;
+      // debounce via rAF then timeout
+      requestAnimationFrame(() => {
+        try { swapToIndoor(card); } finally {
+          setTimeout(() => { locked = false; }, 120);
+        }
+      });
+    };
+
+    const obs = new MutationObserver((muts) => {
+      for (const m of muts) {
+        if (m.type === "attributes") { handle(); return; }
+      }
+    });
+    obs.observe(card, { attributes: true, subtree: true, attributeFilter: ["href", "data-variant-slug"] });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", attach, { once:true });
+    document.addEventListener("DOMContentLoaded", attach, { once: true });
   } else {
     attach();
   }
