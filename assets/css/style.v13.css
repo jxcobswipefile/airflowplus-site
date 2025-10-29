@@ -3173,3 +3173,87 @@ body:not(.home) .hero { border-bottom: 0 !important; box-shadow: none !important
 
 /* 7) Keep the footer from creeping up on short content */
 body:not(.home) .khv2-stage { min-height: 60vh; }
+
+/* --- Patch: Prijzen ▸ Waarom Airflow strip (white card) --- */
+#prijzen-scope #kwaliteit .why-strip{
+  background:#fff;
+  color:#0b0b0f;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:12px;
+  padding:16px 20px;
+  box-shadow:0 12px 28px rgba(0,0,0,.10);
+  margin:14px 0 28px 0;
+}
+#prijzen-scope #kwaliteit .why-strip .trust-ticker{
+  list-style:disc;
+  margin:0 0 0 18px;
+}
+#prijzen-scope #kwaliteit .why-strip .trust-ticker li{
+  margin:6px 0; line-height:1.5;
+}
+
+/* --- Fix: Prijzen ▸ Waarom Airflow+ (no wrapper present) --- */
+#prijzen-scope #kwaliteit .trust-ticker{
+  background:transparent !important; box-shadow:none !important; border:0 !important;
+  color:#0B0B0F !important; list-style:disc; margin-left:18px; padding:0 !important;
+}
+#prijzen-scope #kwaliteit .trust-ticker li{
+  background:transparent !important; color:#0B0B0F !important; line-height:1.5; margin:6px 0;
+}
+
+/* --- HOME ▸ Services: fix Zakelijk crop (show lower part of the photo) --- */
+/* Preferred: if your markup has a data hook or class on the Zakelijk card */
+body.home .section-services .service-card[data-service="zakelijk"] .media,
+body.home .section-services .service-card.zakelijk .media{
+  background-position:center 72% !important;
+}
+body.home .section-services .service-card[data-service="zakelijk"] .media img,
+body.home .section-services .service-card.zakelijk .media img{
+  object-fit:cover; object-position:center 72%;
+}
+
+/* Fallback #1: target by heading text (browsers that support :has) */
+@supports selector(:has(*)) {
+  body.home .section-services .service-card:has(h3, .title){ /* narrow only when text matches */
+    /* keep empty – next rule narrows to Zakelijk only via attribute value contains */
+  }
+  body.home .section-services .service-card:has(h3[innerText*="Zakelijk"], .title[innerText*="Zakelijk"]) .media{
+    background-position:center 72% !important;
+  }
+}
+
+/* Fallback #2: target by position if Zakelijk is, e.g., the 3rd tile (adjust n accordingly) */
+body.home .section-services .service-grid .service-card:nth-child(3) .media{
+  background-position:center 72% !important;
+}
+body.home .section-services .service-grid .service-card:nth-child(3) .media img{
+  object-fit:cover; object-position:center 72%;
+}
+
+/* --- HOME ▸ Reviews: temporarily show only first 3 until real ones arrive --- */
+body.home [data-reviews] .rev-card:nth-of-type(n+4),
+body.home .reviews .rev-card:nth-of-type(n+4){
+  display:none !important;
+}
+
+/* --- PRIJZEN ▸ Waarom Airflow+ (force black text, remove dark inner bg) --- */
+#prijzen-scope #kwaliteit .why-strip .trust-ticker{
+  background:transparent !important; box-shadow:none !important; border:0 !important;
+  color:#0B0B0F !important; list-style:disc; margin-left:18px; padding:0 !important;
+}
+#prijzen-scope #kwaliteit .why-strip .trust-ticker li{
+  background:transparent !important; color:#0B0B0F !important; line-height:1.5; margin:6px 0;
+}
+/* If you *don’t* have .why-strip wrapper, this fallback still fixes it */
+#prijzen-scope #kwaliteit .trust-ticker{
+  background:transparent !important; color:#0B0B0F !important;
+  box-shadow:none !important; border:0 !important; list-style:disc; margin-left:18px; padding:0 !important;
+}
+#prijzen-scope #kwaliteit .trust-ticker li{ color:#0B0B0F !important; }
+
+
+/* Home services — show lower portion of the photo */
+body.home .section-services .service-card .media img{
+  object-fit:cover; object-position:center 70%;
+}
+
