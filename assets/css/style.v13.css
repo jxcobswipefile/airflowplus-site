@@ -4358,3 +4358,68 @@ section.promo.promo--emura-only .promo__bullets li {
   .promo__unit img{ width: 100%; height: 180px; }
   .promo__logo{ height: 48px; }
 }
+
+/* =========================================================
+   MOBILE-ONLY PATCH — Promo (Emura) Responsiveness
+   ========================================================= */
+@media (max-width: 980px) {
+  /* Stack left + right columns */
+  .promo--emura-only .promo__grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  /* Header behaves normally again */
+  .promo--emura-only .promo__head {
+    position: static;
+    margin-bottom: 0.5rem;
+    text-align: left;
+  }
+
+  /* Tighten spacing */
+  .promo--emura-only {
+    padding: 24px 0 28px;
+  }
+
+  /* Adjust text & button spacing */
+  .promo--emura-only .promo__left p,
+  .promo--emura-only .promo__bullets li {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .promo--emura-only .promo__cta {
+    justify-content: center;
+  }
+
+  /* Center the images + logo vertically in a smaller column */
+  .promo--emura-only .promo__right {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Resize unit image and logo for small screens */
+  .promo--emura-only .promo__unit img {
+    height: 180px;
+    width: auto;
+  }
+  .promo--emura-only .promo__logo-wrap {
+    padding: 10px 14px;
+  }
+  .promo--emura-only .promo__logo {
+    height: 48px;
+  }
+}
+
+/* Ultra-small phones */
+@media (max-width: 600px) {
+  .promo--emura-only .promo__unit img {
+    height: 150px;
+  }
+  .promo--emura-only .promo__logo {
+    height: 42px;
+  }
+}
