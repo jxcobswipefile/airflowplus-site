@@ -1,4 +1,3 @@
-
 /* ======================================================================
    Airflow+ — Main JS (namespaced & idempotent)
    ====================================================================== */ 
@@ -8,6 +7,9 @@
   // ----------------------- Namespace + shared utils -----------------------
   const AFP = (window.AFP = window.AFP || {});
   AFP.ROOT_BASE = AFP.ROOT_BASE || "/airflowplus-site/";
+
+  // ---- NEW: global guard so legacy KH injectors/safetynet won’t run ----
+  window.__KH_IMAGE_INJECTOR_ACTIVE__ = true;
 
   const $  = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -25,7 +27,7 @@
   AFP.ITEMS = AFP.ITEMS || [
     { slug: "panasonic-tz",          name: "Panasonic TZ",          img: "assets/indoor units kh/panasonic tz indoor.jpg",          url: "products/panasonic-tz.html",          cool_area_m2: 25 },
     { slug: "daikin-comfora",        name: "Daikin Comfora",        img: "assets/indoor units kh/daikin comfora indoor.jpg",        url: "products/daikin-comfora.html",        cool_area_m2: 25 },
-    { slug: "haier-revive-plus",     name: "Haier Revive Plus",     img: "assets/indoor units kh/haier revive indoor.jpg",     url: "products/haier-revive-plus.html",     cool_area_m2: 25 },
+    { slug: "haier-revive-plus",     name: "Haier Revive Plus",     img: "assets/indoor units kh/haier revive indoor.jpg",          url: "products/haier-revive-plus.html",     cool_area_m2: 25 },
     { slug: "daikin-perfera",        name: "Daikin Perfera",        img: "assets/indoor units kh/daikin perfera indoor.jpg",        url: "products/daikin-perfera.html",        cool_area_m2: 25 },
     { slug: "panasonic-etherea",     name: "Panasonic Etherea",     img: "assets/indoor units kh/panasonic etherea indoor.jpg",     url: "products/panasonic-etherea.html",     cool_area_m2: 25 },
     { slug: "haier-expert",          name: "Haier Expert",          img: "assets/indoor units kh/haier expert indoor.jpg",          url: "products/haier-expert.html",          cool_area_m2: 26 },
@@ -116,9 +118,7 @@
     });
 
     // drag
-    let down = false,
-      sx = 0,
-      sl = 0;
+    let down = false, sx = 0, sl = 0;
     track.addEventListener("mousedown", (e) => {
       down = true;
       sx = e.pageX;
@@ -136,27 +136,18 @@
     });
 
     // touch
-    let tx = 0,
-      tl = 0;
-    track.addEventListener(
-      "touchstart",
-      (e) => {
-        const t = e.touches?.[0];
-        if (!t) return;
-        tx = t.pageX;
-        tl = track.scrollLeft;
-      },
-      { passive: true }
-    );
-    track.addEventListener(
-      "touchmove",
-      (e) => {
-        const t = e.touches?.[0];
-        if (!t) return;
-        track.scrollLeft = tl - (t.pageX - tx);
-      },
-      { passive: true }
-    );
+    let tx = 0, tl = 0;
+    track.addEventListener("touchstart", (e) => {
+      const t = e.touches?.[0];
+      if (!t) return;
+      tx = t.pageX;
+      tl = track.scrollLeft;
+    }, { passive: true });
+    track.addEventListener("touchmove", (e) => {
+      const t = e.touches?.[0];
+      if (!t) return;
+      track.scrollLeft = tl - (t.pageX - tx);
+    }, { passive: true });
 
     start();
   });
@@ -232,31 +223,24 @@
     let profile = profileSel?.value || "mixed";
 
     const clamp = (v) => {
-      const min = +range.min || 50,
-        max = +range.max || 600,
-        step = +range.step || 5;
+      const min = +range.min || 50, max = +range.max || 600, step = +range.step || 5;
       v = Math.round((+v || min) / step) * step;
       return Math.min(max, Math.max(min, v));
     };
 
     function positionBubble() {
-      const min = +range.min || 50,
-        max = +range.max || 600,
-        v = +range.value || min;
+      const min = +range.min || 50, max = +range.max || 600, v = +range.value || min;
       const pct = (v - min) / (max - min);
       const trackRect = range.getBoundingClientRect();
       const wrapRect = wrap.getBoundingClientRect();
-      const w = bubble.offsetWidth || 48,
-        half = w / 2;
+      const w = bubble.offsetWidth || 48, half = w / 2;
       const x = Math.min(trackRect.width - half, Math.max(half, pct * trackRect.width));
       bubble.style.left = trackRect.left - wrapRect.left + x + "px";
       bubble.textContent = fmtEUR.format(v);
     }
 
     function writeTicks() {
-      const min = +range.min || 50,
-        max = +range.max || 600,
-        step = +range.step || 5;
+      const min = +range.min || 50, max = +range.max || 600, step = +range.step || 5;
       const mid = Math.round((min + max) / 2 / step) * step;
       ticks.innerHTML = `<span>€${min.toLocaleString("nl-NL")}</span><span>€${mid.toLocaleString("nl-NL")}</span><span>€${max.toLocaleString("nl-NL")}</span>`;
       ticks.style.width = range.getBoundingClientRect().width + "px";
@@ -617,48 +601,6 @@
     return pool[0] || list[0];
   };
 
-/* KH – prefer user/rotating brand for the same capacity (append-only wrapper) */
-(function KH_PickVariantBiasFix(){
-  if (!window.AFP || typeof AFP.pickVariantByArea !== 'function') return;
-  const ORIGINAL = AFP.pickVariantByArea;
-
-  const byBrand = {
-    Panasonic: { '2.5': 'panasonic-tz-25kw',  '3.5': 'panasonic-tz-35kw',  '5': 'panasonic-tz-50kw' },
-    Daikin:    { '2.5': 'daikin-comfora-25kw','3.5': 'daikin-comfora-35kw','5': 'daikin-comfora-50kw' },
-    Haier:     { '2.5': 'haier-revive-plus-25kw','3.5':'haier-revive-plus-35kw','5':'haier-revive-plus-50kw' }
-  };
-
-  function preferredBrands(){
-    try { return JSON.parse(sessionStorage.getItem('khPreferredBrands') || '[]'); }
-    catch { return []; }
-  }
-  function rrBrand(){
-    const order = ['Daikin','Panasonic','Haier'];
-    let i = 0; try { i = Number(sessionStorage.getItem('khBrandRR2')||'0')||0; } catch {}
-    const b = order[i % order.length];
-    try { sessionStorage.setItem('khBrandRR2', String((i+1)%order.length)); } catch {}
-    return b;
-  }
-
-  AFP.pickVariantByArea = function wrapped(totalRooms, avgRoomM2, preferQuiet){
-    const rec = ORIGINAL(totalRooms, avgRoomM2, preferQuiet);
-    if (!rec) return rec;
-
-    // if user has preferences, try them first; otherwise round-robin
-    const prefs = preferredBrands();
-    const brandOrder = (prefs.length ? prefs.map(s=>s.charAt(0).toUpperCase()+s.slice(1)) : [rrBrand()]);
-
-    const cap = String(rec.kw || rec.cap || '').replace(/\.0$/,''); // "2.5" | "3.5" | "5"
-    for (const Brand of brandOrder){
-      const slugKey = byBrand[Brand]?.[cap];
-      if (!slugKey) continue;
-      const match = (AFP.VARS || []).find(v => (v.slug||'').includes(slugKey));
-      if (match) return match;
-    }
-    return rec; // fallback to original
-  };
-})();
-
   // --------------------------- Keuzehulp v2 wizard ------------------------
   onReady(() => {
     const card = $(".khv2-card");
@@ -768,8 +710,7 @@
       txt = String(txt).replace(/\s/g, "").replace("m²", "").replace("m2", "").replace(",", ".");
       const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
       if (m) {
-        const a = parseFloat(m[1]),
-          b = parseFloat(m[2]);
+        const a = parseFloat(m[1]), b = parseFloat(m[2]);
         if (!isNaN(a) && !isNaN(b)) return (a + b) / 2;
       }
       const n = parseFloat(txt);
@@ -796,7 +737,7 @@
         `<div class="kh-reco-card">
            <div class="kh-reco-main">
              <div class="kh-reco-body">
-               <h3>${rec.name || "Aanbevolen model"}</h3>
+               <h3 class="kh-reco-title">${rec.name || "Aanbevolen model"}</h3>
                <div class="muted">${priceLine(rec.brand || "")}</div>
                <a class="btn btn-green" style="margin-top:12px" href="${AFP.ROOT_BASE + (rec.slug || "")}">Bekijk aanbeveling</a>
                <p class="muted" style="margin-top:8px">Op basis van ~${Math.round(totalM2)} m².</p>
@@ -912,7 +853,9 @@
 })();
 
 /* === Keuzehulp recommendation safety net (re-renders if missing) ======= */
+/* DISABLED by guard to avoid collisions with the main wizard render */
 (function () {
+  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return; // <-- added
   if (!window.AFP) return;
 
   function midFromRange(txt) {
@@ -947,7 +890,7 @@
         '<div class="kh-reco-card">' +
           '<div class="kh-reco-main">' +
             '<div class="kh-reco-body">' +
-              '<h3>' + (rec.name || 'Aanbevolen model') + '</h3>' +
+              '<h3 class="kh-reco-title">' + (rec.name || 'Aanbevolen model') + '</h3>' +
               '<div class="muted">' + price(rec.brand || '') + '</div>' +
               '<a class="btn btn-green" style="margin-top:12px" href="' + base + (rec.slug || '') + '">Bekijk aanbeveling</a>' +
               '<p class="muted" style="margin-top:8px">Op basis van ~' + Math.round(totalM2) + ' m².</p>' +
@@ -968,7 +911,6 @@
       mount = document.createElement('div');
       mount.id = 'kh-reco';
       mount.style.marginTop = '16px';
-      // Prefer step-3 container if present, else append to card
       (document.querySelector('[data-kh-step="3"]') || card).appendChild(mount);
     }
     if (!mount.innerHTML.trim()) {
@@ -976,7 +918,6 @@
     }
   }
 
-  // Observe step changes
   const card = document.querySelector('.khv2-card');
   if (card) {
     try {
@@ -984,8 +925,6 @@
       mo.observe(card, { attributes: true, attributeFilter: ['data-step'] });
     } catch {}
   }
-
-  // Also try after any obvious "Next" click and on load
   document.addEventListener('click', (e) => {
     if (e.target.closest('#kh-next,.kh-next,[data-kh-next]')) setTimeout(ensureReco, 120);
   }, true);
@@ -994,9 +933,7 @@
   } else {
     setTimeout(ensureReco, 120);
   }
-
-  // Manual helper (handy in console): AFP.forceReco()
-  window.AFP.forceReco = ensureReco;
+  window.AFP && (window.AFP.forceReco = ensureReco);
 })();
 
 /* Place recommendation inside the Step-3 summary box */
@@ -1009,7 +946,6 @@
     }
   }
 
-  // run now and whenever Step 3 activates
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', relocateReco, { once: true });
   } else {
@@ -1023,673 +959,9 @@
   }
 })();
 
-/* === KH recommendation: add product image & nicer layout === */
+/* === Keuzehulp: inject product hero image next to recommendation ========= */
+/* DISABLED: we now use kh-reco-image.js to swap INDOOR images only */
 (function () {
-  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return;
-  // Derive hero image from a slug like "products/panasonic-tz-50kw.html"
-  function productHeroFromSlug(slug) {
-    try {
-      if (!slug) return null;
-      var base = String(slug).split('/')[1] || ''; // "panasonic-tz-50kw.html"
-      var folder = base.split('-').slice(0, 2).join('-'); // "panasonic-tz"
-      // Existing pattern in your repo: assets/img/products/<folder>/hero.jpg
-      return 'assets/img/products/' + folder + '/hero.jpg';
-    } catch (_) { return null; }
-  }
-
-  // keep a reference to the original renderer if you kept it somewhere
-  // otherwise we just re-render after the hotfix put content in #kh-reco
-  function reRenderWithImage() {
-    var mount = document.getElementById('kh-reco');
-    if (!mount) return;
-
-    // Try to read what you just chose
-    var st = (window.state && typeof window.state === 'object') ? window.state : {};
-    var rooms = Math.max(1, st.rooms || 1);
-    var sizes = Array.isArray(st.sizes) ? st.sizes : [];
-    var mids = sizes.map(function (txt) {
-      if (!txt) return 30;
-      txt = String(txt).replace(/\s/g,'').replace('m²','').replace('m2','').replace(',', '.');
-      var m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
-      if (m) { var a = parseFloat(m[1]), b = parseFloat(m[2]); return (a+b)/2; }
-      var n = parseFloat(txt); return isNaN(n) ? 30 : n;
-    });
-    var total = mids.length ? mids.reduce((a,b)=>a+b,0) : 30;
-    var avg = total / rooms;
-
-    if (typeof pickVariantByArea !== 'function') return;
-    var rec = pickVariantByArea(rooms, avg, false);
-    if (!rec) return;
-
-    var img = productHeroFromSlug(rec.slug) || 'assets/img/products/_placeholder.jpg';
-    var base = (typeof ROOT_BASE !== 'undefined' ? ROOT_BASE : '/airflowplus-site/');
-
-    mount.innerHTML =
-      '<div class="kh-reco-card kh-reco--withimg">' +
-        '<div class="kh-reco-media"><img alt="'+ (rec.name||'Airco') +'" src="'+ img +'"></div>' +
-        '<div class="kh-reco-body">' +
-          '<h3>'+ (rec.name || 'Aanbevolen model') +'</h3>' +
-          '<div class="muted">'+ (rec.brand === 'Daikin' ? 'vanaf € 1.800 incl. materiaal en montage' :
-                                  rec.brand === 'Panasonic' ? 'vanaf € 1.600 incl. materiaal en montage' :
-                                  rec.brand === 'Haier' ? 'vanaf € 1.300 incl. materiaal en montage' :
-                                  'Prijs op aanvraag') + '</div>' +
-          '<a class="btn btn-green" style="margin-top:12px" href="'+ base + (rec.slug||'') +'">Bekijk aanbeveling</a>' +
-          '<p class="muted" style="margin-top:8px">Op basis van ~'+ Math.round(total) +' m².</p>' +
-        '</div>' +
-      '</div>';
-  }
-
-  // run whenever Step 3 is visible (same triggers you wired before)
-  var card = document.querySelector('.khv2-card');
-  if (card) {
-    try {
-      new MutationObserver(function () {
-        if (card.getAttribute('data-step') === '3') setTimeout(reRenderWithImage, 80);
-      }).observe(card, { attributes: true, attributeFilter: ['data-step'] });
-    } catch (_) {}
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){ setTimeout(reRenderWithImage, 120); }, { once:true });
-  } else {
-    setTimeout(reRenderWithImage, 120);
-  }
+  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return; // <-- added: kill legacy products/hero.jpg injector
+  // (dead code below intentionally left for future reference)
 })();
-
-/* Replace review names with Dutch placeholders */
-(function () {
-  const dutchNames = [
-    'Sanne V.', 'Daan J.', 'Lotte B.',
-    'Milan V.', 'Noa B.', 'Jasper S.',
-    'Fleur M.', 'Bram G.', 'Iris W.'
-  ];
-
-  // Adjust selectors to your markup:
-  // - container has [data-reviews]
-  // - each card has .rev-card
-  // - the name lives in .rev-name
-  const cards = document.querySelectorAll('[data-reviews] .rev-card');
-  if (!cards.length) return;
-
-  cards.forEach((card, i) => {
-    const nameEl = card.querySelector('.rev-name') || card.querySelector('[data-name]');
-    if (nameEl) nameEl.textContent = dutchNames[i % dutchNames.length];
-  });
-})();
-
-/* Swap all review avatars for the logo */
-(function () {
-  const LOGO = 'assets/img/airflowplus_logo_circle.png'; // <- path to your saved logo
-  const imgs = document.querySelectorAll('[data-reviews] .rev-card img, [data-reviews] .rev-avatar img');
-  imgs.forEach(img => {
-    img.src = LOGO;
-    img.srcset = ''; // prevent srcset from overriding
-    img.alt = 'AirFlow+';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-  });
-})();
-
-/* ========= Keuzehulp: inject product hero image next to recommendation ========= */
-
-(function () {
-  const MOUNT_SEL = '#kh-reco'; // your mount showed this id in the screenshot
-
-  // map titles → folders you showed in assets/img/products/<folder>/hero.jpg
-  const TITLE_MAP = [
-    { test: /panasonic.*etherea.*(2\.5|25)/i, folder: 'panasonic-etherea-25kw' },
-    { test: /panasonic.*etherea/i,            folder: 'panasonic-etherea' },
-    { test: /panasonic.*tz/i,                 folder: 'panasonic-tz' },
-
-    { test: /daikin.*comfora/i,               folder: 'daikin-comfora' },
-    { test: /daikin.*emura.*(2\.5|25)/i,      folder: 'daikin-emura-25kw' },
-    { test: /daikin.*emura/i,                 folder: 'daikin-emura' },
-    { test: /daikin.*perfera/i,               folder: 'daikin-perfera' },
-
-    { test: /haier.*flexis.*(2\.5|25)/i,      folder: 'haier-flexis-25kw' },
-    { test: /haier.*expert/i,                 folder: 'haier-expert' },
-    { test: /haier.*revive.*plus/i,           folder: 'haier-revive-plus' },
-  ];
-
-  // strip known -XXkw suffixes from slugs
-  const stripSize = (s) => s.replace(/-(?:2\.5|25|35|40|45|50|60|70)kw$/i, '');
-
-  // try a list of hero.jpg urls until one exists
-  async function tryHero(paths) {
-    for (const url of paths) {
-      try {
-        const res = await fetch(url, { method: 'HEAD', cache: 'no-store' });
-        if (res.ok) return url;
-      } catch (e) { /* ignore */ }
-    }
-    return null;
-  }
-
-  function getBasePath() {
-    // If site is served under /airflowplus-site/, keep it; else relative is fine.
-    const p = location.pathname;
-    return p.includes('/airflowplus-site') ? '/airflowplus-site' : '';
-  }
-
-  function guessFolderFromTitle(title) {
-    for (const rule of TITLE_MAP) {
-      if (rule.test.test(title)) return rule.folder;
-    }
-    return null;
-  }
-
-  function getRecoRoot() {
-    const mount = document.querySelector(MOUNT_SEL);
-    if (!mount) return null;
-    // The recommendation content is inside the mount. We'll decorate that block.
-    return mount;
-  }
-
-  function getRecoTitleAndLink(root) {
-    // Title (e.g. “Panasonic TZ 3.5 kW”)
-    const h3 = root.querySelector('h3, h2, .kh-reco-title');
-    const title = (h3 && h3.textContent.trim()) || '';
-
-    // The “Bekijk aanbeveling” link or any product link
-    const link = root.querySelector('a[href*="products"]');
-    let slug = '';
-    if (link) {
-      try {
-        const url = new URL(link.href, location.origin);
-        // last path segment without extension
-        const segs = url.pathname.split('/').filter(Boolean);
-        slug = (segs.pop() || '').replace(/\.(html?)$/i, '');
-      } catch (_) { /* ignore */ }
-    }
-    return { title, slug, linkEl: link };
-  }
-
-  function ensureLayout(root) {
-    // If the card already has our layout, bail
-    if (root.querySelector('.kh-reco--withimg')) return root.querySelector('.kh-reco--withimg');
-
-    // Find main body container (the block that holds text). If not obvious, wrap the whole mount.
-    // We'll create: <div class="kh-reco--withimg"><div class="kh-reco-media"></div><div class="kh-reco-body">...</div></div>
-    const bodyCandidate =
-      root.querySelector('.kh-reco-card, .kh-reco-main, .kh-reco-body') || root;
-
-    // Build wrapper
-    const wrapper = document.createElement('div');
-    wrapper.className = 'kh-reco--withimg';
-
-    const media = document.createElement('div');
-    media.className = 'kh-reco-media';
-
-    const body = document.createElement('div');
-    body.className = 'kh-reco-body';
-
-    // Move existing children into body
-    while (bodyCandidate.firstChild) {
-      body.appendChild(bodyCandidate.firstChild);
-    }
-    bodyCandidate.appendChild(wrapper);
-    wrapper.appendChild(media);
-    wrapper.appendChild(body);
-
-    return wrapper;
-  }
-
-  async function injectImage() {
-    const root = getRecoRoot();
-    if (!root) return;
-
-    const { title, slug } = getRecoTitleAndLink(root);
-    if (!title && !slug) return; // nothing to go on yet
-
-    const base = getBasePath();
-
-    // Build candidate folder list
-    const candidates = [];
-
-    if (slug) {
-      candidates.push(slug);
-      const withoutSize = stripSize(slug);
-      if (withoutSize !== slug) candidates.push(withoutSize);
-    }
-
-    const mapped = guessFolderFromTitle(title);
-    if (mapped) candidates.push(mapped);
-
-    // Deduplicate
-    const uniqueFolders = [...new Set(candidates.filter(Boolean))];
-
-    // Build hero.jpg attempt list
-    const urls = uniqueFolders.map(f => `${base}/assets/img/products/${f}/hero.jpg`);
-
-    const found = await tryHero(urls);
-    if (!found) return; // nothing to show; fail silently
-
-    // Ensure layout and inject
-    const layout = ensureLayout(root);
-    const media = layout.querySelector('.kh-reco-media');
-    if (!media) return;
-
-    // Avoid double insert
-    if (media.querySelector('img')) return;
-
-    const img = document.createElement('img');
-    img.alt = title || 'Productfoto';
-    img.src = found;
-    media.appendChild(img);
-  }
-
-  // Observe recommendation mount for changes (wizard updates)
-  const start = () => {
-    const mount = document.querySelector(MOUNT_SEL);
-    if (!mount) return;
-
-    // Run once now
-    injectImage();
-
-    const mo = new MutationObserver(() => injectImage());
-    mo.observe(mount, { childList: true, subtree: true });
-  };
-
-  // Start when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
-  } else {
-    start();
-  }
-
-  // DevTools helper (optional): run window._khImage() to re-try
-  window._khImage = injectImage;
-})();
-
-/* =========================================================
-   v36 — KH: Brand diversification after recommendation render
-   - Safe to paste at the end of assets/js/main.js
-   - No HTML edits; no dependency on KH image script internals
-   - Runs only on keuzehulp page when #kh-reco mounts
-   ========================================================= */
-(function KH_BrandDiversification_Main(){
-  if (document.querySelector('[data-kh-step]') == null) return; // not on KH
-
-  const PRODUCT_EQ = {
-    panasonic: {
-      '25kw': { slug: 'panasonic-tz-25kw',  title: 'Panasonic TZ — 2.5 kW' },
-      '35kw': { slug: 'panasonic-tz-35kw',  title: 'Panasonic TZ — 3.5 kW' },
-      '50kw': { slug: 'panasonic-tz-50kw',  title: 'Panasonic TZ — 5.0 kW' },
-    },
-    daikin: {
-      '25kw': { slug: 'daikin-comfora-25kw', title: 'Daikin Comfora — 2.5 kW' },
-      '35kw': { slug: 'daikin-comfora-35kw', title: 'Daikin Comfora — 3.5 kW' },
-      '50kw': { slug: 'daikin-comfora-50kw', title: 'Daikin Comfora — 5.0 kW' },
-    },
-    haier: {
-      '25kw': { slug: 'haier-revive-plus-25kw', title: 'Haier Revive Plus — 2.5 kW' },
-      '35kw': { slug: 'haier-revive-plus-35kw', title: 'Haier Revive Plus — 3.5 kW' },
-      '50kw': { slug: 'haier-revive-plus-50kw', title: 'Haier Revive Plus — 5.0 kW' },
-    }
-  };
-
-  // --- helpers
-  const brandFromSlug = (slug='')=>{
-    slug = slug.toLowerCase();
-    if (slug.startsWith('daikin-')) return 'daikin';
-    if (slug.startsWith('panasonic-')) return 'panasonic';
-    if (slug.startsWith('haier-')) return 'haier';
-    return '';
-  };
-  const capacityKeyFrom = (s='')=>{
-    s = s.toLowerCase();
-    let m = s.match(/-(25|35|50)\s*kw/);
-    if (m) return `${m[1]}kw`;
-    m = s.match(/(\b2\.5|\b3\.5|\b5\.0)\s*kW/i);
-    if (m) return m[1].replace('.','') + 'kw';
-    return null;
-  };
-  const currentSlugFromCard = (card)=>{
-    const img = card.querySelector('.kh-reco-media img');
-    if (img?.src){
-      const mm = img.src.match(/assets\/img\/products\/([^/]+)\/hero\.jpg/i);
-      if (mm) return mm[1];
-    }
-    const cta = card.querySelector('a[href*="/products/"]');
-    if (cta){
-      const mm = cta.getAttribute('href').match(/products\/([^\.]+)\.html/i);
-      if (mm) return mm[1];
-    }
-    return '';
-  };
-
-  // Heuristics — tweak to match your stored keys if you have them
-  const getBudgetTier = ()=>{
-    try {
-      const v = (sessionStorage.getItem('khBudget')||'').toLowerCase();
-      if (/laag|low|budget/.test(v)) return 'low';
-      if (/hoog|high|premium|design/.test(v)) return 'high';
-      return v ? 'mid' : null;
-    } catch { return null; }
-  };
-  const wantsDesign   = ()=> { try { return /design|emura/i.test(sessionStorage.getItem('khPriority')||''); } catch { return false; } };
-  const wantsLowNoise = ()=> { try { return /stil|quiet|low\s*noise/i.test(sessionStorage.getItem('khPriority')||''); } catch { return false; } };
-
-  const chooseBrandByHints = ()=>{
-    const budget = getBudgetTier();
-    if (wantsDesign())   return 'daikin';
-    if (wantsLowNoise()) return 'panasonic';
-    if (budget === 'low')  return 'haier';
-    if (budget === 'high') return 'daikin';
-    return null;
-  };
-
-  // Round-robin fallback so we don’t always pick the same brand
-  const rrBrand = ()=>{
-    const order = ['daikin','panasonic','haier'];
-    let i = 0;
-    try { i = Number(sessionStorage.getItem('khBrandRR')||'0')||0; } catch {}
-    const b = order[i % order.length];
-    try { sessionStorage.setItem('khBrandRR', String((i+1)%order.length)); } catch {}
-    return b;
-  };
-
-  const swapTo = (card, brand, capKey)=>{
-    const cfg = PRODUCT_EQ[brand]?.[capKey];
-    if (!cfg) return false;
-
-    const newSlug = cfg.slug;
-    const newTitle = cfg.title;
-    const imgPath  = `assets/img/products/${newSlug}/hero.jpg`;
-    const pageHref = `/airflowplus-site/products/${newSlug}.html`;
-
-    const titleEl = card.querySelector('.kh-reco-body h4, .kh-reco-body .title, .kh-reco-title, h4');
-    if (titleEl) titleEl.textContent = newTitle;
-
-    const img = card.querySelector('.kh-reco-media img');
-    if (img) { img.src = imgPath; img.alt = newTitle; img.loading='lazy'; img.decoding='async'; }
-
-    const cta = card.querySelector('a[href*="/products/"]');
-    if (cta) cta.setAttribute('href', pageHref);
-
-    return true;
-  };
-
-  const diversify = (card)=>{
-    const slug   = currentSlugFromCard(card);
-    const capKey = capacityKeyFrom(slug || card.textContent || '');
-    if (!capKey) return;
-
-    const currentBrand = brandFromSlug(slug) || '';
-    const hinted = chooseBrandByHints();
-
-    if (hinted && hinted !== currentBrand && PRODUCT_EQ[hinted]?.[capKey]) {
-      swapTo(card, hinted, capKey);
-      return;
-    }
-    const next = rrBrand();
-    if (next && next !== currentBrand && PRODUCT_EQ[next]?.[capKey]) {
-      swapTo(card, next, capKey);
-    }
-  };
-
-  // Wait for the recommendation card your other script renders/enhances
-  const mount = document.querySelector('#kh-reco, .kh-reco-card');
-  if (!mount) return;
-
-  let ranOnce = false;
-  const run = ()=>{
-    const card = document.querySelector('.kh-reco--withimg, .kh-reco-card');
-    if (!card) return;
-    diversify(card);
-    // prevent thrashing (still safe if recommendation re-renders)
-    if (!ranOnce) ranOnce = true;
-  };
-
-  // Observe changes under the mount (plays nice with existing MutationObserver)
-  const mo = new MutationObserver(run);
-  mo.observe(mount, { childList:true, subtree:true });
-
-  // Also try once on load (in case rendered synchronously)
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run, { once:true });
-  } else {
-    run();
-  }
-})();
-
-/* =========================================================
-   KH – ensure brand diversification runs when #kh-reco appears
-   (append-only shim; safe even if other observers exist)
-   ========================================================= */
-(function KH_WaitForRecoAndDiversify(){
-  // Map of brand ↔ equivalent slugs by capacity
-  const PRODUCT_BY_BRAND = {
-    panasonic: {
-      '25kw': { slug: 'panasonic-tz-25kw',  title: 'Panasonic TZ — 2.5 kW' },
-      '35kw': { slug: 'panasonic-tz-35kw',  title: 'Panasonic TZ — 3.5 kW' },
-      '50kw': { slug: 'panasonic-tz-50kw',  title: 'Panasonic TZ — 5.0 kW' },
-    },
-    daikin: {
-      '25kw': { slug: 'daikin-comfora-25kw', title: 'Daikin Comfora — 2.5 kW' },
-      '35kw': { slug: 'daikin-comfora-35kw', title: 'Daikin Comfora — 3.5 kW' },
-      '50kw': { slug: 'daikin-comfora-50kw', title: 'Daikin Comfora — 5.0 kW' },
-    },
-    haier: {
-      '25kw': { slug: 'haier-revive-plus-25kw', title: 'Haier Revive Plus — 2.5 kW' },
-      '35kw': { slug: 'haier-revive-plus-35kw', title: 'Haier Revive Plus — 3.5 kW' },
-      '50kw': { slug: 'haier-revive-plus-50kw', title: 'Haier Revive Plus — 5.0 kW' },
-    }
-  };
-
-  function brandFromSlug(slug=''){
-    slug = slug.toLowerCase();
-    if (slug.startsWith('daikin-')) return 'daikin';
-    if (slug.startsWith('panasonic-')) return 'panasonic';
-    if (slug.startsWith('haier-')) return 'haier';
-    return '';
-  }
-  function capKeyFromSlug(s=''){
-    const m = s.toLowerCase().match(/-(25|35|50)\s*kw/);
-    return m ? `${m[1]}kw` : null;
-  }
-  function currentSlugFromCard(card){
-    const img = card.querySelector('.kh-reco-media img');
-    if (img?.src){
-      const mm = img.src.match(/assets\/img\/products\/([^/]+)\/hero\.jpg/i);
-      if (mm) return mm[1];
-    }
-    const cta = card.querySelector('a[href*="/products/"]');
-    if (cta){
-      const mm = cta.getAttribute('href')?.match(/products\/([^\.]+)\.html/i);
-      if (mm) return mm[1];
-    }
-    return '';
-  }
-
-  // Use user-selected brand chips if present; otherwise round-robin
-  function preferredBrands(){
-    try { return JSON.parse(sessionStorage.getItem('khPreferredBrands') || '[]'); }
-    catch { return []; }
-  }
-  function rrBrand(exclude){
-    const order = ['daikin','panasonic','haier'];
-    let i = 0; try { i = Number(sessionStorage.getItem('khBrandRR')||'0')||0; } catch {}
-    // pick first that isn't the excluded current brand
-    for (let n=0;n<order.length;n++){
-      const b = order[(i+n)%order.length];
-      if (b !== exclude) {
-        try { sessionStorage.setItem('khBrandRR', String((i+n+1)%order.length)); } catch {}
-        return b;
-      }
-    }
-    return exclude || 'panasonic';
-  }
-
-  function swap(card, brand, capKey){
-    const cfg = PRODUCT_BY_BRAND[brand]?.[capKey];
-    if (!cfg) return false;
-    const newSlug = cfg.slug;
-    const newTitle = cfg.title;
-    const imgPath  = `assets/img/products/${newSlug}/hero.jpg`;
-    const pageHref = `/airflowplus-site/products/${newSlug}.html`;
-
-    const titleEl = card.querySelector('.kh-reco-body h3, .kh-reco-body h4, .kh-reco-title, h3, h4');
-    if (titleEl) titleEl.textContent = newTitle;
-
-    const img = card.querySelector('.kh-reco-media img');
-    if (img) { img.src = imgPath; img.alt = newTitle; img.loading='lazy'; img.decoding='async'; }
-
-    const cta = card.querySelector('a[href*="/products/"]');
-    if (cta) cta.setAttribute('href', pageHref);
-    return true;
-  }
-
-  function diversify(card){
-    const slug = currentSlugFromCard(card);
-    if (!slug) return;
-    const cap  = capKeyFromSlug(slug);
-    if (!cap)  return;
-
-    const current = brandFromSlug(slug);
-    const prefs = preferredBrands();
-
-    // 1) honor explicit preferences
-    for (const b of prefs){
-      if (b !== current && PRODUCT_BY_BRAND[b]?.[cap]) {
-        swap(card, b, cap);
-        return;
-      }
-    }
-    // 2) otherwise rotate brands to avoid "always Panasonic"
-    const target = rrBrand(current);
-    if (target !== current && PRODUCT_BY_BRAND[target]?.[cap]) {
-      swap(card, target, cap);
-    }
-  }
-
-  function attachToMount(mount){
-    // run whenever content inside #kh-reco changes
-    const run = ()=> {
-      const card = mount.querySelector('.kh-reco--withimg, .kh-reco-card, .kh-reco-main') || mount;
-      if (card) diversify(card);
-    };
-    // observe mutations inside the mount
-    let busy = false;
-const mo = new MutationObserver(() => {
-  if (busy) return;
-  busy = true;
-  requestAnimationFrame(() => {
-    run();
-    // let the DOM settle before re-allowing
-    setTimeout(() => busy = false, 100);
-  });
-});
-mo.observe(mount, { childList:true, subtree:true });
-run();
-
-  }
-
-  function waitForMount(){
-    const existing = document.querySelector('#kh-reco');
-    if (existing) { attachToMount(existing); return; }
-
-    const bodyMO = new MutationObserver(() => {
-      const el = document.querySelector('#kh-reco');
-      if (el) { bodyMO.disconnect(); attachToMount(el); }
-    });
-    bodyMO.observe(document.body, { childList:true, subtree:true });
-  }
-
-  // Only on KH screens
-  if (document.querySelector('[data-kh-step]')) {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', waitForMount, { once:true });
-    } else {
-      waitForMount();
-    }
-  }
-})();
-
-
-/* === KH brand controller v2 (stable, preference-aware) ==================
-   Goal: avoid defaulting to Haier; pick brand by user preference or rotate.
-   Families used for equivalents per brand (indoor images available):
-     Panasonic -> tz
-     Daikin    -> comfora
-     Haier     -> revive
-===========================================================================*/
-(function(){
-  const BASE = ((window.AFP && AFP.ROOT_BASE) || "/airflowplus-site").replace(/\/+$/,"");
-  const brands = ["panasonic","daikin","haier"];
-  const familyFor = { panasonic:"tz", daikin:"comfora", haier:"revive" };
-
-  function parseSlug(slug) {
-    slug = String(slug||"").toLowerCase();
-    const m = slug.match(/^([a-z0-9]+)-([a-z0-9\-]+)-(\d+)kw$/);
-    if (!m) return null;
-    return { brand:m[1], family:m[2], kw:m[3] };
-  }
-
-  function pickBrand() {
-    // 1) User preference chips stored as CSV in sessionStorage['khPreferredBrands']
-    try {
-      const raw = sessionStorage.getItem('khPreferredBrands') || "";
-      const prefs = raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
-      for (const p of prefs) if (brands.includes(p)) return p;
-    } catch {}
-    // 2) Rotate among brands
-    try {
-      let i = parseInt(sessionStorage.getItem('khBrandIndex')||"0",10);
-      if (isNaN(i) || i<0 || i>=brands.length) i = 0;
-      const b = brands[i];
-      sessionStorage.setItem('khBrandIndex', String((i+1)%brands.length));
-      return b;
-    } catch { return "panasonic"; }
-  }
-
-  function swapIfNeeded() {
-    const card = document.querySelector("#kh-reco");
-    if (!card || card.__khBrandSwapDone) return;
-
-    const cta = card.querySelector("a[href*='/products/']");
-    if (!cta) return;
-
-    const m = (cta.getAttribute("href")||"").match(/\/products\/([^\/]+)\.html/i);
-    if (!m) return;
-    const cur = parseSlug(m[1]);
-    if (!cur) return;
-
-    const want = pickBrand();
-    if (cur.brand === want) { card.__khBrandSwapDone = true; return; }
-
-    const fam = familyFor[want] || cur.family;
-    const slug = `${want}-${fam}-${cur.kw}kw`;
-
-    const abs = (BASE + "/products/" + slug + ".html").replace(/\/{2,}/g,"/");
-    cta.setAttribute("href", abs);
-    card.setAttribute("data-variant-slug", slug);
-
-    // Update visible title if present (e.g., "Panasonic TZ — 3.5 kW")
-    const titleEl = card.querySelector(".kh-reco-title, h3, h2");
-    if (titleEl) {
-      const kwText = (cur.kw.length===2 ? (parseInt(cur.kw,10)/10).toFixed(1) : cur.kw);
-      const brandTitle = want.charAt(0).toUpperCase()+want.slice(1);
-      const famTitle = fam.split("-").map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(" ");
-      titleEl.textContent = `${brandTitle} ${famTitle} — ${kwText.replace(/\.0$/,"")} kW`;
-    }
-    card.__khBrandSwapDone = true;
-  }
-
-  // Run on DOM ready + after KH step 3 render (observer on #kh-reco attributes only)
-  function attach() {
-    swapIfNeeded();
-    const host = document.querySelector("#kh-reco");
-    if (!host) return;
-    const mo = new MutationObserver((muts)=>{
-      for (const m of muts) if (m.type==="attributes") { swapIfNeeded(); return; }
-    });
-    mo.observe(host, { attributes:true, subtree:true, attributeFilter:["href","data-variant-slug"] });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", attach, { once:true });
-  } else {
-    attach();
-  }
-})();
-

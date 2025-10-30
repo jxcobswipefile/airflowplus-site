@@ -1,19 +1,15 @@
-
-/* ======================================================================
-   Airflow+ — KH Indoor Image Swap (v38.9 strict replace-only)
-   ---------------------------------------------------------------------- */
+/* Airflow+ — KH Indoor Image Swap (final) */
 (() => {
   "use strict";
-
   try { window.__KH_IMAGE_INJECTOR_ACTIVE__ = true; } catch(e) {}
 
-  const AFP = (window.AFP = window.AFP || {});
+  const AFP  = (window.AFP = window.AFP || {});
   const BASE = ((AFP && AFP.ROOT_BASE) || "/airflowplus-site").replace(/\/+$/,"");
-  const $ = (s, r=document) => r.querySelector(s);
-  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const $    = (s, r=document) => r.querySelector(s);
+  const $$   = (s, r=document) => Array.from(r.querySelectorAll(s));
 
-  // Exact map to your files
-  const INDOOR_FILE_MAP = {
+  // Exact filenames you provided
+  const MAP = {
     "daikin comfora":        "daikin comfora indoor.jpg",
     "daikin emura":          "daikin emura indoor.jpg",
     "daikin perfera":        "daikin perfera indoor.jpg",
@@ -25,104 +21,101 @@
     "panasonic tz":          "panasonic tz indoor.jpg"
   };
 
-  function parseBrandFamilyFromSlug(slug) {
-    slug = String(slug||"").trim().toLowerCase();
-    const m = slug.match(/^([a-z0-9]+)-([a-z0-9\-]+)-\d+kw$/);
-    if (!m) return { brand:"", family:"" };
-    const brand = m[1];
-    const fam = m[2].replace(/-/g," ");
-    return { brand, family:fam };
-  }
-
-  function readBrandFamily(card) {
+  function readBrandFamily(card){
+    // Prefer CTA slug: /products/<brand>-<family>-<kw>kw.html
     const cta = card.querySelector("a[href*='/products/']");
     if (cta) {
-      const m = (cta.getAttribute("href")||"").match(/\/products\/([a-z0-9\-]+)-\d+kw\.html/i);
-      if (m) return parseBrandFamilyFromSlug(m[1] + "-00kw");
+      const m = (cta.getAttribute("href")||"").match(/\/products\/([a-z0-9]+)-([a-z0-9\-]+)-\d+kw\.html/i);
+      if (m) return { brand:m[1].toLowerCase(), family:m[2].replace(/-/g," ").toLowerCase() };
     }
-    const tEl = card.querySelector(".kh-reco-title, h3, h2");
-    const t = (tEl && tEl.textContent || "").trim();
+    // Fallback: title "Brand Family — X.X kW"
+    const t = (card.querySelector(".kh-reco-title, h3, h2")?.textContent || "").trim();
     const tm = t.match(/^\s*([A-Za-z]+)[^\w]+([A-Za-z][A-Za-z0-9\s\-]+)/);
-    if (tm) {
-      const brand = (tm[1]||"").toLowerCase();
-      const family = (tm[2]||"").replace(/\s*—.*/,"").replace(/\s*-\s*/g," ").replace(/\s+/g," ").trim().toLowerCase();
-      return { brand, family };
-    }
+    if (tm) return { brand:tm[1].toLowerCase(), family:tm[2].replace(/\s*—.*/,"").replace(/\s*-\s*/g," ").trim().toLowerCase() };
     return { brand:"", family:"" };
   }
 
-  function indoorUrl(brand, family) {
-    const file = INDOOR_FILE_MAP[(brand + " " + family).trim()] || "";
+  function urlFor(brand,family){
+    const file = MAP[(brand+" "+family).trim()];
     if (!file) return "";
-    const rel = ("assets/indoor units kh/" + file).replace(/ /g, "%20");
-    return (BASE + "/" + rel).replace(/\/{2,}/g, "/");
+    const rel = ("assets/indoor units kh/"+file).replace(/ /g,"%20");
+    return (BASE+"/"+rel).replace(/\/{2,}/g,"/");
   }
 
-  // STRICT REPLACE ONLY: never insert; find best existing small image in #kh-reco
-  function findCardThumb(card) {
-    const imgs = card.querySelectorAll("img");
-    // Prefer an image inside a known thumb container if present
-    for (const img of imgs) {
+  // Find an existing small img to replace (keeps size). If none, insert a 120px slot once.
+  function findOrMakeThumb(card){
+    // Prefer an existing non-icon image inside the reco block
+    const imgs = card.querySelectorAll("img:not([data-kh-injected='1'])");
+    for (const img of imgs){
       const src = (img.getAttribute("src")||"").toLowerCase();
-      if (/label|energy|logo|favicon|outdoor/.test(src)) continue;
-      // Heuristic: thumbnails usually have width <= 200px by attribute or computed style
-      const wAttr = parseInt(img.getAttribute("width")||"0",10);
-      if (wAttr && wAttr <= 220) return img;
-      // fallback: first non-icon image
+      if (/label|energy|logo|favicon|products\/.+\/hero\.jpg/.test(src)) continue; // ignore icons & old product hero
       return img;
     }
-    return null;
-  }
-
-  // Remove any legacy big image blocks outside the card (one-time per attach)
-  function cleanupLegacyBigs() {
-    // Remove stray .kh-reco-media blocks (any origin)
-    $$(".kh-reco-media").forEach(el => el.remove());
-    // Remove any large hero-like image directly inside the KH stage wrapper above the card
-    const stage = $(".khv2-stage .khv2-wrap") || $(".khv2-stage") || document;
-    const bigs = $$("img", stage).filter(img => {
-      if (img.closest("#kh-reco")) return false;
-      const src = (img.getAttribute("src")||"").toLowerCase();
-      if (/label|energy|logo|favicon/.test(src)) return false;
-      const r = img.getBoundingClientRect();
-      return r.width > 400 || r.height > 300;
-    });
-    bigs.forEach(img => img.remove());
-  }
-
-  function swap(card) {
-    const { brand, family } = readBrandFamily(card);
-    const key = brand && family ? `${brand}::${family}` : "";
-    if (!key || key === card.__khSwapKey) return;
-    card.__khSwapKey = key;
-
-    const url = indoorUrl(brand, family);
-    if (!url) return;
-    const thumb = findCardThumb(card);
-    if (thumb) {
-      thumb.src = url;
-      thumb.alt = "Binnenunit";
+    // Create a controlled small thumb if none exists
+    let media = card.querySelector(".kh-reco-media[data-kh-injected='1']");
+    if (!media){
+      media = document.createElement("div");
+      media.className = "kh-reco-media";
+      media.setAttribute("data-kh-injected","1");
+      media.style.flex = "0 0 120px";
+      media.style.padding = "8px";
+      media.style.borderRadius = "12px";
+      card.insertBefore(media, card.firstChild);
     }
+    let img = media.querySelector("img");
+    if (!img){
+      img = document.createElement("img");
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.style.maxWidth = "100%";
+      img.style.height = "auto";
+      media.appendChild(img);
+    }
+    return img;
   }
 
-  function attach() {
+  // One-time cleanup: remove any legacy big images above the card
+  function cleanupLegacy(){
+    $$(".kh-reco--withimg, .kh-reco-media:not([data-kh-injected='1'])").forEach(el => {
+      // If it contains a products/hero.jpg, it’s from the old injector → remove container
+      const hasLegacy = el.querySelector("img[src*='/assets/img/products/']");
+      if (hasLegacy) el.remove();
+    });
+  }
+
+  function swap(card){
+    const { brand, family } = readBrandFamily(card);
+    const key = brand && family ? brand+"::"+family : "";
+    if (!key || key === card.__khImgKey) return;
+    card.__khImgKey = key;
+
+    const url = urlFor(brand,family);
+    if (!url) return;
+
+    const img = findOrMakeThumb(card);
+    img.src = url;
+    img.alt = "Binnenunit";
+  }
+
+  function attach(){
     const card = $("#kh-reco");
     if (!card) return;
-    cleanupLegacyBigs();
+    cleanupLegacy();
     swap(card);
 
+    // Attribute-only observer; debounce via lock
     let locked = false;
     const handle = () => {
       if (locked) return;
       locked = true;
       requestAnimationFrame(() => {
-        try { swap(card); } finally { setTimeout(()=>{ locked=false; }, 120); }
+        try { swap(card); } finally { setTimeout(()=>locked=false,120); }
       });
     };
-    const obs = new MutationObserver((muts) => {
+    const mo = new MutationObserver((muts)=>{
       for (const m of muts) if (m.type === "attributes") { handle(); return; }
     });
-    obs.observe(card, { attributes:true, subtree:true, attributeFilter:["href","data-variant-slug"] });
+    mo.observe(card, { attributes:true, subtree:true, attributeFilter:["href","data-variant-slug"] });
   }
 
   if (document.readyState === "loading") {
