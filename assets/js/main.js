@@ -901,6 +901,58 @@
       return el;
     }
 
+    // --- KH: brand logo injector (runs after the image injector wraps the card) ---
+    function khInjectBrandLogo() {
+      try {
+        const host = document.querySelector("#kh-reco");
+        if (!host) return;
+
+        // Our image injector wraps into .kh-reco--withimg > (.kh-reco-media + .kh-reco-body)
+        const wrapper = host.querySelector(".kh-reco--withimg");
+        if (!wrapper) return;
+
+        // Avoid duplicates
+        if (wrapper.querySelector(".kh-reco-brand")) return;
+
+        // Detect brand from title or CTA href
+        const titleEl = host.querySelector(".kh-reco-title, .kh-reco-body h3, h3");
+        const title = (titleEl?.textContent || "").toLowerCase();
+        const href = host.querySelector('a[href*="/products/"]')?.getAttribute("href") || "";
+        const txt = (title + " " + href).toLowerCase();
+
+        let brand = "";
+        if (/\bdaikin\b/.test(txt)) brand = "daikin";
+        else if (/\bpanasonic\b/.test(txt)) brand = "panasonic";
+        else if (/\bhaier\b/.test(txt)) brand = "haier";
+        if (!brand) return;
+
+        // Map to your exact filenames
+        const BASE = ((window.AFP && AFP.ROOT_BASE) || "/airflowplus-site/").replace(/\/+$/, "") + "/";
+        const LOGOS = {
+          daikin: `${BASE}assets/img/brands/daikin.placeholder.svg`,
+          panasonic: `${BASE}assets/img/brands/panasonic.placeholder.svg`,
+          haier: `${BASE}assets/img/brands/haier.palaceholder.svg` // as provided
+        };
+        const src = LOGOS[brand];
+        if (!src) return;
+
+        // Insert small logo right after the product image container
+        const media = wrapper.querySelector(".kh-reco-media");
+        const brandBox = document.createElement("div");
+        brandBox.className = "kh-reco-brand";
+        brandBox.innerHTML = `<img alt="${brand} logo" src="${src}" style="max-height:36px;width:auto;display:block;margin-left:8px;">`;
+
+        if (media && media.parentNode) {
+          media.parentNode.insertBefore(brandBox, media.nextSibling);
+        } else {
+          wrapper.appendChild(brandBox);
+        }
+      } catch (_) {
+        // silent fail — never break the wizard
+      }
+}
+
+
     function renderStep3() {
       state.step = 3;
       setDot(3);
@@ -919,18 +971,17 @@
 
       const mount = ensureRecoMount();
       renderRecoInto(mount);
+      // Let the image injector wrap, then add/maintain the brand logo
+      setTimeout(() => {
+        try { khInjectBrandLogo(); } catch {}
+        try {
+          const mo = new MutationObserver(() => { try { khInjectBrandLogo(); } catch {} });
+          mo.observe(document.getElementById("kh-reco"), { childList: true, subtree: true });
+        } catch {}
+      }, 0);
       khInjectBrandLogo(); // add brand logo beside the product image
     }
 
-    // Re-try brand logo when #kh-reco updates (e.g., image injector wraps after our render)
-    (() => {
-      const mount = document.getElementById("kh-reco");
-      if (!mount) return;
-      const mo = new MutationObserver(() => khInjectBrandLogo());
-      mo.observe(mount, { childList: true, subtree: true });
-      // Try once now too
-      khInjectBrandLogo();
-    })();
 
     // Dots jump
     document.addEventListener("click", (e) => {
