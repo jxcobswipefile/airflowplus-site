@@ -4032,7 +4032,7 @@ section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
   position: absolute;
   inset-inline-start: 0;
   top: 0;
-  transform: translateY(-34px);
+  transform: translateY(+45px);
   z-index: 2;
 }
 
