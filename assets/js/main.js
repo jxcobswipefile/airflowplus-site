@@ -767,37 +767,32 @@
       return isNaN(n) ? null : n;
     }
 
-        function renderRecoInto(target) {
+    function renderRecoInto(target) {
       // --- helpers (local to this function) ------------------------------
-      // products/daikin-comfora-35kw.html  -> "daikin-comfora"
       function baseFromSlug(slug) {
         if (!slug) return "";
         const last = String(slug).split("/").pop() || "";
         const noExt = last.replace(/\.(html?)$/i, "");
         return noExt.replace(/-(?:2\.5|25|3\.5|35|5\.0|50)kw$/i, ""); // strip capacity suffix
       }
-      // find matching item in AFP.ITEMS and return its indoor image path
       function indoorImageFor(rec) {
         const base = baseFromSlug(rec.slug || "");
         if (!base || !Array.isArray(AFP.ITEMS)) return null;
-        // Best match: item.slug equals the family start of the variant
         let hit = AFP.ITEMS.find(it => base.startsWith(it.slug));
         if (!hit) {
-          // fallback: try loose contains on name
           const nm = String(rec.name || "").toLowerCase();
           hit = AFP.ITEMS.find(it => nm.includes(it.name.toLowerCase()));
         }
         return hit?.img || null;
       }
-
       function priceLine(b) {
         return b === "Daikin"
           ? "vanaf € 1.800 incl. materiaal en montage"
           : b === "Panasonic"
-          ? "vanaf € 1.600 incl. materiaal en montage"
-          : b === "Haier"
-          ? "vanaf € 1.300 incl. materiaal en montage"
-          : "Prijs op aanvraag";
+            ? "vanaf € 1.600 incl. materiaal en montage"
+            : b === "Haier"
+              ? "vanaf € 1.300 incl. materiaal en montage"
+              : "Prijs op aanvraag";
       }
       function midFromRange(txt) {
         if (!txt) return null;
@@ -812,7 +807,7 @@
       }
       // -------------------------------------------------------------------
 
-      const mids = (state.sizes || []).map(midFromRange).filter((x) => typeof x === "number" && !isNaN(x));
+      const mids = (state.sizes || []).map(midFromRange).filter(x => typeof x === "number" && !isNaN(x));
       const totalM2 = mids.length ? mids.reduce((a, b) => a + b, 0) : 30;
       const rooms = Math.max(1, state.rooms || 1);
       const avg = totalM2 / rooms;
@@ -820,30 +815,46 @@
       const rec = AFP.pickVariantByArea(rooms, avg, false);
       if (!rec) return;
 
-      const imgPath = indoorImageFor(rec); // <- pulls from AFP.ITEMS indoor images
+      const imgPath = indoorImageFor(rec);
       const href = (AFP.ROOT_BASE || "/airflowplus-site/") + (rec.slug || "");
 
-      const brandKey = (rec.brand || "").toLowerCase();
+      // Brand key + logo URL (use your exact filenames)
+      const BASE = ((AFP.ROOT_BASE || "/airflowplus-site/").replace(/\/+$/, "")) + "/";
+      const brandKey = String(rec.brand || "").toLowerCase();
+      const LOGOS = {
+        daikin: `${BASE}assets/img/brands/daikin.placeholder.svg`,
+        panasonic: `${BASE}assets/img/brands/panasonic.placeholder.svg`,
+        haier: `${BASE}assets/img/brands/haier.palaceholder.svg` // (typo in filename is intentional)
+      };
+      const brandLogo = LOGOS[brandKey] || null;
+
+      // expose brand on the mount (harmless, may help future hooks)
       target.setAttribute("data-brand", brandKey);
 
-
-      // render card with optional media slot; no legacy hero.jpg lookups
+      // Card HTML — we position the logo absolutely so alignment is consistent
       target.innerHTML =
         `<div class="kh-reco-card">
-           <div class="kh-reco-main">
-             ${imgPath ? `
-             <div class="kh-reco-media">
-               <img src="${imgPath}" alt="${rec.name || "Airco"}"
-                    style="width:240px;height:auto;object-fit:contain" loading="lazy" decoding="async">
-             </div>` : ``}
-             <div class="kh-reco-body">
-               <h3 class="kh-reco-title">${rec.name || "Aanbevolen model"}</h3>
-               <div class="muted">${priceLine(rec.brand || "")}</div>
-               <a class="btn btn-green" style="margin-top:12px" href="${href}">Bekijk aanbeveling</a>
-               <p class="muted" style="margin-top:8px">Op basis van ~${Math.round(totalM2)} m².</p>
-             </div>
-           </div>
-         </div>`;
+       <div class="kh-reco-main" style="position:relative;">
+         ${brandLogo ? `
+         <div class="kh-reco-brand" style="
+              position:absolute; right:12px; top:12px;
+              display:flex; align-items:center; justify-content:center;">
+           <img src="${brandLogo}" alt="${rec.brand || 'Merk'} logo"
+                style="max-height:28px; width:auto; display:block;">
+         </div>` : ``}
+         ${imgPath ? `
+         <div class="kh-reco-media">
+           <img src="${imgPath}" alt="${rec.name || "Airco"}"
+                style="width:240px;height:auto;object-fit:contain" loading="lazy" decoding="async">
+         </div>` : ``}
+         <div class="kh-reco-body">
+           <h3 class="kh-reco-title">${rec.name || "Aanbevolen model"}</h3>
+           <div class="muted">${priceLine(rec.brand || "")}</div>
+           <a class="btn btn-green" style="margin-top:12px" href="${href}">Bekijk aanbeveling</a>
+           <p class="muted" style="margin-top:8px">Op basis van ~${Math.round(totalM2)} m².</p>
+         </div>
+       </div>
+     </div>`;
     }
 
 // --- KH: inject brand logo next to the product image (robust) -------------
