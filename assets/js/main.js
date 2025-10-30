@@ -717,34 +717,80 @@
       return isNaN(n) ? null : n;
     }
 
-    function renderRecoInto(target) {
-      const mids = (state.sizes || []).map(midFromRange).filter((x) => typeof x === "number" && !isNaN(x));
-      const totalM2 = mids.length ? mids.reduce((a, b) => a + b, 0) : 30;
-      const rooms = Math.max(1, state.rooms || 1);
-      const avg = totalM2 / rooms;
-      const rec = AFP.pickVariantByArea(rooms, avg, false);
-      if (!rec) return;
-      const priceLine = (b) =>
-        b === "Daikin"
+        function renderRecoInto(target) {
+      // --- helpers (local to this function) ------------------------------
+      // products/daikin-comfora-35kw.html  -> "daikin-comfora"
+      function baseFromSlug(slug) {
+        if (!slug) return "";
+        const last = String(slug).split("/").pop() || "";
+        const noExt = last.replace(/\.(html?)$/i, "");
+        return noExt.replace(/-(?:2\.5|25|3\.5|35|5\.0|50)kw$/i, ""); // strip capacity suffix
+      }
+      // find matching item in AFP.ITEMS and return its indoor image path
+      function indoorImageFor(rec) {
+        const base = baseFromSlug(rec.slug || "");
+        if (!base || !Array.isArray(AFP.ITEMS)) return null;
+        // Best match: item.slug equals the family start of the variant
+        let hit = AFP.ITEMS.find(it => base.startsWith(it.slug));
+        if (!hit) {
+          // fallback: try loose contains on name
+          const nm = String(rec.name || "").toLowerCase();
+          hit = AFP.ITEMS.find(it => nm.includes(it.name.toLowerCase()));
+        }
+        return hit?.img || null;
+      }
+      function priceLine(b) {
+        return b === "Daikin"
           ? "vanaf € 1.800 incl. materiaal en montage"
           : b === "Panasonic"
           ? "vanaf € 1.600 incl. materiaal en montage"
           : b === "Haier"
           ? "vanaf € 1.300 incl. materiaal en montage"
           : "Prijs op aanvraag";
+      }
+      function midFromRange(txt) {
+        if (!txt) return null;
+        txt = String(txt).replace(/\s/g, "").replace("m²", "").replace("m2", "").replace(",", ".");
+        const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
+        if (m) {
+          const a = parseFloat(m[1]), b = parseFloat(m[2]);
+          if (!isNaN(a) && !isNaN(b)) return (a + b) / 2;
+        }
+        const n = parseFloat(txt);
+        return isNaN(n) ? null : n;
+      }
+      // -------------------------------------------------------------------
 
+      const mids = (state.sizes || []).map(midFromRange).filter((x) => typeof x === "number" && !isNaN(x));
+      const totalM2 = mids.length ? mids.reduce((a, b) => a + b, 0) : 30;
+      const rooms = Math.max(1, state.rooms || 1);
+      const avg = totalM2 / rooms;
+
+      const rec = AFP.pickVariantByArea(rooms, avg, false);
+      if (!rec) return;
+
+      const imgPath = indoorImageFor(rec); // <- pulls from AFP.ITEMS indoor images
+      const href = (AFP.ROOT_BASE || "/airflowplus-site/") + (rec.slug || "");
+
+      // render card with optional media slot; no legacy hero.jpg lookups
       target.innerHTML =
         `<div class="kh-reco-card">
            <div class="kh-reco-main">
+             ${imgPath ? `
+             <div class="kh-reco-media">
+               <img src="${imgPath}" alt="${rec.name || "Airco"}"
+                    style="width:240px;height:auto;object-fit:contain" loading="lazy" decoding="async">
+             </div>` : ``}
              <div class="kh-reco-body">
                <h3 class="kh-reco-title">${rec.name || "Aanbevolen model"}</h3>
                <div class="muted">${priceLine(rec.brand || "")}</div>
-               <a class="btn btn-green" style="margin-top:12px" href="${AFP.ROOT_BASE + (rec.slug || "")}">Bekijk aanbeveling</a>
+               <a class="btn btn-green" style="margin-top:12px" href="${href}">Bekijk aanbeveling</a>
                <p class="muted" style="margin-top:8px">Op basis van ~${Math.round(totalM2)} m².</p>
              </div>
            </div>
          </div>`;
     }
+
 
     function ensureRecoMount() {
       let el = $("#kh-reco");
