@@ -3911,7 +3911,7 @@ section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
 .promo--emura-only .promo__wrap {
   position: relative;
   /* space we need so the absolute header doesn’t overlap body text */
-  padding-top: 56px;
+  padding-top: 0px;
 }
 .promo--emura-only .promo__head {
   position: absolute;
