@@ -4008,3 +4008,86 @@ section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
     height: 220px;
   }
 }
+
+/* ===== Emura promo hard-fix (center in SECTION + header overlay + larger right cards) ===== */
+
+.promo--emura-only {               /* section */
+  --promoH: 340px;                 /* overall visual height; increase if you want taller cards */
+  padding: 16px 0 28px;
+}
+
+.promo--emura-only .promo__wrap {  /* center the whole block within the section */
+  position: relative;
+  min-height: var(--promoH);
+  display: flex;
+  align-items: center;             /* <-- section-level centering */
+  padding-top: 58px;               /* room for absolute header overlay (no visual gap) */
+}
+
+.promo--emura-only .promo__head {  /* overlay the header to kill the top gap */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  margin: 0;
+  z-index: 2;
+}
+
+.promo--emura-only .promo__grid {  /* actual content area */
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 640px; /* pushes the images further right + gives them space */
+  column-gap: 28px;
+  align-items: center;              /* vertical centering inside the grid too */
+}
+
+/* promo text always readable (no washed-out opacity) */
+.promo--emura-only .promo__left,
+.promo--emura-only .promo__left * {
+  color: #0D2233 !important;
+  opacity: 1 !important;
+}
+
+/* right side (two cards) */
+.promo--emura-only .promo__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 24px;
+  height: calc(var(--promoH) * 0.95); /* both cards same tall height, vertically centered */
+}
+
+/* shared card look */
+.promo--emura-only .promo__unit,
+.promo--emura-only .promo__logo-wrap {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(8, 28, 48, 0.18);
+  padding: 14px 18px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* indoor unit = wide rectangle */
+.promo--emura-only .promo__unit { aspect-ratio: 16 / 11; }
+.promo--emura-only .promo__unit img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* brand = square-ish card, a bit smaller width but same height */
+.promo--emura-only .promo__logo-wrap { aspect-ratio: 1 / 1; min-width: 156px; }
+.promo--emura-only .promo__logo     { max-height: 66%; width: auto; }
+
+/* responsive trims */
+@media (max-width: 1180px) {
+  .promo--emura-only .promo__grid { grid-template-columns: 1fr 560px; }
+}
+@media (max-width: 980px) {
+  .promo--emura-only .promo__wrap  { padding-top: 52px; }
+  .promo--emura-only .promo__grid  { grid-template-columns: 1fr; row-gap: 18px; }
+  .promo--emura-only .promo__right { justify-content: flex-start; height: 220px; }
+}
