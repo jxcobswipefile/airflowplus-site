@@ -3265,3 +3265,10 @@ body.home .section-services .service-card .media img{
 .brand-chip img{width:22px;height:22px;object-fit:contain}
 .brand-chip:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.10)}
 .brand-chip.is-selected{border-color:#11a36a;background:#eefff7}
+
+.kh-reco-brand img{
+  height:44px;
+  width:auto;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
