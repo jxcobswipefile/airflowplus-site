@@ -789,52 +789,6 @@
         }
         return hit?.img || null;
       }
-          // --- KH: brand logo injector (runs after image injector wraps the card) ---
-      function khInjectBrandLogo() {
-        const host = document.querySelector("#kh-reco");
-        if (!host) return;
-
-        // The image injector wraps into: .kh-reco--withimg > (.kh-reco-media + .kh-reco-body)
-        const wrapper = host.querySelector(".kh-reco--withimg");
-        if (!wrapper) return;
-
-        // Avoid duplicates
-        if (wrapper.querySelector(".kh-reco-brand")) return;
-
-        // Detect brand from title or CTA href
-        const titleEl = host.querySelector(".kh-reco-title, .kh-reco-body h3, h3");
-        const title = (titleEl?.textContent || "").toLowerCase();
-        const href = host.querySelector('a[href*="/products/"]')?.getAttribute("href") || "";
-        const txt = (title + " " + href).toLowerCase();
-
-        let brand = "";
-        if (/\bdaikin\b/.test(txt)) brand = "daikin";
-        else if (/\bpanasonic\b/.test(txt)) brand = "panasonic";
-        else if (/\bhaier\b/.test(txt)) brand = "haier";
-        if (!brand) return;
-
-        // Map to your file names (kept exactly as you provided)
-        const BASE = (window.AFP && AFP.ROOT_BASE) || "/airflowplus-site/";
-        const LOGOS = {
-          daikin: `${BASE}assets/img/brands/daikin.placeholder.svg`,
-          panasonic: `${BASE}assets/img/brands/panasonic.placeholder.svg`,
-          haier: `${BASE}assets/img/brands/haier.palaceholder.svg` // note: "palaceholder" filename
-        };
-        const src = LOGOS[brand];
-        if (!src) return;
-
-        // Insert the small logo right next to the product image container
-        const media = wrapper.querySelector(".kh-reco-media");
-        const brandBox = document.createElement("div");
-        brandBox.className = "kh-reco-brand";
-        brandBox.innerHTML = `<img alt="${brand} logo" src="${src}" style="max-height:36px;width:auto;display:block;">`;
-
-        if (media && media.parentNode) {
-          media.parentNode.insertBefore(brandBox, media.nextSibling);
-        } else {
-          wrapper.appendChild(brandBox);
-        }
-      }
 
       function priceLine(b) {
         return b === "Daikin"
@@ -888,6 +842,68 @@
          </div>`;
     }
 
+// --- KH: inject brand logo next to the product image (robust) -------------
+    function khInjectBrandLogo() {
+      try {
+        const host = document.getElementById("kh-reco");
+        if (!host) return;
+
+        // Prefer the wrapper if your image injector adds it; otherwise use the main card
+        const wrapper = host.querySelector(".kh-reco--withimg") ||
+          host.querySelector(".kh-reco-main") ||
+          host;
+
+        // Avoid duplicates
+        if (wrapper.querySelector(".kh-brand-badge")) return;
+
+        // Detect brand from title / CTA / image src
+        const title = (host.querySelector(".kh-reco-title, .kh-reco-body h3, h3")?.textContent || "").toLowerCase();
+        const href = (host.querySelector('a[href*="/products/"]')?.getAttribute("href") || "").toLowerCase();
+        const img = (host.querySelector(".kh-reco-media img")?.getAttribute("src") || "").toLowerCase();
+        const blob = `${title} ${href} ${img}`;
+
+        let brand = "panasonic";
+        if (blob.includes("daikin")) brand = "daikin";
+        else if (blob.includes("haier")) brand = "haier";
+
+        const base = ((window.AFP?.ROOT_BASE) || "/airflowplus-site/").replace(/\/+$/, "");
+        const logos = {
+          daikin: `${base}/assets/img/brands/daikin.placeholder.svg`,
+          panasonic: `${base}/assets/img/brands/panasonic.placeholder.svg`,
+          // use your actual filename; you mentioned "palaceholder"—keep it if that’s the file on disk
+          haier: `${base}/assets/img/brands/haier.palaceholder.svg`
+        };
+
+        // Ensure positioned host so absolute badge anchors correctly
+        const positioned = wrapper;
+        const prevPos = positioned.style.position;
+        if (!prevPos || prevPos === "static") positioned.style.position = "relative";
+
+        // Create badge
+        const badge = document.createElement("img");
+        badge.className = "kh-brand-badge";
+        badge.alt = `${brand} logo`;
+        badge.src = logos[brand] || logos.panasonic;
+        Object.assign(badge.style, {
+          position: "absolute",
+          right: "16px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          width: "96px",
+          height: "auto",
+          pointerEvents: "none",
+          opacity: "0.92"
+        });
+
+        // Prefer placing right after the media block, else append to wrapper
+        const media = wrapper.querySelector(".kh-reco-media");
+        if (media && media.parentNode) {
+          media.parentNode.insertBefore(badge, media.nextSibling);
+        } else {
+          wrapper.appendChild(badge);
+        }
+      } catch { /* never break wizard */ }
+    }
 
     function ensureRecoMount() {
       let el = $("#kh-reco");
