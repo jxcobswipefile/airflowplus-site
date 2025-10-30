@@ -716,16 +716,12 @@
              .map((n) => `<label class="chip round"><input type="radio" name="rooms" value="${n}"><span>${n}</span></label>`)
              .join("")}
          </div>`;
-      body.addEventListener(
-        "change",
-        (e) => {
-          const input = e.target;
-          if (input?.name !== "rooms") return;
-          state.rooms = parseInt(input.value, 10) || 0;
-          nextBtn.disabled = !complete();
-        },
-        { once: true }
-      );
+      body.addEventListener("change", (e) => {
+        const input = e.target;
+        if (input?.name !== "rooms") return;
+        state.rooms = parseInt(input.value, 10) || 0;
+        nextBtn.disabled = !complete();
+      });
       nextBtn.textContent = "Volgende →";
       nextBtn.disabled = true;
       card.setAttribute("data-step", "1");
@@ -793,6 +789,53 @@
         }
         return hit?.img || null;
       }
+          // --- KH: brand logo injector (runs after image injector wraps the card) ---
+      function khInjectBrandLogo() {
+        const host = document.querySelector("#kh-reco");
+        if (!host) return;
+
+        // The image injector wraps into: .kh-reco--withimg > (.kh-reco-media + .kh-reco-body)
+        const wrapper = host.querySelector(".kh-reco--withimg");
+        if (!wrapper) return;
+
+        // Avoid duplicates
+        if (wrapper.querySelector(".kh-reco-brand")) return;
+
+        // Detect brand from title or CTA href
+        const titleEl = host.querySelector(".kh-reco-title, .kh-reco-body h3, h3");
+        const title = (titleEl?.textContent || "").toLowerCase();
+        const href = host.querySelector('a[href*="/products/"]')?.getAttribute("href") || "";
+        const txt = (title + " " + href).toLowerCase();
+
+        let brand = "";
+        if (/\bdaikin\b/.test(txt)) brand = "daikin";
+        else if (/\bpanasonic\b/.test(txt)) brand = "panasonic";
+        else if (/\bhaier\b/.test(txt)) brand = "haier";
+        if (!brand) return;
+
+        // Map to your file names (kept exactly as you provided)
+        const BASE = (window.AFP && AFP.ROOT_BASE) || "/airflowplus-site/";
+        const LOGOS = {
+          daikin: `${BASE}assets/img/brands/daikin.placeholder.svg`,
+          panasonic: `${BASE}assets/img/brands/panasonic.placeholder.svg`,
+          haier: `${BASE}assets/img/brands/haier.palaceholder.svg` // note: "palaceholder" filename
+        };
+        const src = LOGOS[brand];
+        if (!src) return;
+
+        // Insert the small logo right next to the product image container
+        const media = wrapper.querySelector(".kh-reco-media");
+        const brandBox = document.createElement("div");
+        brandBox.className = "kh-reco-brand";
+        brandBox.innerHTML = `<img alt="${brand} logo" src="${src}" style="max-height:36px;width:auto;display:block;">`;
+
+        if (media && media.parentNode) {
+          media.parentNode.insertBefore(brandBox, media.nextSibling);
+        } else {
+          wrapper.appendChild(brandBox);
+        }
+      }
+
       function priceLine(b) {
         return b === "Daikin"
           ? "vanaf € 1.800 incl. materiaal en montage"
@@ -876,7 +919,18 @@
 
       const mount = ensureRecoMount();
       renderRecoInto(mount);
+      khInjectBrandLogo(); // add brand logo beside the product image
     }
+
+    // Re-try brand logo when #kh-reco updates (e.g., image injector wraps after our render)
+    (() => {
+      const mount = document.getElementById("kh-reco");
+      if (!mount) return;
+      const mo = new MutationObserver(() => khInjectBrandLogo());
+      mo.observe(mount, { childList: true, subtree: true });
+      // Try once now too
+      khInjectBrandLogo();
+    })();
 
     // Dots jump
     document.addEventListener("click", (e) => {
@@ -1001,6 +1055,7 @@
       console.warn('KH safety net render error', e);
     }
   }
+
 
   function ensureReco() {
     const card = document.querySelector('.khv2-card');
