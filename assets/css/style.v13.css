@@ -3898,3 +3898,113 @@ section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
     padding-top: 0;
   }
 }
+
+/* =========================
+   PROMO — Emura (hard fixes)
+   ========================= */
+.promo--emura-only {
+  /* controls the visual height for centering */
+  --promoH: 320px;
+}
+
+/* Remove “header gap” by overlaying header inside the wrap */
+.promo--emura-only .promo__wrap {
+  position: relative;
+  /* space we need so the absolute header doesn’t overlap body text */
+  padding-top: 56px;
+}
+.promo--emura-only .promo__head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  margin: 0;
+  line-height: 1.15;
+  z-index: 2;
+}
+
+/* Grid spans text (left) and the dual image pane (right) */
+.promo--emura-only .promo__grid {
+  display: grid;
+  grid-template-columns: 1fr 620px;  /* pushes the images further right & gives them room */
+  column-gap: 28px;
+  align-items: center;               /* vertically centers the grid content within the section */
+  min-height: var(--promoH);
+}
+
+/* Ensure the text column also centers with the visual height */
+.promo--emura-only .promo__left {
+  align-self: center;
+}
+
+/* Force real black text (no opacity fade) inside the promo body */
+.promo--emura-only .promo__price-row,
+.promo--emura-only .promo__incl,
+.promo--emura-only .promo__bullets,
+.promo--emura-only .promo__bullets li {
+  color: #0D2233;
+  opacity: 1 !important;
+}
+
+/* Right-side dual cards (indoor unit + brand) */
+.promo--emura-only .promo__right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;         /* pushes cards toward the right side */
+  gap: 24px;
+  height: calc(var(--promoH) * 0.90); /* both cards will be tall & centered */
+}
+
+/* Card styling (shared) */
+.promo--emura-only .promo__unit,
+.promo--emura-only .promo__logo-wrap {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(8, 28, 48, 0.18);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Indoor unit card should be a wide rectangle */
+.promo--emura-only .promo__unit {
+  aspect-ratio: 16 / 11;             /* thinner than square */
+}
+.promo--emura-only .promo__unit img {
+  max-height: 100%;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Brand logo card slightly narrower & square-ish */
+.promo--emura-only .promo__logo-wrap {
+  aspect-ratio: 1 / 1;
+  min-width: 152px;                   /* keeps it substantial */
+}
+.promo--emura-only .promo__logo {
+  max-height: 64%;
+  width: auto;
+}
+
+/* Optional: tighten the whole section’s vertical rhythm a bit */
+.promo--emura-only .promo__wrap { margin: 0; }
+.promo--emura-only { padding: 8px 0 24px; }
+
+/* Responsive polish */
+@media (max-width: 1180px) {
+  .promo--emura-only .promo__grid { grid-template-columns: 1fr 560px; }
+}
+@media (max-width: 980px) {
+  .promo--emura-only .promo__grid {
+    grid-template-columns: 1fr;
+    row-gap: 18px;
+    min-height: auto;
+  }
+  .promo--emura-only .promo__right {
+    justify-content: flex-start;
+    height: 220px;
+  }
+}
