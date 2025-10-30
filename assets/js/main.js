@@ -583,385 +583,285 @@
     apply();
   });
 
-  // ----------------------- Recommender (capacity pick) --------------------
-  AFP.pickVariantByArea = function pickVariantByArea(totalRooms, avgRoomM2 /* preferQuiet unused here */) {
-    const totalM2 = totalRooms * avgRoomM2;
-    const list = AFP.VARS.slice();
+  /* ----------------------- Recommender (capacity pick) --------------------
+   Neutral, capacity-first picker (no brand bias). It:
+   - chooses target capacity from avg m²
+   - filters all variants to matching kW
+   - breaks ties by user brand preference (chips) or round-robin
+------------------------------------------------------------------------- */
+AFP.pickVariantByArea = function pickVariantByArea(totalRooms, avgRoomM2) {
+  const list = (AFP.VARS || []).slice();
+  const rooms = Math.max(1, +totalRooms || 1);
+  const avg = Math.max(1, +avgRoomM2 || 20);
 
-    let pool = list.filter((it) => totalM2 >= it.min_m2 && totalM2 <= it.max_m2);
-    if (!pool.length) {
-      // closest mid distance
-      const mid = (x) => (x.min_m2 + x.max_m2) / 2;
-      pool = list.sort((a, b) => Math.abs(mid(a) - totalM2) - Math.abs(mid(b) - totalM2));
-    }
-    if (totalRooms >= 3) {
-      const big = pool.filter((it) => it.kw >= 3.5);
-      if (big.length) pool = big;
-    }
-    return pool[0] || list[0];
+  // Map avg m² → preferred kW bucket (tweak if you like)
+  const targetKW = avg <= 25 ? 2.5 : avg <= 40 ? 3.5 : 5.0;
+
+  // 1) pool: same kW, anywhere in doc
+  let pool = list.filter(v => (v.kw || v.cap) === targetKW);
+  // 2) if nothing exact, take those whose [min_m2,max_m2] contains avg
+  if (!pool.length) pool = list.filter(v => avg >= v.min_m2 && avg <= v.max_m2);
+  // 3) still nothing: closest by mid distance
+  if (!pool.length) {
+    const mid = x => (x.min_m2 + x.max_m2) / 2;
+    pool = list.sort((a,b) => Math.abs(mid(a)-avg*rooms) - Math.abs(mid(b)-avg*rooms));
+  }
+
+  // User preferences from chips (Step 3), stored as CSV: "panasonic,daikin,haier"
+  const prefs = (() => {
+    try {
+      const raw = sessionStorage.getItem('khPreferredBrands') || '';
+      return raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+    } catch { return []; }
+  })();
+
+  // Round-robin fallback so we don’t always hit the first brand
+  const rr = (() => {
+    try {
+      let i = parseInt(sessionStorage.getItem('khRR')||'0',10) || 0;
+      const order = ['daikin','panasonic','haier'];
+      const b = order[i % order.length];
+      sessionStorage.setItem('khRR', String((i+1)%order.length));
+      return b;
+    } catch { return 'panasonic'; }
+  })();
+
+  const brandOf = v => (v.brand || '').toLowerCase();
+
+  // Try preferences first (first one that exists in pool wins)
+  for (const want of prefs) {
+    const hit = pool.find(v => brandOf(v) === want);
+    if (hit) return hit;
+  }
+  // Otherwise pick round-robin brand if present in pool
+  const hitRR = pool.find(v => brandOf(v) === rr);
+  if (hitRR) return hitRR;
+
+  // Finally: stable tie-break by closest min/max span to avg (prevents bias)
+  const spanScore = v => Math.abs(((v.min_m2+v.max_m2)/2) - avg);
+  pool.sort((a,b) => spanScore(a) - spanScore(b));
+
+  return pool[0] || list[0];
+};
+
+/* ======================= Keuzehulp v2 — stable Step 3 ====================
+   Single source of truth for:
+   - rendering the recommendation card
+   - injecting the **indoor unit** image from `assets/indoor units kh/*`
+   - NO legacy image/safety-net/diversification observers
+   - idempotent, no thrashing, no loops
+============================================================================ */
+(function KH_V2_Render() {
+  // Hard block any legacy injectors that might still be in the file
+  window.__KH_IMAGE_INJECTOR_ACTIVE__ = true;
+
+  // Mapping brand+family → indoor head image
+  // (filenames exactly as you provided)
+  const INDOOR_MAP = {
+    // daikin
+    'daikin comfora'  : 'assets/indoor units kh/daikin comfora indoor.jpg',
+    'daikin perfera'  : 'assets/indoor units kh/daikin perfera indoor.jpg',
+    'daikin emura'    : 'assets/indoor units kh/daikin emura indoor.jpg',
+
+    // panasonic
+    'panasonic tz'      : 'assets/indoor units kh/panasonic tz indoor.jpg',
+    'panasonic etherea' : 'assets/indoor units kh/panasonic etherea indoor.jpg',
+
+    // haier
+    'haier revive plus' : 'assets/indoor units kh/haier revive indoor.jpg',
+    'haier flexis'      : 'assets/indoor units kh/haier flexis indoor.jpg',
+    'haier expert'      : 'assets/indoor units kh/haier expert indoor.jpg'
   };
 
-  // --------------------------- Keuzehulp v2 wizard ------------------------
-  onReady(() => {
-    const card = $(".khv2-card");
-    let nextBtn = $("#kh-next");
-    const dots = $$(".khv2-steps .dot");
-    if (!card || !nextBtn || !dots.length) return;
+  const BASE = ((window.AFP && AFP.ROOT_BASE) || '/airflowplus-site').replace(/\/+$/,'');
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-    // Ensure a dedicated render body
-    let body = $(".khv2-body", card);
-    const actions = $(".khv2-actions", card);
-    if (!body) {
-      body = document.createElement("div");
-      body.className = "khv2-body";
-      card.insertBefore(body, actions || null);
+  // Helpers to parse family from slug or title
+  function familyKeyFrom(rec) {
+    // prefer slug: products/daikin-comfora-35kw.html → "daikin comfora"
+    const slug = String(rec.slug||'').toLowerCase();
+    let fam = '';
+    const m = slug.match(/products\/([a-z0-9\-]+?)-(?:\d+(?:\.?\d)?|25|35|50)kw\.html$/i) ||
+              slug.match(/products\/([a-z0-9\-]+)\.html$/i);
+    if (m) fam = m[1]; // e.g., "daikin-comfora"
+    if (!fam) {
+      // fallback to title, e.g. "Panasonic TZ 3.5 kW"
+      const t = String(rec.name||'').toLowerCase();
+      if (/daikin/.test(t)) fam = 'daikin-' + (t.includes('perfera') ? 'perfera' : t.includes('emura') ? 'emura' : 'comfora');
+      else if (/panasonic/.test(t)) fam = 'panasonic-' + (t.includes('etherea') ? 'etherea' : 'tz');
+      else if (/haier/.test(t)) fam = 'haier-' + (t.includes('expert') ? 'expert' : t.includes('flexis') ? 'flexis' : 'revive-plus');
     }
+    return fam.replace(/-/g, ' ').trim(); // normalize to "brand family"
+  }
 
-    // Remove stray static step DOM outside body (prevents overlaying/blocks)
-    $$(".khv2-q, .kh-grid-rooms", card).forEach((el) => {
-      if (!body.contains(el)) el.remove();
-    });
+  function indoorImageFor(rec) {
+    const key = familyKeyFrom(rec);              // e.g., "panasonic tz"
+    const hit = INDOOR_MAP[key];
+    return hit || null;
+  }
 
-    // Replace Next to kill legacy listeners that blocked clicks before
-    const fresh = nextBtn.cloneNode(true);
-    nextBtn.replaceWith(fresh);
-    nextBtn = $("#kh-next") || fresh;
+  // KH state helpers (created in your KH step renderer below)
+  function midFromRange(txt) {
+    if (!txt) return null;
+    txt = String(txt).replace(/\s/g,'').replace('m²','').replace('m2','').replace(',', '.');
+    const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
+    if (m) { const a = parseFloat(m[1]), b = parseFloat(m[2]); if (!isNaN(a)&&!isNaN(b)) return (a+b)/2; }
+    const n = parseFloat(txt);
+    return isNaN(n) ? null : n;
+  }
 
-    const state = (AFP.KH_STATE = { step: 1, rooms: 0, sizes: [] });
+  function renderRecoInto(target, state) {
+    const sizes = Array.isArray(state?.sizes) ? state.sizes : [];
+    const mids = sizes.map(midFromRange).filter(x => typeof x === 'number' && !isNaN(x));
+    const totalM2 = mids.length ? mids.reduce((a,b)=>a+b, 0) : 30;
+    const rooms   = Math.max(1, state?.rooms || 1);
+    const avg     = totalM2 / rooms;
 
-    const setDot = (n) => dots.forEach((d, i) => d.classList.toggle("is-active", i === n - 1));
-    const complete = () =>
-      state.step === 1 ? state.rooms > 0 : state.step === 2 ? state.sizes.length === state.rooms && state.sizes.every(Boolean) : true;
+    const rec = AFP.pickVariantByArea(rooms, avg);
+    if (!rec) return;
 
-    const sizeOptions = [
-      { val: "1-30", label: "1–30 m²" },
-      { val: "30-40", label: "30–40 m²" },
-      { val: "40-50", label: "40–50 m²" }
-    ];
-    const roomCard = (i) =>
-      `<div class="khv2-room-card" data-room="${i}">
-         <h4>Kamer ${i}</h4>
-         <div class="khv2-sizes">
-           ${sizeOptions
-             .map(
-               (p) =>
-                 `<label class="kh-pill"><input type="radio" name="room-${i}-size" value="${p.val}" hidden><span>${p.label}</span></label>`
-             )
-             .join("")}
+    const priceLine = (b) =>
+      b === 'Daikin'    ? 'vanaf € 1.800 incl. materiaal en montage' :
+      b === 'Panasonic' ? 'vanaf € 1.600 incl. materiaal en montage' :
+      b === 'Haier'     ? 'vanaf € 1.300 incl. materiaal en montage' :
+                          'Prijs op aanvraag';
+
+    // Build fresh card, kill any legacy images or placeholders
+    target.innerHTML =
+      `<div class="kh-reco-card kh-reco--withimg">
+         <div class="kh-reco-media"></div>
+         <div class="kh-reco-body">
+           <h3 class="kh-reco-title">${rec.name || 'Aanbevolen model'}</h3>
+           <div class="muted">${priceLine(rec.brand || '')}</div>
+           <a class="btn btn-green" style="margin-top:12px" href="${BASE}/${(rec.slug||'').replace(/^\/+/,'')}">Bekijk aanbeveling</a>
+           <p class="muted" style="margin-top:8px">Op basis van ~${Math.round(totalM2)} m².</p>
          </div>
        </div>`;
 
-    function renderStep1() {
-      state.step = 1;
-      state.rooms = 0;
-      setDot(1);
+    // Inject the indoor head image
+    const media = $('.kh-reco-media', target);
+    const imgPath = indoorImageFor(rec);
+    if (media && imgPath) {
+      // remove any stray <img> left by static markup
+      $$('img', media).forEach(x => x.remove());
+      const img = new Image();
+      img.alt = rec.name || 'Airco';
+      img.src = imgPath;
+      // inline size so we don’t touch global CSS (keeps the old small-card look)
+      img.style.width = '240px';
+      img.style.height = 'auto';
+      img.style.objectFit = 'contain';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      media.appendChild(img);
+    }
+  }
+
+  // === Wizard glue (Steps 1→2→3) – tiny, stable, idempotent ===============
+  (function KH_Wizard(){
+    const card = document.querySelector('.khv2-card');
+    let nextBtn = document.getElementById('kh-next');
+    const dots = Array.from(document.querySelectorAll('.khv2-steps .dot'));
+    if (!card || !nextBtn || !dots.length) return;
+
+    const state = (AFP.KH_STATE = { step: 1, rooms: 0, sizes: [] });
+
+    const setDot = (n) => dots.forEach((d,i)=> d.classList.toggle('is-active', i===n-1));
+    const complete = () =>
+      state.step === 1 ? state.rooms > 0
+      : state.step === 2 ? state.sizes.length === state.rooms && state.sizes.every(Boolean)
+      : true;
+
+    function renderStep1(){
+      state.step = 1; state.rooms = 0; setDot(1);
+      const body = document.querySelector('.khv2-body');
       body.innerHTML =
         `<h2 class="khv2-q">In hoeveel ruimtes wil je airconditioning?</h2>
          <div class="kh-grid-rooms" style="justify-content:center; grid-template-columns:repeat(4,72px); gap:14px;">
-           ${[1, 2, 3, 4]
-             .map((n) => `<label class="chip round"><input type="radio" name="rooms" value="${n}"><span>${n}</span></label>`)
-             .join("")}
+           ${[1,2,3,4].map(n => `<label class="chip round"><input type="radio" name="rooms" value="${n}"><span>${n}</span></label>`).join('')}
          </div>`;
-      body.addEventListener(
-        "change",
-        (e) => {
-          const input = e.target;
-          if (input?.name !== "rooms") return;
-          state.rooms = parseInt(input.value, 10) || 0;
-          nextBtn.disabled = !complete();
-        },
-        { once: true }
-      );
-      nextBtn.textContent = "Volgende →";
+      body.addEventListener('change', (e)=>{
+        const i = e.target;
+        if (i?.name === 'rooms') { state.rooms = parseInt(i.value,10)||0; nextBtn.disabled = !complete(); }
+      }, { once:true });
+      nextBtn.textContent = 'Volgende →';
       nextBtn.disabled = true;
-      card.setAttribute("data-step", "1");
+      card.setAttribute('data-step','1');
     }
 
-    function renderStep2() {
-      state.step = 2;
-      state.sizes = new Array(state.rooms).fill(null);
-      setDot(2);
+    function renderStep2(){
+      state.step = 2; state.sizes = new Array(state.rooms).fill(null); setDot(2);
+      const opts = [{val:'1-30',label:'1–30 m²'},{val:'30-40',label:'30–40 m²'},{val:'40-50',label:'40–50 m²'}];
+      const room = i =>
+        `<div class="khv2-room-card" data-room="${i}">
+           <h4>Kamer ${i}</h4>
+           <div class="khv2-sizes">
+             ${opts.map(p=>`<label class="kh-pill"><input type="radio" name="room-${i}-size" value="${p.val}" hidden><span>${p.label}</span></label>`).join('')}
+           </div>
+         </div>`;
+      const body = document.querySelector('.khv2-body');
       body.innerHTML =
         `<h2 class="khv2-q">Hoe groot zijn de ruimtes?</h2>
          <p class="kh-sub">Kies de oppervlakte per kamer. Dit helpt ons het juiste vermogen te adviseren.</p>
-         <div class="kh-size-grid">
-           ${Array.from({ length: state.rooms }, (_, i) => roomCard(i + 1)).join("")}
-         </div>`;
-      body.addEventListener("change", (e) => {
-        const input = e.target;
-        if (!input || input.type !== "radio") return;
-        if (!input.name.startsWith("room-") || !input.name.endsWith("-size")) return;
-        const idx = parseInt(input.name.split("-")[1], 10);
-        if (Number.isFinite(idx) && idx >= 1 && idx <= state.rooms) {
-          state.sizes[idx - 1] = input.value;
-          const c = input.closest(".khv2-room-card");
-          c?.querySelectorAll(".kh-pill").forEach((l) => l.classList.remove("active"));
-          input.closest(".kh-pill")?.classList.add("active");
-          nextBtn.disabled = !complete();
-        }
+         <div class="kh-size-grid">${Array.from({length: state.rooms},(_,i)=>room(i+1)).join('')}</div>`;
+      body.addEventListener('change', (e)=>{
+        const i = e.target; if (!i || i.type!=='radio') return;
+        const idx = parseInt(i.name.split('-')[1],10); if (!Number.isFinite(idx)) return;
+        state.sizes[idx-1] = i.value;
+        i.closest('.khv2-room-card')?.querySelectorAll('.kh-pill').forEach(l=>l.classList.remove('active'));
+        i.closest('.kh-pill')?.classList.add('active');
+        nextBtn.disabled = !complete();
       });
-      nextBtn.textContent = "Volgende →";
+      nextBtn.textContent = 'Volgende →';
       nextBtn.disabled = true;
-      card.setAttribute("data-step", "2");
+      card.setAttribute('data-step','2');
     }
 
-    function midFromRange(txt) {
-      if (!txt) return null;
-      txt = String(txt).replace(/\s/g, "").replace("m²", "").replace("m2", "").replace(",", ".");
-      const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
-      if (m) {
-        const a = parseFloat(m[1]), b = parseFloat(m[2]);
-        if (!isNaN(a) && !isNaN(b)) return (a + b) / 2;
-      }
-      const n = parseFloat(txt);
-      return isNaN(n) ? null : n;
-    }
-
-    function renderRecoInto(target) {
-      const mids = (state.sizes || []).map(midFromRange).filter((x) => typeof x === "number" && !isNaN(x));
-      const totalM2 = mids.length ? mids.reduce((a, b) => a + b, 0) : 30;
-      const rooms = Math.max(1, state.rooms || 1);
-      const avg = totalM2 / rooms;
-      const rec = AFP.pickVariantByArea(rooms, avg, false);
-      if (!rec) return;
-      const priceLine = (b) =>
-        b === "Daikin"
-          ? "vanaf € 1.800 incl. materiaal en montage"
-          : b === "Panasonic"
-          ? "vanaf € 1.600 incl. materiaal en montage"
-          : b === "Haier"
-          ? "vanaf € 1.300 incl. materiaal en montage"
-          : "Prijs op aanvraag";
-
-      target.innerHTML =
-        `<div class="kh-reco-card">
-           <div class="kh-reco-main">
-             <div class="kh-reco-body">
-               <h3 class="kh-reco-title">${rec.name || "Aanbevolen model"}</h3>
-               <div class="muted">${priceLine(rec.brand || "")}</div>
-               <a class="btn btn-green" style="margin-top:12px" href="${AFP.ROOT_BASE + (rec.slug || "")}">Bekijk aanbeveling</a>
-               <p class="muted" style="margin-top:8px">Op basis van ~${Math.round(totalM2)} m².</p>
-             </div>
-           </div>
-         </div>`;
-    }
-
-    function ensureRecoMount() {
-      let el = $("#kh-reco");
+    function ensureRecoMount(){
+      let el = document.getElementById('kh-reco');
       if (!el) {
-        const host = $('[data-kh-step="3"]') || card;
-        el = document.createElement("div");
-        el.id = "kh-reco";
-        el.style.marginTop = "16px";
-        host.appendChild(el);
+        el = document.createElement('div'); el.id = 'kh-reco'; el.style.marginTop = '16px';
+        (document.querySelector('[data-kh-step="3"]') || document.querySelector('.khv2-body')).appendChild(el);
       }
       return el;
     }
 
-    function renderStep3() {
-      state.step = 3;
-      setDot(3);
-      const list = state.sizes.map((sz, i) => `<li>Kamer ${i + 1}: <strong>${sz.replace("-", "–")} m²</strong></li>`).join("");
+    function renderStep3(){
+      state.step = 3; setDot(3);
+      const list = state.sizes.map((sz,i)=>`<li>Kamer ${i+1}: <strong>${sz.replace('-', '–')} m²</strong></li>`).join('');
+      const body = document.querySelector('.khv2-body');
       body.innerHTML =
         `<h2 class="khv2-q">Overzicht</h2>
-         <p class="kh-sub">Op basis van jouw keuzes stellen we een advies op maat samen.</p>
          <div id="khv2-summary" class="kh-result">
            <h3>Je keuzes</h3>
            <ul class="kh-out">${list}</ul>
            <p class="muted">Klaar? Ga door voor een vrijblijvende offerte.</p>
          </div>`;
-      nextBtn.textContent = "Afronden →";
+      nextBtn.textContent = 'Afronden →';
       nextBtn.disabled = false;
-      card.setAttribute("data-step", "3");
+      card.setAttribute('data-step','3');
 
       const mount = ensureRecoMount();
-      renderRecoInto(mount);
+      renderRecoInto(mount, state);
     }
 
-    // Dots jump
-    document.addEventListener("click", (e) => {
-      const dot = e.target.closest(".khv2-steps .dot");
-      if (!dot) return;
+    // dots & next
+    document.addEventListener('click', (e)=>{
+      const dot = e.target.closest('.khv2-steps .dot'); if (!dot) return;
       const i = dots.indexOf(dot);
-      if (i === 0) renderStep1();
-      if (i === 1 && state.rooms) renderStep2();
-      if (i === 2 && state.rooms && state.sizes.length) renderStep3();
+      if (i===0) renderStep1();
+      if (i===1 && state.rooms) renderStep2();
+      if (i===2 && state.rooms && state.sizes.length) renderStep3();
     });
+    nextBtn.addEventListener('click', (e)=>{
+      e.preventDefault(); if (!complete()) return;
+      if (state.step===1) return renderStep2();
+      if (state.step===2) return renderStep3();
+      if (state.step===3) window.location.href = 'contact.html#offerte';
+    }, true);
 
-    // Next
-    nextBtn.addEventListener(
-      "click",
-      (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        ev.stopImmediatePropagation();
-        if (!complete()) return;
-        if (state.step === 1) return renderStep2();
-        if (state.step === 2) return renderStep3();
-        if (state.step === 3) window.location.href = "contact.html#offerte";
-      },
-      true
-    );
-
-    // Close (×)
-    const closeBtn = $(".khv2-close");
-    closeBtn?.addEventListener("click", () => (window.location.href = "index.html"));
-    document.addEventListener("keydown", (e) => e.key === "Escape" && (window.location.href = "index.html"));
-
-    // Boot
+    // boot
     renderStep1();
-  });
-
-  // -------------------- Legacy Formspree (data-fs only) -------------------
-  onReady(() => {
-    const FORMS = $$("form[data-fs]");
-    if (!FORMS.length) return;
-
-    const toQuery = (obj) => Object.entries(obj).map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join("&");
-
-    FORMS.forEach((form) => {
-      const endpoint = form.getAttribute("action");
-      if (!endpoint || !/^https:\/\/formspree\.io\/f\//.test(endpoint)) return;
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const submitBtn = form.querySelector('[type="submit"]');
-        submitBtn?.setAttribute("data-loading", "1");
-
-        try {
-          const formData = new FormData(form);
-          const meta = {
-            source: formData.get("source") || form.getAttribute("data-source") || "site",
-            type: form.getAttribute("data-type") || "lead"
-          };
-          const res = await fetch(endpoint, { method: "POST", body: formData, headers: { Accept: "application/json" } });
-          if (res.ok) {
-            const thanksURL = form.getAttribute("data-thanks") || "/thank-you.html";
-            window.location.href = `${thanksURL}?${toQuery(meta)}`;
-          } else {
-            alert("Er is iets misgegaan bij het versturen. Probeer het opnieuw.");
-          }
-        } catch (err) {
-          console.error(err);
-          alert("Netwerkfout. Controleer uw verbinding en probeer opnieuw.");
-        } finally {
-          submitBtn?.removeAttribute("data-loading");
-        }
-      });
-    });
-  });
-})();
-
-/* === Keuzehulp recommendation safety net (re-renders if missing) ======= */
-/* DISABLED by guard to avoid collisions with the main wizard render */
-(function () {
-  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return; // <-- added
-  if (!window.AFP) return;
-
-  function midFromRange(txt) {
-    if (!txt) return null;
-    txt = String(txt).replace(/\s/g, '').replace('m²','').replace('m2','').replace(',', '.');
-    const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
-    if (m) { const a = parseFloat(m[1]), b = parseFloat(m[2]); if (!isNaN(a) && !isNaN(b)) return (a + b) / 2; }
-    const n = parseFloat(txt);
-    return isNaN(n) ? null : n;
-  }
-
-  function renderRecoInto(mount, state) {
-    try {
-      const sizes = Array.isArray(state?.sizes) ? state.sizes : [];
-      const mids = sizes.map(midFromRange).filter(x => typeof x === 'number' && !isNaN(x));
-      const totalM2 = mids.length ? mids.reduce((a,b) => a+b, 0) : 30;
-      const rooms   = Math.max(1, state?.rooms || 1);
-      const avg     = totalM2 / rooms;
-
-      const pick = (window.AFP.pickVariantByArea || function (r,a){ return (AFP.VARS||[])[0]; });
-      const rec  = pick(rooms, avg, false);
-      if (!rec) return;
-
-      const price = (b) =>
-        b === 'Daikin'    ? 'vanaf € 1.800 incl. materiaal en montage' :
-        b === 'Panasonic' ? 'vanaf € 1.600 incl. materiaal en montage' :
-        b === 'Haier'     ? 'vanaf € 1.300 incl. materiaal en montage' :
-                            'Prijs op aanvraag';
-
-      const base = AFP.ROOT_BASE || '/airflowplus-site/';
-      mount.innerHTML =
-        '<div class="kh-reco-card">' +
-          '<div class="kh-reco-main">' +
-            '<div class="kh-reco-body">' +
-              '<h3 class="kh-reco-title">' + (rec.name || 'Aanbevolen model') + '</h3>' +
-              '<div class="muted">' + price(rec.brand || '') + '</div>' +
-              '<a class="btn btn-green" style="margin-top:12px" href="' + base + (rec.slug || '') + '">Bekijk aanbeveling</a>' +
-              '<p class="muted" style="margin-top:8px">Op basis van ~' + Math.round(totalM2) + ' m².</p>' +
-            '</div>' +
-          '</div>' +
-        '</div>';
-    } catch (e) {
-      console.warn('KH safety net render error', e);
-    }
-  }
-
-  function ensureReco() {
-    const card = document.querySelector('.khv2-card');
-    if (!card || card.getAttribute('data-step') !== '3') return;
-
-    let mount = document.getElementById('kh-reco');
-    if (!mount) {
-      mount = document.createElement('div');
-      mount.id = 'kh-reco';
-      mount.style.marginTop = '16px';
-      (document.querySelector('[data-kh-step="3"]') || card).appendChild(mount);
-    }
-    if (!mount.innerHTML.trim()) {
-      renderRecoInto(mount, window.AFP.KH_STATE);
-    }
-  }
-
-  const card = document.querySelector('.khv2-card');
-  if (card) {
-    try {
-      const mo = new MutationObserver(() => setTimeout(ensureReco, 60));
-      mo.observe(card, { attributes: true, attributeFilter: ['data-step'] });
-    } catch {}
-  }
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('#kh-next,.kh-next,[data-kh-next]')) setTimeout(ensureReco, 120);
-  }, true);
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(ensureReco, 120), { once: true });
-  } else {
-    setTimeout(ensureReco, 120);
-  }
-  window.AFP && (window.AFP.forceReco = ensureReco);
-})();
-
-/* Place recommendation inside the Step-3 summary box */
-(function () {
-  function relocateReco() {
-    var mount = document.getElementById('kh-reco');
-    var summary = document.getElementById('khv2-summary'); // the visible Step-3 panel
-    if (mount && summary && !summary.contains(mount)) {
-      summary.insertAdjacentElement('afterend', mount);
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', relocateReco, { once: true });
-  } else {
-    relocateReco();
-  }
-  var card = document.querySelector('.khv2-card');
-  if (card) {
-    try {
-      new MutationObserver(relocateReco).observe(card, { attributes: true, attributeFilter: ['data-step'] });
-    } catch {}
-  }
-})();
-
-/* === Keuzehulp: inject product hero image next to recommendation ========= */
-/* DISABLED: we now use kh-reco-image.js to swap INDOOR images only */
-(function () {
-  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return; // <-- added: kill legacy products/hero.jpg injector
-  // (dead code below intentionally left for future reference)
+  })();
 })();
