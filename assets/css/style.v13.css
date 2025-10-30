@@ -3685,3 +3685,75 @@ section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
     height: 200px;
   }
 }
+
+/* === Emura promo: stable layout, centered media, no text-gap =============== */
+.promo--emura-only .promo__grid{
+  /* switch to a side-by-side flex row */
+  display:flex;
+  align-items:center;                 /* vertical centering */
+  justify-content:space-between;
+  gap:32px;
+  /* overall height for the section; tweak if you want it taller/shorter */
+  --promo-h: 260px;
+  min-height: var(--promo-h);
+}
+
+.promo--emura-only .promo__left{
+  flex:1 1 auto;                      /* text column takes remaining width */
+  min-width: 0;                       /* prevents overflow that pushes things down */
+}
+
+/* Right cluster contains the two white media cards */
+.promo--emura-only .promo__right{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;                 /* center both boxes vertically */
+  gap:28px;
+  padding-right: 12px;
+}
+
+/* The two white cards (indoor unit + logo) share the same vertical sizing */
+.promo--emura-only .promo__unit,
+.promo--emura-only .promo__logo-wrap{
+  height: calc(var(--promo-h) * 0.875);   /* ~7/8 of section height */
+  aspect-ratio: 16/11;                     /* “thin” look; prevents over-wide box */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  border-radius:16px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06);
+  padding:12px;
+}
+
+/* Make the left image card a bit wider than the logo card */
+.promo--emura-only .promo__unit{ aspect-ratio: 16/9; }
+.promo--emura-only .promo__logo-wrap{ aspect-ratio: 5/4; }
+
+/* Media inside the cards */
+.promo--emura-only .promo__unit img{
+  height:100%;
+  width:auto;
+  object-fit:contain;
+  display:block;
+}
+
+.promo--emura-only .promo__logo{
+  height:70%;                           /* nice margin inside the white logo card */
+  width:auto;
+  display:block;
+}
+
+/* Responsive: stack on small screens but keep proportions */
+@media (max-width: 920px){
+  .promo--emura-only .promo__grid{
+    flex-direction:column;
+    align-items:stretch;
+    gap:20px;
+    --promo-h: 220px;
+  }
+  .promo--emura-only .promo__right{
+    justify-content:center;
+    padding-right:0;
+  }
+}
