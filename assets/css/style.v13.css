@@ -2289,6 +2289,111 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
   .promo__logo-wrap{ width:auto; margin-left:auto; }
 }
 
+/* === Daikin Emura promo — rigid visual layout ========================== */
+/* Card container */
+.promo--emura,
+#promo-emura,
+#emura-promo {
+  position: relative;
+}
+
+/* The right-side visual lane that holds both boxes */
+.promo--emura .emura-visuals,
+#emura-promo .emura-visuals,
+.promo--emura .promo-visuals {
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  /* gap from card’s right edge */
+  left: min(52%, 680px);
+  /* pushes visuals to the right half like your mock */
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  pointer-events: none;
+  /* visuals don’t block buttons/links on the left */
+}
+
+/* The two white “tall” boxes */
+.promo--emura .emura-unit,
+#emura-promo .emura-unit,
+.promo--emura .promo-unit,
+.promo--emura .emura-brand,
+#emura-promo .emura-brand,
+.promo--emura .promo-brand {
+  height: 87%;
+  /* ≈7/8 of the card height as requested */
+  aspect-ratio: 4/5;
+  /* tall box feel; keeps width in check */
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(6, 22, 47, .08), 0 2px 6px rgba(6, 22, 47, .06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+/* Fine-tune the left tall box (indoor unit) width vs. logo width */
+.promo--emura .emura-unit,
+#emura-promo .emura-unit,
+.promo--emura .promo-unit {
+  flex: 0 0 34%;
+}
+
+/* left rectangle width */
+
+.promo--emura .emura-brand,
+#emura-promo .emura-brand,
+.promo--emura .promo-brand {
+  flex: 0 0 22%;
+}
+
+/* right rectangle width */
+
+/* Images inside boxes */
+.promo--emura .emura-unit img,
+#emura-promo .emura-unit img,
+.promo--emura .promo-unit img,
+.promo--emura .emura-brand img,
+#emura-promo .emura-brand img,
+.promo--emura .promo-brand img {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Mobile/tablet: stack under text and keep clean */
+@media (max-width: 1024px) {
+
+  .promo--emura .emura-visuals,
+  #emura-promo .emura-visuals,
+  .promo--emura .promo-visuals {
+    position: static;
+    transform: none;
+    margin-top: 16px;
+    left: auto;
+    right: auto;
+    justify-content: flex-start;
+  }
+
+  .promo--emura .emura-unit,
+  #emura-promo .emura-unit,
+  .promo--emura .promo-unit,
+  .promo--emura .emura-brand,
+  #emura-promo .emura-brand,
+  .promo--emura .promo-brand {
+    height: 180px;
+    aspect-ratio: auto;
+    flex: 0 0 48%;
+  }
+}
 
 /* Keep mute toggle clickable over keuzehulp without moving the card */
 .hero, .hero-wrap{ position: relative; }
