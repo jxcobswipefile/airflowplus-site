@@ -583,23 +583,77 @@
     apply();
   });
 
-  // ----------------------- Recommender (capacity pick) --------------------
-  AFP.pickVariantByArea = function pickVariantByArea(totalRooms, avgRoomM2 /* preferQuiet unused here */) {
-    const totalM2 = totalRooms * avgRoomM2;
-    const list = AFP.VARS.slice();
+    // ----------------------- Recommender (capacity pick) --------------------
+  // Diversified: same sizing logic, then pick brand by (1) user prefs, else (2) round-robin
+  AFP.pickVariantByArea = function pickVariantByArea(totalRooms, avgRoomM2 /* preferQuiet unused */) {
+    try {
+      const list = Array.isArray(AFP.VARS) ? AFP.VARS.slice() : [];
+      if (!list.length) return null;
 
-    let pool = list.filter((it) => totalM2 >= it.min_m2 && totalM2 <= it.max_m2);
-    if (!pool.length) {
-      // closest mid distance
+      const totalM2 = Math.max(1, (totalRooms || 1) * (avgRoomM2 || 1));
+
+      // 1) Base pool by area range (fallback: nearest mid)
+      let pool = list.filter(it => totalM2 >= it.min_m2 && totalM2 <= it.max_m2);
+      if (!pool.length) {
+        const mid = (x) => (x.min_m2 + x.max_m2) / 2;
+        pool = list.slice().sort((a,b) => Math.abs(mid(a)-totalM2) - Math.abs(mid(b)-totalM2));
+      }
+
+      // If many rooms, prefer >=3.5kW (but don’t empty the pool)
+      if ((totalRooms||1) >= 3) {
+        const big = pool.filter(it => (it.kw||it.cap||0) >= 3.5);
+        if (big.length) pool = big;
+      }
+
+      // “Best fit” by closeness to pool mid; use its kW as the target capacity
       const mid = (x) => (x.min_m2 + x.max_m2) / 2;
-      pool = list.sort((a, b) => Math.abs(mid(a) - totalM2) - Math.abs(mid(b) - totalM2));
+      const best = pool.slice().sort((a,b) => Math.abs(mid(a)-totalM2) - Math.abs(mid(b)-totalM2))[0] || pool[0] || list[0];
+      const targetKW = Number((best.kw ?? best.cap) || 0);
+      const eqKW = (v) => Math.abs(Number((v.kw ?? v.cap) || 0) - targetKW) < 0.05; // float-safe
+
+      // 2) Brand order = user prefs (if any) else round-robin across sessions
+      function getPreferredBrands() {
+        try {
+          const raw = sessionStorage.getItem('khPreferredBrands') || "[]";
+          const arr = Array.isArray(JSON.parse(raw)) ? JSON.parse(raw) : [];
+          return arr.map(s => String(s).trim()).filter(Boolean).map(s => s.charAt(0).toUpperCase()+s.slice(1).toLowerCase());
+        } catch { return []; }
+      }
+      function nextBrandRR() {
+        const order = ['Daikin','Panasonic','Haier'];
+        let i = 0;
+        try { i = Number(sessionStorage.getItem('khBrandRRv3')||'0')||0; } catch {}
+        const b = order[i % order.length];
+        try { sessionStorage.setItem('khBrandRRv3', String((i+1)%order.length)); } catch {}
+        return [b, ...order.filter(x => x !== b)]; // start from RR pick, then others
+      }
+
+      const brandOrder = (getPreferredBrands().length ? getPreferredBrands() : nextBrandRR());
+
+      // 3) Try to return same capacity from the chosen brand(s)
+      for (const brand of brandOrder) {
+        const exact = pool.find(v => v.brand === brand && eqKW(v));
+        if (exact) return exact;
+
+        // closest capacity within same brand, if exact isn’t available
+        const brandAlts = pool.filter(v => v.brand === brand);
+        if (brandAlts.length) {
+          const closest = brandAlts.slice().sort((a,b) =>
+            Math.abs((a.kw??a.cap??0) - targetKW) - Math.abs((b.kw??b.cap??0) - targetKW)
+          )[0];
+          if (closest) return closest;
+        }
+      }
+
+      // 4) Fallbacks
+      return best || pool[0] || list[0];
+    } catch {
+      // absolute safety fallback (keep site working)
+      const all = Array.isArray(AFP.VARS) ? AFP.VARS : [];
+      return all[0] || null;
     }
-    if (totalRooms >= 3) {
-      const big = pool.filter((it) => it.kw >= 3.5);
-      if (big.length) pool = big;
-    }
-    return pool[0] || list[0];
   };
+
 
   // --------------------------- Keuzehulp v2 wizard ------------------------
   onReady(() => {
