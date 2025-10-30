@@ -4176,3 +4176,85 @@ section.promo.promo--emura-only .promo__logo {
     height: 180px !important;
   }
 }
+
+/* ==== EMURA PROMO: authoritative overrides (wins specificity & order) ==== */
+
+/* 1) Section rhythm – center the whole row inside the section */
+section.promo.promo--emura-only {
+  padding-top: 16px;
+  padding-bottom: 24px;
+}
+section.promo.promo--emura-only .promo__wrap {
+  display: grid;
+  align-items: center; /* centers the whole row inside the section */
+}
+
+/* 2) Remove the “mystery gap” – keep header in normal flow but tight */
+section.promo.promo--emura-only .promo__head {
+  position: static;
+  margin: 0 0 8px 0 !important;
+}
+
+/* 3) Row layout: text | unit | brand (push visuals to the right) */
+section.promo.promo--emura-only .promo__grid {
+  display: grid;
+  grid-template-columns: minmax(420px,1fr) 420px 180px;
+  column-gap: 28px;
+  align-items: center;   /* vertical centering on the row */
+}
+
+/* 4) Cards: kill old margin/padding and force equal tall cards (~7/8 height) */
+section.promo.promo--emura-only .promo__unit,
+section.promo.promo--emura-only .promo__logo-wrap {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 260px !important;      /* adjust to taste */
+  width: auto;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid #e7ebf1;
+  border-radius: 16px;
+  box-shadow: 0 12px 34px rgba(0,0,0,.10);
+  overflow: hidden;
+}
+
+/* Unit card proportions (kept “thinner” width-wise) */
+section.promo.promo--emura-only .promo__unit {
+  min-width: 320px;
+  max-width: 460px;
+}
+
+/* Brand tile */
+section.promo.promo--emura-only .promo__logo-wrap {
+  min-width: 150px;
+  max-width: 220px;
+}
+
+/* Media sizing inside cards */
+section.promo.promo--emura-only .promo__unit img,
+section.promo.promo--emura-only .promo__logo {
+  max-height: 92%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* 5) Force dark copy in this block */
+section.promo.promo--emura-only .promo__sub,
+section.promo.promo--emura-only .promo__bullets li {
+  color: #0f1720;
+}
+
+/* 6) Responsive fallback */
+@media (max-width: 1024px) {
+  section.promo.promo--emura-only .promo__grid {
+    grid-template-columns: 1fr;
+    row-gap: 18px;
+  }
+  section.promo.promo--emura-only .promo__unit,
+  section.promo.promo--emura-only .promo__logo-wrap {
+    height: 200px !important;
+  }
+}
