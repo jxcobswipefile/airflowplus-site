@@ -3844,3 +3844,57 @@ section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
   .promo--emura-only .promo__unit{ width:68%; }
   .promo--emura-only .promo__logo-wrap{ width:28%; }
 }
+
+/* =========================================
+   PROMO — Emura : center-in-section + overlay header
+   ========================================= */
+
+/* 1) Center the entire block inside the section */
+.promo--emura-only{
+  /* give the section a consistent height and center its content */
+  min-height: 460px;             /* adjust if you want taller/shorter */
+  display: flex;
+  align-items: center;            /* vertical centering of .promo__wrap */
+}
+
+.promo--emura-only .promo__wrap{
+  width: 100%;
+  position: relative;             /* needed for header overlay */
+}
+
+/* 2) Overlay the header so it no longer pushes the grid down */
+.promo--emura-only .promo__head{
+  position: absolute;
+  top: 18px;                      /* keep this tight to shrink the “gap” */
+  left: 32px;
+  right: 32px;
+  margin: 0;                      /* no flow margin */
+  z-index: 2;                     /* sit above the grid */
+}
+
+/* give the grid internal top padding so text clears the title */
+.promo--emura-only .promo__grid{
+  padding-top: 64px;              /* header height + a little breathing room */
+  margin-top: 0;
+  align-items: center;            /* keep the row vertically centered */
+}
+
+/* keep text readable */
+.promo--emura-only .promo__title,
+.promo--emura-only .promo__sub,
+.promo--emura-only .promo__bullets li{ color:#0D2233; }
+
+/* 3) Mobile/tablet: revert to normal flow to avoid overlaps */
+@media (max-width: 1024px){
+  .promo--emura-only{
+    min-height: unset;
+    display: block;               /* let it stack normally */
+  }
+  .promo--emura-only .promo__head{
+    position: static;
+    margin-bottom: 8px;
+  }
+  .promo--emura-only .promo__grid{
+    padding-top: 0;
+  }
+}
