@@ -2046,6 +2046,23 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
 .promo .cta-row .btn.btn-primary{ background:#22a3ff; color:#fff; }
 .promo .cta-row .btn.btn-outline{ background:#fff; color:#0b2a3c; border:1px solid rgba(2,32,71,.15); }
 
+.promo--emura-only{background:#0c2233;border-radius:18px;padding:24px;margin:24px 0}
+.promo--emura-only .promo__wrap{max-width:1100px;margin:0 auto}
+.promo__head{margin-bottom:10px}
+.promo__title{font-size:1.4rem;margin:0}
+.promo__sub{margin:.25rem 0 0;color:#98a7b4}
+.promo__grid{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
+.promo__price-row{display:flex;align-items:baseline;gap:10px;margin:8px 0 12px}
+.promo__was{text-decoration:line-through;opacity:.6}
+.promo__now{font-weight:700;font-size:1.6rem}
+.promo__incl{font-size:.9rem;color:#98a7b4}
+.promo__badges{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px;padding:0;list-style:none}
+.promo__bullets{margin:0 0 14px 1rem;color:#cfe0ec}
+.promo__cta{display:flex;gap:10px;flex-wrap:wrap}
+.promo__right{display:flex;align-items:center;justify-content:center}
+.promo__logo{height:28px;filter:none;border-radius:0}
+
+
 @media (max-width: 1024px){
   .promo .promo-card{ grid-template-columns: 1fr; }
   .promo .promo-right{ align-items:flex-start; }
