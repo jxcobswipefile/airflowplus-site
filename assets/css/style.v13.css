@@ -4530,3 +4530,25 @@ section.promo.promo--emura-only .promo__bullets li {
     height: 42px;
   }
 }
+
+/* Footer brand image */
+.site-footer .footer-mark {
+  height: 24px;
+  width: auto;
+  display: block;
+}
+@media (max-width: 680px) {
+  .site-footer .footer-mark { height: 20px; }
+}
+
+/* Footer phone styling */
+.site-footer .footer-phone {
+  display: inline-block;
+  font-weight: 600;
+  color: #eaf1ff;   /* matches current footer text color */
+  text-decoration: none;
+}
+.site-footer .footer-phone:hover {
+  text-decoration: underline;
+  opacity: 0.95;
+}
