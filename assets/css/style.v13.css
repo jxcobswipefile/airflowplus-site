@@ -3874,7 +3874,7 @@ section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
 
 /* give the grid internal top padding so text clears the title */
 .promo--emura-only .promo__grid{
-  padding-top: 64px;              /* header height + a little breathing room */
+  padding-top: 0px;              /* header height + a little breathing room */
   margin-top: 0;
   align-items: center;            /* keep the row vertically centered */
 }
