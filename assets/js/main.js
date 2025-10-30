@@ -768,12 +768,12 @@
     }
 
     function renderRecoInto(target) {
-      // --- helpers (local to this function) ------------------------------
+      // --- helpers ----------------------------------------------------------
       function baseFromSlug(slug) {
         if (!slug) return "";
         const last = String(slug).split("/").pop() || "";
         const noExt = last.replace(/\.(html?)$/i, "");
-        return noExt.replace(/-(?:2\.5|25|3\.5|35|5\.0|50)kw$/i, ""); // strip capacity suffix
+        return noExt.replace(/-(?:2\.5|25|3\.5|35|5\.0|50)kw$/i, "");
       }
       function indoorImageFor(rec) {
         const base = baseFromSlug(rec.slug || "");
@@ -786,26 +786,20 @@
         return hit?.img || null;
       }
       function priceLine(b) {
-        return b === "Daikin"
-          ? "vanaf € 1.800 incl. materiaal en montage"
-          : b === "Panasonic"
-            ? "vanaf € 1.600 incl. materiaal en montage"
-            : b === "Haier"
-              ? "vanaf € 1.300 incl. materiaal en montage"
-              : "Prijs op aanvraag";
+        return b === "Daikin" ? "vanaf € 1.800 incl. materiaal en montage" :
+          b === "Panasonic" ? "vanaf € 1.600 incl. materiaal en montage" :
+            b === "Haier" ? "vanaf € 1.300 incl. materiaal en montage" :
+              "Prijs op aanvraag";
       }
       function midFromRange(txt) {
         if (!txt) return null;
         txt = String(txt).replace(/\s/g, "").replace("m²", "").replace("m2", "").replace(",", ".");
         const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
-        if (m) {
-          const a = parseFloat(m[1]), b = parseFloat(m[2]);
-          if (!isNaN(a) && !isNaN(b)) return (a + b) / 2;
-        }
+        if (m) { const a = parseFloat(m[1]), b = parseFloat(m[2]); if (!isNaN(a) && !isNaN(b)) return (a + b) / 2; }
         const n = parseFloat(txt);
         return isNaN(n) ? null : n;
       }
-      // -------------------------------------------------------------------
+      // ---------------------------------------------------------------------
 
       const mids = (state.sizes || []).map(midFromRange).filter(x => typeof x === "number" && !isNaN(x));
       const totalM2 = mids.length ? mids.reduce((a, b) => a + b, 0) : 30;
@@ -818,36 +812,31 @@
       const imgPath = indoorImageFor(rec);
       const href = (AFP.ROOT_BASE || "/airflowplus-site/") + (rec.slug || "");
 
-      // Brand key + logo URL (use your exact filenames)
+      // Brand logo mapping
       const BASE = ((AFP.ROOT_BASE || "/airflowplus-site/").replace(/\/+$/, "")) + "/";
       const brandKey = String(rec.brand || "").toLowerCase();
       const LOGOS = {
         daikin: `${BASE}assets/img/brands/daikin.placeholder.svg`,
         panasonic: `${BASE}assets/img/brands/panasonic.placeholder.svg`,
-        haier: `${BASE}assets/img/brands/haier.palaceholder.svg` // (typo in filename is intentional)
+        haier: `${BASE}assets/img/brands/haier.palaceholder.svg` // (filename as in repo)
       };
       const brandLogo = LOGOS[brandKey] || null;
 
-      // expose brand on the mount (harmless, may help future hooks)
-      target.setAttribute("data-brand", brandKey);
-
-      // Card HTML — we position the logo absolutely so alignment is consistent
+      // Flex row: [ product image ] [ brand logo ] [ text ]
       target.innerHTML =
         `<div class="kh-reco-card">
-       <div class="kh-reco-main" style="position:relative;">
-         ${brandLogo ? `
-         <div class="kh-reco-brand" style="
-              position:absolute; right:12px; top:12px;
-              display:flex; align-items:center; justify-content:center;">
-           <img src="${brandLogo}" alt="${rec.brand || 'Merk'} logo"
-                style="max-height:28px; width:auto; display:block;">
-         </div>` : ``}
+       <div class="kh-reco-main" style="display:flex;align-items:center;gap:12px;">
          ${imgPath ? `
-         <div class="kh-reco-media">
+         <div class="kh-reco-media" style="flex:0 0 auto;">
            <img src="${imgPath}" alt="${rec.name || "Airco"}"
                 style="width:240px;height:auto;object-fit:contain" loading="lazy" decoding="async">
          </div>` : ``}
-         <div class="kh-reco-body">
+         ${brandLogo ? `
+         <div class="kh-reco-brand" style="flex:0 0 auto;display:flex;align-items:center;justify-content:center;">
+           <img src="${brandLogo}" alt="${rec.brand || 'Merk'} logo"
+                style="height:28px;width:auto;display:block;">
+         </div>` : ``}
+         <div class="kh-reco-body" style="flex:1 1 auto;">
            <h3 class="kh-reco-title">${rec.name || "Aanbevolen model"}</h3>
            <div class="muted">${priceLine(rec.brand || "")}</div>
            <a class="btn btn-green" style="margin-top:12px" href="${href}">Bekijk aanbeveling</a>
