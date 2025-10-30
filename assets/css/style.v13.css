@@ -3616,3 +3616,72 @@ body.home .section-services .service-card .media img{
   border-radius:0 !important;
   box-shadow:none !important;
 }
+
+/* ===== Daikin Emura promo — force layout like the mock ===== */
+section.promo.promo--emura-only .promo__grid{
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 520px !important; /* lock right lane width */
+  column-gap: 32px;
+  align-items: center; /* vertically center lane */
+}
+
+section.promo.promo--emura-only .promo__right.promo__right--emura{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;          /* unit box on left, logo box on right */
+  min-height: clamp(240px, 28vw, 360px);   /* give the lane a real height */
+  padding-right: 8px;
+}
+
+/* Two tall white cards inside the lane */
+section.promo.promo--emura-only .promo__right.promo__right--emura .promo__unit,
+section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo-wrap{
+  height: calc(100% * 0.87);               /* ~7/8 of the lane height */
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(6,22,47,.08), 0 2px 6px rgba(6,22,47,.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  overflow: hidden;
+  flex: 0 0 auto;                          /* respect the widths below */
+}
+
+/* Make them “thinner” width-wise (unit wider than logo) */
+section.promo.promo--emura-only .promo__right.promo__right--emura .promo__unit{      width: 62%; }
+section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo-wrap{ width: 30%; }
+
+/* Images inside */
+section.promo.promo--emura-only .promo__right.promo__right--emura .promo__unit img{
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
+  border-radius: 0;              /* no rounded corners on the logo itself */
+  max-height: 86%;
+  max-width: 86%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Stack nicely on tablet/mobile */
+@media (max-width: 1100px){
+  section.promo.promo--emura-only .promo__grid{
+    grid-template-columns: 1fr !important;
+  }
+  section.promo.promo--emura-only .promo__right.promo__right--emura{
+    min-height: 220px;
+    gap: 20px;
+    padding-right: 0;
+  }
+  section.promo.promo--emura-only .promo__right.promo__right--emura .promo__unit,
+  section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo-wrap{
+    width: 48%;
+    height: 200px;
+  }
+}
