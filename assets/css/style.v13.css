@@ -3805,8 +3805,9 @@ section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
   width:58%;
 }
 .promo--emura-only .promo__logo-wrap{ /* brand logo (right card) */
-  width:34%;
+  width:218px;
   margin-left:24px;               /* push a bit further right */
+  
 }
 
 /* make the images fill nicely without distortion */
