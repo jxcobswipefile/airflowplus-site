@@ -4080,3 +4080,99 @@ section.promo.promo--emura-only .promo__right.promo__right--emura .promo__logo{
   object-fit: contain;
   display: block;
 }
+/* =========================================================
+   HOMEPAGE — DAIKIN EMURA PROMO (final, specific overrides)
+   ========================================================= */
+
+/* 1) Section-level rhythm & centering */
+section.promo.promo--emura-only {
+  /* tighten the vertical rhythm */
+  padding-top: 18px;
+  padding-bottom: 20px;
+}
+
+/* 2) Wrap + grid: make the row vertically centered IN the section */
+section.promo.promo--emura-only .promo__wrap {
+  display: grid;
+  align-items: center;                /* centers content vertically within section */
+}
+
+/* Use a single grid for the row: text | unit | brand */
+section.promo.promo--emura-only .promo__grid {
+  display: grid;
+  grid-template-columns: 1.15fr auto auto; /* push the images further right */
+  column-gap: 28px;
+  align-items: center;                      /* center items on the row */
+  min-height: 250px;                        /* base row height; adjust to taste */
+}
+
+/* 3) Remove extra gap from the header by making it flow naturally */
+section.promo.promo--emura-only .promo__head {
+  position: static;        /* no overlay – prevents double top gap */
+  margin-bottom: 8px;      /* small breathing room above the row */
+}
+
+/* 4) Force strong copy contrast only in this promo */
+section.promo.promo--emura-only .promo__sub,
+section.promo.promo--emura-only .promo__bullets li {
+  color: #0f1720;
+}
+
+/* 5) Right-hand image cards: consistent tall cards, equal height */
+section.promo.promo--emura-only .promo__right {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 22px;
+}
+
+/* One place where earlier fixed sizes were winning; we beat them. */
+section.promo.promo--emura-only .promo__unit,
+section.promo.promo--emura-only .promo__logo-wrap {
+  height: 220px !important;            /* ~7/8 of the row (tune with min-height above) */
+  width: auto;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid #e7ebf1;
+  border-radius: 16px;
+  box-shadow: 0 12px 34px rgba(0,0,0,.10);
+  overflow: hidden;
+}
+
+/* Give the unit card proportion and keep it “thinner width-wise” */
+section.promo.promo--emura-only .promo__unit { 
+  min-width: 260px; 
+  max-width: 360px;
+}
+
+/* Smaller, clean brand tile */
+section.promo.promo--emura-only .promo__logo-wrap {
+  min-width: 140px;
+  max-width: 220px;
+}
+
+/* Make media fill most of the card without distortion */
+section.promo.promo--emura-only .promo__unit img,
+section.promo.promo--emura-only .promo__logo {
+  max-height: 92%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* 6) Keep small screens sane */
+@media (max-width: 1024px) {
+  section.promo.promo--emura-only .promo__grid {
+    grid-template-columns: 1fr;         /* stack */
+    row-gap: 18px;
+    min-height: 0;
+  }
+  section.promo.promo--emura-only .promo__right {
+    justify-content: start;
+  }
+  section.promo.promo--emura-only .promo__unit,
+  section.promo.promo--emura-only .promo__logo-wrap {
+    height: 180px !important;
+  }
+}
