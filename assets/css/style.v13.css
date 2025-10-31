@@ -9050,3 +9050,13 @@ main#airco-scope + .site-footer,
 main#airco-scope .site-footer {
   margin-top: clamp(32px, 4vw, 72px) !important;
 }
+
+/* Diensten – dark CTA title only */
+main#diensten-scope #diensten-cta .card-dark h2 {
+  color: #fff !important;      /* make the non-accent text white */
+}
+
+/* keep the green word 'Klaar' as-is */
+main#diensten-scope #diensten-cta .card-dark h2 .accent--green {
+  color: var(--accent-600) !important;
+}
