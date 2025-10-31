@@ -3553,7 +3553,7 @@ body.home .section-services .service-card.zakelijk .media{
 }
 body.home .section-services .service-card[data-service="zakelijk"] .media img,
 body.home .section-services .service-card.zakelijk .media img{
-  object-fit:cover; object-position:center 22%;
+  object-fit:cover; object-position:center 72%;
 }
 
 /* Fallback #1: target by heading text (browsers that support :has) */
@@ -3562,7 +3562,7 @@ body.home .section-services .service-card.zakelijk .media img{
     /* keep empty – next rule narrows to Zakelijk only via attribute value contains */
   }
   body.home .section-services .service-card:has(h3[innerText*="Zakelijk"], .title[innerText*="Zakelijk"]) .media{
-    background-position:center 72% !important;
+    background-position:50% 0% !important;
   }
 }
 
