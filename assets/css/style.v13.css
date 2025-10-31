@@ -8846,3 +8846,8 @@ body.home .section-services .service-card[data-service="zakelijk"] .media > img 
   object-fit: cover;
   object-position: 50% 0% !important;  /* keep horizontal center, show top */
 }
+
+/* Neutralize the old nth-child fallback for Zakelijk (if it exists) */
+body.home .section-services .service-grid .service-card:nth-child(3) .media img {
+  object-position: 50% 0% !important;
+}
