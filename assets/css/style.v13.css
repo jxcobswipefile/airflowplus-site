@@ -8831,3 +8831,18 @@ body.home .section-services .service-card.zakelijk .media img {
     text-decoration: underline;
     opacity: 0.95;
   }
+
+  /* Zakelijk card — make the IMG actually fill the media box, then crop from the top */
+body.home .section-services .service-card[data-service="zakelijk"] .media {
+  position: relative;
+  overflow: hidden;              /* ensure the crop is visible as a crop */
+}
+
+/* IMG must fill the box for object-fit to have effect */
+body.home .section-services .service-card[data-service="zakelijk"] .media > img {
+  display: block;
+  width: 100%;
+  height: 100%;                  /* <-- key line most sites miss */
+  object-fit: cover;
+  object-position: 50% 0% !important;  /* keep horizontal center, show top */
+}
