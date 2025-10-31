@@ -7606,7 +7606,7 @@ body.home .section-services .service-card.zakelijk .media img {
 
   /* Fallback #2: target by position if Zakelijk is, e.g., the 3rd tile (adjust n accordingly) */
   body.home .section-services .service-grid .service-card:nth-child(3) .media {
-    background-position: center 72% !important;
+    background-position: center 72%;
   }
 
   body.home .section-services .service-grid .service-card:nth-child(3) .media img {
