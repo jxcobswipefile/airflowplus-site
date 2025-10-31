@@ -2005,6 +2005,8 @@ section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: transl
   section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-6%) !important; }
 }
 
+section.kh-cta.overlap.hero-overlap {padding-bottom: 0px;}
+
 /* =========================================================
    SECTION: Promo (client data) v29.9.17
    ========================================================= */
