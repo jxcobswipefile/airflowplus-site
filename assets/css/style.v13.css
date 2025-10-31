@@ -8851,3 +8851,51 @@ body.home .section-services .service-card[data-service="zakelijk"] .media > img 
 body.home .section-services .service-grid .service-card:nth-child(3) .media img {
   object-position: 50% 0% !important;
 }
+
+/* ===========================
+   HOME — Hero CTA button sizing
+   (scoped to home hero only)
+   =========================== */
+
+body.home .khv2-hero .cta,
+body.home .khv2-hero .hero-cta,
+body.home .khv2-hero .btn-row { 
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Make hero buttons large again */
+body.home .khv2-hero :is(.btn, .button, a.btn, a.button) {
+  /* Typography */
+  font-size: clamp(16px, 1.25vw + 12px, 20px); /* ~18–20px desktop, scales down gracefully */
+  line-height: 1.2;
+  font-weight: 600;
+
+  /* Sizing */
+  padding: 14px 28px;            /* big & comfy like the section buttons */
+  min-height: 54px;
+  min-width: 210px;              /* gives that wide-pill look */
+  border-radius: 9999px;         /* full pill */
+}
+
+/* Keep visual parity for outline variant in hero */
+body.home .khv2-hero :is(.btn-outline, .button-outline) {
+  background: #fff0;             /* transparent fill */
+  border-width: 2px;
+}
+
+/* Mobile tweaks: keep them big but not overflowing */
+@media (max-width: 640px) {
+  body.home .khv2-hero :is(.btn, .button, a.btn, a.button) {
+    font-size: 16px;
+    padding: 12px 22px;
+    min-width: 180px;
+    min-height: 50px;
+  }
+  body.home .khv2-hero .cta,
+  body.home .khv2-hero .hero-cta,
+  body.home .khv2-hero .btn-row {
+    gap: 10px;
+  }
+}
