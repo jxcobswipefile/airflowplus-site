@@ -7603,16 +7603,6 @@ body.home .section-services .service-card.zakelijk .media img {
   object-position: 50% 0%;
 }
 
-/* Fallback #1: target by heading text (browsers that support :has) */
-@supports selector(:has(*)) {
-
-  body.home .section-services .service-card[data-service="zakelijk"] .media,
-  body.home .section-services .service-card.zakelijk .media {
-    background-size: cover;
-    background-position: 50% 0%;
-    /* center horizontally, top vertically */
-  }
-
 
   /* Fallback #2: target by position if Zakelijk is, e.g., the 3rd tile (adjust n accordingly) */
   body.home .section-services .service-grid .service-card:nth-child(3) .media {
