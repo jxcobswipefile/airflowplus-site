@@ -8995,3 +8995,19 @@ body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[clas
   a[href^="tel:"]:active {
   background: var(--accent-700, #1164b1);
 }
+
+/* AIRCO — add space above/below the FAQ section */
+body[class*="airco"] :is(.section-faq, .faq, section[id*="faq"], .accordion-section) {
+  /* top & bottom padding */
+  padding-block: clamp(40px, 6vw, 96px);
+}
+
+/* (Optional) make sure the section *before* the FAQ doesn’t sit too close */
+body[class*="airco"] :is(.khv2-cta, .section-maintenance, .promo--emura-only, .section-services) {
+  margin-bottom: clamp(24px, 3vw, 56px);
+}
+
+/* (Optional) a little gap before the footer after the FAQ */
+body[class*="airco"] :is(.section-faq, .faq, section[id*="faq"], .accordion-section) + footer.site-footer {
+  margin-top: clamp(24px, 3vw, 48px);
+}
