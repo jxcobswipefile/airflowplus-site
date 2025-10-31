@@ -8899,3 +8899,79 @@ body.home .khv2-hero :is(.btn-outline, .button-outline) {
     gap: 10px;
   }
 }
+
+/* =========================================
+   HOME — make the hero buttons BIG again
+   (robust selectors; safe on desktop & mobile)
+   ========================================= */
+
+/* 1) Treat any “hero” container as the wrapper */
+body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"]) .btn-row,
+body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"]) .cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* 2) Buttons inside hero by common classes */
+body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"])
+  :is(.btn, .button, .btn-green, .btn-outline, a.btn, a.button) {
+  font-size: clamp(16px, 1.2vw + 12px, 20px);
+  line-height: 1.2;
+  font-weight: 600;
+  padding: 14px 28px;
+  min-height: 54px;
+  min-width: 210px;
+  border-radius: 9999px;
+}
+
+/* 3) If your hero anchors don’t carry .btn classes, target them by hrefs */
+body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"])
+  a[href*="keuzehulp"] {
+  font-size: clamp(16px, 1.2vw + 12px, 20px);
+  line-height: 1.2;
+  font-weight: 600;
+  padding: 14px 28px;
+  min-height: 54px;
+  min-width: 210px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"])
+  a[href^="tel:"] {
+  font-size: clamp(16px, 1.2vw + 12px, 20px);
+  line-height: 1.2;
+  font-weight: 600;
+  padding: 14px 28px;
+  min-height: 54px;
+  min-width: 210px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 4) Outline variant inside hero keeps parity */
+body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"])
+  :is(.btn-outline, .button-outline) {
+  background: transparent;
+  border-width: 2px;
+}
+
+/* 5) Mobile: big, but not overflowing */
+@media (max-width: 640px) {
+  body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"])
+    :is(.btn, .button, .btn-green, .btn-outline, a.btn, a.button, a[href*="keuzehulp"], a[href^="tel:"]) {
+    font-size: 16px;
+    padding: 12px 22px;
+    min-width: 180px;
+    min-height: 50px;
+  }
+  body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"])
+    :is(.btn-row, .cta) {
+    gap: 10px;
+  }
+}
