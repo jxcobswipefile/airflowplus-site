@@ -3549,11 +3549,11 @@ body:not(.home) .khv2-stage { min-height: 60vh; }
 /* Preferred: if your markup has a data hook or class on the Zakelijk card */
 body.home .section-services .service-card[data-service="zakelijk"] .media,
 body.home .section-services .service-card.zakelijk .media{
-  background-position:center 72% !important;
+  background-position:center 22% !important;
 }
 body.home .section-services .service-card[data-service="zakelijk"] .media img,
 body.home .section-services .service-card.zakelijk .media img{
-  object-fit:cover; object-position:center 72%;
+  object-fit:cover; object-position:center 22%;
 }
 
 /* Fallback #1: target by heading text (browsers that support :has) */
