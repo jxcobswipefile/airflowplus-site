@@ -8981,7 +8981,7 @@ body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[clas
   a[href^="tel:"] {
   /* fill like a primary button */
   background: var(--accent-500, #ffffff);
-  color: #fff;
+  color: #000;
   border: 2px solid transparent;
 }
 
