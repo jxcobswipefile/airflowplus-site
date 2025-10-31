@@ -9029,3 +9029,24 @@ body.airco .accordion-list {
 body.airco .site-footer {
   margin-top: clamp(32px, 4vw, 72px) !important;
 }
+
+/* AIRCO page — add breathing room around the FAQ block
+   Target the real wrapper on airco.html: <main id="airco-scope"> */
+main#airco-scope .container:has(.accordion),
+main#airco-scope section:has(.accordion) {
+  padding-block: clamp(48px, 6vw, 96px) !important; /* top & bottom */
+}
+
+/* Fallback when :has() isn’t available: pad the accordion itself */
+@supports not selector(:has(*)) {
+  main#airco-scope .container > .accordion,
+  main#airco-scope section > .accordion {
+    padding-block: clamp(48px, 6vw, 96px) !important;
+  }
+}
+
+/* Ensure a gap before the footer even if the FAQ has zero margin */
+main#airco-scope + .site-footer,
+main#airco-scope .site-footer {
+  margin-top: clamp(32px, 4vw, 72px) !important;
+}
