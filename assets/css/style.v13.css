@@ -2002,7 +2002,7 @@ body.home section.kh-cta.hero-overlap{ margin-top: clamp(-200px, -26vh, -320px);
    ========================================================= */
 section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-8%) !important; }
 @media (max-width: 960px){
-  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ transform: translateY(-6%) !important; }
+  section.kh-cta.overlap.hero-overlap .kh-cta-card.compact.seam{ padding:0px; transform: translateY(-6%) !important; }
 }
 
 /* =========================================================
@@ -3553,7 +3553,7 @@ body.home .section-services .service-card.zakelijk .media{
 }
 body.home .section-services .service-card[data-service="zakelijk"] .media img,
 body.home .section-services .service-card.zakelijk .media img{
-  object-fit:cover; object-position:50% 0%;
+  object-fit:cover; object-position:center 72%;
 }
 
 /* Fallback #1: target by heading text (browsers that support :has) */
