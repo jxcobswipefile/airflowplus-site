@@ -7657,7 +7657,7 @@ body.home .section-services .service-card.zakelijk .media img {
   /* Home services — show lower portion of the photo */
   body.home .section-services .service-card .media img {
     object-fit: cover;
-    object-position: center 70%;
+    object-position: center 20%;
   }
 
   /* v36 — KH brand chips */
