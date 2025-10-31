@@ -9011,3 +9011,21 @@ body[class*="airco"] :is(.khv2-cta, .section-maintenance, .promo--emura-only, .s
 body[class*="airco"] :is(.section-faq, .faq, section[id*="faq"], .accordion-section) + footer.site-footer {
   margin-top: clamp(24px, 3vw, 48px);
 }
+
+/* AIRCO — give the FAQ block clear space above & below */
+body.airco .section-faq,
+body.airco .faq-section,
+body.airco section.faq,
+body.airco section[id*="faq"],
+body.airco .accordion-section,
+body.airco .accordion-wrapper,
+body.airco .accordion,
+body.airco .accordion-list {
+  padding-block: clamp(48px, 6vw, 96px) !important;   /* top & bottom padding */
+  margin-block: clamp(24px, 4vw, 64px) !important;     /* extra safety margin */
+}
+
+/* Also ensure there’s a gap before the footer even if the FAQ has zero margin */
+body.airco .site-footer {
+  margin-top: clamp(32px, 4vw, 72px) !important;
+}
