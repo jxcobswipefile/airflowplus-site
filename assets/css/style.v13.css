@@ -8975,3 +8975,23 @@ body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[clas
     gap: 10px;
   }
 }
+
+/* HERO ▸ Make the “Bel nu” button solid (not transparent) */
+body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"])
+  a[href^="tel:"] {
+  /* fill like a primary button */
+  background: var(--accent-500, #1e90ff);
+  color: #fff;
+  border: 2px solid transparent;
+}
+
+/* Hover/active treatment for a tiny bit of feedback */
+body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"])
+  a[href^="tel:"]:hover {
+  background: var(--accent-600, #1678d3);
+}
+
+body.home :is(.khv2-hero, .hero, .site-hero, header[class*="hero"], section[class*="hero"])
+  a[href^="tel:"]:active {
+  background: var(--accent-700, #1164b1);
+}
