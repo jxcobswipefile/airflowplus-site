@@ -7600,7 +7600,7 @@ body.home .section-services .service-card[data-service="zakelijk"] .media img,
 body.home .section-services .service-card.zakelijk .media img {
   object-fit: cover;
   /* keep horizontally centered, align the image’s TOP to the box’s TOP */
-  object-position: 50% 0%;
+  object-position: 50% 0% !important; 
 }
 
 
