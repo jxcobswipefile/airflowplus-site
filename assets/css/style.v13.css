@@ -3547,15 +3547,12 @@ body:not(.home) .khv2-stage { min-height: 60vh; }
   background:transparent !important; color:#0B0B0F !important; line-height:1.5; margin:6px 0;
 }
 
-/* --- HOME ▸ Services: fix Zakelijk crop (show lower part of the photo) --- */
-/* Preferred: if your markup has a data hook or class on the Zakelijk card */
-body.home .section-services .service-card[data-service="zakelijk"] .media,
-body.home .section-services .service-card.zakelijk .media{
-  background-position:center 22% !important;
-}
+/* Zakelijk card — show more of the top of the image */
 body.home .section-services .service-card[data-service="zakelijk"] .media img,
-body.home .section-services .service-card.zakelijk .media img{
-  object-fit:cover; object-position:center 72%;
+body.home .section-services .service-card.zakelijk .media img {
+  object-fit: cover;
+  /* keep horizontally centered, align the image’s TOP to the box’s TOP */
+  object-position: 50% 0%;
 }
 
 /* Fallback #1: target by heading text (browsers that support :has) */
