@@ -3665,3 +3665,27 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
     border-radius:14px !important;
   }
 }
+
+/* ===== Emura promo: lift text block further on mobile ===== */
+@media (max-width: 768px) {
+  /* kill any hidden spacer/pseudo that pushes content down */
+  .promo--emura-only .promo__wrap::before,
+  .promo--emura-only .promo__wrap::after,
+  .promo--emura-only .promo__intro-spacer,
+  .promo--emura-only .spacer {
+    content: none !important; display: none !important; height: 0 !important;
+  }
+
+  /* reduce card top padding */
+  .promo--emura-only .promo__card { padding-top: 8px !important; }
+
+  /* zero out head/top margins */
+  .promo--emura-only .promo__head { margin-top: 0 !important; padding-top: 0 !important; }
+  .promo--emura-only h3.promo__title { margin-top: 0 !important; margin-bottom: 4px !important; }
+  .promo--emura-only p.promo__sub   { margin: 0 0 6px !important; }
+
+  /* tighten price/badges block so it sits higher */
+  .promo--emura-only .price-row { margin-top: 0 !important; margin-bottom: 6px !important; }
+  .promo--emura-only .badges, 
+  .promo--emura-only .labels { margin-top: 4px !important; }
+}
