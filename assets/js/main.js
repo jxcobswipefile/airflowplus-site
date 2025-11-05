@@ -1284,17 +1284,23 @@
       setTimeout(function(){ isAnimating=false; suppressScroll=false; setSliderFromScroll(); }, smooth ? 420 : 0);
     }
 
-    function loopToStartThenAdvance(){
+    function loopToStartThenAdvance() {
+      // For autoplay: jump to the FIRST image and STOP there.
+      // The next autoplay tick (in ~4s) will move to image 2.
       if (isAnimating) return;
-      suppressScroll = true; isAnimating = true;
+      suppressScroll = true;
+      isAnimating = true;
+
       track.scrollTo({ left: 0, behavior: "auto" });
-      requestAnimationFrame(function(){
-        requestAnimationFrame(function(){
-          monitorDuringAnimation(420);
-          scrollToX(step(), true);
-        });
+      // ensure slider/UI sync without advancing
+      requestAnimationFrame(function () {
+        setSliderFromScroll();
+        // end of animation state (no forward step here)
+        isAnimating = false;
+        suppressScroll = false;
       });
     }
+
 
     function nextSlide(){
       if (isAnimating) return;
