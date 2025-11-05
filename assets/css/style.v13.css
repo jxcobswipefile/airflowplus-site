@@ -3735,3 +3735,18 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
     margin-top: 0 !important;       /* neutralize the -30px margin seen in screenshots */
   }
 }
+
+/* Mobile header: ensure only one visible toggle and it’s not covered */
+@media (max-width: 768px) {
+  header.site-header .menu-toggle,
+  header.site-header .nav-toggle,
+  header.site-header [data-mobile-toggle],
+  header.site-header [data-nav-toggle] { z-index: 1002; position: relative; }
+
+  header.site-header .header-cta,
+  header.site-header .btn--cta,
+  header.site-header .cta-pill { z-index: 1001; position: relative; }
+
+  /* Safety: hide any centered/floating duplicate toggle if present */
+  header.site-header .toolbar .btn-toggle:not(:last-child) { display: none !important; }
+}
