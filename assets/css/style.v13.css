@@ -3424,3 +3424,85 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
   .wizard .modal, .wizard .sheet, .wizard .result-card { overflow:visible !important; max-height:none !important; }
   .wizard [data-step="3"] .actions { position: static !important; margin-top: 12px; }
 }
+
+/* ===== Emura promo — mobile stack & spacing (no desktop impact) ===== */
+@media (max-width: 768px) {
+  section.promo.promo--emura-only .promo__wrap,
+  .promo--emura-only .promo__wrap {
+    display: block !important;
+    padding-top: 0 !important;
+  }
+
+  /* Make all text rows flow normally (no overlay) */
+  .promo--emura-only .promo__head,
+  .promo--emura-only h3.promo__title,
+  .promo--emura-only p.promo__sub,
+  .promo--emura-only .price-row,
+  .promo--emura-only .badges,
+  .promo--emura-only .labels,
+  .promo--emura-only .bullets,
+  .promo--emura-only .cta-row {
+    position: static !important;
+    width: 100%;
+  }
+
+  .promo--emura-only h3.promo__title { 
+    line-height: 1.22; 
+    margin: 0 0 6px; 
+  }
+  .promo--emura-only p.promo__sub { 
+    line-height: 1.35; 
+    margin: 2px 0 8px; 
+  }
+
+  /* Price + strike + badges: wrap neatly */
+  .promo--emura-only .price-row { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 6px 10px; 
+    align-items: baseline; 
+    margin-bottom: 8px;
+  }
+  .promo--emura-only .badges,
+  .promo--emura-only .labels { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 6px; 
+    margin-top: 6px; 
+  }
+
+  /* Buttons full width under text */
+  .promo--emura-only .cta-row { 
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: 10px; 
+    margin: 10px 0 12px; 
+  }
+
+  /* Image block below content, not clipped */
+  .promo--emura-only .promo__media,
+  .promo--emura-only .media { 
+    margin-top: 12px; 
+  }
+  .promo--emura-only .promo__media img,
+  .promo--emura-only .media img { 
+    display: block; 
+    width: 100%; 
+    height: auto; 
+    object-fit: cover; 
+    border-radius: 12px; 
+  }
+
+  /* Brand logo size/fit */
+  .promo--emura-only .brand-logo, 
+  .promo--emura-only .logo { 
+    max-width: 88px; 
+    height: auto; 
+    object-fit: contain; 
+  }
+
+  /* Card padding */
+  .promo--emura-only .promo__card { 
+    padding: 16px 16px 18px !important; 
+  }
+}
