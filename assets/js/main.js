@@ -1503,3 +1503,33 @@
     } catch(e){ console && console.warn && console.warn("filters collapse skipped:", e); }
   });
 })();
+
+// === Mobile header: de-dup toggles + fix overlap (idempotent) ===
+(() => {
+  const header = document.querySelector('header.site-header');
+  if (!header) return;
+
+  // Collect any plausible toggle buttons
+  const toggles = header.querySelectorAll(
+    '.menu-toggle, .nav-toggle, [data-mobile-toggle], [data-nav-toggle], .btn-toggle'
+  );
+
+  if (toggles.length > 1) {
+    // Keep the rightmost toggle; hide the rest
+    [...toggles].slice(0, -1).forEach(el => { el.style.display = 'none'; });
+  }
+
+  const activeToggle = toggles.length ? toggles[toggles.length - 1] : null;
+  const cta = header.querySelector('.header-cta, .btn--cta, .cta-pill, a[href*="offerte"]');
+
+  // Ensure the toggle is above the CTA and clickable
+  if (activeToggle) {
+    activeToggle.style.position = 'relative';
+    activeToggle.style.zIndex = '1002';
+  }
+  if (cta) {
+    cta.style.position = 'relative';
+    cta.style.zIndex = '1001';
+    cta.style.marginRight = cta.style.marginRight || '6px';
+  }
+})();
