@@ -1296,3 +1296,109 @@
     console && console.warn && console.warn('Gallery init skipped:', err);
   }
 })();
+
+/* ----------------------- Product Gallery (prijzen.html) — soft loop & clamped step ----------------------- */
+(function () {
+  function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn, {once:true}); }
+  ready(function(){
+    var track = document.querySelector('.gallery-track');
+    if (!track || track.dataset.init === '1') return;
+    track.dataset.init = '1';
+
+    var slider = document.getElementById('gallery-slider');
+    var prev = document.querySelector('.gallery-btn.prev');
+    var next = document.querySelector('.gallery-btn.next');
+    var isUserInteracting = false;
+    var autoplayId = null;
+
+    function getGap(){
+      var cs = window.getComputedStyle(track);
+      var g = parseFloat(cs.gap || cs.columnGap || 0);
+      return isFinite(g) && g >= 0 ? g : 16;
+    }
+    function firstImageWidth(){
+      var f = track.querySelector('img');
+      if (!f) return 320;
+      return f.clientWidth || f.naturalWidth || 320;
+    }
+    function stepSize(){
+      // Prefer ~1 card step; clamp so we never skip the end
+      var card = firstImageWidth() + getGap();
+      var vw = track.clientWidth * 0.6;
+      return Math.max(160, Math.min(Math.round(card), Math.round(vw)));
+    }
+    function maxScroll(){ return Math.max(0, track.scrollWidth - track.clientWidth); }
+
+    function ensureImagesLoaded(cb){
+      var imgs = track.querySelectorAll('img');
+      if (!imgs.length) return cb();
+      var left = imgs.length, done = false;
+      function tick(){ if (!done && --left <= 0){ done = true; cb(); } }
+      imgs.forEach(function(img){
+        if (img.complete) tick();
+        else { img.addEventListener('load', tick, {once:true}); img.addEventListener('error', tick, {once:true}); }
+      });
+      setTimeout(function(){ if (!done) cb(); }, 1200);
+    }
+
+    function updateSlider(){
+      if (!slider) return;
+      var max = maxScroll();
+      var ratio = max > 0 ? (track.scrollLeft / max) : 0;
+      slider.value = Math.max(0, Math.min(100, Math.round(ratio * 100)));
+    }
+    function scrollToRatio(r){
+      var max = maxScroll();
+      var target = Math.max(0, Math.min(max, max * r));
+      track.scrollTo({ left: target, behavior: 'smooth' });
+    }
+
+    function nextSlide(){
+      var max = maxScroll();
+      var step = stepSize();
+      var atEnd = track.scrollLeft >= max - 1;
+      if (atEnd) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });     // loop only when truly at end
+      } else {
+        var target = Math.min(track.scrollLeft + step, max);  // clamp to max instead of looping early
+        track.scrollTo({ left: target, behavior: 'smooth' });
+      }
+    }
+    function prevSlide(){
+      var max = maxScroll();
+      var step = stepSize();
+      var atStart = track.scrollLeft <= 1;
+      if (atStart) {
+        track.scrollTo({ left: max, behavior: 'smooth' });    // loop to end from start
+      } else {
+        var target = Math.max(0, track.scrollLeft - step);
+        track.scrollTo({ left: target, behavior: 'smooth' });
+      }
+    }
+
+    next && next.addEventListener('click', nextSlide, {passive:true});
+    prev && prev.addEventListener('click', prevSlide, {passive:true});
+    track.addEventListener('scroll', updateSlider, {passive:true});
+    slider && slider.addEventListener('input', function(e){
+      var v = parseFloat(e.target.value || 0)/100;
+      scrollToRatio(v);
+    }, {passive:true});
+
+    function startAuto(){
+      stopAuto();
+      autoplayId = setInterval(function(){
+        if (!isUserInteracting) nextSlide();
+      }, 4000);
+    }
+    function stopAuto(){ if (autoplayId) clearInterval(autoplayId); autoplayId = null; }
+
+    track.addEventListener('mouseenter', function(){ isUserInteracting = true; }, {passive:true});
+    track.addEventListener('mouseleave', function(){ isUserInteracting = false; }, {passive:true});
+
+    ensureImagesLoaded(function(){
+      updateSlider();
+      startAuto();
+      window.addEventListener('resize', updateSlider, {passive:true});
+    });
+  });
+})();
