@@ -1219,203 +1219,129 @@
 
 
 
-// ----------------------- Product Gallery (prijzen.html) -----------------------
+/* ---------------- Product Gallery (prijzen.html) — seamless loop, stable slider ---------------- */
 (function () {
-  try {
-    var track = document.querySelector('.gallery-track');
-    if (!track) return;
-    var slider = document.getElementById('gallery-slider');
-    var prev = document.querySelector('.gallery-btn.prev');
-    var next = document.querySelector('.gallery-btn.next');
-    var isUserInteracting = false;
-    var autoplayId = null;
-
-    function updateSlider() {
-      if (!slider) return;
-      var max = track.scrollWidth - track.clientWidth;
-      var ratio = max > 0 ? (track.scrollLeft / max) : 0;
-      slider.value = Math.max(0, Math.min(100, Math.round(ratio * 100)));
-    }
-
-    function scrollToRatio(ratio) {
-      var max = track.scrollWidth - track.clientWidth;
-      track.scrollLeft = max * ratio;
-    }
-
-    function unitWidth() {
-      var first = track.querySelector('img');
-      if (!first) return 320; // fallback
-      var style = window.getComputedStyle(track);
-      var gap = parseFloat(style.columnGap || 0) || 16;
-      return first.clientWidth + gap;
-    }
-
-    function nextSlide() {
-      var uw = unitWidth();
-      var max = track.scrollWidth - track.clientWidth;
-      if (track.scrollLeft + track.clientWidth >= max - uw) {
-        track.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        track.scrollBy({ left: uw, behavior: 'smooth' });
-      }
-    }
-
-    function prevSlide() {
-      var uw = unitWidth();
-      if (track.scrollLeft <= uw) {
-        track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
-      } else {
-        track.scrollBy({ left: -uw, behavior: 'smooth' });
-      }
-    }
-
-    if (next) next.addEventListener('click', nextSlide);
-    if (prev) prev.addEventListener('click', prevSlide);
-    track.addEventListener('scroll', updateSlider);
-    if (slider) {
-      slider.addEventListener('input', function (e) {
-        var val = parseFloat(e.target.value || 0) / 100;
-        scrollToRatio(val);
-      });
-    }
-
-    function startAuto() {
-      if (autoplayId) clearInterval(autoplayId);
-      autoplayId = setInterval(function () {
-        if (!isUserInteracting) nextSlide();
-      }, 4000);
-    }
-
-    track.addEventListener('mouseenter', function () { isUserInteracting = true; });
-    track.addEventListener('mouseleave', function () { isUserInteracting = false; });
-
-    // start after a tick to ensure layout
-    setTimeout(startAuto, 300);
-  } catch (err) {
-    // fail-safe: do nothing if errors
-    console && console.warn && console.warn('Gallery init skipped:', err);
-  }
-})();
-
-/* ----------------------- Product Gallery (prijzen.html) — seamless loop, no twitch ----------------------- */
-(function () {
-  function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn, {once:true}); }
+  function ready(fn){ if (document.readyState!=="loading") fn(); else document.addEventListener("DOMContentLoaded",fn,{once:true}); }
   ready(function(){
-    var track = document.querySelector('.gallery-track');
-    if (!track || track.dataset.init === '1') return;
-    track.dataset.init = '1';
+    var track = document.querySelector(".gallery-track");
+    if (!track || track.dataset.init==="1") return;
+    track.dataset.init = "1";
 
-    var slider = document.getElementById('gallery-slider');
-    var prev = document.querySelector('.gallery-btn.prev');
-    var next = document.querySelector('.gallery-btn.next');
-    var isUserInteracting = false;
-    var isAnimating = false;
+    var slider = document.getElementById("gallery-slider");
+    var prev   = document.querySelector(".gallery-btn.prev");
+    var next   = document.querySelector(".gallery-btn.next");
+
+    var isHovering = false;
+    var isAnimating = false;          // blocks double moves
+    var suppressScroll = false;       // ignore scroll handler during programmatic jumps
     var autoplayId = null;
 
-    function getGap(){
-      var cs = window.getComputedStyle(track);
+    function gap(){
+      var cs = getComputedStyle(track);
       var g = parseFloat(cs.gap || cs.columnGap || 0);
-      return isFinite(g) && g >= 0 ? g : 16;
+      return (isFinite(g) && g>=0) ? g : 16;
     }
-    function cardWidth(){
-      var f = track.querySelector('img');
+    function cardW(){
+      var f = track.querySelector("img");
       return (f && (f.clientWidth || f.naturalWidth)) ? (f.clientWidth || f.naturalWidth) : 320;
     }
-    function stepSize(){
-      // One card step, clamped against ~60% of viewport to avoid overshoot
-      var step = cardWidth() + getGap();
-      var vw60 = track.clientWidth * 0.6;
-      return Math.max(160, Math.min(Math.round(step), Math.round(vw60)));
+    function step(){
+      // one card, clamped to ~60% viewport to avoid overshoot at narrow widths
+      var s = cardW() + gap();
+      var v = track.clientWidth * 0.6;
+      return Math.max(160, Math.min(Math.round(s), Math.round(v)));
     }
     function maxScroll(){ return Math.max(0, track.scrollWidth - track.clientWidth); }
-    function atEnd(){ return track.scrollLeft >= maxScroll() - 1; }
     function atStart(){ return track.scrollLeft <= 1; }
+    function atEnd(){ return track.scrollLeft >= maxScroll() - 1; }
 
-    function ensureImagesLoaded(cb){
-      var imgs = track.querySelectorAll('img');
+    function ensureImages(cb){
+      var imgs = track.querySelectorAll("img");
       if (!imgs.length) return cb();
-      var left = imgs.length, done = false;
-      function tick(){ if (!done && --left <= 0){ done = true; cb(); } }
+      var left = imgs.length, done=false;
+      function tick(){ if(!done && --left<=0){ done=true; cb(); } }
       imgs.forEach(function(img){
         if (img.complete) tick();
-        else { img.addEventListener('load', tick, {once:true}); img.addEventListener('error', tick, {once:true}); }
+        else { img.addEventListener("load",tick,{once:true}); img.addEventListener("error",tick,{once:true}); }
       });
-      setTimeout(function(){ if (!done) cb(); }, 1200);
+      setTimeout(function(){ if(!done) cb(); }, 1200);
     }
 
     function updateSlider(){
-      if (!slider) return;
-      var max = maxScroll();
-      var ratio = max > 0 ? (track.scrollLeft / max) : 0;
-      slider.value = Math.max(0, Math.min(100, Math.round(ratio * 100)));
+      if (suppressScroll || !slider) return;
+      var m = maxScroll();
+      var r = m>0 ? track.scrollLeft/m : 0;
+      slider.value = Math.max(0, Math.min(100, Math.round(r*100)));
     }
 
-    function scrollToClamped(target, smooth){
-      var max = maxScroll();
-      var x = Math.max(0, Math.min(max, target));
-      isAnimating = true;
-      track.scrollTo({ left: x, behavior: smooth ? 'smooth' : 'auto' });
-      // unlock after typical smooth duration
-      setTimeout(function(){ isAnimating = false; }, smooth ? 420 : 0);
+    function scrollToX(x, smooth){
+      var m = maxScroll();
+      var target = Math.max(0, Math.min(m, x));
+      suppressScroll = true;
+      isAnimating = !!smooth;
+      track.scrollTo({ left: target, behavior: smooth ? "smooth" : "auto" });
+      // unlock: typical smooth time ~360–420ms
+      setTimeout(function(){ isAnimating=false; suppressScroll=false; updateSlider(); }, smooth ? 420 : 0);
     }
 
-    function jumpToStartThenSlide(){
-      // Instant reset (no visual twitch), then smooth step forward on next frame
+    // Seamless loop: instant reset (no draw), then smooth advance next frame
+    function loopToStartThenAdvance(){
+      if (isAnimating) return;
+      suppressScroll = true;
       isAnimating = true;
-      track.scrollTo({ left: 0, behavior: 'auto' });
+      track.scrollTo({ left: 0, behavior: "auto" });
       requestAnimationFrame(function(){
-        scrollToClamped(stepSize(), true);
+        requestAnimationFrame(function(){
+          scrollToX(step(), true);
+        });
       });
     }
 
     function nextSlide(){
       if (isAnimating) return;
-      var step = stepSize();
-      if (atEnd()) {
-        // Seamless loop: instant reset, then smooth forward
-        jumpToStartThenSlide();
-      } else {
-        scrollToClamped(track.scrollLeft + step, true);
-      }
+      var m = maxScroll();
+      var s = step();
+      if (atEnd()) { loopToStartThenAdvance(); return; }
+      // clamp to end without early loop (prevents “backwards” flicker)
+      scrollToX(Math.min(track.scrollLeft + s, m), true);
     }
 
     function prevSlide(){
       if (isAnimating) return;
-      var step = stepSize();
+      var s = step();
       if (atStart()) {
-        // Loop to end instantly, no visible twitch
-        track.scrollTo({ left: maxScroll(), behavior: 'auto' });
-        // small async to ensure layout before further input
-        setTimeout(function(){ updateSlider(); }, 0);
-      } else {
-        scrollToClamped(track.scrollLeft - step, true);
+        // jump to end without flicker
+        scrollToX(maxScroll(), false);
+        return;
       }
+      scrollToX(Math.max(track.scrollLeft - s, 0), true);
     }
 
-    next && next.addEventListener('click', nextSlide, {passive:true});
-    prev && prev.addEventListener('click', prevSlide, {passive:true});
-    track.addEventListener('scroll', updateSlider, {passive:true});
-    slider && slider.addEventListener('input', function(e){
+    // Wire up
+    next && next.addEventListener("click", nextSlide, {passive:true});
+    prev && prev.addEventListener("click", prevSlide, {passive:true});
+    track.addEventListener("scroll", function(){ if(!suppressScroll) updateSlider(); }, {passive:true});
+    slider && slider.addEventListener("input", function(e){
       if (isAnimating) return;
-      var v = Math.max(0, Math.min(100, parseFloat(e.target.value || 0))) / 100;
-      scrollToClamped(maxScroll() * v, true);
+      var v = Math.max(0, Math.min(100, parseFloat(e.target.value||0)))/100;
+      scrollToX(maxScroll()*v, true);
     }, {passive:true});
 
     function startAuto(){
       stopAuto();
       autoplayId = setInterval(function(){
-        if (!isUserInteracting) nextSlide();
+        if (!isHovering) nextSlide();
       }, 4000);
     }
-    function stopAuto(){ if (autoplayId) clearInterval(autoplayId); autoplayId = null; }
+    function stopAuto(){ if (autoplayId) clearInterval(autoplayId); autoplayId=null; }
 
-    track.addEventListener('mouseenter', function(){ isUserInteracting = true; }, {passive:true});
-    track.addEventListener('mouseleave', function(){ isUserInteracting = false; }, {passive:true});
+    track.addEventListener("mouseenter", function(){ isHovering=true; }, {passive:true});
+    track.addEventListener("mouseleave", function(){ isHovering=false; }, {passive:true});
 
-    ensureImagesLoaded(function(){
+    ensureImages(function(){
       updateSlider();
       startAuto();
-      window.addEventListener('resize', updateSlider, {passive:true});
+      window.addEventListener("resize", updateSlider, {passive:true});
     });
   });
 })();
