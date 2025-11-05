@@ -3731,7 +3731,7 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
 @media (max-width: 768px) {
   section.promo.promo--emura-only .promo__price-row,
   section.promo.promo--emura-only .price-row {
-    padding-top: 35px !important;   /* matches your DevTools test */
+    padding-top: 25px !important;   /* matches your DevTools test */
     margin-top: 0 !important;       /* neutralize the -30px margin seen in screenshots */
   }
 }
