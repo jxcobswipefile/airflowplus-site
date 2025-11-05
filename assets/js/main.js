@@ -1219,7 +1219,7 @@
 
 
 
-/* ---------------- Product Gallery (prijzen.html) — seamless loop, stable slider ---------------- */
+/* ---------------- Product Gallery (prijzen.html) — seamless loop, live slider ---------------- */
 (function () {
   function ready(fn){ if (document.readyState!=="loading") fn(); else document.addEventListener("DOMContentLoaded",fn,{once:true}); }
   ready(function(){
@@ -1232,25 +1232,13 @@
     var next   = document.querySelector(".gallery-btn.next");
 
     var isHovering = false;
-    var isAnimating = false;          // blocks double moves
-    var suppressScroll = false;       // ignore scroll handler during programmatic jumps
+    var isAnimating = false;        // blocks double moves
+    var suppressScroll = false;     // ignore scroll handler during programmatic jumps
     var autoplayId = null;
 
-    function gap(){
-      var cs = getComputedStyle(track);
-      var g = parseFloat(cs.gap || cs.columnGap || 0);
-      return (isFinite(g) && g>=0) ? g : 16;
-    }
-    function cardW(){
-      var f = track.querySelector("img");
-      return (f && (f.clientWidth || f.naturalWidth)) ? (f.clientWidth || f.naturalWidth) : 320;
-    }
-    function step(){
-      // one card, clamped to ~60% viewport to avoid overshoot at narrow widths
-      var s = cardW() + gap();
-      var v = track.clientWidth * 0.6;
-      return Math.max(160, Math.min(Math.round(s), Math.round(v)));
-    }
+    function gap(){ var cs=getComputedStyle(track); var g=parseFloat(cs.gap||cs.columnGap||0); return (isFinite(g)&&g>=0)?g:16; }
+    function cardW(){ var f=track.querySelector("img"); return (f&&(f.clientWidth||f.naturalWidth))?(f.clientWidth||f.naturalWidth):320; }
+    function step(){ var s=cardW()+gap(), v=track.clientWidth*0.6; return Math.max(160, Math.min(Math.round(s), Math.round(v))); }
     function maxScroll(){ return Math.max(0, track.scrollWidth - track.clientWidth); }
     function atStart(){ return track.scrollLeft <= 1; }
     function atEnd(){ return track.scrollLeft >= maxScroll() - 1; }
@@ -1267,11 +1255,23 @@
       setTimeout(function(){ if(!done) cb(); }, 1200);
     }
 
-    function updateSlider(){
-      if (suppressScroll || !slider) return;
+    function setSliderFromScroll(){
+      if (!slider) return;
       var m = maxScroll();
-      var r = m>0 ? track.scrollLeft/m : 0;
+      var r = m>0 ? (track.scrollLeft/m) : 0;
       slider.value = Math.max(0, Math.min(100, Math.round(r*100)));
+    }
+
+    function updateSlider(){ if (!suppressScroll) setSliderFromScroll(); }
+
+    // NEW: while smooth scrolling, keep slider in sync via rAF (since we suppress scroll events)
+    function monitorDuringAnimation(durationMs){
+      var end = performance.now() + (durationMs||420) + 60;
+      function raf(now){
+        setSliderFromScroll();
+        if (isAnimating && now < end) requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
     }
 
     function scrollToX(x, smooth){
@@ -1279,19 +1279,18 @@
       var target = Math.max(0, Math.min(m, x));
       suppressScroll = true;
       isAnimating = !!smooth;
+      if (smooth) monitorDuringAnimation(420);   // <— keep slider moving during the smooth scroll
       track.scrollTo({ left: target, behavior: smooth ? "smooth" : "auto" });
-      // unlock: typical smooth time ~360–420ms
-      setTimeout(function(){ isAnimating=false; suppressScroll=false; updateSlider(); }, smooth ? 420 : 0);
+      setTimeout(function(){ isAnimating=false; suppressScroll=false; setSliderFromScroll(); }, smooth ? 420 : 0);
     }
 
-    // Seamless loop: instant reset (no draw), then smooth advance next frame
     function loopToStartThenAdvance(){
       if (isAnimating) return;
-      suppressScroll = true;
-      isAnimating = true;
+      suppressScroll = true; isAnimating = true;
       track.scrollTo({ left: 0, behavior: "auto" });
       requestAnimationFrame(function(){
         requestAnimationFrame(function(){
+          monitorDuringAnimation(420);
           scrollToX(step(), true);
         });
       });
@@ -1302,46 +1301,34 @@
       var m = maxScroll();
       var s = step();
       if (atEnd()) { loopToStartThenAdvance(); return; }
-      // clamp to end without early loop (prevents “backwards” flicker)
       scrollToX(Math.min(track.scrollLeft + s, m), true);
     }
-
     function prevSlide(){
       if (isAnimating) return;
       var s = step();
-      if (atStart()) {
-        // jump to end without flicker
-        scrollToX(maxScroll(), false);
-        return;
-      }
+      if (atStart()) { scrollToX(maxScroll(), false); return; }
       scrollToX(Math.max(track.scrollLeft - s, 0), true);
     }
 
-    // Wire up
     next && next.addEventListener("click", nextSlide, {passive:true});
     prev && prev.addEventListener("click", prevSlide, {passive:true});
-    track.addEventListener("scroll", function(){ if(!suppressScroll) updateSlider(); }, {passive:true});
+    track.addEventListener("scroll", updateSlider, {passive:true});
     slider && slider.addEventListener("input", function(e){
       if (isAnimating) return;
       var v = Math.max(0, Math.min(100, parseFloat(e.target.value||0)))/100;
       scrollToX(maxScroll()*v, true);
     }, {passive:true});
 
-    function startAuto(){
-      stopAuto();
-      autoplayId = setInterval(function(){
-        if (!isHovering) nextSlide();
-      }, 4000);
-    }
+    function startAuto(){ stopAuto(); autoplayId = setInterval(function(){ if(!isHovering) nextSlide(); }, 4000); }
     function stopAuto(){ if (autoplayId) clearInterval(autoplayId); autoplayId=null; }
 
     track.addEventListener("mouseenter", function(){ isHovering=true; }, {passive:true});
     track.addEventListener("mouseleave", function(){ isHovering=false; }, {passive:true});
 
     ensureImages(function(){
-      updateSlider();
+      setSliderFromScroll();
       startAuto();
-      window.addEventListener("resize", updateSlider, {passive:true});
+      window.addEventListener("resize", setSliderFromScroll, {passive:true});
     });
   });
 })();
