@@ -3146,3 +3146,99 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
   width: 100%;
   margin-top: 1rem;
 }
+
+/* ===================== Mobile Overhaul (non-desktop safe) ===================== */
+
+/* Base container paddings */
+@media (max-width: 768px) {
+  .container { padding-left: 16px; padding-right: 16px; }
+  section, .section { padding-block: clamp(28px, 8vw, 48px); }
+}
+
+/* Header & Mobile Nav */
+@media (max-width: 900px) {
+  header .nav, header nav, .site-nav { display: none; }
+  .mobile-nav-open header .nav,
+  .mobile-nav-open header nav,
+  .mobile-nav-open .site-nav {
+    display: block;
+    position: absolute; left: 0; right: 0; top: var(--header-h, 64px);
+    background: var(--card, #fff);
+    padding: 12px 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    z-index: 50;
+  }
+  .mobile-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px; border-radius: 10px; border: 1px solid rgba(0,0,0,.08);
+    background: var(--card, #fff);
+  }
+  .mobile-toggle .bar { width: 18px; height: 2px; background: currentColor; display: block; }
+  .mobile-toggle .bar + .bar { margin-top: 4px; }
+  header .logo { max-width: 160px; }
+  header .cta, header .btn-row { display: none; } /* optional: move CTAs into menu links */
+  header .nav a, .site-nav a { display: block; padding: 12px 6px; font-size: 16px; }
+}
+
+/* Hero (index) */
+@media (max-width: 768px) {
+  .hero { padding-top: clamp(12px, 5vw, 24px); padding-bottom: clamp(24px, 8vw, 48px); }
+  .hero .grid, .hero .row { display: block; }
+  .hero h1 { font-size: clamp(26px, 7vw, 34px); line-height: 1.12; }
+  .hero p.lead { font-size: clamp(15px, 4.2vw, 17px); }
+  .hero .btn-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .hero .btn, .hero a.btn { width: 100%; }
+  .hero img, .hero video { width: 100%; height: auto; border-radius: var(--radius); }
+}
+
+/* Trust ticker */
+@media (max-width: 768px) {
+  .trust-ticker, .trust-row { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+  .trust-ticker .item, .trust-row .item { display: inline-flex; padding-right: 18px; }
+}
+
+/* Promo cards / product features rows */
+@media (max-width: 900px) {
+  .promo-grid, .cards, .features, .product-grid, .services-grid,
+  .grid, .cards-3, .cards-4, .cards-2 {
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+  }
+  .promo .media, .promo .content { width: 100%; }
+  .promo .media img { width: 100%; height: auto; object-fit: cover; }
+}
+
+/* FAQ accordions */
+@media (max-width: 768px) {
+  .accordion .item { border-radius: 10px; }
+  .accordion .item + .item { margin-top: 10px; }
+  .accordion .item .head { padding: 14px 14px; font-size: 16px; }
+  .accordion .item .body { padding: 12px 14px 18px; font-size: 15px; }
+}
+
+/* Footer stacking */
+@media (max-width: 768px) {
+  footer .cols, footer .grid, footer .row {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  footer .logo { margin-bottom: 8px; }
+  footer nav a { padding: 6px 0; }
+}
+
+/* Product pages: gallery & info columns */
+@media (max-width: 900px) {
+  .product-layout, .product-columns, .product-two-col {
+    display: grid; grid-template-columns: 1fr; gap: 18px;
+  }
+  .gallery-main img { width: 100%; height: auto; }
+  .thumbs, .thumbnails, .product-thumbs, .gallery-thumbs {
+    display: flex; gap: 10px; overflow-x: auto;
+  }
+  .thumbs img, .thumbnails img, .product-thumbs img, .gallery-thumbs img {
+    height: 72px; width: auto;
+  }
+}
+
+/* Keuzehulp card overlap safety */
+@media (max-width: 768px) {
+  .keuzehulp-card { margin-top: 14px; transform: none !important; }
+}

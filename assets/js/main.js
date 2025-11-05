@@ -1418,3 +1418,43 @@
     }
   });
 })();
+
+// ---------------- Mobile menu toggle (injected, non-breaking) ----------------
+(function(){
+  function ready(fn){ if (document.readyState!=="loading") fn(); else document.addEventListener("DOMContentLoaded",fn,{once:true}); }
+  ready(function(){
+    try {
+      var header = document.querySelector("header");
+      if (!header || header.dataset.mobileToggleInit==="1") return;
+      header.dataset.mobileToggleInit = "1";
+
+      // Insert toggle button if not present
+      var btn = header.querySelector(".mobile-toggle");
+      if (!btn) {
+        btn = document.createElement("button");
+        btn.className = "mobile-toggle";
+        btn.setAttribute("aria-label","Menu");
+        btn.setAttribute("aria-expanded","false");
+        btn.innerHTML = '<span class="bar"></span><span class="bar"></span><span class="bar"></span>';
+        var logo = header.querySelector(".logo, a[aria-label*=logo], a[href*='index']");
+        if (logo && logo.parentNode) logo.parentNode.insertBefore(btn, logo.nextSibling);
+        else header.insertBefore(btn, header.firstChild);
+      }
+
+      function toggleMenu(open){
+        var wantOpen = (typeof open === "boolean") ? open : !document.documentElement.classList.contains("mobile-nav-open");
+        document.documentElement.classList.toggle("mobile-nav-open", wantOpen);
+        btn.setAttribute("aria-expanded", wantOpen ? "true" : "false");
+      }
+
+      btn.addEventListener("click", function(e){ e.preventDefault(); toggleMenu(); });
+      header.addEventListener("click", function(e){
+        var a = e.target.closest("a");
+        if (a && document.documentElement.classList.contains("mobile-nav-open")) toggleMenu(false);
+      });
+      document.addEventListener("keydown", function(e){
+        if (e.key === "Escape") toggleMenu(false);
+      });
+    } catch(e){ console && console.warn && console.warn("Mobile menu init skipped:", e); }
+  });
+})();
