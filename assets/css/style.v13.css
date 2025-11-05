@@ -3506,3 +3506,37 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
     padding: 16px 16px 18px !important; 
   }
 }
+
+/* ===== Diensten page: force full-width media on mobile ===== */
+@media (max-width: 768px) {
+  /* Stack the two-column service blocks */
+  main#diensten-scope #svc-multisplit .container.grid-2,
+  main#diensten-scope #svc-zakelijk   .container.grid-2,
+  main#diensten-scope #svc-wp         .container.grid-2,
+  main#diensten-scope #svc-reparatie  .container.grid-2,
+  main#diensten-scope #svc-onderhoud  .container.grid-2 {
+    display: block !important;
+  }
+
+  /* Ensure the image row becomes full-width under the text */
+  main#diensten-scope #svc-multisplit figure.media,
+  main#diensten-scope #svc-zakelijk   figure.media,
+  main#diensten-scope #svc-wp         figure.media,
+  main#diensten-scope #svc-reparatie  figure.media,
+  main#diensten-scope #svc-onderhoud  figure.media {
+    margin-top: 12px;
+  }
+
+  /* Kill any tiny inline sizes and stretch nicely */
+  main#diensten-scope #svc-multisplit figure.media img,
+  main#diensten-scope #svc-zakelijk   figure.media img,
+  main#diensten-scope #svc-wp         figure.media img,
+  main#diensten-scope #svc-reparatie  figure.media img,
+  main#diensten-scope #svc-onderhoud  figure.media img {
+    width: 100% !important;
+    height: auto !important;
+    max-width: none !important;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+}
