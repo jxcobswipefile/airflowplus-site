@@ -3750,3 +3750,23 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
   /* Safety: hide any centered/floating duplicate toggle if present */
   header.site-header .toolbar .btn-toggle:not(:last-child) { display: none !important; }
 }
+
+/* ——— Mobile header: single hamburger, never covered ——— */
+@media (max-width: 768px) {
+  header.site-header button.mobile-toggle {           /* hide the duplicate */
+    display: none !important;
+  }
+  header.site-header button.nav-toggle {              /* keep this one */
+    position: relative !important;
+    z-index: 1005 !important;
+    min-width: 44px; min-height: 44px;               /* comfy tap target */
+    margin-left: auto;                                /* push to right if in a flex row */
+  }
+  header.site-header .header-cta,                     /* Bel/Offerte pill */
+  header.site-header .btn--cta,
+  header.site-header .cta-pill {
+    position: relative !important;
+    z-index: 1004 !important;                         /* below the hamburger */
+  }
+}
+
