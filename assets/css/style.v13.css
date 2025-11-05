@@ -3689,3 +3689,40 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
   .promo--emura-only .badges, 
   .promo--emura-only .labels { margin-top: 4px !important; }
 }
+
+/* ==== PROMO (Emura) — hard lift on mobile ==== */
+@media (max-width: 768px) {
+  section.promo.promo--emura-only .promo__wrap,
+  section.promo.promo--emura-only .promo__card,
+  section.promo.promo--emura-only .promo__head {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+  }
+
+  /* remove any spacer/pseudo pushing down */
+  section.promo.promo--emura-only .promo__wrap::before,
+  section.promo.promo--emura-only .promo__wrap::after {
+    content: none !important; display: none !important; height: 0 !important;
+  }
+
+  /* pull the whole text block up a bit */
+  section.promo.promo--emura-only .promo__card { padding-top: 4px !important; }
+  section.promo.promo--emura-only .promo__head { margin-top: -10px !important; padding-top: 0 !important; }
+
+  /* ensure title/sub flow normally */
+  section.promo.promo--emura-only h3.promo__title,
+  section.promo.promo--emura-only p.promo__sub {
+    display:block !important; margin: 0 0 6px !important; line-height: 1.28 !important;
+  }
+
+  /* place price/badges AFTER sub, not overlapping */
+  section.promo.promo--emura-only .price-row {
+    position: static !important; float: none !important; clear: both !important;
+    margin: 2px 0 6px !important; display: flex !important; flex-wrap: wrap !important; gap: 6px 10px !important;
+  }
+  section.promo.promo--emura-only .badges,
+  section.promo.promo--emura-only .labels {
+    position: static !important; margin-top: 4px !important; display: flex !important; flex-wrap: wrap !important; gap: 6px !important;
+  }
+}
