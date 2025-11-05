@@ -1,11 +1,14 @@
+/* ======================================================================
+   Airflow+ — Main JS (namespaced & idempotent)
+   ====================================================================== */ 
 (() => {
   "use strict";
 
-  
+  // ----------------------- Namespace + shared utils -----------------------
   const AFP = (window.AFP = window.AFP || {});
   AFP.ROOT_BASE = AFP.ROOT_BASE || "/airflowplus-site/";
 
-  
+  // ---- NEW: global guard so legacy KH injectors/safetynet won’t run ----
   window.__KH_IMAGE_INJECTOR_ACTIVE__ = true;
 
   const $  = (sel, root = document) => root.querySelector(sel);
@@ -16,11 +19,11 @@
       ? document.addEventListener("DOMContentLoaded", fn, { once: true })
       : fn());
 
-  
+  // Guarded log
   AFP.log = (...a) => (window.AFP_DEBUG ? console.log("[AFP]", ...a) : void 0);
 
-  
-  
+  // ---------------------------- Data (guarded) ----------------------------
+  // Product cards used on general pages (small list)
   AFP.ITEMS = AFP.ITEMS || [
     { slug: "panasonic-tz",          name: "Panasonic TZ",          img: "assets/indoor units kh/panasonic tz indoor.jpg",          url: "products/panasonic-tz.html",          cool_area_m2: 25 },
     { slug: "daikin-comfora",        name: "Daikin Comfora",        img: "assets/indoor units kh/daikin comfora indoor.jpg",        url: "products/daikin-comfora.html",        cool_area_m2: 25 },
@@ -31,7 +34,7 @@
     { slug: "daikin-emura",          name: "Daikin Emura",          img: "assets/indoor units kh/daikin emura indoor.jpg",          url: "products/daikin-emura.html",          cool_area_m2: 25 }
   ];
 
-  
+  // Variants used by the recommender (capacity-based)
   AFP.VARS = AFP.VARS || [
     { slug:"products/panasonic-tz-25kw.html",        name:"Panasonic TZ 2.5 kW",        brand:"Panasonic", kw:2.5, min_m2:10, max_m2:25, seer:"A++", scop:"A+", noise_in:20, noise_out:46, cap:2.5 },
     { slug:"products/panasonic-tz-35kw.html",        name:"Panasonic TZ 3.5 kW",        brand:"Panasonic", kw:3.5, min_m2:20, max_m2:35, seer:"A++", scop:"A+", noise_in:20, noise_out:46, cap:3.5 },
@@ -55,7 +58,7 @@
     { slug:"products/haier-expert-nordic-35kw.html", name:"Haier Expert Nordic 3.5 kW", brand:"Haier",     kw:3.5, min_m2:20, max_m2:35, seer:"A++", scop:"A+", noise_in:20, noise_out:46, cap:3.5 }
   ];
 
-  
+  // ------------------------------ Header/nav ------------------------------
   onReady(() => {
     const toggle = $(".nav-toggle");
     const nav = $(".nav");
@@ -66,7 +69,7 @@
     if (y) y.textContent = new Date().getFullYear();
   });
 
-  
+  // --------------------------- Sticky header glow -------------------------
   onReady(() => {
     const header = $(".site-header");
     if (!header) return;
@@ -76,7 +79,7 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   });
 
-  
+  // ------------------------------ Reviews rail ----------------------------
   onReady(() => {
     const wrap = $("[data-reviews]");
     if (!wrap) return;
@@ -114,7 +117,7 @@
       start();
     });
 
-    
+    // drag
     let down = false, sx = 0, sl = 0;
     track.addEventListener("mousedown", (e) => {
       down = true;
@@ -132,7 +135,7 @@
       track.classList.remove("dragging");
     });
 
-    
+    // touch
     let tx = 0, tl = 0;
     track.addEventListener("touchstart", (e) => {
       const t = e.touches?.[0];
@@ -149,7 +152,7 @@
     start();
   });
 
-  
+  // --------------------------- Savings calculator -------------------------
   onReady(() => {
     const root = $("#savings");
     if (!root) return;
@@ -291,11 +294,11 @@
     writeTicks();
     calc();
 
-    
+    // small patch: ensure input 'change' fires calc too (for steppers)
     number.addEventListener("change", () => number.dispatchEvent(new Event("input", { bubbles: true })));
   });
 
-  
+  // ------------------------ FAQ deep-link + schema ------------------------
   onReady(() => {
     const faq = $(".faq");
     if (!faq) return;
@@ -319,7 +322,7 @@
       })
     );
 
-    
+    // schema.org
     const qa = items.map((d) => {
       const q = d.querySelector("summary")?.textContent?.trim() || "";
       const a = d.querySelector("summary + *")?.textContent?.trim() || "";
@@ -327,11 +330,11 @@
     });
     const s = document.createElement("script");
     s.type = "application/ld+json";
-    s.textContent = JSON.stringify({ "@context": "https:
+    s.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: qa });
     document.head.appendChild(s);
   });
 
-  
+  // ----------------------------- Contact form -----------------------------
   onReady(() => {
     const form = $("#contact-form");
     if (!form) return;
@@ -381,7 +384,7 @@
     });
   });
 
-  
+  // ----------------------------- Page fade nav ----------------------------
   onReady(() => {
     $$(".site a[data-transition]").forEach((a) => {
       a.addEventListener("click", (e) => {
@@ -394,7 +397,7 @@
     });
   });
 
-  
+  // --------------------------- Reveal-on-scroll ---------------------------
   onReady(() => {
     const els = $$(".reveal");
     if (!els.length || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -412,7 +415,7 @@
     els.forEach((el) => io.observe(el));
   });
 
-  
+  // ----------------------- Ticker (rotating checkmarks) -------------------
   onReady(() => {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     $$(".afp-ticker").forEach((ticker) => {
@@ -450,7 +453,7 @@
     });
   });
 
-  
+  // -------------------------- Hero video mute toggle ----------------------
   onReady(() => {
     const video =
       $("[data-hero-video]") ||
@@ -501,9 +504,9 @@
     render();
   });
 
-  
+  // --------------------- Compare rail + product crosslinks ----------------
   onReady(() => {
-    
+    // Fill "Bekijk ook" scrollers if present (uses AFP.ITEMS)
     AFP.ITEMS.forEach((a) => {
       const scroller = document.getElementById("also-" + a.slug);
       if (!scroller) return;
@@ -518,7 +521,7 @@
         });
     });
 
-    
+    // Compare rails
     const rails = $$('.compare-rail[data-compare="auto"]');
     if (!rails.length) return;
     rails.forEach((rail) => {
@@ -539,7 +542,7 @@
     });
   });
 
-  
+  // ------------------------------ Catalog filters -------------------------
   onReady(() => {
     const root = $("#cards");
     if (!root) return;
@@ -561,7 +564,7 @@
         const k = c.getAttribute("data-capacity");
         const okBrand = !brands.length || brands.includes(b);
         const okCap = !caps.length || caps.includes(k);
-        const okPrice = true; 
+        const okPrice = true; // vanaf-prijzen, we laten alles zien
         c.style.display = okBrand && okCap && okPrice ? "" : "none";
       });
     };
@@ -580,35 +583,35 @@
     apply();
   });
 
-    
-  
-  AFP.pickVariantByArea = function pickVariantByArea(totalRooms, avgRoomM2 ) {
+    // ----------------------- Recommender (capacity pick) --------------------
+  // Diversified: same sizing logic, then pick brand by (1) user prefs, else (2) round-robin
+  AFP.pickVariantByArea = function pickVariantByArea(totalRooms, avgRoomM2 /* preferQuiet unused */) {
     try {
       const list = Array.isArray(AFP.VARS) ? AFP.VARS.slice() : [];
       if (!list.length) return null;
 
       const totalM2 = Math.max(1, (totalRooms || 1) * (avgRoomM2 || 1));
 
-      
+      // 1) Base pool by area range (fallback: nearest mid)
       let pool = list.filter(it => totalM2 >= it.min_m2 && totalM2 <= it.max_m2);
       if (!pool.length) {
         const mid = (x) => (x.min_m2 + x.max_m2) / 2;
         pool = list.slice().sort((a,b) => Math.abs(mid(a)-totalM2) - Math.abs(mid(b)-totalM2));
       }
 
-      
+      // If many rooms, prefer >=3.5kW (but don’t empty the pool)
       if ((totalRooms||1) >= 3) {
         const big = pool.filter(it => (it.kw||it.cap||0) >= 3.5);
         if (big.length) pool = big;
       }
 
-      
+      // “Best fit” by closeness to pool mid; use its kW as the target capacity
       const mid = (x) => (x.min_m2 + x.max_m2) / 2;
       const best = pool.slice().sort((a,b) => Math.abs(mid(a)-totalM2) - Math.abs(mid(b)-totalM2))[0] || pool[0] || list[0];
       const targetKW = Number((best.kw ?? best.cap) || 0);
-      const eqKW = (v) => Math.abs(Number((v.kw ?? v.cap) || 0) - targetKW) < 0.05; 
+      const eqKW = (v) => Math.abs(Number((v.kw ?? v.cap) || 0) - targetKW) < 0.05; // float-safe
 
-      
+      // 2) Brand order = user prefs (if any) else round-robin across sessions
       function getPreferredBrands() {
         try {
           const raw = sessionStorage.getItem('khPreferredBrands') || "[]";
@@ -622,17 +625,17 @@
         try { i = Number(sessionStorage.getItem('khBrandRRv3')||'0')||0; } catch {}
         const b = order[i % order.length];
         try { sessionStorage.setItem('khBrandRRv3', String((i+1)%order.length)); } catch {}
-        return [b, ...order.filter(x => x !== b)]; 
+        return [b, ...order.filter(x => x !== b)]; // start from RR pick, then others
       }
 
       const brandOrder = (getPreferredBrands().length ? getPreferredBrands() : nextBrandRR());
 
-      
+      // 3) Try to return same capacity from the chosen brand(s)
       for (const brand of brandOrder) {
         const exact = pool.find(v => v.brand === brand && eqKW(v));
         if (exact) return exact;
 
-        
+        // closest capacity within same brand, if exact isn’t available
         const brandAlts = pool.filter(v => v.brand === brand);
         if (brandAlts.length) {
           const closest = brandAlts.slice().sort((a,b) =>
@@ -642,23 +645,24 @@
         }
       }
 
-      
+      // 4) Fallbacks
       return best || pool[0] || list[0];
     } catch {
-      
+      // absolute safety fallback (keep site working)
       const all = Array.isArray(AFP.VARS) ? AFP.VARS : [];
       return all[0] || null;
     }
   };
 
-  
+
+  // --------------------------- Keuzehulp v2 wizard ------------------------
   onReady(() => {
     const card = $(".khv2-card");
     let nextBtn = $("#kh-next");
     const dots = $$(".khv2-steps .dot");
     if (!card || !nextBtn || !dots.length) return;
 
-    
+    // Ensure a dedicated render body
     let body = $(".khv2-body", card);
     const actions = $(".khv2-actions", card);
     if (!body) {
@@ -667,12 +671,12 @@
       card.insertBefore(body, actions || null);
     }
 
-    
+    // Remove stray static step DOM outside body (prevents overlaying/blocks)
     $$(".khv2-q, .kh-grid-rooms", card).forEach((el) => {
       if (!body.contains(el)) el.remove();
     });
 
-    
+    // Replace Next to kill legacy listeners that blocked clicks before
     const fresh = nextBtn.cloneNode(true);
     nextBtn.replaceWith(fresh);
     nextBtn = $("#kh-next") || fresh;
@@ -764,7 +768,7 @@
     }
 
     function renderRecoInto(target) {
-      
+      // --- helpers ----------------------------------------------------------
       function baseFromSlug(slug) {
         if (!slug) return "";
         const last = String(slug).split("/").pop() || "";
@@ -795,7 +799,7 @@
         const n = parseFloat(txt);
         return isNaN(n) ? null : n;
       }
-      
+      // ---------------------------------------------------------------------
 
       const mids = (state.sizes || []).map(midFromRange).filter(x => typeof x === "number" && !isNaN(x));
       const totalM2 = mids.length ? mids.reduce((a, b) => a + b, 0) : 30;
@@ -808,17 +812,17 @@
       const imgPath = indoorImageFor(rec);
       const href = (AFP.ROOT_BASE || "/airflowplus-site/") + (rec.slug || "");
 
-      
+      // Brand logo mapping
       const BASE = ((AFP.ROOT_BASE || "/airflowplus-site/").replace(/\/+$/, "")) + "/";
       const brandKey = String(rec.brand || "").toLowerCase();
       const LOGOS = {
         daikin: `${BASE}assets/img/brands/daikin.placeholder.svg`,
         panasonic: `${BASE}assets/img/brands/panasonic.placeholder.svg`,
-        haier: `${BASE}assets/img/brands/haier.palaceholder.svg` 
+        haier: `${BASE}assets/img/brands/haier.palaceholder.svg` // (filename as in repo)
       };
       const brandLogo = LOGOS[brandKey] || null;
 
-      
+      // Flex row: [ product image ] [ brand logo ] [ text ]
       target.innerHTML =
         `<div class="kh-reco-card">
        <div class="kh-reco-main" style="display:flex;align-items:center;gap:12px;">
@@ -842,20 +846,21 @@
      </div>`;
     }
 
+// --- KH: inject brand logo next to the product image (robust) -------------
     function khInjectBrandLogo() {
       try {
         const host = document.getElementById("kh-reco");
         if (!host) return;
 
-        
+        // Prefer the wrapper if your image injector adds it; otherwise use the main card
         const wrapper = host.querySelector(".kh-reco--withimg") ||
           host.querySelector(".kh-reco-main") ||
           host;
 
-        
+        // Avoid duplicates
         if (wrapper.querySelector(".kh-brand-badge")) return;
 
-        
+        // Detect brand from title / CTA / image src
         const title = (host.querySelector(".kh-reco-title, .kh-reco-body h3, h3")?.textContent || "").toLowerCase();
         const href = (host.querySelector('a[href*="/products/"]')?.getAttribute("href") || "").toLowerCase();
         const img = (host.querySelector(".kh-reco-media img")?.getAttribute("src") || "").toLowerCase();
@@ -869,16 +874,16 @@
         const logos = {
           daikin: `${base}/assets/img/brands/daikin.placeholder.svg`,
           panasonic: `${base}/assets/img/brands/panasonic.placeholder.svg`,
-          
+          // use your actual filename; you mentioned "palaceholder"—keep it if that’s the file on disk
           haier: `${base}/assets/img/brands/haier.palaceholder.svg`
         };
 
-        
+        // Ensure positioned host so absolute badge anchors correctly
         const positioned = wrapper;
         const prevPos = positioned.style.position;
         if (!prevPos || prevPos === "static") positioned.style.position = "relative";
 
-        
+        // Create badge
         const badge = document.createElement("img");
         badge.className = "kh-brand-badge";
         badge.alt = `${brand} logo`;
@@ -894,14 +899,14 @@
           opacity: "0.92"
         });
 
-        
+        // Prefer placing right after the media block, else append to wrapper
         const media = wrapper.querySelector(".kh-reco-media");
         if (media && media.parentNode) {
           media.parentNode.insertBefore(badge, media.nextSibling);
         } else {
           wrapper.appendChild(badge);
         }
-      } catch {  }
+      } catch { /* never break wizard */ }
     }
 
     function ensureRecoMount() {
@@ -916,21 +921,21 @@
       return el;
     }
 
-    
+    // KH brand logo: place it NEXT TO the product image, vertically centered
     function khInjectBrandLogo() {
       try {
         const host = document.getElementById("kh-reco");
         if (!host) return;
 
-        
+        // Image injector wraps into: .kh-reco--withimg > (.kh-reco-media + .kh-reco-body)
         const wrapper = host.querySelector(".kh-reco--withimg");
         const media = wrapper?.querySelector(".kh-reco-media");
         if (!wrapper || !media) return;
 
-        
+        // Avoid dupes
         if (wrapper.querySelector(".kh-reco-brand")) return;
 
-        
+        // Brand (prefer explicit data-brand from render; then fallbacks)
         let brand = (host.getAttribute("data-brand") || "").toLowerCase();
         if (!brand) {
           const title = (host.querySelector(".kh-reco-title, .kh-reco-body h3, h3")?.textContent || "").toLowerCase();
@@ -943,16 +948,16 @@
         }
         if (!brand) return;
 
-        
+        // Ensure a ROW wrapper so brand sits *next to* the image
         let row = wrapper.querySelector(".kh-reco-mediaRow");
         if (!row) {
           row = document.createElement("div");
           row.className = "kh-reco-mediaRow";
           media.parentNode.insertBefore(row, media);
-          row.appendChild(media); 
+          row.appendChild(media); // move media into row
         }
 
-        
+        // Build badge with robust path + fallback (haier "palaceholder" typo)
         const BASE = ((window.AFP?.ROOT_BASE) || "/airflowplus-site/").replace(/\/+$/, "");
         const LOGO1 = `${BASE}/assets/img/brands/${brand}.placeholder.svg`;
         const LOGO2 = brand === "haier"
@@ -973,7 +978,7 @@
         brandBox.appendChild(badge);
         row.appendChild(brandBox);
 
-        
+        // One-time CSS injection for alignment
         if (!document.getElementById("kh-brand-css")) {
           const css = `
         .kh-reco--withimg .kh-reco-mediaRow { display:flex; align-items:center; gap:16px; }
@@ -987,8 +992,11 @@
           const style = Object.assign(document.createElement("style"), { id: "kh-brand-css", textContent: css });
           document.head.appendChild(style);
         }
-      } catch (_) {  }
+      } catch (_) { /* never break the wizard */ }
     }
+
+
+
 
     function renderStep3() {
       state.step = 3;
@@ -1008,7 +1016,7 @@
 
       const mount = ensureRecoMount();
       renderRecoInto(mount);
-      
+      // Let the image injector wrap, then add/maintain the brand logo
       setTimeout(() => {
         try { khInjectBrandLogo(); } catch {}
         try {
@@ -1016,10 +1024,11 @@
           mo.observe(document.getElementById("kh-reco"), { childList: true, subtree: true });
         } catch {}
       }, 0);
-      khInjectBrandLogo(); 
+      khInjectBrandLogo(); // add brand logo beside the product image
     }
 
-    
+
+    // Dots jump
     document.addEventListener("click", (e) => {
       const dot = e.target.closest(".khv2-steps .dot");
       if (!dot) return;
@@ -1029,7 +1038,7 @@
       if (i === 2 && state.rooms && state.sizes.length) renderStep3();
     });
 
-    
+    // Next
     nextBtn.addEventListener(
       "click",
       (ev) => {
@@ -1044,16 +1053,16 @@
       true
     );
 
-    
+    // Close (×)
     const closeBtn = $(".khv2-close");
     closeBtn?.addEventListener("click", () => (window.location.href = "index.html"));
     document.addEventListener("keydown", (e) => e.key === "Escape" && (window.location.href = "index.html"));
 
-    
+    // Boot
     renderStep1();
   });
 
-  
+  // -------------------- Legacy Formspree (data-fs only) -------------------
   onReady(() => {
     const FORMS = $$("form[data-fs]");
     if (!FORMS.length) return;
@@ -1062,7 +1071,7 @@
 
     FORMS.forEach((form) => {
       const endpoint = form.getAttribute("action");
-      if (!endpoint || !/^https:\/\/formspree\.io\/f\
+      if (!endpoint || !/^https:\/\/formspree\.io\/f\//.test(endpoint)) return;
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -1093,8 +1102,10 @@
   });
 })();
 
+/* === Keuzehulp recommendation safety net (re-renders if missing) ======= */
+/* DISABLED by guard to avoid collisions with the main wizard render */
 (function () {
-  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return; 
+  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return; // <-- added
   if (!window.AFP) return;
 
   function midFromRange(txt) {
@@ -1141,6 +1152,7 @@
     }
   }
 
+
   function ensureReco() {
     const card = document.querySelector('.khv2-card');
     if (!card || card.getAttribute('data-step') !== '3') return;
@@ -1175,10 +1187,11 @@
   window.AFP && (window.AFP.forceReco = ensureReco);
 })();
 
+/* Place recommendation inside the Step-3 summary box */
 (function () {
   function relocateReco() {
     var mount = document.getElementById('kh-reco');
-    var summary = document.getElementById('khv2-summary'); 
+    var summary = document.getElementById('khv2-summary'); // the visible Step-3 panel
     if (mount && summary && !summary.contains(mount)) {
       summary.insertAdjacentElement('afterend', mount);
     }
@@ -1197,62 +1210,89 @@
   }
 })();
 
+/* === Keuzehulp: inject product hero image next to recommendation ========= */
+/* DISABLED: we now use kh-reco-image.js to swap INDOOR images only */
 (function () {
-  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return; 
-  
+  if (window.__KH_IMAGE_INJECTOR_ACTIVE__) return; // <-- added: kill legacy products/hero.jpg injector
+  // (dead code below intentionally left for future reference)
 })();
 
 
 
 // ----------------------- Product Gallery (prijzen.html) -----------------------
-(() => {
-  const track = document.querySelector('.gallery-track');
-  if (!track) return;
+(function () {
+  try {
+    var track = document.querySelector('.gallery-track');
+    if (!track) return;
+    var slider = document.getElementById('gallery-slider');
+    var prev = document.querySelector('.gallery-btn.prev');
+    var next = document.querySelector('.gallery-btn.next');
+    var isUserInteracting = false;
+    var autoplayId = null;
 
-  const slider = document.getElementById('gallery-slider');
-  const prev = document.querySelector('.gallery-btn.prev');
-  const next = document.querySelector('.gallery-btn.next');
-  let autoPlay, isUserInteracting = false;
-
-  function updateSlider() {
-    const ratio = track.scrollLeft / (track.scrollWidth - track.clientWidth);
-    slider.value = ratio * 100;
-  }
-
-  function scrollToRatio(ratio) {
-    track.scrollLeft = ratio * (track.scrollWidth - track.clientWidth);
-  }
-
-  function nextSlide() {
-    const imgWidth = track.querySelector('img').clientWidth + 16;
-    if (track.scrollLeft + track.clientWidth >= track.scrollWidth - imgWidth) {
-      track.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      track.scrollBy({ left: imgWidth, behavior: 'smooth' });
+    function updateSlider() {
+      if (!slider) return;
+      var max = track.scrollWidth - track.clientWidth;
+      var ratio = max > 0 ? (track.scrollLeft / max) : 0;
+      slider.value = Math.max(0, Math.min(100, Math.round(ratio * 100)));
     }
-  }
 
-  function prevSlide() {
-    const imgWidth = track.querySelector('img').clientWidth + 16;
-    if (track.scrollLeft <= 0) {
-      track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
-    } else {
-      track.scrollBy({ left: -imgWidth, behavior: 'smooth' });
+    function scrollToRatio(ratio) {
+      var max = track.scrollWidth - track.clientWidth;
+      track.scrollLeft = max * ratio;
     }
+
+    function unitWidth() {
+      var first = track.querySelector('img');
+      if (!first) return 320; // fallback
+      var style = window.getComputedStyle(track);
+      var gap = parseFloat(style.columnGap || 0) || 16;
+      return first.clientWidth + gap;
+    }
+
+    function nextSlide() {
+      var uw = unitWidth();
+      var max = track.scrollWidth - track.clientWidth;
+      if (track.scrollLeft + track.clientWidth >= max - uw) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: uw, behavior: 'smooth' });
+      }
+    }
+
+    function prevSlide() {
+      var uw = unitWidth();
+      if (track.scrollLeft <= uw) {
+        track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: -uw, behavior: 'smooth' });
+      }
+    }
+
+    if (next) next.addEventListener('click', nextSlide);
+    if (prev) prev.addEventListener('click', prevSlide);
+    track.addEventListener('scroll', updateSlider);
+    if (slider) {
+      slider.addEventListener('input', function (e) {
+        var val = parseFloat(e.target.value || 0) / 100;
+        scrollToRatio(val);
+      });
+    }
+
+    function startAuto() {
+      if (autoplayId) clearInterval(autoplayId);
+      autoplayId = setInterval(function () {
+        if (!isUserInteracting) nextSlide();
+      }, 4000);
+    }
+
+    track.addEventListener('mouseenter', function () { isUserInteracting = true; });
+    track.addEventListener('mouseleave', function () { isUserInteracting = false; });
+
+    // start after a tick to ensure layout
+    setTimeout(startAuto, 300);
+  } catch (err) {
+    // fail-safe: do nothing if errors
+    console && console.warn && console.warn('Gallery init skipped:', err);
   }
-
-  next?.addEventListener('click', nextSlide);
-  prev?.addEventListener('click', prevSlide);
-  track.addEventListener('scroll', updateSlider);
-  slider.addEventListener('input', e => scrollToRatio(e.target.value / 100));
-
-  function startAuto() {
-    autoPlay = setInterval(() => {
-      if (!isUserInteracting) nextSlide();
-    }, 4000);
-  }
-
-  track.addEventListener('mouseenter', () => isUserInteracting = true);
-  track.addEventListener('mouseleave', () => isUserInteracting = false);
-  startAuto();
 })();
