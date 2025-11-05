@@ -3388,3 +3388,39 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
 @media (max-width: 900px) {
   .filters--open + * { margin-top:12px; }
 }
+
+/* ===== MOBILE PRECISION HOTFIX (selectors from screenshots) ===== */
+
+/* 1) Emura promo block (stop text/badge overlap & logo clipping) */
+@media (max-width: 768px) {
+  header.promo__head,
+  h3.promo__title,
+  p.promo__sub { position: static !important; display:block; width:100%; }
+  h3.promo__title { line-height: 1.22; margin: 0 0 6px; }
+  p.promo__sub   { line-height: 1.35; margin: 2px 0 8px; }
+  .promo .badges, .promo .labels { position: static !important; display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .promo .media { margin-top: 12px; }
+  .promo .media img { width:100%; height:auto; object-fit:cover; border-radius:12px; }
+  .promo .brand-logo, .promo .logo { max-width:88px; height:auto; object-fit:contain; }
+}
+
+/* 2) Index hero → keuzehulp card (keep inputs/buttons fully on card) */
+@media (max-width: 768px) {
+  .keuzehulp-card { transform:none !important; margin:14px 0 0; left:auto; right:auto; }
+  .keuzehulp-card .form-row, .keuzehulp-card form .row { display:grid; grid-template-columns:1fr; gap:10px; }
+  .keuzehulp-card input, .keuzehulp-card select, .keuzehulp-card .btn { width:100% !important; box-sizing:border-box; }
+  .keuzehulp-card .btn-row { display:grid; grid-template-columns:1fr; gap:10px; }
+}
+
+/* 3) Diensten hero card (your grid-2 wrapper) — make image full width */
+@media (max-width: 768px) {
+  #svc-airco-grid.container.grid-2 { display:block !important; }
+  #svc-airco-grid .media img { width:100% !important; height:auto !important; object-fit:cover; }
+}
+
+/* 4) Keuzehulp step 3 results (kh-reco-*) — stop clipping/2-col overflow */
+@media (max-width: 768px) {
+  .kh-reco-main, .kh-reco-body { width:100% !important; float:none !important; display:block !important; }
+  .wizard .modal, .wizard .sheet, .wizard .result-card { overflow:visible !important; max-height:none !important; }
+  .wizard [data-step="3"] .actions { position: static !important; margin-top: 12px; }
+}
