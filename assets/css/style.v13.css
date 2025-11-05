@@ -3297,3 +3297,47 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
   .filters__toggle { border: 1px solid rgba(0,0,0,.1); background:#fff; border-radius: 10px; padding: 6px 10px; }
   .filters form, .filters .body { padding: 0 16px 14px; }
 }
+
+/* ================= MOBILE HOTFIXES (scoped; desktop untouched) ================= */
+
+/* 1) Emura promo: stop text overlap + unclipped logo/media */
+@media (max-width: 768px) {
+  .promo .row, .promo .grid { display:block !important; }
+  .promo .content { position: static !important; margin-bottom: 12px; }
+  .promo .badges, .promo .labels { position: static !important; flex-wrap: wrap; gap: 6px; }
+  .promo .price, .promo .strike { position: static !important; margin: 6px 0 0; }
+  .promo .media { margin-top: 12px; }
+  .promo .media img { width:100%; height:auto; object-fit:cover; object-position:center; border-radius:12px; }
+  .promo .brand-logo, .promo .logo { max-width:84px; height:auto; object-fit:contain; }
+}
+
+/* 2) Keuzehulp hero card: keep fields/buttons on the card */
+@media (max-width: 768px) {
+  .keuzehulp-card { transform:none !important; margin:14px auto 0; left:auto; right:auto; }
+  .keuzehulp-card form .row, .keuzehulp-card .form-row { display:grid; grid-template-columns:1fr; gap:10px; }
+  .keuzehulp-card input, .keuzehulp-card select, .keuzehulp-card .btn { width:100% !important; }
+  .keuzehulp-card .btn-row { display:grid; grid-template-columns:1fr; gap:10px; }
+}
+
+/* 3) Diensten: images appear tiny → full-width cards */
+@media (max-width: 900px) {
+  main#diensten-scope .services-grid, 
+  main#diensten-scope .cards, 
+  main#diensten-scope .grid { grid-template-columns:1fr !important; gap:16px; }
+  main#diensten-scope .card .media img,
+  main#diensten-scope .service .media img { width:100%; height:auto; object-fit:cover; border-radius:var(--radius,16px); }
+}
+
+/* 4) Keuzehulp — stap 3 (resultaat) clipping */
+@media (max-width: 768px) {
+  .wizard .modal .body, .wizard .sheet, .wizard .result-card { max-height:none; overflow:visible !important; }
+  .wizard [data-step="3"] .result-card { display:block; }
+  .wizard [data-step="3"] .result-card .col-media,
+  .wizard [data-step="3"] .result-card .col-info { width:100%; }
+  .wizard [data-step="3"] .actions { position:static; margin-top:12px; }
+}
+
+/* 5) Modellen filter already OK (collapsible) — keep space below when open */
+@media (max-width: 900px) {
+  .filters--open + * { margin-top: 12px; }
+}
