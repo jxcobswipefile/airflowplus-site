@@ -3099,3 +3099,50 @@ main#airco-scope .site-footer {margin-top: clamp(32px, 4vw, 72px) !important;}
 main#diensten-scope #diensten-cta .card-dark h2 {color: #fff !important;}
 
 main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--accent-600) !important;}
+
+
+
+/* --- Product Gallery (prijzen.html) --- */
+.section-gallery {
+  padding-block: clamp(48px,6vw,96px);
+  background: #fff;
+  text-align: center;
+}
+.section-gallery .gallery-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.gallery-track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.gallery-track::-webkit-scrollbar { display: none; }
+.gallery-track img {
+  height: 280px;
+  flex: 0 0 auto;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+}
+.gallery-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  cursor: pointer;
+  opacity: .85;
+  transition: opacity .2s;
+}
+.gallery-btn:hover { opacity: 1; }
+.gallery-btn.prev { left: .5rem; }
+.gallery-btn.next { right: .5rem; }
+#gallery-slider {
+  width: 100%;
+  margin-top: 1rem;
+}
