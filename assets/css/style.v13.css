@@ -3341,3 +3341,50 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
 @media (max-width: 900px) {
   .filters--open + * { margin-top: 12px; }
 }
+
+/* ================= MOBILE HOTFIX PACK (desktop untouched) ================= */
+
+/* 1) Emura promo: prevent text/badge overlap + unclipped brand logo + image not bleeding */
+@media (max-width: 768px) {
+  .promo-card, .promo { overflow: hidden; }
+  .promo .row, .promo .grid { display:block !important; }
+  .promo .content { position:static !important; margin-bottom:12px; }
+  .promo .price, .promo .strike, .promo .badges, .promo .labels,
+  .promo .cta-row, .promo .bullets { position:static !important; }
+  .promo .badges, .promo .labels { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .promo .media { margin-top:12px; }
+  .promo .media img { display:block; width:100%; height:auto; object-fit:cover; border-radius:12px; }
+  .promo .brand-logo, .promo .logo { max-width:88px; height:auto; object-fit:contain; }
+}
+
+/* 2) Index hero → keuzehulp card: keep inputs & buttons fully inside the card */
+@media (max-width: 768px) {
+  .hero .btn-row { display:grid; grid-template-columns:1fr; gap:10px; }
+  .keuzehulp-card { transform:none !important; margin:14px 0 0; left:auto; right:auto; }
+  .keuzehulp-card form .row, .keuzehulp-card .form-row { display:grid; grid-template-columns:1fr; gap:10px; }
+  .keuzehulp-card input, .keuzehulp-card select, .keuzehulp-card .btn { width:100% !important; box-sizing:border-box; }
+  .keuzehulp-card .btn-row { display:grid; grid-template-columns:1fr; gap:10px; }
+}
+
+/* 3) Diensten page images: scale up on mobile */
+@media (max-width: 900px) {
+  main#diensten-scope .services-grid,
+  main#diensten-scope .cards,
+  main#diensten-scope .grid { grid-template-columns:1fr !important; gap:16px; }
+  main#diensten-scope .card .media img,
+  main#diensten-scope .service .media img { width:100%; height:auto; object-fit:cover; border-radius:var(--radius,16px); }
+}
+
+/* 4) Keuzehulp — Step 3: prevent clipping of product info and actions */
+@media (max-width: 768px) {
+  .wizard .modal, .wizard .sheet, .wizard .result-card { overflow:visible !important; max-height:none !important; }
+  .wizard [data-step="3"] .result-card { display:block; }
+  .wizard [data-step="3"] .result-card .col-media,
+  .wizard [data-step="3"] .result-card .col-info { width:100%; float:none; }
+  .wizard [data-step="3"] .actions { position:static; margin-top:12px; }
+}
+
+/* 5) Modellen filter (keep your working collapsible UX tidy) */
+@media (max-width: 900px) {
+  .filters--open + * { margin-top:12px; }
+}
