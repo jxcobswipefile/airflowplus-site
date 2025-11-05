@@ -1339,70 +1339,82 @@
   });
 })();
 
-/* ---------------- Product Page Thumbnails → Main image swap (generic, non-breaking) ---------------- */
+/* ---------------- Product Page Thumbnails → Main image swap (true swap) ---------------- */
 (function () {
   function ready(fn){ if (document.readyState!=="loading") fn(); else document.addEventListener("DOMContentLoaded",fn,{once:true}); }
   ready(function(){
     try {
-      var path = (window.location && window.location.pathname) || "";
-      if (path.indexOf("/products/") === -1) return; // only product pages
+      if ((location.pathname||"").indexOf("/products/") === -1) return;
 
-      function findMainImage(scope){
+      function findMain(scope){
         return scope.querySelector(".gallery-main img, img#product-main, .product-hero img, .product-media img, .product-gallery .main img")
             || (function(){
-                  // Fallback: the largest visible image nearby
-                  var imgs = scope.querySelectorAll("img");
-                  var best = null, area = 0;
-                  imgs.forEach(function(img){
-                    var w = img.clientWidth, h = img.clientHeight;
-                    if (w*h > area) { area = w*h; best = img; }
-                  });
-                  return best;
+                 var best=null, area=0;
+                 scope.querySelectorAll("img").forEach(function(img){
+                   var a = img.clientWidth*img.clientHeight;
+                   if (a>area){ area=a; best=img; }
+                 });
+                 return best;
                })();
       }
 
+      function swapImage(a, b, attr){
+        var tmp = a.getAttribute(attr);
+        if (b.getAttribute(attr) != null) a.setAttribute(attr, b.getAttribute(attr));
+        if (tmp != null) b.setAttribute(attr, tmp);
+      }
+
       function setup(container){
-        if (!container || container.dataset.pgInit==="1") return;
-        container.dataset.pgInit = "1";
+        if (!container || container.dataset.pgSwapInit==="1") return;
+        container.dataset.pgSwapInit = "1";
 
-        var main = findMainImage(document);
+        var main = findMain(document);
         if (!main) return;
-
-        // If main is wrapped by a link (lightbox), keep href in sync
         var mainLink = main.closest("a");
 
         var thumbs = container.querySelectorAll("img");
         thumbs.forEach(function(t){
           t.style.cursor = "pointer";
-          t.addEventListener("click", function(ev){
-            ev.preventDefault();
-            ev.stopPropagation();
+          t.addEventListener("click", function(e){
+            e.preventDefault(); e.stopPropagation();
 
-            var newSrc = t.getAttribute("data-full") || t.getAttribute("data-src") || t.currentSrc || t.src;
-            if (!newSrc) return;
+            // Determine “full” sources
+            var thumbFull = t.getAttribute("data-full") || t.getAttribute("data-src") || t.currentSrc || t.src;
+            var mainFull  = main.getAttribute("data-full") || main.getAttribute("data-src") || main.currentSrc || main.src;
 
-            // swap
-            main.src = newSrc;
-            if (t.alt) main.alt = t.alt;
-            if (mainLink) mainLink.href = newSrc;
+            // Display src we’ll swap (so the thumb visually becomes the old main)
+            var oldMainDisplay = main.src;
+            var oldThumbDisplay = t.src;
 
-            // active state styles (optional)
+            // 1) Swap display src
+            main.src = thumbFull;          // main shows clicked image (full if provided)
+            t.src    = oldMainDisplay;     // thumb shows previous main (what the user saw)
+
+            // 2) Swap alt (keep semantics correct)
+            var tmpAlt = main.alt;
+            main.alt = t.alt || main.alt;
+            t.alt = tmpAlt || t.alt;
+
+            // 3) Swap data-full / data-src so future clicks stay consistent
+            // (swap both attributes if present)
+            ["data-full","data-src","srcset"].forEach(function(attr){
+              swapImage(main, t, attr);
+            });
+
+            // 4) If main is wrapped in a link, keep href in sync with current main
+            if (mainLink) mainLink.href = (main.getAttribute("data-full") || main.src);
+
+            // 5) Optional: active state — remove to avoid mismatch after swap
             thumbs.forEach(function(n){ n.classList.remove("is-active"); n.removeAttribute("aria-current"); });
-            t.classList.add("is-active");
-            t.setAttribute("aria-current","true");
           }, {passive:true});
         });
       }
 
-      // Likely thumbnail strips across your product pages
-      var strips = document.querySelectorAll(".thumbs, .thumbnails, .product-thumbs, .gallery-thumbs, .product-gallery .thumbs, .image-strip");
-      if (!strips.length) {
-        // explicit opt-in via data attribute if structure varies
-        strips = document.querySelectorAll("[data-thumb-strip]");
-      }
+      // Common thumbnail containers
+      var strips = document.querySelectorAll(".thumbs, .thumbnails, .product-thumbs, .gallery-thumbs, .product-gallery .thumbs, .image-strip, [data-thumb-strip]");
       strips.forEach(setup);
     } catch(e){
-      if (window && window.console) console.warn("Product gallery init skipped:", e);
+      if (window && window.console) console.warn("Product gallery swap init skipped:", e);
     }
   });
 })();
