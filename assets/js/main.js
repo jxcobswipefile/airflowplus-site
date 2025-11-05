@@ -1338,3 +1338,71 @@
     });
   });
 })();
+
+/* ---------------- Product Page Thumbnails → Main image swap (generic, non-breaking) ---------------- */
+(function () {
+  function ready(fn){ if (document.readyState!=="loading") fn(); else document.addEventListener("DOMContentLoaded",fn,{once:true}); }
+  ready(function(){
+    try {
+      var path = (window.location && window.location.pathname) || "";
+      if (path.indexOf("/products/") === -1) return; // only product pages
+
+      function findMainImage(scope){
+        return scope.querySelector(".gallery-main img, img#product-main, .product-hero img, .product-media img, .product-gallery .main img")
+            || (function(){
+                  // Fallback: the largest visible image nearby
+                  var imgs = scope.querySelectorAll("img");
+                  var best = null, area = 0;
+                  imgs.forEach(function(img){
+                    var w = img.clientWidth, h = img.clientHeight;
+                    if (w*h > area) { area = w*h; best = img; }
+                  });
+                  return best;
+               })();
+      }
+
+      function setup(container){
+        if (!container || container.dataset.pgInit==="1") return;
+        container.dataset.pgInit = "1";
+
+        var main = findMainImage(document);
+        if (!main) return;
+
+        // If main is wrapped by a link (lightbox), keep href in sync
+        var mainLink = main.closest("a");
+
+        var thumbs = container.querySelectorAll("img");
+        thumbs.forEach(function(t){
+          t.style.cursor = "pointer";
+          t.addEventListener("click", function(ev){
+            ev.preventDefault();
+            ev.stopPropagation();
+
+            var newSrc = t.getAttribute("data-full") || t.getAttribute("data-src") || t.currentSrc || t.src;
+            if (!newSrc) return;
+
+            // swap
+            main.src = newSrc;
+            if (t.alt) main.alt = t.alt;
+            if (mainLink) mainLink.href = newSrc;
+
+            // active state styles (optional)
+            thumbs.forEach(function(n){ n.classList.remove("is-active"); n.removeAttribute("aria-current"); });
+            t.classList.add("is-active");
+            t.setAttribute("aria-current","true");
+          }, {passive:true});
+        });
+      }
+
+      // Likely thumbnail strips across your product pages
+      var strips = document.querySelectorAll(".thumbs, .thumbnails, .product-thumbs, .gallery-thumbs, .product-gallery .thumbs, .image-strip");
+      if (!strips.length) {
+        // explicit opt-in via data attribute if structure varies
+        strips = document.querySelectorAll("[data-thumb-strip]");
+      }
+      strips.forEach(setup);
+    } catch(e){
+      if (window && window.console) console.warn("Product gallery init skipped:", e);
+    }
+  });
+})();
