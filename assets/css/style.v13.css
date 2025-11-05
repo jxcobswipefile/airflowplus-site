@@ -3585,3 +3585,83 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
   .promo--emura-only .promo__media { margin-top: 12px; }
   .promo--emura-only .promo__media img { width:100%; height:auto; object-fit:cover; border-radius:12px; }
 }
+
+/* ===== URGENT MOBILE PATCHES (desktop untouched) ===== */
+
+/* --- A) PROMO – Emura: lift head, stop overlays --- */
+@media (max-width: 768px) {
+  section.promo.promo--emura-only .promo__wrap { display:block !important; padding-top:0 !important; }
+
+  section.promo.promo--emura-only .promo__head,
+  section.promo.promo--emura-only h3.promo__title,
+  section.promo.promo--emura-only p.promo__sub,
+  section.promo.promo--emura-only .price-row,
+  section.promo.promo--emura-only .badges,
+  section.promo.promo--emura-only .labels,
+  section.promo.promo--emura-only .bullets,
+  section.promo.promo--emura-only .cta-row {
+    position:static !important;
+    inset:auto !important;
+    transform:none !important;
+    width:100% !important;
+    z-index:auto !important;
+  }
+
+  section.promo.promo--emura-only .promo__head { margin:0 0 6px !important; padding:0 !important; }
+  section.promo.promo--emura-only h3.promo__title { line-height:1.22 !important; margin:0 0 6px !important; }
+  section.promo.promo--emura-only p.promo__sub   { line-height:1.35 !important; margin:2px 0 8px !important; }
+
+  section.promo.promo--emura-only .price-row      { display:flex !important; flex-wrap:wrap !important; gap:6px 10px !important; align-items:baseline !important; margin-bottom:8px !important; }
+  section.promo.promo--emura-only .badges,
+  section.promo.promo--emura-only .labels         { display:flex !important; flex-wrap:wrap !important; gap:6px !important; margin-top:6px !important; }
+
+  section.promo.promo--emura-only .cta-row        { display:grid !important; grid-template-columns:1fr !important; gap:10px !important; margin:10px 0 12px !important; }
+
+  section.promo.promo--emura-only .promo__media   { margin-top:12px !important; }
+  section.promo.promo--emura-only .promo__media img,
+  section.promo.promo--emura-only .media img      { display:block !important; width:100% !important; height:auto !important; object-fit:cover !important; border-radius:12px !important; }
+}
+
+/* --- B) DIENSTEN – force text first, image second (like Multi-split/Airconditioning) --- */
+@media (max-width: 768px) {
+  /* Stack and order */
+  main#diensten-scope #svc-onderhoud .container.grid-2,
+  main#diensten-scope #svc-wp         .container.grid-2,
+  main#diensten-scope #svc-zakelijk   .container.grid-2,
+  main#diensten-scope #svc-reparatie  .container.grid-2,
+  main#diensten-scope #svc-multisplit .container.grid-2 {
+    display:flex !important;
+    flex-direction:column !important;
+    gap:12px !important;
+  }
+
+  /* Image ALWAYS below text */
+  main#diensten-scope #svc-onderhoud .container.grid-2 figure.media,
+  main#diensten-scope #svc-wp         .container.grid-2 figure.media,
+  main#diensten-scope #svc-zakelijk   .container.grid-2 figure.media,
+  main#diensten-scope #svc-reparatie  .container.grid-2 figure.media,
+  main#diensten-scope #svc-multisplit .container.grid-2 figure.media {
+    order:2 !important; margin-top:8px !important;
+  }
+  main#diensten-scope #svc-onderhoud .container.grid-2 > *:not(figure.media),
+  main#diensten-scope #svc-wp         .container.grid-2 > *:not(figure.media),
+  main#diensten-scope #svc-zakelijk   .container.grid-2 > *:not(figure.media),
+  main#diensten-scope #svc-reparatie  .container.grid-2 > *:not(figure.media),
+  main#diensten-scope #svc-multisplit .container.grid-2 > *:not(figure.media) {
+    order:1 !important;
+  }
+
+  /* Make the images fill the row */
+  main#diensten-scope #svc-onderhoud figure.media img,
+  main#diensten-scope #svc-wp         figure.media img,
+  main#diensten-scope #svc-zakelijk   figure.media img,
+  main#diensten-scope #svc-reparatie  figure.media img,
+  main#diensten-scope #svc-multisplit figure.media img {
+    display:block !important;
+    width:100% !important;
+    height:auto !important;
+    max-width:none !important;
+    object-fit:cover !important;
+    border-radius:14px !important;
+  }
+}
