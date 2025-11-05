@@ -1458,3 +1458,48 @@
     } catch(e){ console && console.warn && console.warn("Mobile menu init skipped:", e); }
   });
 })();
+
+// ---------------- Modellen filter: collapsible (mobile only) ----------------
+(function(){
+  function ready(fn){ if (document.readyState!=="loading") fn(); else document.addEventListener("DOMContentLoaded",fn,{once:true}); }
+  ready(function(){
+    try {
+      if (window.matchMedia("(min-width: 901px)").matches) return; // desktop untouched
+      var panel = document.querySelector("#filters, .filters, aside.filters");
+      if (!panel || panel.dataset.collapseInit==="1") return;
+      panel.dataset.collapseInit = "1";
+
+      // Ensure header + toggle exist
+      var header = panel.querySelector(".filters__header");
+      if (!header) {
+        header = document.createElement("div");
+        header.className = "filters__header";
+        var title = document.createElement("div");
+        title.className = "filters__title";
+        title.textContent = "Filters";
+        var btn = document.createElement("button");
+        btn.className = "filters__toggle";
+        btn.type = "button";
+        btn.setAttribute("aria-expanded","false");
+        btn.textContent = "Toon";
+        header.appendChild(title); header.appendChild(btn);
+        panel.insertBefore(header, panel.firstChild);
+      }
+      var toggle = panel.querySelector(".filters__toggle");
+      function setOpen(open){
+        panel.classList.toggle("filters--open", !!open);
+        toggle.setAttribute("aria-expanded", open ? "true":"false");
+        toggle.textContent = open ? "Sluit" : "Toon";
+      }
+      toggle.addEventListener("click", function(e){ e.preventDefault(); setOpen(!panel.classList.contains("filters--open")); });
+
+      // Close on scroll a bit to keep content visible
+      var lastY = window.scrollY;
+      window.addEventListener("scroll", function(){
+        if (!panel.classList.contains("filters--open")) return;
+        var dy = Math.abs(window.scrollY - lastY); lastY = window.scrollY;
+        if (dy > 80) setOpen(false);
+      }, {passive:true});
+    } catch(e){ console && console.warn && console.warn("filters collapse skipped:", e); }
+  });
+})();
