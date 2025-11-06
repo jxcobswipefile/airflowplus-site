@@ -10,7 +10,20 @@
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap"
         rel="stylesheet" />
-    <link href="/airflowplus-site/assets/css/style.v13.css?v=rev3" rel="stylesheet" />
+    <link rel="stylesheet" data-afp-css href="/airflowplus-site/assets/css/style.v13.css?v=29.9.19">
+    <script>
+        (function () {
+            var isGh = /github\.io$/i.test(location.hostname);
+            var ROOT = isGh ? '/airflowplus-site/' : '/';
+            // set global root for your JS too
+            window.AFP = window.AFP || {};
+            window.AFP.ROOT_BASE = ROOT;
+            // rewrite the CSS href to correct root
+            var link = document.querySelector('link[data-afp-css]');
+            if (link) link.href = ROOT + 'assets/css/style.v13.css?v=29.9.19';
+        })();
+    </script>
+
     <script defer="" src="assets/js/main.js?v=rev3"></script>
 </head>
 
@@ -153,4 +166,5 @@
     </footer>
     <script src="main.js"></script>
 </body>
+
 </html>

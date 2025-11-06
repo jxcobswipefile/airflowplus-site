@@ -1,174 +1,263 @@
 <!DOCTYPE html>
- 
-<html lang="nl"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Contact • Airflow+</title>
-<meta content="Airflow+ — Airconditioning &amp; warmtepomp installatie. Snel, netjes en gecertificeerd." name="description"/>
-<link href="/airflowplus-site/assets/img/favicon.png" rel="icon"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<!-- Use the new themed CSS -->
-<link href="/airflowplus-site/assets/css/style.v13.css?v=rev3" rel="stylesheet"/>
-<!-- Your script (keep your filename; example shown) -->
-<script defer="" src="assets/js/main.js?v=rev3"></script>
-<!-- TEMP override start -->
-<style>
-/* TEMP override for consent row; remove once deploy is healthy */
-#contact .field.full.terms label.checkbox {
-  display:inline-flex !important;
-  align-items:center !important;
-  gap:10px !important;
-}
-#contact .field.full.terms label.checkbox > input[type="checkbox"] {
-  margin:0 !important;
-  position:static !important;
-  transform:none !important;
-}
-#contact .field.full.terms label.checkbox > span {
-  display:inline !important;
-  margin:0 !important;
-  white-space:normal !important;
-}
-</style>
-<!-- TEMP override end -->
-<!-- TEMP consent inline force -->
-<style>
-#contact .field.full.terms label.checkbox{display:inline-flex!important;align-items:center!important;gap:10px!important;}
-#contact .field.full.terms label.checkbox>input[type="checkbox"]{margin:0!important;position:static!important;transform:none!important;}
-#contact .field.full.terms label.checkbox>span{display:inline!important;margin:0!important;white-space:normal!important;}
-#contact .cta-row{display:flex!important;gap:12px!important;align-items:center!important;flex-wrap:wrap!important;margin-top:14px!important;}
-</style>
-<!-- FINAL contact form visual fix (v29.3.6) -->
-<style>
-#contact .container > h1, #contact .container > p, #contact form { max-width: 920px; margin: 0 auto; }
-#contact .container > p { margin-bottom: 40px; } /* moderate spacing */
-#contact .field.full.terms { display:flex; align-items:center; justify-content:flex-start; margin:10px 0 5px; }
-#contact .field.full.terms label.checkbox { display:flex; align-items:center; gap:10px; font-weight:500; margin:0; width:auto; }
-#contact .field.full.terms input[type="checkbox"] { width:18px; height:18px; margin:0; transform: translateY(1px); }
-#contact .field.full.terms span { white-space: nowrap; display:inline; }
-#contact .cta-row { display:flex; gap:12px; align-items:center; margin-top:14px; justify-content:flex-start; }
-#contact .cta-row .btn { padding:10px 22px; border-radius:50px; font-weight:600; }
-</style>
-</head><body>
-<div class="topbar">
-<div class="container topbar-inner">
-<span>Gecertificeerde airconditioning &amp; warmtepomp installateur</span>
-<a class="topbar-link" href="tel:+31640981629">Bel: +31 64 098 1629</a>
-</div>
-</div>
-<header class="site-header">
-<div class="container header-inner">
-<a class="brand" href="/airflowplus-site/index.html"><img alt="AirFlow+" src="assets/img/airflowplus-logo.png" style="height:32px;width:auto;display:block"/></a>
-<nav class="nav"><a href="/airflowplus-site/airco-modellen.html">Modellen</a>
-<a href="/airflowplus-site/keuzehulp.html">Keuzehulp</a>
-<a href="/airflowplus-site/airco.html">Airconditioning</a>
-<a href="/airflowplus-site/diensten.html">Diensten</a>
-<a href="/airflowplus-site/prijzen.html">Prijzen</a>
-<a href="/airflowplus-site/over.html">Over ons</a>
-<a class="btn btn-primary btn--green" href="/airflowplus-site/contact.html">Bel/Offerte</a>
-</nav>
-<button aria-label="Open menu" class="nav-toggle">☰</button>
-</div>
-</header>
-<section class="section" id="contact">
-<div class="container">
-<h1>Offerte of vraag</h1>
-<p class="muted">Vul je gegevens in en we reageren meestal dezelfde werkdag.</p>
-<form action="https://formspree.io/f/xwprybon" class="contact-form" data-fs="" data-thanks="/thank-you.html" data-type="quote" id="contact-form" method="POST" novalidate="">
-<!-- Honeypot (spam trap) -->
-<input autocomplete="off" name="_gotcha" style="display:none" tabindex="-1" type="text"/>
-<div class="form-grid">
-<div class="field">
-<label for="cf-name">Naam</label>
-<input id="cf-name" name="name" placeholder="Voor- en achternaam" required="" type="text"/>
-<div class="error" data-err="name"></div>
-</div>
-<div class="field">
-<label for="cf-email">E-mail</label>
-<input id="cf-email" name="email" placeholder="jij@voorbeeld.nl" required="" type="email"/>
-<div class="error" data-err="email"></div>
-</div>
-<div class="field">
-<label for="cf-phone">Telefoon (optioneel)</label>
-<input id="cf-phone" inputmode="tel" name="phone" placeholder="06 12345678" type="tel"/>
-<div class="error" data-err="phone"></div>
-</div>
-<div class="field">
-<label for="cf-topic">Onderwerp</label>
-<select class="save-select" id="cf-topic" name="topic">
-<option selected="" value="offerte">Offerte</option>
-<option value="advies">Advies</option>
-<option value="onderhoud">Onderhoud</option>
-<option value="storingen">Storingen / Reparatie</option>
-</select>
-</div>
-<div class="field full">
-<label for="cf-message">Bericht</label>
-<textarea id="cf-message" name="message" placeholder="Vertel kort wat je zoekt (ruimtes, type woning, gewenste periode)..." required="" rows="6"></textarea>
-<div class="error" data-err="message"></div>
-<div class="field full terms">
-<label class="checkbox">
-<input id="cf-consent" name="consent" required="" type="checkbox"/>
-<span>Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</span>
-</label>
-<div class="error" data-err="consent"></div>
-</div>
-<div class="cta-row">
-<button class="btn btn-primary" type="submit">Versturen</button>
-<a class="btn btn--ghost" href="tel:+31640981629">Bel direct</a>
-</div><div class="error" data-err="consent"></div>
-</div>
-<!-- Success / error inline feedback (JS fills these) -->
-<div aria-live="polite" class="form-status"></div>
-</div></form>
-</div>
-</section>
-<section class="section section-navy section-tight trust-band">
-<div class="container">
-<div aria-label="Pluspunten" class="trust-ticker keyword-ticker" data-dir="ltr" data-speed="0.6">
-<div class="keyword-track" role="list">
-<span class="item" role="listitem"><span class="check"></span> Binnen 7 dagen geplaatst</span>
-<span class="item" role="listitem"><span class="check"></span> Gecertificeerde monteurs</span>
-<span class="item" role="listitem"><span class="check"></span> Geen verborgen kosten</span>
-<span class="item" role="listitem"><span class="check"></span> Gratis offerte binnen 24u</span>
-</div>
-</div>
-</div>
-</section>
-<footer class="site-footer">
-<div class="container footer-grid">
-<div>
-<img
-    src="assets/img/airflowplus-logo-2.png"
-    alt="Airflow+"
-    class="footer-mark"
-    width="148"
-    height="24"
-    loading="lazy"
-    decoding="async"
-  />
-<p class="muted">Gecertificeerde installatie van airconditioning &amp; warmtepompen. Snel, netjes en volgens norm.</p>
-</div>
-<div>
-<h4>Contact</h4>
-<ul class="list">
-<li><a href="tel:+31640981629" class="footer-phone">Bel: +31 64 098 1629</a></li>
-<li><a href="mailto:info@airflow-plus.com">info@airflow-plus.com</a></li>
-<li>Deventersweg 5, Barendrecht 2994LE</li>
-</ul>
-</div>
-<div>
-<h4>Pagina’s</h4>
-<ul class="list">
-<li><a href="#keuzehulp-cta">Keuzehulp</a></li>
-<li><a href="airflowplus-site/airco-modellen.html">Modellen</a></li>
-<li><a href="/airflowplus-site/airco.html">Airconditioning</a></li>
-<li><a href="/airflowplus-site/diensten.html">Diensten</a></li>
-<li><a href="/airflowplus-site/prijzen.html">Prijzen</a></li>
-<li><a href="/airflowplus-site/over.html">Over ons</a></li>
-<li><a href="/airflowplus-site/contact.html">Contact</a></li>
-<div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
-</footer>
-</body></html>
+
+<html lang="nl">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Contact • Airflow+</title>
+  <meta content="Airflow+ — Airconditioning &amp; warmtepomp installatie. Snel, netjes en gecertificeerd."
+    name="description" />
+  <link href="/airflowplus-site/assets/img/favicon.png" rel="icon" />
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+    rel="stylesheet" />
+  <!-- Use the new themed CSS -->
+  <link rel="stylesheet" data-afp-css href="/airflowplus-site/assets/css/style.v13.css?v=29.9.19">
+  <script>
+    (function () {
+      var isGh = /github\.io$/i.test(location.hostname);
+      var ROOT = isGh ? '/airflowplus-site/' : '/';
+      // set global root for your JS too
+      window.AFP = window.AFP || {};
+      window.AFP.ROOT_BASE = ROOT;
+      // rewrite the CSS href to correct root
+      var link = document.querySelector('link[data-afp-css]');
+      if (link) link.href = ROOT + 'assets/css/style.v13.css?v=29.9.19';
+    })();
+  </script>
+
+  <!-- Your script (keep your filename; example shown) -->
+  <script defer="" src="assets/js/main.js?v=rev3"></script>
+  <!-- TEMP override start -->
+  <style>
+    /* TEMP override for consent row; remove once deploy is healthy */
+    #contact .field.full.terms label.checkbox {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+    }
+
+    #contact .field.full.terms label.checkbox>input[type="checkbox"] {
+      margin: 0 !important;
+      position: static !important;
+      transform: none !important;
+    }
+
+    #contact .field.full.terms label.checkbox>span {
+      display: inline !important;
+      margin: 0 !important;
+      white-space: normal !important;
+    }
+  </style>
+  <!-- TEMP override end -->
+  <!-- TEMP consent inline force -->
+  <style>
+    #contact .field.full.terms label.checkbox {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+    }
+
+    #contact .field.full.terms label.checkbox>input[type="checkbox"] {
+      margin: 0 !important;
+      position: static !important;
+      transform: none !important;
+    }
+
+    #contact .field.full.terms label.checkbox>span {
+      display: inline !important;
+      margin: 0 !important;
+      white-space: normal !important;
+    }
+
+    #contact .cta-row {
+      display: flex !important;
+      gap: 12px !important;
+      align-items: center !important;
+      flex-wrap: wrap !important;
+      margin-top: 14px !important;
+    }
+  </style>
+  <!-- FINAL contact form visual fix (v29.3.6) -->
+  <style>
+    #contact .container>h1,
+    #contact .container>p,
+    #contact form {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    #contact .container>p {
+      margin-bottom: 40px;
+    }
+
+    /* moderate spacing */
+    #contact .field.full.terms {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 10px 0 5px;
+    }
+
+    #contact .field.full.terms label.checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+      margin: 0;
+      width: auto;
+    }
+
+    #contact .field.full.terms input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      transform: translateY(1px);
+    }
+
+    #contact .field.full.terms span {
+      white-space: nowrap;
+      display: inline;
+    }
+
+    #contact .cta-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+      justify-content: flex-start;
+    }
+
+    #contact .cta-row .btn {
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span>Gecertificeerde airconditioning &amp; warmtepomp installateur</span>
+      <a class="topbar-link" href="tel:+31640981629">Bel: +31 64 098 1629</a>
+    </div>
+  </div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/airflowplus-site/index.html"><img alt="AirFlow+" src="assets/img/airflowplus-logo.png"
+          style="height:32px;width:auto;display:block" /></a>
+      <nav class="nav"><a href="/airflowplus-site/airco-modellen.html">Modellen</a>
+        <a href="/airflowplus-site/keuzehulp.html">Keuzehulp</a>
+        <a href="/airflowplus-site/airco.html">Airconditioning</a>
+        <a href="/airflowplus-site/diensten.html">Diensten</a>
+        <a href="/airflowplus-site/prijzen.html">Prijzen</a>
+        <a href="/airflowplus-site/over.html">Over ons</a>
+        <a class="btn btn-primary btn--green" href="/airflowplus-site/contact.html">Bel/Offerte</a>
+      </nav>
+      <button aria-label="Open menu" class="nav-toggle">☰</button>
+    </div>
+  </header>
+  <section class="section" id="contact">
+    <div class="container">
+      <h1>Offerte of vraag</h1>
+      <p class="muted">Vul je gegevens in en we reageren meestal dezelfde werkdag.</p>
+      <form action="https://formspree.io/f/xwprybon" class="contact-form" data-fs="" data-thanks="/thank-you.html"
+        data-type="quote" id="contact-form" method="POST" novalidate="">
+        <!-- Honeypot (spam trap) -->
+        <input autocomplete="off" name="_gotcha" style="display:none" tabindex="-1" type="text" />
+        <div class="form-grid">
+          <div class="field">
+            <label for="cf-name">Naam</label>
+            <input id="cf-name" name="name" placeholder="Voor- en achternaam" required="" type="text" />
+            <div class="error" data-err="name"></div>
+          </div>
+          <div class="field">
+            <label for="cf-email">E-mail</label>
+            <input id="cf-email" name="email" placeholder="jij@voorbeeld.nl" required="" type="email" />
+            <div class="error" data-err="email"></div>
+          </div>
+          <div class="field">
+            <label for="cf-phone">Telefoon (optioneel)</label>
+            <input id="cf-phone" inputmode="tel" name="phone" placeholder="06 12345678" type="tel" />
+            <div class="error" data-err="phone"></div>
+          </div>
+          <div class="field">
+            <label for="cf-topic">Onderwerp</label>
+            <select class="save-select" id="cf-topic" name="topic">
+              <option selected="" value="offerte">Offerte</option>
+              <option value="advies">Advies</option>
+              <option value="onderhoud">Onderhoud</option>
+              <option value="storingen">Storingen / Reparatie</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="cf-message">Bericht</label>
+            <textarea id="cf-message" name="message"
+              placeholder="Vertel kort wat je zoekt (ruimtes, type woning, gewenste periode)..." required=""
+              rows="6"></textarea>
+            <div class="error" data-err="message"></div>
+            <div class="field full terms">
+              <label class="checkbox">
+                <input id="cf-consent" name="consent" required="" type="checkbox" />
+                <span>Ik ga akkoord dat Airflow+ mijn gegevens gebruikt om contact op te nemen.</span>
+              </label>
+              <div class="error" data-err="consent"></div>
+            </div>
+            <div class="cta-row">
+              <button class="btn btn-primary" type="submit">Versturen</button>
+              <a class="btn btn--ghost" href="tel:+31640981629">Bel direct</a>
+            </div>
+            <div class="error" data-err="consent"></div>
+          </div>
+          <!-- Success / error inline feedback (JS fills these) -->
+          <div aria-live="polite" class="form-status"></div>
+        </div>
+      </form>
+    </div>
+  </section>
+  <section class="section section-navy section-tight trust-band">
+    <div class="container">
+      <div aria-label="Pluspunten" class="trust-ticker keyword-ticker" data-dir="ltr" data-speed="0.6">
+        <div class="keyword-track" role="list">
+          <span class="item" role="listitem"><span class="check"></span> Binnen 7 dagen geplaatst</span>
+          <span class="item" role="listitem"><span class="check"></span> Gecertificeerde monteurs</span>
+          <span class="item" role="listitem"><span class="check"></span> Geen verborgen kosten</span>
+          <span class="item" role="listitem"><span class="check"></span> Gratis offerte binnen 24u</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <img src="assets/img/airflowplus-logo-2.png" alt="Airflow+" class="footer-mark" width="148" height="24"
+          loading="lazy" decoding="async" />
+        <p class="muted">Gecertificeerde installatie van airconditioning &amp; warmtepompen. Snel, netjes en volgens
+          norm.</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="list">
+          <li><a href="tel:+31640981629" class="footer-phone">Bel: +31 64 098 1629</a></li>
+          <li><a href="mailto:info@airflow-plus.com">info@airflow-plus.com</a></li>
+          <li>Deventersweg 5, Barendrecht 2994LE</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Pagina’s</h4>
+        <ul class="list">
+          <li><a href="#keuzehulp-cta">Keuzehulp</a></li>
+          <li><a href="airflowplus-site/airco-modellen.html">Modellen</a></li>
+          <li><a href="/airflowplus-site/airco.html">Airconditioning</a></li>
+          <li><a href="/airflowplus-site/diensten.html">Diensten</a></li>
+          <li><a href="/airflowplus-site/prijzen.html">Prijzen</a></li>
+          <li><a href="/airflowplus-site/over.html">Over ons</a></li>
+          <li><a href="/airflowplus-site/contact.html">Contact</a></li>
+          <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
+  </footer>
+</body>
+
+</html>

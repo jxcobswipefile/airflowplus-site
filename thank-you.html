@@ -1,64 +1,108 @@
 <!DOCTYPE html>
 
 <html lang="nl">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Bedankt • Airflow+</title>
-<link href="/airflowplus-site/assets/img/favicon.png" rel="icon"/>
-<link href="/airflowplus-site/assets/css/style.v13.css?v=rev3" rel="stylesheet"/>
-<meta content="Bedankt voor uw aanvraag bij Airflow+. We nemen zo snel mogelijk contact met u op." name="description"/>
-<style>
-    .ty-hero { padding: clamp(3rem, 6vw, 6rem) 0; text-align: center; }
-    .ty-hero .chip { margin-bottom: 10px; display: inline-block; }
-    .ty-grid { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Bedankt • Airflow+</title>
+  <link href="/airflowplus-site/assets/img/favicon.png" rel="icon" />
+  <link rel="stylesheet" data-afp-css href="/airflowplus-site/assets/css/style.v13.css?v=29.9.19">
+  <script>
+    (function () {
+      var isGh = /github\.io$/i.test(location.hostname);
+      var ROOT = isGh ? '/airflowplus-site/' : '/';
+      // set global root for your JS too
+      window.AFP = window.AFP || {};
+      window.AFP.ROOT_BASE = ROOT;
+      // rewrite the CSS href to correct root
+      var link = document.querySelector('link[data-afp-css]');
+      if (link) link.href = ROOT + 'assets/css/style.v13.css?v=29.9.19';
+    })();
+  </script>
+
+  <meta content="Bedankt voor uw aanvraag bij Airflow+. We nemen zo snel mogelijk contact met u op."
+    name="description" />
+  <style>
+    .ty-hero {
+      padding: clamp(3rem, 6vw, 6rem) 0;
+      text-align: center;
+    }
+
+    .ty-hero .chip {
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    .ty-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
     .ty-card {
-      border: 1px solid rgba(0,0,0,0.08);
+      border: 1px solid rgba(0, 0, 0, 0.08);
       border-radius: 16px;
       padding: 20px;
       background: #fff;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
     }
-    .ty-actions { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; margin-top: 16px; }
-    @media (max-width: 640px) { .ty-actions { grid-template-columns: 1fr; } }
+
+    .ty-actions {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .ty-actions {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
-<main>
-<section class="ty-hero section reveal">
-<div class="ty-grid">
-<span class="chip">Bedankt!</span>
-<h1>We hebben uw aanvraag ontvangen</h1>
-<p class="lead">Ons team neemt zo snel mogelijk contact met u op. U ontvangt een bevestiging per e-mail (controleer ook uw spam).</p>
-<div class="ty-card reveal">
-<h3>Wat is de volgende stap?</h3>
-<p>We beoordelen uw aanvraag en nemen contact op om eventuele vragen te stellen en een afspraak in te plannen.</p>
-<div class="ty-actions">
-<a class="btn" data-transition="" href="/airflowplus-site/keuzehulp.html"><img alt="AirFlow+" src="assets/img/airflowplus-logo.png" style="height:32px;width:auto;display:block"/></a>
-<a class="btn btn--ghost" href="/airflowplus-site/index.html#savings">Bekijk de besparing</a>
-</div>
-</div>
-<p style="margin-top:16px; opacity:.8;">Referentie: <span id="ty-ref">—</span></p>
-</div>
-</section>
-<section class="section section-navy section-tight trust-band">
-<div class="container">
-<div aria-label="Pluspunten" class="trust-ticker keyword-ticker" data-dir="ltr" data-speed="0.6">
-<div class="keyword-track" role="list">
-<span class="item" role="listitem"><span class="check"></span> Binnen 7 dagen geplaatst</span>
-<span class="item" role="listitem"><span class="check"></span> Gecertificeerde monteurs</span>
-<span class="item" role="listitem"><span class="check"></span> Geen verborgen kosten</span>
-<span class="item" role="listitem"><span class="check"></span> Gratis offerte binnen 24u</span>
-</div>
-</div>
-</div>
-</section>
-</main>
-<script>
+  <main>
+    <section class="ty-hero section reveal">
+      <div class="ty-grid">
+        <span class="chip">Bedankt!</span>
+        <h1>We hebben uw aanvraag ontvangen</h1>
+        <p class="lead">Ons team neemt zo snel mogelijk contact met u op. U ontvangt een bevestiging per e-mail
+          (controleer ook uw spam).</p>
+        <div class="ty-card reveal">
+          <h3>Wat is de volgende stap?</h3>
+          <p>We beoordelen uw aanvraag en nemen contact op om eventuele vragen te stellen en een afspraak in te plannen.
+          </p>
+          <div class="ty-actions">
+            <a class="btn" data-transition="" href="/airflowplus-site/keuzehulp.html"><img alt="AirFlow+"
+                src="assets/img/airflowplus-logo.png" style="height:32px;width:auto;display:block" /></a>
+            <a class="btn btn--ghost" href="/airflowplus-site/index.html#savings">Bekijk de besparing</a>
+          </div>
+        </div>
+        <p style="margin-top:16px; opacity:.8;">Referentie: <span id="ty-ref">—</span></p>
+      </div>
+    </section>
+    <section class="section section-navy section-tight trust-band">
+      <div class="container">
+        <div aria-label="Pluspunten" class="trust-ticker keyword-ticker" data-dir="ltr" data-speed="0.6">
+          <div class="keyword-track" role="list">
+            <span class="item" role="listitem"><span class="check"></span> Binnen 7 dagen geplaatst</span>
+            <span class="item" role="listitem"><span class="check"></span> Gecertificeerde monteurs</span>
+            <span class="item" role="listitem"><span class="check"></span> Geen verborgen kosten</span>
+            <span class="item" role="listitem"><span class="check"></span> Gratis offerte binnen 24u</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
     const qp = new URLSearchParams(window.location.search);
     const ref = [qp.get('type'), qp.get('source')].filter(Boolean).join(' • ') || 'Airflow+';
     document.getElementById('ty-ref').textContent = ref;
   </script>
-<script defer="" src="assets/js/main.js?v=rev3"></script>
+  <script defer="" src="assets/js/main.js?v=rev3"></script>
 </body>
+
 </html>

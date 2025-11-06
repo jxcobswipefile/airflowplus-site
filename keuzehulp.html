@@ -1,124 +1,134 @@
 <!DOCTYPE html>
 
 <html lang="nl">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Airflow+ • Keuzehulp</title>
-<link href="/airflowplus-site/assets/css/style.v13.css?v=rev3" rel="stylesheet"/>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Airflow+ • Keuzehulp</title>
+  <link rel="stylesheet" data-afp-css href="/airflowplus-site/assets/css/style.v13.css?v=29.9.19">
+  <script>
+    (function () {
+      var isGh = /github\.io$/i.test(location.hostname);
+      var ROOT = isGh ? '/airflowplus-site/' : '/';
+      // set global root for your JS too
+      window.AFP = window.AFP || {};
+      window.AFP.ROOT_BASE = ROOT;
+      // rewrite the CSS href to correct root
+      var link = document.querySelector('link[data-afp-css]');
+      if (link) link.href = ROOT + 'assets/css/style.v13.css?v=29.9.19';
+    })();
+  </script>
 </head>
 <script src="assets/js/kh-reco-image.js" defer></script>
+
 <body>
-<!-- Topbar / header identical to site -->
-<div class="topbar">
-<div class="container topbar-inner">
-<span>Gecertificeerde airconditioning &amp; warmtepomp installateur</span>
-<a class="topbar-link" href="tel:+31640981629">Bel: +31 64 098 1629</a>
-</div>
-</div>
-<header class="site-header">
-<div class="container header-inner">
-<a class="brand" href="/airflowplus-site/index.html"><img alt="AirFlow+" src="assets/img/airflowplus-logo.png" style="height:32px;width:auto;display:block"/></a>
-<nav class="nav"><a href="/airflowplus-site/airco-modellen.html">Modellen</a>
-<a aria-current="page" href="/airflowplus-site/keuzehulp.html">Keuzehulp</a>
-<a href="/airflowplus-site/airco.html">Airconditioning</a>
-<a href="/airflowplus-site/diensten.html">Diensten</a>
-<a href="/airflowplus-site/prijzen.html">Prijzen</a>
-<a href="/airflowplus-site/over.html">Over ons</a>
-</nav>
-<a class="btn btn-primary" href="tel:+31640981629">Bel/Offerte</a>
-</div>
-</header>
-<header class="khv2-hero">
-<div class="container">
-<h1>Welke <span class="hl-blue">airconditioning</span> past bij jou?</h1>
-</div>
-</header>
-<section class="khv2-stage kh-wrap">
-<div class="container">
-<!-- NEW: the wizard state lives here -->
-<div class="kh-card khv2-card" data-step="1" data-steps="3" id="khv2">
-<button aria-label="Sluiten" class="khv2-close" type="button">×</button>
-<!-- STEP 1 ------------------------------------------------------- -->
-<section data-kh-step="1">
-<h2 class="khv2-q"><span class="accent-green">In</span> hoeveel ruimtes wil je airconditioning?</h2>
-<div class="kh-grid-rooms" style="justify-content:center; grid-template-columns:repeat(4,72px); gap:14px;">
-<label class="chip round"><input name="rooms" type="radio" value="1"/><span>1</span></label>
-<label class="chip round"><input name="rooms" type="radio" value="2"/><span>2</span></label>
-<label class="chip round"><input name="rooms" type="radio" value="3"/><span>3</span></label>
-<label class="chip round"><input name="rooms" type="radio" value="4"/><span>4</span></label>
-</div>
-</section>
-<!-- STEP 2 (put your existing content here) --------------------- -->
-<section data-kh-step="2" hidden="">
-<!-- Example placeholder; replace with your real step-2 UI -->
-<h2 class="khv2-q"><span class="accent-green">Kies</span> per ruimte het oppervlak</h2>
-<!-- keep your .kh-size-grid / .kh-room etc. here if you have them -->
-</section>
-<!-- STEP 3 (put your existing summary/overview here) ------------ -->
-<section data-kh-step="3" hidden="">
-<h2 class="khv2-q">Overzicht</h2>
-<div id="kh-reco" class="kh-reco-mount withimg" style="margin-top:16px"></div>
-<!-- your existing summary/result UI -->
-</section>
-<!-- Actions -->
-<div class="khv2-actions">
-<button class="btn btn-primary" data-final-href="/airflowplus-site/contact.html#offerte" id="kh-next" type="button">Volgende →
-            </button>
-</div>
-</div>
-<!-- dots (your CSS already styles these) -->
-<nav aria-label="Stappen" class="khv2-steps">
-<button class="dot is-active" type="button">1</button>
-<button class="dot" type="button">2</button>
-<button class="dot" type="button">3</button>
-</nav>
-</div>
-</section>
-<footer class="site-footer">
-<div class="container footer-grid">
-<div>
-<img
-    src="assets/img/airflowplus-logo-2.png"
-    alt="Airflow+"
-    class="footer-mark"
-    width="148"
-    height="24"
-    loading="lazy"
-    decoding="async"
-  />
-<p class="muted">Gecertificeerde installatie van airconditioning &amp; warmtepompen. Snel, netjes en volgens norm.</p>
-</div>
-<div>
-<h4>Contact</h4>
-<ul class="list">
-<li><a href="tel:+31640981629" class="footer-phone">Bel: +31 64 098 1629</a></li>
-<li><a href="mailto:info@airflow-plus.com">info@airflow-plus.com</a></li>
-<li>Deventersweg 5, Barendrecht 2994LE</li>
-</ul>
-</div>
-<div>
-<h4>Pagina’s</h4>
-<ul class="list">
-<li><a href="/airflowplus-site/keuzehulp.html">Keuzehulp</a></li>
-<li><a href="/airflowplus-site/airco-modellen.html">Modellen</a></li>
-<li><a href="/airflowplus-site/airco.html">Airconditioning</a></li>
-<li><a href="/airflowplus-site/diensten.html">Diensten</a></li>
-<li><a href="/airflowplus-site/prijzen.html">Prijzen</a></li>
-<li><a href="/airflowplus-site/over.html">Over ons</a></li>
-<li><a href="/airflowplus-site/contact.html">Contact</a></li>
-</ul>
-</div>
-<div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
-</footer>
-<script defer="" src="assets/js/main.js?v=rev3"></script>
-<!-- ADD: small safety shim after your main bundle loads -->
-<script>
+  <!-- Topbar / header identical to site -->
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span>Gecertificeerde airconditioning &amp; warmtepomp installateur</span>
+      <a class="topbar-link" href="tel:+31640981629">Bel: +31 64 098 1629</a>
+    </div>
+  </div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/airflowplus-site/index.html"><img alt="AirFlow+" src="assets/img/airflowplus-logo.png"
+          style="height:32px;width:auto;display:block" /></a>
+      <nav class="nav"><a href="/airflowplus-site/airco-modellen.html">Modellen</a>
+        <a aria-current="page" href="/airflowplus-site/keuzehulp.html">Keuzehulp</a>
+        <a href="/airflowplus-site/airco.html">Airconditioning</a>
+        <a href="/airflowplus-site/diensten.html">Diensten</a>
+        <a href="/airflowplus-site/prijzen.html">Prijzen</a>
+        <a href="/airflowplus-site/over.html">Over ons</a>
+      </nav>
+      <a class="btn btn-primary" href="tel:+31640981629">Bel/Offerte</a>
+    </div>
+  </header>
+  <header class="khv2-hero">
+    <div class="container">
+      <h1>Welke <span class="hl-blue">airconditioning</span> past bij jou?</h1>
+    </div>
+  </header>
+  <section class="khv2-stage kh-wrap">
+    <div class="container">
+      <!-- NEW: the wizard state lives here -->
+      <div class="kh-card khv2-card" data-step="1" data-steps="3" id="khv2">
+        <button aria-label="Sluiten" class="khv2-close" type="button">×</button>
+        <!-- STEP 1 ------------------------------------------------------- -->
+        <section data-kh-step="1">
+          <h2 class="khv2-q"><span class="accent-green">In</span> hoeveel ruimtes wil je airconditioning?</h2>
+          <div class="kh-grid-rooms" style="justify-content:center; grid-template-columns:repeat(4,72px); gap:14px;">
+            <label class="chip round"><input name="rooms" type="radio" value="1" /><span>1</span></label>
+            <label class="chip round"><input name="rooms" type="radio" value="2" /><span>2</span></label>
+            <label class="chip round"><input name="rooms" type="radio" value="3" /><span>3</span></label>
+            <label class="chip round"><input name="rooms" type="radio" value="4" /><span>4</span></label>
+          </div>
+        </section>
+        <!-- STEP 2 (put your existing content here) --------------------- -->
+        <section data-kh-step="2" hidden="">
+          <!-- Example placeholder; replace with your real step-2 UI -->
+          <h2 class="khv2-q"><span class="accent-green">Kies</span> per ruimte het oppervlak</h2>
+          <!-- keep your .kh-size-grid / .kh-room etc. here if you have them -->
+        </section>
+        <!-- STEP 3 (put your existing summary/overview here) ------------ -->
+        <section data-kh-step="3" hidden="">
+          <h2 class="khv2-q">Overzicht</h2>
+          <div id="kh-reco" class="kh-reco-mount withimg" style="margin-top:16px"></div>
+          <!-- your existing summary/result UI -->
+        </section>
+        <!-- Actions -->
+        <div class="khv2-actions">
+          <button class="btn btn-primary" data-final-href="/airflowplus-site/contact.html#offerte" id="kh-next"
+            type="button">Volgende →
+          </button>
+        </div>
+      </div>
+      <!-- dots (your CSS already styles these) -->
+      <nav aria-label="Stappen" class="khv2-steps">
+        <button class="dot is-active" type="button">1</button>
+        <button class="dot" type="button">2</button>
+        <button class="dot" type="button">3</button>
+      </nav>
+    </div>
+  </section>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <img src="assets/img/airflowplus-logo-2.png" alt="Airflow+" class="footer-mark" width="148" height="24"
+          loading="lazy" decoding="async" />
+        <p class="muted">Gecertificeerde installatie van airconditioning &amp; warmtepompen. Snel, netjes en volgens
+          norm.</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="list">
+          <li><a href="tel:+31640981629" class="footer-phone">Bel: +31 64 098 1629</a></li>
+          <li><a href="mailto:info@airflow-plus.com">info@airflow-plus.com</a></li>
+          <li>Deventersweg 5, Barendrecht 2994LE</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Pagina’s</h4>
+        <ul class="list">
+          <li><a href="/airflowplus-site/keuzehulp.html">Keuzehulp</a></li>
+          <li><a href="/airflowplus-site/airco-modellen.html">Modellen</a></li>
+          <li><a href="/airflowplus-site/airco.html">Airconditioning</a></li>
+          <li><a href="/airflowplus-site/diensten.html">Diensten</a></li>
+          <li><a href="/airflowplus-site/prijzen.html">Prijzen</a></li>
+          <li><a href="/airflowplus-site/over.html">Over ons</a></li>
+          <li><a href="/airflowplus-site/contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
+  </footer>
+  <script defer="" src="assets/js/main.js?v=rev3"></script>
+  <!-- ADD: small safety shim after your main bundle loads -->
+  <script>
     // Keuzehulp v2 – control "Volgende" so it only redirects on the last step
     (function () {
-      const wrap   = document.getElementById('khv2');
-      const next   = document.getElementById('kh-next');
-      const dots   = () => Array.from(document.querySelectorAll('.khv2-steps .dot'));
+      const wrap = document.getElementById('khv2');
+      const next = document.getElementById('kh-next');
+      const dots = () => Array.from(document.querySelectorAll('.khv2-steps .dot'));
       if (!wrap || !next) return;
 
       const total = Number(wrap.dataset.steps || 3);
@@ -170,6 +180,7 @@
       // init
       setStep(Number(wrap.dataset.step || 1));
     })();
-    </script>
+  </script>
 </body>
+
 </html>
