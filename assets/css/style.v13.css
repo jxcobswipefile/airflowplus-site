@@ -3770,3 +3770,19 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
   }
 }
 
+/* Desktop: remove ghost/oval hamburger */
+@media (min-width: 992px) {
+  header.site-header button.mobile-toggle,
+  header.site-header button.nav-toggle,
+  header.site-header .btn-toggle,
+  header.site-header [aria-label*="menu"],
+  header.site-header [aria-label*="Menu"] {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    pointer-events: none !important;
+  }
+}
