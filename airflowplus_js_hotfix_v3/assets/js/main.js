@@ -1,6 +1,39 @@
 /* ======================================================================
    Airflow+ — Main JS (namespaced & idempotent)
    ====================================================================== */ 
+
+/* --- Root normalizer (GH Pages vs custom domain) --- */
+(function () {
+  var isGh = /github\.io$/i.test(location.hostname);
+  var ROOT = isGh ? '/airflowplus-site/' : '/';
+
+  // ensure AFP.ROOT_BASE is set early
+  var AFP = (window.AFP = window.AFP || {});
+  AFP.ROOT_BASE = ROOT;
+
+  // Normalize internal anchors that were authored with /airflowplus-site/
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (!href) return;
+
+      // Only touch same-site, non-external links
+      if (/^https?:\/\//i.test(href) || href.startsWith('#') || href.startsWith('mailto:')) return;
+
+      // Replace hardcoded project root with detected ROOT
+      if (/^\/airflowplus-site\//.test(href)) {
+        a.setAttribute('href', href.replace(/^\/airflowplus-site\//, ROOT));
+        return;
+      }
+
+      // If it was authored as absolute-from-root ("/..."), keep it but ensure correct ROOT
+      if (href.startsWith('/')) {
+        a.setAttribute('href', href.replace(/^\//, ROOT));
+      }
+    });
+  });
+})();
+
 (() => {
   "use strict";
 
