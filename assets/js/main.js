@@ -718,7 +718,7 @@
     // 5) Final fallback: first option in pool or global list
     return pool[0] || list[0];
   };
-};
+
 
 
 // --------------------------- Keuzehulp v2 wizard ------------------------
