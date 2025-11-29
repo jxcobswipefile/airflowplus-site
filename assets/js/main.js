@@ -584,69 +584,92 @@
   });
 
   // ----------------------- Recommender (capacity pick) --------------------
-  // Diversified: same sizing logic, then pick brand by (1) user prefs, else (2) round-robin
+  // Works with AFP.VARS as a flat array OR grouped by brand.
+  // 30–40 m² (single room) → 3.5 kW instead of 5.0 kW.
   AFP.pickVariantByArea = function (totalRooms, totalM2, brandPrefs = [], forcedBrands = []) {
-    const cleanNum = (v) => Number(String(v || "").replace(",", ".").replace(/[^\d.]+/g, "")) || 0;
+    const cleanNum = (v) =>
+      Number(String(v || "").replace(",", ".").replace(/[^\d.]+/g, "")) || 0;
 
     totalRooms = cleanNum(totalRooms) || 1;
     totalM2 = cleanNum(totalM2);
 
-    // Collect all variants across brands (we'll filter later)
-    const allBrands = Object.keys(AFP.VARS || {});
+    // --------- 1) Build a flat list of variants from AFP.VARS ----------
     let list = [];
-    allBrands.forEach((brand) => {
-      (AFP.VARS[brand] || []).forEach((v) => list.push({ ...v, brand }));
-    });
+    const raw = AFP.VARS || [];
+
+    if (Array.isArray(raw)) {
+      // your current structure
+      list = raw.slice();
+    } else if (raw && typeof raw === "object") {
+      // also support legacy {Brand: [variants]} shape
+      Object.keys(raw).forEach((k) => {
+        const val = raw[k];
+        if (Array.isArray(val)) list.push(...val);
+        else if (val && typeof val === "object") list.push(val);
+      });
+    }
 
     if (!list.length) return null;
 
-    // Filter by forced brands if present
+    // --------- 2) Optional forced brand filter --------------------------
     if (forcedBrands && forcedBrands.length) {
-      const forcedSet = new Set(forcedBrands.map((b) => String(b).toLowerCase()));
-      const forcedList = list.filter((v) => forcedSet.has(String(v.brand).toLowerCase()));
+      const forcedSet = new Set(
+        forcedBrands.map((b) => String(b).toLowerCase())
+      );
+      const forcedList = list.filter((v) =>
+        forcedSet.has(String(v.brand || "").toLowerCase())
+      );
       if (forcedList.length) list = forcedList;
     }
 
-    // Filter variants whose m² coverage includes totalM2
-    let pool = list.filter(
-      (v) =>
-        typeof v.min_m2 === "number" &&
-        typeof v.max_m2 === "number" &&
-        totalM2 >= v.min_m2 &&
-        totalM2 <= v.max_m2
-    );
+    // --------- 3) Build pool by m² coverage -----------------------------
+    const covers = (v) =>
+      typeof v.min_m2 === "number" &&
+      typeof v.max_m2 === "number" &&
+      totalM2 >= v.min_m2 &&
+      totalM2 <= v.max_m2;
 
-    // If nothing matches, fall back to closest-by-mid from the full list
+    let pool = list.filter(covers);
+
+    // If nothing covers exactly, fall back to closest by midpoint
     if (!pool.length) {
-      const mid = (x) => (x.min_m2 + x.max_m2) / 2;
+      const mid = (x) => ((x.min_m2 || 0) + (x.max_m2 || 0)) / 2;
       pool = list
         .slice()
-        .sort((a, b) => Math.abs(mid(a) - totalM2) - Math.abs(mid(b) - totalM2));
+        .sort(
+          (a, b) =>
+            Math.abs(mid(a) - totalM2) - Math.abs(mid(b) - totalM2)
+        );
     }
 
-    let best;
+    if (!pool.length) return null;
 
-    // 🔧 NEW: for a single room, prefer the smallest capacity that still covers the area
-    // This avoids jumping to 5.0 kW for a 30–40 m² room when 3.5 kW is sufficient.
-    if ((totalRooms || 1) <= 1 && pool.length) {
+    // --------- 4) Choose "best" variant (includes 30–40 m² fix) ---------
+    let best;
+    const mid = (x) => ((x.min_m2 || 0) + (x.max_m2 || 0)) / 2;
+
+    if (totalRooms <= 1) {
+      // Single room: take the SMALLEST kW that still covers the area.
+      // This is what makes 30–40 m² → 3.5 kW instead of 5.0 kW.
       best = pool
         .slice()
         .sort(
           (a, b) => cleanNum(a.kw ?? a.cap) - cleanNum(b.kw ?? b.cap)
         )[0];
     } else {
-      // Existing behaviour for multi-room setups:
+      // Multi-room behaviour (very close to your previous logic)
+      let work = pool.slice();
 
-      // If many rooms, prefer >= 3.5 kW (but don’t empty the pool)
-      if ((totalRooms || 1) >= 3) {
-        const big = pool.filter((it) => cleanNum(it.kw ?? it.cap) >= 3.5);
-        if (big.length) pool = big;
+      // For ≥3 rooms, prefer ≥3.5 kW if available
+      if (totalRooms >= 3) {
+        const big = work.filter(
+          (it) => cleanNum(it.kw ?? it.cap) >= 3.5
+        );
+        if (big.length) work = big;
       }
 
-      // “Best fit” by closeness to pool mid; use its kW as the target capacity
-      const mid = (x) => (x.min_m2 + x.max_m2) / 2;
       best =
-        pool
+        work
           .slice()
           .sort(
             (a, b) =>
@@ -654,25 +677,23 @@
           )[0] || pool[0] || list[0];
     }
 
-    if (!best) {
-      best = pool[0] || list[0];
-    }
+    if (!best) best = pool[0] || list[0];
+    if (!best) return null;
 
     const targetKW = cleanNum(best.kw ?? best.cap);
     const eqKW = (v) =>
       Math.abs(cleanNum(v.kw ?? v.cap) - targetKW) < 0.05; // float-safe
 
-    // 2) Brand order = user prefs (if any) else round-robin across sessions
+    // --------- 5) Brand preference / round robin ------------------------
     function getPreferredBrands() {
       try {
         const raw = sessionStorage.getItem("khPreferredBrands") || "[]";
-        const arr = Array.isArray(JSON.parse(raw)) ? JSON.parse(raw) : [];
+        const arr = JSON.parse(raw);
+        if (!Array.isArray(arr)) return [];
         return arr
           .map((s) => String(s).trim())
           .filter(Boolean)
-          .map(
-            (s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
-          );
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
       } catch {
         return [];
       }
@@ -686,38 +707,41 @@
       } catch { }
       const brand = order[i % order.length];
       try {
-        sessionStorage.setItem("khBrandIndex", String((i + 1) % order.length));
+        sessionStorage.setItem(
+          "khBrandIndex",
+          String((i + 1) % order.length)
+        );
       } catch { }
       return brand;
     }
 
-    let prefOrder = Array.isArray(brandPrefs) && brandPrefs.length
-      ? brandPrefs
-      : getPreferredBrands();
+    let prefOrder =
+      Array.isArray(brandPrefs) && brandPrefs.length
+        ? brandPrefs
+        : getPreferredBrands();
 
     if (!prefOrder || !prefOrder.length) {
       prefOrder = [nextBrandRR()];
     }
 
-    // 3) Within the pool, choose variant with target kW and preferred brand order
+    // Try preferred brands first (with matching kW)
     for (const brand of prefOrder) {
       const candidates = pool.filter(
         (v) =>
-          String(v.brand).toLowerCase() ===
+          String(v.brand || "").toLowerCase() ===
           String(brand).toLowerCase() && eqKW(v)
       );
-      if (candidates.length) {
-        return candidates[0];
-      }
+      if (candidates.length) return candidates[0];
     }
 
-    // 4) Fallback: any brand with target kW
+    // Any brand with target kW
     const anyEq = pool.filter(eqKW);
     if (anyEq.length) return anyEq[0];
 
-    // 5) Final fallback: first option in pool or global list
+    // Final fallbacks
     return pool[0] || list[0];
   };
+
 
 
 
