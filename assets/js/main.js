@@ -1533,3 +1533,34 @@
     cta.style.marginRight = cta.style.marginRight || '6px';
   }
 })();
+
+/* v29.9.20 — KH sizing hotfix: make 30–40 m² → 3.5 kW (1 room) */
+(() => {
+  // canonical bands used everywhere (per-room m² → kW)
+  function kwForRoom(m2) {
+    if (m2 <= 30) return 2.5;        // 1–30 m² → 2.5 kW
+    if (m2 <= 40) return 3.5;        // 30–40 m² → 3.5 kW  (fix)
+    if (m2 <= 55) return 5.0;        // 41–55 m² → 5.0 kW
+    if (m2 <= 75) return 7.1;        // 56–75 m² → 7.1 kW
+    return 9.0;                      // >75 m² → 9.0 kW (fallback)
+  }
+
+  // If the wizard exposes a sizing function, replace it.
+  if (window.KH && typeof window.KH.calcKw === 'function') {
+    window.KH.calcKw = kwForRoom;
+  } else {
+    // Provide a global the wizard can read if it was using a plain helper
+    window.KH = window.KH || {};
+    window.KH.calcKw = kwForRoom;
+  }
+
+  // If total sizing sums rooms, ensure it uses per-room kw without extra rounding
+  if (window.KH) {
+    window.KH.totalKwForRooms = function (roomSizesM2) {
+      // Sum per-room recommended capacities (no “next-band” rounding here)
+      const sum = roomSizesM2.reduce((t, m2) => t + kwForRoom(Number(m2) || 0), 0);
+      // Snap total to available outdoor sizes if you do multi-split totals (optional)
+      return sum;
+    };
+  }
+})();
