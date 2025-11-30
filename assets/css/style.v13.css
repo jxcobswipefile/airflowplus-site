@@ -1218,7 +1218,7 @@ html.is-fading body {opacity: 0; transition: opacity 180ms ease;}
 
 .align-right .list-check {margin-left: auto;}
 
-.trust-ticker {background: #0b1f3300; color: #eaf1ff; border-radius: 12px; padding: 10px 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0, 0, 0, .25);}
+.trust-ticker {background: #0b1f33; color: #eaf1ff; border-radius: 12px; padding: 10px 12px; overflow: hidden; box-shadow: 0 8px 28px rgba(0, 0, 0, .25);}
 
 .trust-ticker .keyword-track {display: flex; gap: 24px; white-space: nowrap; will-change: transform; align-items: center;}
 
