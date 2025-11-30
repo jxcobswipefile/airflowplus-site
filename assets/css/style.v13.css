@@ -3786,3 +3786,31 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
     pointer-events: none !important;
   }
 }
+
+/* Hero image block */
+#over-scope .hero-image-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 40px;
+}
+
+#over-scope .hero-image {
+  width: 100%;
+  max-width: 460px;
+  border-radius: 22px;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.22);
+  object-fit: cover;
+}
+
+/* Mobile layout: image moves below text */
+@media (max-width: 900px) {
+  #over-scope .hero-image-wrap {
+    padding-left: 0;
+    margin-top: 28px;
+  }
+  #over-scope .hero-image {
+    max-width: 100%;
+    width: 100%;
+  }
+}
