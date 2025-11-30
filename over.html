@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="nl">
 
 <head>
@@ -13,22 +12,21 @@
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
     rel="stylesheet" />
-  <!-- Use the new themed CSS -->
+
+  <!-- Main themed CSS -->
   <link rel="stylesheet" data-afp-css href="/assets/css/style.v13.css?v=29.9.19">
   <script>
     (function () {
       var isGh = /github\.io$/i.test(location.hostname);
       var ROOT = isGh ? '/' : '/';
-      // set global root for your JS too
       window.AFP = window.AFP || {};
       window.AFP.ROOT_BASE = ROOT;
-      // rewrite the CSS href to correct root
       var link = document.querySelector('link[data-afp-css]');
       if (link) link.href = ROOT + 'assets/css/style.v13.css?v=29.9.19';
     })();
   </script>
 
-  <!-- Your script (keep your filename; example shown) -->
+  <!-- Over-ons polish (scoped) -->
   <style id="over-tighten">
     /* Over ons polish */
     #over-scope .section.alt {
@@ -67,15 +65,31 @@
       padding: 16px;
       box-shadow: 0 12px 28px rgba(0, 0, 0, .06);
     }
+
+    /* Hero tightening */
+    #over-scope #about-hero h2 {
+      max-width: 32rem;
+    }
+
+    #over-scope #about-hero .lead {
+      max-width: 36rem;
+    }
+
+    #over-scope #about-hero .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
   </style>
+
   <style id="over-tight-gap">
     #over-scope .section {
       padding-top: 40px;
-      padding-bottom: 40px
+      padding-bottom: 40px;
     }
 
     #over-scope .card-dark {
-      margin: 24px auto
+      margin: 24px auto;
     }
   </style>
 </head>
@@ -87,11 +101,14 @@
       <a class="topbar-link" href="tel:+31640981629">Bel: +31 64 098 1629</a>
     </div>
   </div>
+
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="/index.html"><img alt="AirFlow+" src="assets/img/airflowplus-logo.png"
-          style="height:32px;width:auto;display:block" /></a>
-      <nav class="nav"><a href="/airco-modellen.html">Modellen/Prijzen</a>
+      <a class="brand" href="/index.html">
+        <img alt="AirFlow+" src="assets/img/airflowplus-logo.png" style="height:32px;width:auto;display:block" />
+      </a>
+      <nav class="nav">
+        <a href="/airco-modellen.html">Modellen/Prijzen</a>
         <a href="/keuzehulp.html">Keuzehulp</a>
         <a href="/airco.html">Airconditioning</a>
         <a href="/diensten.html">Diensten</a>
@@ -101,33 +118,28 @@
       <button aria-label="Open menu" class="nav-toggle">☰</button>
     </div>
   </header>
+
   <main id="over-scope">
+    <!-- HERO -->
     <section class="section reveal" id="about-hero">
-      <div class="container twocol">
-        <div>
-          <span class="kicker">Over Airflow+</span>
-          <h2><span class="accent-green">Snel,netjes</span> en gecertificeerd — sinds 2019</h2>
-          <p class="lead">We combineren vakmanschap met duidelijke communicatie en transparante afspraken. We denken
-            actief mee met al uw wensen en maken het netjes werkelijkheid.</p>
-          <div class="badges" style="margin-top:10px;">
-            <span class="badge">Actief sinds 2019</span>
-            <span class="badge">Barendrecht</span>
-            <span class="badge">Gecertificeerde monteurs</span>
-            <span class="badge">Binnen 7 dagen geplaatst*</span>
-          </div>
-          <p class="fig-muted">* afhankelijk van voorraad en planning</p>
+      <div class="container">
+        <span class="kicker">Over Airflow+</span>
+        <h2><span class="accent-green">Snel, netjes</span> en gecertificeerd — sinds 2019</h2>
+        <p class="lead">
+          We combineren vakmanschap met duidelijke communicatie en transparante afspraken.
+          We denken actief mee met al uw wensen en maken het netjes werkelijkheid.
+        </p>
+        <div class="badges" style="margin-top:10px;">
+          <span class="badge">Actief sinds 2019</span>
+          <span class="badge">Barendrecht</span>
+          <span class="badge">Gecertificeerde monteurs</span>
+          <span class="badge">Binnen 7 dagen geplaatst*</span>
         </div>
-        <div class="figure-card">
-          <h3 style="margin:0 0 .5rem;">Kerngegevens</h3>
-          <ul class="list-check">
-            <li><strong>Vestiging:</strong> Deventerseweg 5, 2994 LE Barendrecht</li>
-            <li><strong>Werkgebied:</strong> Zuid‑Holland (landelijk inzetbaar)</li>
-            <li><strong>Contact:</strong> Telefoon, e‑mail, WhatsApp of formulier</li>
-            <li><strong>Missie:</strong> Binnen 6 Jaar een grote speler met sterke naamsbekendheid</li>
-          </ul>
-        </div>
+        <p class="fig-muted">* Afhankelijk van voorraad en planning.</p>
       </div>
     </section>
+
+    <!-- TRUST TICKER -->
     <section class="section section-navy section-tight trust-band" id="trust-band">
       <div class="container">
         <div aria-label="Pluspunten" class="trust-ticker css-marquee">
@@ -148,14 +160,12 @@
         </div>
       </div>
     </section>
-    <section class="section section-tight">
-      <div class="container">
-      </div>
-    </section>
+
+    <!-- DARK VALUE CARD -->
     <section class="section reveal">
       <div class="container container-narrow">
         <article class="card-dark">
-          <h2><span class="accent-green">Open,</span> eerlijk enmeedenkend</h2>
+          <h2><span class="accent-green">Open,</span> eerlijk en meedenkend</h2>
           <ul class="trust-ticker">
             <li>We denken actief mee met al uw wensen — zonder verrassingen.</li>
             <li>Netjes geplaatst: strakke afwerking en doordachte leidingloop.</li>
@@ -164,9 +174,11 @@
         </article>
       </div>
     </section>
+
+    <!-- AIRFLOW+ IN HET KORT -->
     <section class="section alt reveal" id="over-facts">
       <div class="container">
-        <h2><span class="accent-green">Airflow+</span> inhet kort</h2>
+        <h2><span class="accent-green">Airflow+</span> in het kort</h2>
         <div class="grid-3">
           <article class="feature-mini">
             <h3>Actief sinds</h3>
@@ -178,55 +190,27 @@
           </article>
           <article class="feature-mini">
             <h3>Werkgebied</h3>
-            <p>Voornamelijk Zuid‑Holland, inzetbaar landelijk</p>
+            <p>Voornamelijk Zuid-Holland, inzetbaar landelijk</p>
           </article>
           <article class="feature-mini">
-            <h3>Missie</h3>
-            <p>+6 Jaar ervarng en 1000+ airco’s geinstalleerd</p>
+            <h3>Ervaring</h3>
+            <p>Meer dan 6 jaar ervaring en 1000+ airco’s geïnstalleerd</p>
           </article>
         </div>
       </div>
     </section>
-    <section class="section section--invert reveal" id="over-werkgebied">
-      <div class="container">
-        <h2><span class="accent-green">Werkgebied</span> &amp; contact</h2>
-        <p><strong>Regio:</strong> Voornamelijk Zuid-Holland, inzetbaar door heel Nederland.</p>
-        <p><strong>Contactkanalen:</strong> Telefoon, e-mail, WhatsApp of formulier — alle kanalen zijn goed.</p>
-      </div>
-    </section>
-    <section class="section section-navy reveal" section-navy="">
-      <div class="container">
-        <h2><span class="accent-green">Certificeringen</span> &amp; garanties</h2>
-        <p>F‑gas gecertificeerd, focus op veiligheid en een strakke afwerking met garantie.</p>
-      </div>
-    </section>
-    <section class="section reveal" id="about-extra">
-      <div class="container">
-        <h2><span class="accent-green">Waar</span> we voor staan</h2>
-        <p>Open en eerlijk, met oog voor uw wensen. We denken actief mee en leveren strak werk.</p>
-        <div class="badges">
-          <span class="badge">Sinds 2019</span>
-          <span class="badge">Barendrecht</span>
-          <span class="badge">Gecertificeerd</span>
-          <span class="badge">Binnen 7 dagen</span>
-        </div>
-        <div class="timeline">
-          <div class="item"><strong>Advies</strong> — samen kiezen we de beste oplossing per ruimte.</div>
-          <div class="item"><strong>Installatie</strong> — strak, netjes en volgens afspraak.</div>
-          <div class="item"><strong>Service</strong> — onderhoud en storingsdienst voor zorgeloos gebruik.</div>
-        </div>
-      </div>
-    </section>
+
+    <!-- CONTACT BLOKJE -->
     <section class="section reveal">
       <div class="container">
         <h2>Vragen?</h2>
         <div class="optin" style="margin-top:16px;">
           <h4>Stel uw vraag</h4>
-          <form action="https://formspree.io/f/mgvndydv" data-fs="" data-source="over-vraag"
-            data-thanks="/thank-you.html" data-type="lead" method="POST">
+          <form action="https://formspree.io/f/mgvndydv" data-fs data-source="over-vraag" data-thanks="/thank-you.html"
+            data-type="lead" method="POST">
             <div class="row">
-              <input name="naam" placeholder="Uw naam" required="" type="text" />
-              <input name="email" placeholder="E-mail" required="" type="email" />
+              <input name="naam" placeholder="Uw naam" required type="text" />
+              <input name="email" placeholder="E-mail" required type="email" />
               <input name="vraag" placeholder="Uw vraag" type="text" />
               <input name="source" type="hidden" value="over-vraag" />
             </div>
@@ -235,61 +219,77 @@
         </div>
       </div>
     </section>
+
+    <!-- FAQ -->
     <section class="section reveal" id="faq-over">
       <div class="container">
         <h2>Veelgestelde <span class="text-brand">vragen</span></h2>
         <div class="faq">
           <details id="faq-over-regio">
             <summary>Waar zijn jullie actief?</summary>
-            <p>Hoofdlocatie: Barendrecht (Deventerseweg 5). We werken vooral in Zuid‑Holland en desgewenst landelijk.
+            <p>Hoofdlocatie: Barendrecht (Deventerseweg 5). We werken vooral in Zuid-Holland en desgewenst landelijk.
             </p>
           </details>
           <details id="faq-over-ervaring">
             <summary>Hoe lang zijn jullie actief?</summary>
+            <p>Sinds 2019, met meer dan 6 jaar ervaring in airco- en warmtepompinstallaties.</p>
           </details>
           <details id="faq-over-missie">
             <summary>Wat is jullie missie?</summary>
-            <p>+6 Jaar ervarng en 1000+ airco’s geinstalleerd</p>
+            <p>Een betrouwbare, nette partner zijn voor particuliere en zakelijke klanten — met duidelijke afspraken en
+              nette afwerking.</p>
           </details>
           <details id="faq-over-onderscheid">
             <summary>Wat onderscheidt Airflow+?</summary>
-            <p>Open en eerlijk advies, meedenken met uw wensen en net afgewerkte installatie.</p>
+            <p>Open en eerlijk advies, meedenken met uw wensen en een strak afgewerkte installatie.</p>
           </details>
           <details id="faq-over-contact">
             <summary>Wat is het beste contactkanaal?</summary>
-            <p>Telefoon, e‑mail, WhatsApp of het formulier — kies wat voor u het prettigst is.</p>
+            <p>Telefoon, e-mail, WhatsApp of het formulier — kies wat voor u het prettigst is.</p>
           </details>
         </div>
       </div>
     </section>
   </main>
+
   <footer class="site-footer">
     <div class="container footer-grid">
       <div>
         <img src="assets/img/airflowplus-logo-2.png" alt="Airflow+" class="footer-mark" width="148" height="24"
           loading="lazy" decoding="async" />
-        <p class="muted">Gecertificeerde installatie van airconditioning &amp; warmtepompen. Snel, netjes en volgens
-          norm.</p>
+        <p class="muted">
+          Gecertificeerde installatie van airconditioning &amp; warmtepompen.
+          Snel, netjes en volgens norm.
+        </p>
       </div>
+
       <div>
         <h4>Contact</h4>
         <ul class="list">
           <li><a href="tel:+31640981629" class="footer-phone">Bel: +31 64 098 1629</a></li>
           <li><a href="mailto:info@airflow-plus.com">info@airflow-plus.com</a></li>
-          <li>Deventersweg 5, Barendrecht 2994LE</li>
+          <li>Deventerseweg 5, 2994 LE Barendrecht</li>
         </ul>
       </div>
+
       <div>
         <h4>Pagina’s</h4>
         <ul class="list">
-          <li><a href="#keuzehulp-cta">Keuzehulp</a></li>
-          <li><a href="airflowplus-site/airco-modellen.html">Modellen/Prijzen</a></li>
+          <li><a href="/keuzehulp.html#keuzehulp-cta">Keuzehulp</a></li>
+          <li><a href="/airco-modellen.html">Modellen/Prijzen</a></li>
           <li><a href="/airco.html">Airconditioning</a></li>
           <li><a href="/diensten.html">Diensten</a></li>
           <li><a href="/over.html">Over ons</a></li>
           <li><a href="/contact.html">Contact</a></li>
-          <div class="container legal"><small>© <span id="year"></span> Airflow+</small></div>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container legal">
+      <small>© <span id="year"></span> Airflow+</small>
+    </div>
   </footer>
+
   <script src="assets/js/main.js?v=rev3"></script>
 </body>
 
