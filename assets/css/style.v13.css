@@ -3786,3 +3786,49 @@ main#diensten-scope #diensten-cta .card-dark h2 .accent--green {color: var(--acc
     pointer-events: none !important;
   }
 }
+
+/* Over-ons hero layout: text left, image right */
+#about-hero .about-hero-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+/* Text column */
+#about-hero .about-hero-text {
+  flex: 1 1 0;
+  max-width: 540px;
+}
+
+/* Image column */
+#about-hero .about-hero-media {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+}
+
+#about-hero .about-hero-img {
+  max-width: 360px;
+  width: 100%;
+  height: auto;
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
+  object-fit: contain;
+}
+
+/* Mobile: stack under the text */
+@media (max-width: 900px) {
+  #about-hero .about-hero-grid {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #about-hero .about-hero-media {
+    margin-top: 16px;
+  }
+
+  #about-hero .about-hero-img {
+    max-width: 260px;
+  }
+}
