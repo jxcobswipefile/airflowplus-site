@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <title>Over • Airflow+</title>
   <meta content="Airflow+ — Airconditioning &amp; warmtepomp installatie. Snel, netjes en gecertificeerd."
-    name="description" />
+        name="description" />
   <link href="/assets/img/favicon.png" rel="icon" />
   <link href="https://fonts.googleapis.com" rel="preconnect" />
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
-    rel="stylesheet" />
+        rel="stylesheet" />
 
   <!-- Main themed CSS -->
   <link rel="stylesheet" data-afp-css href="/assets/css/style.v13.css?v=29.9.19">
@@ -39,7 +38,8 @@
       border-radius: 28px;
       box-shadow: 0 48px 110px rgba(0, 0, 0, .35);
       border: 1px solid rgba(255, 255, 255, .14);
-      padding: clamp(22px, 3.2vw, 34px);
+      padding: clamp(26px, 3.6vw, 40px);
+      max-width: 760px;
     }
 
     #over-scope .pill {
@@ -55,41 +55,79 @@
     #over-scope .grid-3 {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
+      gap: 24px;
     }
 
     #over-scope .feature-mini {
       background: #fff;
       border: 1px solid rgba(0, 0, 0, .08);
       border-radius: 16px;
-      padding: 16px;
+      padding: 18px 20px;
       box-shadow: 0 12px 28px rgba(0, 0, 0, .06);
     }
 
-    /* Hero tightening */
+    /* HERO spacing & typography */
+    #over-scope #about-hero {
+      padding-top: clamp(82px, 14vh, 120px);
+      padding-bottom: clamp(64px, 11vh, 110px);
+    }
     #over-scope #about-hero h2 {
       max-width: 32rem;
+      line-height: 1.12;
+      margin-bottom: 1rem;
     }
-
     #over-scope #about-hero .lead {
-      max-width: 36rem;
+      max-width: 38rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
     }
-
     #over-scope #about-hero .badges {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-top: 0.25rem;
+    }
+    #over-scope #about-hero .fig-muted {
+      margin-top: 0.6rem;
+    }
+
+    /* “Open, eerlijk…” list – remove ticker styling / highlight */
+    #over-scope .card-dark .trust-ticker {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    #over-scope .card-dark .trust-ticker li {
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0;
+      border-radius: 0;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      #over-scope #about-hero {
+        padding-top: 72px;
+        padding-bottom: 56px;
+      }
+      #over-scope .card-dark {
+        padding: 22px 20px;
+      }
     }
   </style>
 
   <style id="over-tight-gap">
+    /* Taller sections overall */
     #over-scope .section {
-      padding-top: 40px;
-      padding-bottom: 40px;
+      padding-top: clamp(56px, 10vh, 88px);
+      padding-bottom: clamp(56px, 10vh, 88px);
     }
-
+    /* hero has its own padding above; keep this for other sections */
     #over-scope .card-dark {
-      margin: 24px auto;
+      margin: 32px auto;
     }
   </style>
 </head>
@@ -105,7 +143,8 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="/index.html">
-        <img alt="AirFlow+" src="assets/img/airflowplus-logo.png" style="height:32px;width:auto;display:block" />
+        <img alt="AirFlow+" src="assets/img/airflowplus-logo.png"
+             style="height:32px;width:auto;display:block" />
       </a>
       <nav class="nav">
         <a href="/airco-modellen.html">Modellen/Prijzen</a>
@@ -129,7 +168,7 @@
           We combineren vakmanschap met duidelijke communicatie en transparante afspraken.
           We denken actief mee met al uw wensen en maken het netjes werkelijkheid.
         </p>
-        <div class="badges" style="margin-top:10px;">
+        <div class="badges">
           <span class="badge">Actief sinds 2019</span>
           <span class="badge">Barendrecht</span>
           <span class="badge">Gecertificeerde monteurs</span>
@@ -206,8 +245,12 @@
         <h2>Vragen?</h2>
         <div class="optin" style="margin-top:16px;">
           <h4>Stel uw vraag</h4>
-          <form action="https://formspree.io/f/mgvndydv" data-fs data-source="over-vraag" data-thanks="/thank-you.html"
-            data-type="lead" method="POST">
+          <form action="https://formspree.io/f/mgvndydv"
+                data-fs
+                data-source="over-vraag"
+                data-thanks="/thank-you.html"
+                data-type="lead"
+                method="POST">
             <div class="row">
               <input name="naam" placeholder="Uw naam" required type="text" />
               <input name="email" placeholder="E-mail" required type="email" />
@@ -227,8 +270,7 @@
         <div class="faq">
           <details id="faq-over-regio">
             <summary>Waar zijn jullie actief?</summary>
-            <p>Hoofdlocatie: Barendrecht (Deventerseweg 5). We werken vooral in Zuid-Holland en desgewenst landelijk.
-            </p>
+            <p>Hoofdlocatie: Barendrecht (Deventerseweg 5). We werken vooral in Zuid-Holland en desgewenst landelijk.</p>
           </details>
           <details id="faq-over-ervaring">
             <summary>Hoe lang zijn jullie actief?</summary>
@@ -236,8 +278,7 @@
           </details>
           <details id="faq-over-missie">
             <summary>Wat is jullie missie?</summary>
-            <p>Een betrouwbare, nette partner zijn voor particuliere en zakelijke klanten — met duidelijke afspraken en
-              nette afwerking.</p>
+            <p>Een betrouwbare, nette partner zijn voor particuliere en zakelijke klanten — met duidelijke afspraken en nette afwerking.</p>
           </details>
           <details id="faq-over-onderscheid">
             <summary>Wat onderscheidt Airflow+?</summary>
@@ -255,8 +296,13 @@
   <footer class="site-footer">
     <div class="container footer-grid">
       <div>
-        <img src="assets/img/airflowplus-logo-2.png" alt="Airflow+" class="footer-mark" width="148" height="24"
-          loading="lazy" decoding="async" />
+        <img src="assets/img/airflowplus-logo-2.png"
+             alt="Airflow+"
+             class="footer-mark"
+             width="148"
+             height="24"
+             loading="lazy"
+             decoding="async" />
         <p class="muted">
           Gecertificeerde installatie van airconditioning &amp; warmtepompen.
           Snel, netjes en volgens norm.
@@ -292,5 +338,4 @@
 
   <script src="assets/js/main.js?v=rev3"></script>
 </body>
-
 </html>
