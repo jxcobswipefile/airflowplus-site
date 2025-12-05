@@ -857,84 +857,206 @@ onReady(() => {
     return isNaN(n) ? null : n;
   }
 
+  // --- Step-3: render 3 brand recommendations side-by-side -----------
   function renderRecoInto(target) {
-    // --- helpers ----------------------------------------------------------
+    const sizes = Array.isArray(state.sizes) ? state.sizes : [];
+
+    function midFromRange(txt) {
+      if (!txt) return null;
+      txt = String(txt)
+        .replace(/\s/g, "")
+        .replace("m²", "")
+        .replace("m2", "")
+        .replace(",", ".");
+      const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
+      if (m) {
+        const a = parseFloat(m[1]);
+        const b = parseFloat(m[2]);
+        if (!isNaN(a) && !isNaN(b)) return (a + b) / 2;
+      }
+      const n = parseFloat(txt);
+      return isNaN(n) ? null : n;
+    }
+
+    const mids = sizes
+      .map(midFromRange)
+      .filter((v) => typeof v === "number" && !isNaN(v));
+    const totalM2 = mids.length ? mids.reduce((a, b) => a + b, 0) : 30;
+    const rooms = Math.max(1, state.rooms || 1);
+    const avgM2 = totalM2 / rooms;
+
+    // Same sizing logic as your KW helper (1–30 → 2.5 kW, 30–40 → 3.5 kW, etc.)
+    function getTargetKw(m2PerRoom) {
+      if (window.KH && typeof window.KH.calcKw === "function") {
+        return window.KH.calcKw(m2PerRoom);
+      }
+      if (m2PerRoom <= 30) return 2.5;
+      if (m2PerRoom <= 40) return 3.5;
+      if (m2PerRoom <= 55) return 5.0;
+      if (m2PerRoom <= 75) return 7.1;
+      return 9.0;
+    }
+
+    const targetKw = getTargetKw(avgM2);
+
+    const VARS = Array.isArray(AFP.VARS) ? AFP.VARS : [];
+    const byBrand = {};
+    VARS.forEach((v) => {
+      if (!v || !v.brand) return;
+      const b = String(v.brand);
+      (byBrand[b] = byBrand[b] || []).push(v);
+    });
+
+    function bestForBrand(brand) {
+      const list = (byBrand[brand] || []).slice();
+      if (!list.length) return null;
+
+      const kw = (v) => Number(v.kw || v.cap || 0);
+
+      const fitsArea = list.filter((v) =>
+        typeof v.min_m2 === "number" && typeof v.max_m2 === "number"
+          ? avgM2 >= v.min_m2 && avgM2 <= v.max_m2
+          : true
+      );
+
+      const candidates = (() => {
+        const sameKw = fitsArea.filter(
+          (v) => Math.abs(kw(v) - targetKw) < 0.051
+        );
+        if (sameKw.length) return sameKw;
+        if (fitsArea.length) return fitsArea;
+        return list;
+      })();
+
+      candidates.sort(
+        (a, b) => Math.abs(kw(a) - targetKw) - Math.abs(kw(b) - targetKw)
+      );
+      return candidates[0] || null;
+    }
+
+    const wanted = ["Daikin", "Panasonic", "Haier"];
+    const picks = wanted.map(bestForBrand).filter(Boolean);
+    if (!picks.length) {
+      target.innerHTML = "";
+      return;
+    }
+
+    // Map variant slug → indoor image from AFP.ITEMS
     function baseFromSlug(slug) {
       if (!slug) return "";
       const last = String(slug).split("/").pop() || "";
       const noExt = last.replace(/\.(html?)$/i, "");
       return noExt.replace(/-(?:2\.5|25|3\.5|35|5\.0|50)kw$/i, "");
     }
+
     function indoorImageFor(rec) {
       const base = baseFromSlug(rec.slug || "");
       if (!base || !Array.isArray(AFP.ITEMS)) return null;
-      let hit = AFP.ITEMS.find(it => base.startsWith(it.slug));
+      let hit = AFP.ITEMS.find((it) => base.startsWith(it.slug));
       if (!hit) {
         const nm = String(rec.name || "").toLowerCase();
-        hit = AFP.ITEMS.find(it => nm.includes(it.name.toLowerCase()));
+        hit = AFP.ITEMS.find((it) => nm.includes(it.name.toLowerCase()));
       }
-      return hit?.img || null;
+      return hit && hit.img ? hit.img : null;
     }
+
     function priceLine(b) {
-      return b === "Daikin" ? "vanaf € 1.800 incl. materiaal en montage" :
-        b === "Panasonic" ? "vanaf € 1.600 incl. materiaal en montage" :
-          b === "Haier" ? "vanaf € 1.300 incl. materiaal en montage" :
-            "Prijs op aanvraag";
+      return b === "Daikin"
+        ? "vanaf € 1.800 incl. materiaal en montage"
+        : b === "Panasonic"
+          ? "vanaf € 1.600 incl. materiaal en montage"
+          : b === "Haier"
+            ? "vanaf € 1.300 incl. materiaal en montage"
+            : "Prijs op aanvraag";
     }
-    function midFromRange(txt) {
-      if (!txt) return null;
-      txt = String(txt).replace(/\s/g, "").replace("m²", "").replace("m2", "").replace(",", ".");
-      const m = txt.match(/(\d+(?:\.\d+)?)\D+(\d+(?:\.\d+)?)/);
-      if (m) { const a = parseFloat(m[1]), b = parseFloat(m[2]); if (!isNaN(a) && !isNaN(b)) return (a + b) / 2; }
-      const n = parseFloat(txt);
-      return isNaN(n) ? null : n;
-    }
-    // ---------------------------------------------------------------------
 
-    const mids = (state.sizes || []).map(midFromRange).filter(x => typeof x === "number" && !isNaN(x));
-    const totalM2 = mids.length ? mids.reduce((a, b) => a + b, 0) : 30;
-    const rooms = Math.max(1, state.rooms || 1);
-    const avg = totalM2 / rooms;
+    const BASE = (AFP.ROOT_BASE || "/").replace(/\/+$/, "") + "/";
 
-    const rec = AFP.pickVariantByArea(rooms, avg, false);
-    if (!rec) return;
-
-    const imgPath = indoorImageFor(rec);
-    const href = (AFP.ROOT_BASE || "/airflowplus-site/") + (rec.slug || "");
-
-    // Brand logo mapping
-    const BASE = ((AFP.ROOT_BASE || "/airflowplus-site/").replace(/\/+$/, "")) + "/";
-    const brandKey = String(rec.brand || "").toLowerCase();
     const LOGOS = {
       daikin: `${BASE}assets/img/brands/daikin.placeholder.svg`,
       panasonic: `${BASE}assets/img/brands/panasonic.placeholder.svg`,
-      haier: `${BASE}assets/img/brands/haier.palaceholder.svg` // (filename as in repo)
+      haier: `${BASE}assets/img/brands/haier.palaceholder.svg`, // your existing filename
     };
-    const brandLogo = LOGOS[brandKey] || null;
 
-    // Flex row: [ product image ] [ brand logo ] [ text ]
-    target.innerHTML =
-      `<div class="kh-reco-card">
-       <div class="kh-reco-main" style="display:flex;align-items:center;gap:12px;">
-         ${imgPath ? `
-         <div class="kh-reco-media" style="flex:0 0 auto;">
-           <img src="${imgPath}" alt="${rec.name || "Airco"}"
-                style="width:240px;height:auto;object-fit:contain" loading="lazy" decoding="async">
-         </div>` : ``}
-         ${brandLogo ? `
-         <div class="kh-reco-brand" style="flex:0 0 auto;display:flex;align-items:center;justify-content:center;">
-           <img src="${brandLogo}" alt="${rec.brand || 'Merk'} logo"
-                style="height:28px;width:auto;display:block;">
-         </div>` : ``}
-         <div class="kh-reco-body" style="flex:1 1 auto;">
-           <h3 class="kh-reco-title">${rec.name || "Aanbevolen model"}</h3>
-           <div class="muted">${priceLine(rec.brand || "")}</div>
-           <a class="btn btn-green" style="margin-top:12px" href="${href}">Bekijk aanbeveling</a>
-           <p class="muted" style="margin-top:8px">Op basis van ~${Math.round(totalM2)} m².</p>
-         </div>
-       </div>
-     </div>`;
+    const cardsHtml = picks
+      .map((rec) => {
+        const imgPath = indoorImageFor(rec);
+        const brand = rec.brand || "";
+        const brandKey = brand.toLowerCase();
+        const logo = LOGOS[brandKey] || "";
+        const href = BASE + (rec.slug || "");
+        return `
+        <article class="kh-reco-card">
+          ${imgPath ? `
+          <div class="kh-reco-media">
+            <img src="${imgPath}" alt="${rec.name || "Airco"}" loading="lazy" decoding="async">
+          </div>` : ``}
+          <div class="kh-reco-body">
+            ${logo
+            ? `<img class="kh-reco-logo" src="${logo}" alt="${brand} logo" loading="lazy" decoding="async">`
+            : ``}
+            <h3 class="kh-reco-title">${rec.name || "Aanbevolen model"}</h3>
+            <p class="muted">${priceLine(brand)}</p>
+            <a class="btn btn-green" href="${href}">Bekijk ${brand || "model"}</a>
+            <p class="muted kh-reco-meta">
+              Op basis van ~${Math.round(totalM2)} m², ${rooms} ruimte(n).
+            </p>
+          </div>
+        </article>`;
+      })
+      .join("");
+
+    target.innerHTML = `
+      <div class="kh-reco-multi">
+        <h3 class="kh-reco-heading">Aanbevolen modellen voor jouw situatie</h3>
+        <div class="kh-reco-row">
+          ${cardsHtml}
+        </div>
+      </div>`;
+
+    // Minimal CSS for the 3-card layout (injected once)
+    if (!document.getElementById("kh-reco-multi-css")) {
+      const css = `
+        #kh-reco .kh-reco-heading{font-size:1.125rem;margin-bottom:10px}
+        #kh-reco .kh-reco-row{display:flex;flex-wrap:wrap;gap:16px}
+        #kh-reco .kh-reco-card{
+          flex:1 1 min(320px,100%);
+          background:#fff;
+          border-radius:18px;
+          padding:16px 18px;
+          box-shadow:0 18px 45px rgba(0,0,0,.08);
+          display:flex;
+          flex-direction:column;
+          gap:10px;
+        }
+        #kh-reco .kh-reco-media img{
+          width:100%;
+          max-height:180px;
+          object-fit:contain;
+          display:block;
+        }
+        #kh-reco .kh-reco-logo{
+          height:24px;
+          width:auto;
+          margin-bottom:4px;
+          display:block;
+        }
+        #kh-reco .kh-reco-meta{
+          font-size:.8rem;
+          margin-top:4px;
+          color:rgba(0,0,0,.6);
+        }
+        @media(max-width:720px){
+          #kh-reco .kh-reco-row{flex-direction:column}
+        }
+      `.trim();
+      const style = document.createElement("style");
+      style.id = "kh-reco-multi-css";
+      style.textContent = css;
+      document.head.appendChild(style);
+    }
   }
+
 
   // --- KH: inject brand logo next to the product image (robust) -------------
   function khInjectBrandLogo() {
@@ -1091,31 +1213,31 @@ onReady(() => {
   function renderStep3() {
     state.step = 3;
     setDot(3);
-    const list = state.sizes.map((sz, i) => `<li>Kamer ${i + 1}: <strong>${sz.replace("-", "–")} m²</strong></li>`).join("");
+
+    const list = (state.sizes || [])
+      .map(
+        (sz, i) =>
+          `<li>Kamer ${i + 1}: <strong>${(sz || "").replace("-", "–")} m²</strong></li>`
+      )
+      .join("");
+
     body.innerHTML =
       `<h2 class="khv2-q">Overzicht</h2>
-         <p class="kh-sub">Op basis van jouw keuzes stellen we een advies op maat samen.</p>
-         <div id="khv2-summary" class="kh-result">
-           <h3>Je keuzes</h3>
-           <ul class="kh-out">${list}</ul>
-           <p class="muted">Klaar? Ga door voor een vrijblijvende offerte.</p>
-         </div>`;
+       <p class="kh-sub">Op basis van jouw keuzes stellen we een advies op maat samen.</p>
+       <div id="khv2-summary" class="kh-result">
+         <h3>Je keuzes</h3>
+         <ul class="kh-out">${list}</ul>
+         <p class="muted">Klaar? Ga door voor een vrijblijvende offerte.</p>
+       </div>`;
+
     nextBtn.textContent = "Afronden →";
     nextBtn.disabled = false;
     card.setAttribute("data-step", "3");
 
     const mount = ensureRecoMount();
-    renderRecoInto(mount);
-    // Let the image injector wrap, then add/maintain the brand logo
-    setTimeout(() => {
-      try { khInjectBrandLogo(); } catch { }
-      try {
-        const mo = new MutationObserver(() => { try { khInjectBrandLogo(); } catch { } });
-        mo.observe(document.getElementById("kh-reco"), { childList: true, subtree: true });
-      } catch { }
-    }, 0);
-    khInjectBrandLogo(); // add brand logo beside the product image
+    renderRecoInto(mount);   // ⬅️ now renders all 3 brands side-by-side
   }
+
 
 
   // Dots jump
